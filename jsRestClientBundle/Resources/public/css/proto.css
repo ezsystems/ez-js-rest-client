@@ -1,0 +1,67 @@
+html {
+    font-family: Arial;
+}
+
+button {
+    background: #fef5c3;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 16px;
+    padding: 3px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+button:hover {
+    background: #ffff75;
+}
+
+
+.header {
+    background: #c1fff8;
+    height: 100px;
+    padding: 10px;
+}
+
+.sidebar {
+    padding: 10px;
+    background: #f6f4f5;
+    min-height: 200px;
+    list-style-type:none;
+}
+
+.sidebar li {
+    background: #fef5c3;
+    padding: 10px;
+    font-size: 16px;
+    border-bottom: 1px solid #000000;
+}
+.sidebar li.level-1 {
+    padding-left: 50px;
+}
+.sidebar li:hover {
+    background: #ffff75;
+    cursor: pointer;
+}
+.sidebar li span, button span {
+    margin-right: 5px;
+    position: relative;
+    top:2px;
+}
+.ajax-loader {
+    width: 16px;
+    height: 16px;
+    float: right;
+    background: url(/bundles/eiprototype/img/ajax-loader.gif);;
+}
+
+
+.content {
+    padding: 10px;
+    background: #f8f8ff;
+    min-height: 200px;
+}
+
+.content strong {
+    font-weight: bolder;
+}
+

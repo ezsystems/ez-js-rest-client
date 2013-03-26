@@ -1,0 +1,359 @@
+.icon-warning,.icon-cloud,.icon-locked,.icon-inbox,.icon-comment,.icon-mic,.icon-envelope,.icon-briefcase,.icon-cart,.icon-contrast,.icon-clock,.icon-user,.icon-cog,.icon-music,.icon-twitter,.icon-pencil,.icon-frame,.icon-switch,.icon-star,.icon-key,.icon-chart,.icon-apple,.icon-file,.icon-plus,.icon-minus,.icon-picture,.icon-folder,.icon-camera,.icon-search,.icon-dribbble,.icon-forrst,.icon-feed,.icon-blocked,.icon-target,.icon-play,.icon-pause,.icon-bug,.icon-console,.icon-film,.icon-type,.icon-home,.icon-earth,.icon-location,.icon-info,.icon-eye,.icon-heart,.icon-bookmark,.icon-wrench,.icon-calendar,.icon-window,.icon-monitor,.icon-mobile,.icon-droplet,.icon-mouse,.icon-refresh,.icon-location2,.icon-tag,.icon-phone,.icon-star2,.icon-pointer,.icon-thumbs-up,.icon-thumbs-down,.icon-headphones,.icon-move,.icon-checkmark,.icon-cancel,.icon-skype,.icon-gift,.icon-cone,.icon-alarm,.icon-coffee,.icon-basket,.icon-flag,.icon-ipod,.icon-trashcan,.icon-bolt,.icon-ampersand,.icon-compass,.icon-list,.icon-grid,.icon-volume,.icon-volume2,.icon-stats,.icon-target2,.icon-forward,.icon-paperclip,.icon-keyboard,.icon-crop,.icon-floppy,.icon-filter,.icon-trophy,.icon-diary,.icon-address-book,.icon-stop,.icon-smiley,.icon-shit,.icon-bookmark2,.icon-camera2,.icon-lamp,.icon-disk,.icon-button,.icon-database,.icon-credit-card,.icon-atom,.icon-winsows,.icon-target3,.icon-battery,.icon-code,.content-type-,.content-type-folder,.content-type-blog,.content-type-blog_post,.content-type-article,.content-type-image,.content-type-landing_page,.content-type-video {
+	display: inline-block;
+	width: 16px;
+	height: 16px;
+	background-image: url(/bundles/eiprototype/img/sprites.png);
+	background-repeat: no-repeat;
+}
+.icon-warning {
+	background-position: 0 0;
+}
+.icon-cloud {
+	background-position: -32px 0;
+}
+.icon-locked {
+	background-position: -64px 0;
+}
+.icon-inbox {
+	background-position: -96px 0;
+}
+.icon-comment {
+	background-position: -128px 0;
+}
+.icon-mic {
+	background-position: -160px 0;
+}
+.icon-envelope {
+	background-position: -192px 0;
+}
+.icon-briefcase {
+	background-position: -224px 0;
+}
+.icon-cart {
+	background-position: -256px 0;
+}
+.icon-contrast {
+	background-position: -288px 0;
+}
+.icon-clock {
+	background-position: -320px 0;
+}
+.icon-user {
+	background-position: -352px 0;
+}
+.icon-cog {
+	background-position: -384px 0;
+}
+.icon-music {
+	background-position: -416px 0;
+}
+.icon-twitter {
+	background-position: -448px 0;
+}
+.icon-pencil {
+	background-position: -480px 0;
+}
+.icon-frame {
+	background-position: 0 -32px;
+}
+.icon-switch {
+	background-position: -32px -32px;
+}
+.icon-star {
+	background-position: -64px -32px;
+}
+.icon-key {
+	background-position: -96px -32px;
+}
+.icon-chart {
+	background-position: -128px -32px;
+}
+.icon-apple {
+	background-position: -160px -32px;
+}
+.icon-file {
+	background-position: -192px -32px;
+}
+.icon-plus {
+	background-position: -224px -32px;
+}
+.icon-minus {
+	background-position: -256px -32px;
+}
+.icon-picture {
+	background-position: -288px -32px;
+}
+.icon-folder {
+	background-position: -320px -32px;
+}
+.icon-camera {
+	background-position: -352px -32px;
+}
+.icon-search {
+	background-position: -384px -32px;
+}
+.icon-dribbble {
+	background-position: -416px -32px;
+}
+.icon-forrst {
+	background-position: -448px -32px;
+}
+.icon-feed {
+	background-position: -480px -32px;
+}
+.icon-blocked {
+	background-position: 0 -64px;
+}
+.icon-target {
+	background-position: -32px -64px;
+}
+.icon-play {
+	background-position: -64px -64px;
+}
+.icon-pause {
+	background-position: -96px -64px;
+}
+.icon-bug {
+	background-position: -128px -64px;
+}
+.icon-console {
+	background-position: -160px -64px;
+}
+.icon-film {
+	background-position: -192px -64px;
+}
+.icon-type {
+	background-position: -224px -64px;
+}
+.icon-home {
+	background-position: -256px -64px;
+}
+.icon-earth {
+	background-position: -288px -64px;
+}
+.icon-location {
+	background-position: -320px -64px;
+}
+.icon-info {
+	background-position: -352px -64px;
+}
+.icon-eye {
+	background-position: -384px -64px;
+}
+.icon-heart {
+	background-position: -416px -64px;
+}
+.icon-bookmark {
+	background-position: -448px -64px;
+}
+.icon-wrench {
+	background-position: -480px -64px;
+}
+.icon-calendar {
+	background-position: 0 -96px;
+}
+.icon-window {
+	background-position: -32px -96px;
+}
+.icon-monitor {
+	background-position: -64px -96px;
+}
+.icon-mobile {
+	background-position: -96px -96px;
+}
+.icon-droplet {
+	background-position: -128px -96px;
+}
+.icon-mouse {
+	background-position: -160px -96px;
+}
+.icon-refresh {
+	background-position: -192px -96px;
+}
+.icon-location2 {
+	background-position: -224px -96px;
+}
+.icon-tag {
+	background-position: -256px -96px;
+}
+.icon-phone {
+	background-position: -288px -96px;
+}
+.icon-star2 {
+	background-position: -320px -96px;
+}
+.icon-pointer {
+	background-position: -352px -96px;
+}
+.icon-thumbs-up {
+	background-position: -384px -96px;
+}
+.icon-thumbs-down {
+	background-position: -416px -96px;
+}
+.icon-headphones {
+	background-position: -448px -96px;
+}
+.icon-move {
+	background-position: -480px -96px;
+}
+.icon-checkmark {
+	background-position: 0 -128px;
+}
+.icon-cancel {
+	background-position: -32px -128px;
+}
+.icon-skype {
+	background-position: -64px -128px;
+}
+.icon-gift {
+	background-position: -96px -128px;
+}
+.icon-cone {
+	background-position: -128px -128px;
+}
+.icon-alarm {
+	background-position: -160px -128px;
+}
+.icon-coffee {
+	background-position: -192px -128px;
+}
+.icon-basket {
+	background-position: -224px -128px;
+}
+.icon-flag {
+	background-position: -256px -128px;
+}
+.icon-ipod {
+	background-position: -288px -128px;
+}
+.icon-trashcan {
+	background-position: -320px -128px;
+}
+.icon-bolt {
+	background-position: -352px -128px;
+}
+.icon-ampersand {
+	background-position: -384px -128px;
+}
+.icon-compass {
+	background-position: -416px -128px;
+}
+.icon-list {
+	background-position: -448px -128px;
+}
+.icon-grid {
+	background-position: -480px -128px;
+}
+.icon-volume {
+	background-position: 0 -160px;
+}
+.icon-volume2 {
+	background-position: -32px -160px;
+}
+.icon-stats {
+	background-position: -64px -160px;
+}
+.icon-target2 {
+	background-position: -96px -160px;
+}
+.icon-forward {
+	background-position: -128px -160px;
+}
+.icon-paperclip {
+	background-position: -160px -160px;
+}
+.icon-keyboard {
+	background-position: -192px -160px;
+}
+.icon-crop {
+	background-position: -224px -160px;
+}
+.icon-floppy {
+	background-position: -256px -160px;
+}
+.icon-filter {
+	background-position: -288px -160px;
+}
+.icon-trophy {
+	background-position: -320px -160px;
+}
+.icon-diary {
+	background-position: -352px -160px;
+}
+.icon-address-book {
+	background-position: -384px -160px;
+}
+.icon-stop {
+	background-position: -416px -160px;
+}
+.icon-smiley {
+	background-position: -448px -160px;
+}
+.icon-shit {
+	background-position: -480px -160px;
+}
+.icon-bookmark2 {
+	background-position: 0 -192px;
+}
+.icon-camera2 {
+	background-position: -32px -192px;
+}
+.icon-lamp {
+	background-position: -64px -192px;
+}
+.icon-disk {
+	background-position: -96px -192px;
+}
+.icon-button {
+	background-position: -128px -192px;
+}
+.icon-database {
+	background-position: -160px -192px;
+}
+.icon-credit-card {
+	background-position: -192px -192px;
+}
+.icon-atom {
+	background-position: -224px -192px;
+}
+.icon-winsows {
+	background-position: -256px -192px;
+}
+.icon-target3 {
+	background-position: -288px -192px;
+}
+.icon-battery {
+	background-position: -320px -192px;
+}
+.icon-code {
+	background-position: -352px -192px;
+}
+
+
+
+.content-type- {
+    background-position: -32px 0;
+}
+.content-type-folder {
+    background-position: -320px -32px;
+}
+.content-type-blog {
+    background-position: -128px 0;
+}
+.content-type-blog_post {
+    background-position: -128px 0;
+}
+
+.content-type-article {
+    background-position: -192px -32px;
+}
+.content-type-image {
+    background-position: -288px -32px;
+}
+.content-type-landing_page {
+    background-position: -320px -32px;
+}
+.content-type-video {
+    background-position: -192px -64px;
+}
