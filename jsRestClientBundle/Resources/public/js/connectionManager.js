@@ -7,11 +7,21 @@ var RestConnectionManager = (function() {
      * @constructor
      * @param endPointUrl {string} url to REST root
      * @param authenticationAgent {object} literal object used to maintain authentication to REST server
-     * @param connection {object} one of the special connection objects used to implement different techniques (connectionXHR, connectionJSONP etc.)
+     * @param connectionType {string} string related to one of the special connection objects used to implement exact technique ("XHR", "JSONP" etc.)
      */
-    var connectionManager = function(endPointUrl, authenticationAgent, connection) {
+    var connectionManager = function(endPointUrl, authenticationAgent, connectionType) {
+
 
         var endPointUrl = endPointUrl;
+        var authenticationAgent = authenticationAgent;
+
+        // Choosing and creating connection of requested type
+        if (connectionType === "XHR"){
+            var connection = new connectionXHR(authenticationAgent);
+        } else if (connectionType === "JSONP") {
+            // some other connection
+        }
+
 
         /**
          * Basic request function

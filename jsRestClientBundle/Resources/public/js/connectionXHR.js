@@ -6,10 +6,15 @@ var connectionXHR = (function() {
      *
      * @constructor
      */
-    var connection = function () {
+    var connection = function (authenticationAgent) {
 
-        // Private
-        var getXHR = function(){
+        // Private area
+        var user = authenticationAgent.user;
+        var password = authenticationAgent.password;
+        var authMethod = authenticationAgent.authMethod;
+
+
+        var getXHR = function(a){
             var result = null;
             if (window.XMLHttpRequest) {
                 // FireFox, Safari, etc.
@@ -23,7 +28,8 @@ var connectionXHR = (function() {
                 console.log("No known mechanism to build XHR!");
             }
             return result;
-        }
+        };
+
 
         /**
          * Basic request implemented via XHR technique
@@ -49,7 +55,18 @@ var connectionXHR = (function() {
                 callback(XHR.responseText);
             }
 
-            XHR.open(method, url, true);
+            // Authentication, if possible and opening connection
+            if (authMethod === "HTTPBasicAuth"){
+                // Http basic authentication
+                if ( (typeof user !== "undefined") && (typeof password !== "undefined") ) {
+                    XHR.open(method, url, true, user, password);
+                } else {
+                    console.error("Incorrect or not full credentials for HTTP Basic Authentication.");
+                }
+            } else {
+                // No specific authentication method
+                XHR.open(method, url, true);
+            }
 
             for (var headerType in headers) {
                 XHR.setRequestHeader(
@@ -59,7 +76,7 @@ var connectionXHR = (function() {
             }
 
             XHR.send(data);
-        }
+        };
     };
 
     return connection;
