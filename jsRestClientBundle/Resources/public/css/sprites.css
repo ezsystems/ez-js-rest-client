@@ -2,7 +2,7 @@
 	display: inline-block;
 	width: 16px;
 	height: 16px;
-	background-image: url(/bundles/eiprototype/img/sprites.png);
+	background-image: url(/bundles/jsrestclient/img/sprites.png);
 	background-repeat: no-repeat;
 }
 .icon-warning {

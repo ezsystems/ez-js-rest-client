@@ -51,7 +51,8 @@ button:hover {
     width: 16px;
     height: 16px;
     float: right;
-    background: url(/bundles/eiprototype/img/ajax-loader.gif);;
+    display: none;
+    background: url(/bundles/jsrestclient/img/ajax-loader.gif);
 }
 
 
