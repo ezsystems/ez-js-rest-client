@@ -1,7 +1,11 @@
 var connectionXHR = (function() {
     "use strict";
 
-    // Constructor
+    /**
+     * Creates an instance of XHR connection object
+     *
+     * @constructor
+     */
     var connection = function () {
 
         // Private
@@ -21,7 +25,16 @@ var connectionXHR = (function() {
             return result;
         }
 
-        // Public for this instance
+        /**
+         * Basic request implemented via XHR technique
+         *
+         * @method request
+         * @param method {string} request method ("POST", "GET" etc)
+         * @param url {string} requested REST resource
+         * @param data {JSON}
+         * @param headers {object}
+         * @param callback {function} function, which will be executed on request success
+         */
         this.sendRequest = function(method, url, data, headers, callback) {
             var XHR = getXHR();
 

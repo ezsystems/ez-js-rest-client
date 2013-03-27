@@ -1,7 +1,14 @@
 var RestConnectionManager = (function() {
     "use strict";
 
-
+    /**
+     * Creates an instance of connection manager object
+     *
+     * @constructor
+     * @param endPointUrl {string} url to REST root
+     * @param authenticationAgent {object} literal object used to maintain authentication to REST server
+     * @param connection {object} one of the special connection objects used to implement different techniques (connectionXHR, connectionJSONP etc.)
+     */
     var connectionManager = function(endPointUrl, authenticationAgent, connection) {
 
         var endPointUrl = endPointUrl;

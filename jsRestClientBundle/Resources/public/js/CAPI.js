@@ -1,11 +1,14 @@
 var CAPI = (function() {
     "use strict";
 
-    // Private static
-
-
-
-    // Constructor
+    /**
+     * Creates an instance of CAPI object
+     *
+     * @constructor
+     * @param endPointUrl {string} url to REST root
+     * @param authenticationAgent {object} literal object used to maintain authentication to REST server
+     * @param connection {object} one of the special connection objects used to implement different techniques (connectionXHR, connectionJSONP etc.)
+     */
     var API = function (endPointUrl, authenticationAgent, connection) {
 
         // Public vars and functions for this instance

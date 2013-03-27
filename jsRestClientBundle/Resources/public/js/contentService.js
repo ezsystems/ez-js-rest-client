@@ -1,6 +1,12 @@
 var contentService = (function() {
     "use strict";
 
+    /**
+     * Creates an instance of content service object
+     *
+     * @constructor
+     * @param connectionManager {object} connection manager that will be used to send requests to REST service
+     */
     var service = function(connectionManager) {
 
         // TODO: store url+method+headers relation to actual request in some preloaded matrix or smth like this?
@@ -57,8 +63,6 @@ var contentService = (function() {
                 callback
             );
         };
-
-
 
     };
 
