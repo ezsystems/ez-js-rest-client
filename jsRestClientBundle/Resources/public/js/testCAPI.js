@@ -63,9 +63,55 @@ createSectionAnchor.onclick = function(e){
         createSectionLoader.style.display = 'none';
     });
 
+};
 
+
+// Update section example
+var updateSectionAnchor = document.getElementById('update-section');
+var updateSectionLoader = document.getElementById('update-section-loader');
+updateSectionAnchor.onclick = function(e){
+
+    var updateSectionInput = document.getElementById('update-section-input');
+    if (updateSectionInput.value.length){
+
+        updateSectionLoader.style.display = 'block';
+        e.preventDefault();
+        var sectionInput = {
+            SectionInput : {
+                identifier : "testSection" + Math.random()*1000000,
+                name : "Test Section " + Math.round(Math.random()*1000)
+            }
+        }
+
+        // compatibility remark: JSON API is supported in all modern browsers (IE-wise since IE8)
+        contentService.updateSection(updateSectionInput.value, JSON.stringify(sectionInput), function(data){
+            clientOutput.innerHTML = data;
+            updateSectionLoader.style.display = 'none';
+        });
+
+    } else {
+        clientOutput.innerHTML = 'Id is missing!';
+    }
 
 };
 
 
+// Delete section example
+var deleteSectionAnchor = document.getElementById('delete-section');
+var deleteSectionLoader = document.getElementById('delete-section-loader');
+deleteSectionAnchor.onclick = function(e){
+
+    deleteSectionLoader.style.display = 'block';
+    e.preventDefault();
+
+    var deleteSectionInput = document.getElementById('delete-section-input');
+    if (deleteSectionInput.value.length){
+        contentService.deleteSection(deleteSectionInput.value, function(data){
+            clientOutput.innerHTML = data;
+            deleteSectionLoader.style.display = 'none';
+        });
+    } else {
+        clientOutput.innerHTML = 'Id is missing!';
+    }
+};
 

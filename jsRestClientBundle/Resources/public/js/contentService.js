@@ -64,6 +64,45 @@ var contentService = (function() {
             );
         };
 
+        /**
+         * Update section
+         *
+         * @method updateSection
+         * @param sectionId {int}
+         * @param sectionInput {JSON} json string describing section to be created
+         * @param callback {function} function, which will be executed on request success
+         */
+        service.prototype.updateSection = function(sectionId, sectionInput, callback) {
+            connectionManager.request(
+                "PATCH",
+                '/content/sections/' + sectionId,
+                sectionInput,
+                {
+                    Accept : "application/vnd.ez.api.Section+json",
+                    "Content-Type" : "application/vnd.ez.api.SectionInput+json"
+                },
+                callback
+            );
+        };
+
+        /**
+         * Delete section
+         *
+         * @method deleteSection
+         * @param sectionId {int}
+         * @param callback {function} function, which will be executed on request success
+         */
+        service.prototype.deleteSection = function(sectionId, callback) {
+            connectionManager.request(
+                "DELETE",
+                '/content/sections/' + sectionId,
+                "",
+                {},
+                callback
+            );
+        };
+
+
     };
 
     return service;

@@ -24,8 +24,12 @@ var CAPI = (function() {
      * @method getContentService
      */
     API.prototype.getContentService = function(){
-        //TODO: singleton approach
-        return new contentService(this.connectionManager);
+        if  (!this.contentService_)  {
+            this.contentService_  =  new contentService(
+                this.connectionManager
+            );
+        }
+        return  this.contentService_;
     };
 
 

@@ -38,12 +38,10 @@ var RestConnectionManager = (function() {
             // default values for all the parameters
             method = (typeof method === "undefined") ? "GET" : method;
             url = (typeof url === "undefined") ? "/" : url;
-            data = (typeof data === "undefined") ? {} : data;
+            data = (typeof data === "undefined") ? "" : data;
             headers = (typeof headers === "undefined") ? {} : headers;
             callback = (typeof callback === "undefined") ? function(){} : callback;
 
-            //manage authentication
-            // ...
 
             //TODO: Suspend Requests during Authentication
             connection.sendRequest(method, endPointUrl + url, data, headers, callback);
