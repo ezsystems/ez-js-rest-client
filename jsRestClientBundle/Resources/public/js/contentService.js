@@ -37,7 +37,7 @@ var contentService = (function() {
         service.prototype.loadSection = function(sectionId, callback) {
             connectionManager.request(
                 "GET",
-                '/content/sections/' + sectionId,
+                sectionId,
                 {},
                 { Accept : "application/vnd.ez.api.Section+json" },
                 callback
@@ -75,7 +75,7 @@ var contentService = (function() {
         service.prototype.updateSection = function(sectionId, sectionInput, callback) {
             connectionManager.request(
                 "PATCH",
-                '/content/sections/' + sectionId,
+                sectionId,
                 sectionInput,
                 {
                     Accept : "application/vnd.ez.api.Section+json",
@@ -95,9 +95,45 @@ var contentService = (function() {
         service.prototype.deleteSection = function(sectionId, callback) {
             connectionManager.request(
                 "DELETE",
-                '/content/sections/' + sectionId,
+                sectionId,
                 "",
                 {},
+                callback
+            );
+        };
+
+// ******************************
+// ******************************
+
+        /**
+         * Load all content type groups
+         *
+         * @method loadContentTypeGroups
+         * @param callback {function} function, which will be executed on request success
+         */
+        service.prototype.loadContentTypeGroups = function(callback) {
+            connectionManager.request(
+                "GET",
+                '/content/typegroups',
+                {},
+                { Accept : "application/vnd.ez.api.ContentTypeGroupList+json" },
+                callback
+            );
+        };
+
+        /**
+         * Load single content type group
+         *
+         * @method loadContentTypeGroups
+         * @param contentTypeGroupId {int}
+         * @param callback {function} function, which will be executed on request success
+         */
+        service.prototype.loadContentTypeGroup = function(contentTypeGroupId, callback) {
+            connectionManager.request(
+                "GET",
+                contentTypeGroupId,
+                {},
+                { Accept : "application/vnd.ez.api.ContentTypeGroup+json" },
                 callback
             );
         };

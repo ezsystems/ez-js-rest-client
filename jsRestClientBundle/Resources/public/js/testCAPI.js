@@ -20,10 +20,16 @@ loadSectionAnchor.onclick = function(e){
 
     loadSectionLoader.style.display = 'block';
     e.preventDefault();
-    contentService.loadSection(2, function(data){
-        clientOutput.innerHTML = data;
-        loadSectionLoader.style.display = 'none';
-    });
+
+    var loadSectionInput = document.getElementById('load-section-input');
+    if (loadSectionInput.value.length){
+        contentService.loadSection(loadSectionInput.value, function(data){
+            clientOutput.innerHTML = data;
+            loadSectionLoader.style.display = 'none';
+        });
+    } else {
+        clientOutput.innerHTML = 'Id is missing!';
+    }
 
 };
 
@@ -115,3 +121,38 @@ deleteSectionAnchor.onclick = function(e){
     }
 };
 
+// ******************************
+// ******************************
+
+// Load content type groups list example
+var loadContentTypeGroupsAnchor = document.getElementById('load-contenttype-groups');
+var loadContentTypeGroupsLoader = document.getElementById('load-contenttype-groups-loader');
+loadContentTypeGroupsAnchor.onclick = function(e){
+
+    loadContentTypeGroupsLoader.style.display = 'block';
+    e.preventDefault();
+
+    contentService.loadContentTypeGroups(function(data){
+        clientOutput.innerHTML = data;
+        loadContentTypeGroupsLoader.style.display = 'none';
+    });
+};
+
+// Load single content type group example
+var loadContentTypeGroupAnchor = document.getElementById('load-contenttype-group');
+var loadContentTypeGroupLoader = document.getElementById('load-contenttype-group-loader');
+loadContentTypeGroupAnchor.onclick = function(e){
+
+    loadContentTypeGroupLoader.style.display = 'block';
+    e.preventDefault();
+
+    var loadContentTypeGroupInput = document.getElementById('load-contenttype-group-input');
+    if (loadContentTypeGroupInput.value.length){
+        contentService.loadContentTypeGroup(loadContentTypeGroupInput.value, function(data){
+            clientOutput.innerHTML = data;
+            loadContentTypeGroupLoader.style.display = 'none';
+        });
+    } else {
+        clientOutput.innerHTML = 'Id is missing!';
+    }
+};
