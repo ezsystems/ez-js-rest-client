@@ -2,6 +2,10 @@ html {
     font-family: Arial;
 }
 
+input {
+    width: 200px;
+}
+
 button {
     background: #fef5c3;
     border-radius: 3px;

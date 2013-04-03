@@ -12,15 +12,32 @@ var contentService = (function() {
         // TODO: store url+method+headers relation to actual request in some preloaded matrix or smth like this?
 
         /**
+         * list Root resources
+         *
+         * @method root
+         * @param callback {function} function, which will be executed on request success
+         */
+        service.prototype.root = function(root, callback) {
+            connectionManager.request(
+                "GET",
+                root,
+                {},
+                { Accept : "application/vnd.ez.api.Root+json" },
+                callback
+            );
+        };
+
+
+        /**
          * List all sections
          *
          * @method loadSections
          * @param callback {function} function, which will be executed on request success
          */
-        service.prototype.loadSections = function(callback) {
+        service.prototype.loadSections = function(sections, callback) {
             connectionManager.request(
                 "GET",
-                '/content/sections',
+                sections,
                 {},
                 { Accept : "application/vnd.ez.api.SectionList+json" },
                 callback
@@ -51,10 +68,10 @@ var contentService = (function() {
          * @param sectionInput {JSON} json string describing section to be created
          * @param callback {function} function, which will be executed on request success
          */
-        service.prototype.createSection = function(sectionInput, callback) {
+        service.prototype.createSection = function(sections, sectionInput, callback) {
             connectionManager.request(
                 "POST",
-                '/content/sections',
+                sections,
                 sectionInput,
                 {
                     Accept : "application/vnd.ez.api.Section+json",
@@ -111,10 +128,10 @@ var contentService = (function() {
          * @method loadContentTypeGroups
          * @param callback {function} function, which will be executed on request success
          */
-        service.prototype.loadContentTypeGroups = function(callback) {
+        service.prototype.loadContentTypeGroups = function(typegroups, callback) {
             connectionManager.request(
                 "GET",
-                '/content/typegroups',
+                typegroups,
                 {},
                 { Accept : "application/vnd.ez.api.ContentTypeGroupList+json" },
                 callback

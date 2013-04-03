@@ -1,7 +1,7 @@
 // Some simple js REST CAPI usage scenario
 
 var jsCAPI = new CAPI(
-    'http://ez.git.local/api/ezp/v2',
+    'http://ez.git.local',
     {
         user : "admin",
         password : "admin",
@@ -13,6 +13,26 @@ var contentService = jsCAPI.getContentService();
 
 var clientOutput = document.getElementById('output');
 
+
+// Root
+var rootAnchor = document.getElementById('root');
+var rootLoader = document.getElementById('root-loader');
+rootAnchor.onclick = function(e){
+
+    loadSectionLoader.style.display = 'block';
+    e.preventDefault();
+
+    contentService.root(
+        '/api/ezp/v2/',
+        function(data){
+            clientOutput.innerHTML = data;
+            rootLoader.style.display = 'none';
+        }
+    );
+};
+
+
+
 // Load single section example
 var loadSectionAnchor = document.getElementById('load-section');
 var loadSectionLoader = document.getElementById('load-section-loader');
@@ -23,14 +43,16 @@ loadSectionAnchor.onclick = function(e){
 
     var loadSectionInput = document.getElementById('load-section-input');
     if (loadSectionInput.value.length){
-        contentService.loadSection(loadSectionInput.value, function(data){
-            clientOutput.innerHTML = data;
-            loadSectionLoader.style.display = 'none';
-        });
+        contentService.loadSection(
+            loadSectionInput.value,
+            function(data){
+                clientOutput.innerHTML = data;
+                loadSectionLoader.style.display = 'none';
+            }
+        );
     } else {
         clientOutput.innerHTML = 'Id is missing!';
     }
-
 };
 
 
@@ -41,10 +63,13 @@ loadSectionsAnchor.onclick = function(e){
 
     loadSectionsLoader.style.display = 'block';
     e.preventDefault();
-    contentService.loadSections(function(data){
-        clientOutput.innerHTML = data;
-        loadSectionsLoader.style.display = 'none';
-    });
+    contentService.loadSections(
+        '/api/ezp/v2/content/sections',
+        function(data){
+            clientOutput.innerHTML = data;
+            loadSectionsLoader.style.display = 'none';
+        }
+    );
 
 };
 
@@ -64,10 +89,14 @@ createSectionAnchor.onclick = function(e){
     }
 
     // compatibility remark: JSON API is supported in all modern browsers (IE-wise since IE8)
-    contentService.createSection(JSON.stringify(sectionInput), function(data){
-        clientOutput.innerHTML = data;
-        createSectionLoader.style.display = 'none';
-    });
+    contentService.createSection(
+        '/api/ezp/v2/content/sections',
+        JSON.stringify(sectionInput),
+        function(data){
+            clientOutput.innerHTML = data;
+            createSectionLoader.style.display = 'none';
+        }
+    );
 
 };
 
@@ -90,10 +119,14 @@ updateSectionAnchor.onclick = function(e){
         }
 
         // compatibility remark: JSON API is supported in all modern browsers (IE-wise since IE8)
-        contentService.updateSection(updateSectionInput.value, JSON.stringify(sectionInput), function(data){
-            clientOutput.innerHTML = data;
-            updateSectionLoader.style.display = 'none';
-        });
+        contentService.updateSection(
+            updateSectionInput.value,
+            JSON.stringify(sectionInput),
+            function(data){
+                clientOutput.innerHTML = data;
+                updateSectionLoader.style.display = 'none';
+            }
+        );
 
     } else {
         clientOutput.innerHTML = 'Id is missing!';
@@ -112,10 +145,13 @@ deleteSectionAnchor.onclick = function(e){
 
     var deleteSectionInput = document.getElementById('delete-section-input');
     if (deleteSectionInput.value.length){
-        contentService.deleteSection(deleteSectionInput.value, function(data){
-            clientOutput.innerHTML = data;
-            deleteSectionLoader.style.display = 'none';
-        });
+        contentService.deleteSection(
+            deleteSectionInput.value,
+            function(data){
+                clientOutput.innerHTML = data;
+                deleteSectionLoader.style.display = 'none';
+            }
+        );
     } else {
         clientOutput.innerHTML = 'Id is missing!';
     }
@@ -132,10 +168,13 @@ loadContentTypeGroupsAnchor.onclick = function(e){
     loadContentTypeGroupsLoader.style.display = 'block';
     e.preventDefault();
 
-    contentService.loadContentTypeGroups(function(data){
-        clientOutput.innerHTML = data;
-        loadContentTypeGroupsLoader.style.display = 'none';
-    });
+    contentService.loadContentTypeGroups(
+        '/api/ezp/v2/content/typegroups',
+        function(data){
+            clientOutput.innerHTML = data;
+            loadContentTypeGroupsLoader.style.display = 'none';
+        }
+    );
 };
 
 // Load single content type group example
@@ -148,10 +187,13 @@ loadContentTypeGroupAnchor.onclick = function(e){
 
     var loadContentTypeGroupInput = document.getElementById('load-contenttype-group-input');
     if (loadContentTypeGroupInput.value.length){
-        contentService.loadContentTypeGroup(loadContentTypeGroupInput.value, function(data){
-            clientOutput.innerHTML = data;
-            loadContentTypeGroupLoader.style.display = 'none';
-        });
+        contentService.loadContentTypeGroup(
+            loadContentTypeGroupInput.value,
+            function(data){
+                clientOutput.innerHTML = data;
+                loadContentTypeGroupLoader.style.display = 'none';
+            }
+        );
     } else {
         clientOutput.innerHTML = 'Id is missing!';
     }
