@@ -19,7 +19,7 @@ var rootAnchor = document.getElementById('root');
 var rootLoader = document.getElementById('root-loader');
 rootAnchor.onclick = function(e){
 
-    loadSectionLoader.style.display = 'block';
+    rootLoader.style.display = 'block';
     e.preventDefault();
 
     contentService.root(
@@ -192,6 +192,75 @@ loadContentTypeGroupAnchor.onclick = function(e){
             function(data){
                 clientOutput.innerHTML = data;
                 loadContentTypeGroupLoader.style.display = 'none';
+            }
+        );
+    } else {
+        clientOutput.innerHTML = 'Id is missing!';
+    }
+};
+
+// ******************************
+// ******************************
+
+// Load content info example
+var loadContentInfoAnchor = document.getElementById('load-contentinfo');
+var loadContentInfoLoader = document.getElementById('load-contentinfo-loader');
+loadContentInfoAnchor.onclick = function(e){
+
+    loadContentInfoLoader.style.display = 'block';
+    e.preventDefault();
+
+    var loadContentInfoInput = document.getElementById('load-contentinfo-input');
+    if (loadContentInfoInput.value.length){
+        contentService.loadContentInfo(
+            loadContentInfoInput.value,
+            function(data){
+                clientOutput.innerHTML = data;
+                loadContentInfoLoader.style.display = 'none';
+            }
+        );
+    } else {
+        clientOutput.innerHTML = 'Id is missing!';
+    }
+};
+
+// Load content info + current version example
+var loadContentCurrentAnchor = document.getElementById('load-contentcurrent');
+var loadContentCurrentLoader = document.getElementById('load-contentcurrent-loader');
+loadContentCurrentAnchor.onclick = function(e){
+
+    loadContentCurrentLoader.style.display = 'block';
+    e.preventDefault();
+
+    var loadContentCurrentInput = document.getElementById('load-contentcurrent-input');
+    if (loadContentCurrentInput.value.length){
+        contentService.loadContentInfoAndCurrentVersion(
+            loadContentCurrentInput.value,
+            function(data){
+                clientOutput.innerHTML = data;
+                loadContentCurrentLoader.style.display = 'none';
+            }
+        );
+    } else {
+        clientOutput.innerHTML = 'Id is missing!';
+    }
+};
+
+// Load content versions example
+var loadContentVersionsAnchor = document.getElementById('load-contentversions');
+var loadContentVersionsLoader = document.getElementById('load-contentversions-loader');
+loadContentVersionsAnchor.onclick = function(e){
+
+    loadContentVersionsLoader.style.display = 'block';
+    e.preventDefault();
+
+    var loadContentVersionsInput = document.getElementById('load-contentversions-input');
+    if (loadContentVersionsInput.value.length){
+        contentService.loadVersions(
+            loadContentVersionsInput.value,
+            function(data){
+                clientOutput.innerHTML = data;
+                loadContentVersionsLoader.style.display = 'none';
             }
         );
     } else {

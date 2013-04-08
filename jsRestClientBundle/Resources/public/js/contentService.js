@@ -48,7 +48,7 @@ var contentService = (function() {
          * Load single section
          *
          * @method loadSection
-         * @param sectionId {int}
+         * @param sectionId {href}
          * @param callback {function} function, which will be executed on request success
          */
         service.prototype.loadSection = function(sectionId, callback) {
@@ -85,7 +85,7 @@ var contentService = (function() {
          * Update section
          *
          * @method updateSection
-         * @param sectionId {int}
+         * @param sectionId {href}
          * @param sectionInput {JSON} json string describing section to be created
          * @param callback {function} function, which will be executed on request success
          */
@@ -106,7 +106,7 @@ var contentService = (function() {
          * Delete section
          *
          * @method deleteSection
-         * @param sectionId {int}
+         * @param sectionId {href}
          * @param callback {function} function, which will be executed on request success
          */
         service.prototype.deleteSection = function(sectionId, callback) {
@@ -142,7 +142,7 @@ var contentService = (function() {
          * Load single content type group
          *
          * @method loadContentTypeGroups
-         * @param contentTypeGroupId {int}
+         * @param contentTypeGroupId {href}
          * @param callback {function} function, which will be executed on request success
          */
         service.prototype.loadContentTypeGroup = function(contentTypeGroupId, callback) {
@@ -151,6 +151,80 @@ var contentService = (function() {
                 contentTypeGroupId,
                 {},
                 { Accept : "application/vnd.ez.api.ContentTypeGroup+json" },
+                callback
+            );
+        };
+
+// ******************************
+// ******************************
+
+        /**
+         * Creates a new content draft assigned to the authenticated user.
+         *
+         * @method createContent
+         * @param content {href} href to content resource
+         * @param contentInput {JSON} json string describing content to be created
+         * @param callback {function} function, which will be executed on request success
+         */
+        service.prototype.createContent = function(content, contentInput, callback) {
+            connectionManager.request(
+                "GET",
+                content,
+                contentInput,
+                { Accept : "application/vnd.ez.api.ContentInfo+json" },
+                callback
+            );
+        };
+
+
+
+        /**
+         * Load single content info
+         *
+         * @method loadContent
+         * @param contentId {href}
+         * @param callback {function} function, which will be executed on request success
+         */
+        service.prototype.loadContentInfo = function(contentId, callback) {
+            connectionManager.request(
+                "GET",
+                contentId,
+                {},
+                { Accept : "application/vnd.ez.api.ContentInfo+json" },
+                callback
+            );
+        };
+
+        /**
+         * Load single content info with embedded current version
+         *
+         * @method loadContentCurrentVersion
+         * @param contentId {href}
+         * @param callback {function} function, which will be executed on request success
+         */
+        service.prototype.loadContentInfoAndCurrentVersion = function(contentId, callback) {
+            connectionManager.request(
+                "GET",
+                contentId,
+                {},
+                { Accept : "application/vnd.ez.api.Content+json" },
+                callback
+            );
+        };
+
+        /**
+         *  Loads all versions for the given content
+         *
+         * @method loadContentCurrentVersion
+         * @param contentId {href}
+         * @param callback {function} function, which will be executed on request success
+         */
+        service.prototype.loadVersions = function(contentVersions, callback) {
+            connectionManager.request(
+                "GET",
+                contentVersions,
+                {},
+                { Accept : "application/vnd.ez.api.VersionList+json" },
                 callback
             );
         };
