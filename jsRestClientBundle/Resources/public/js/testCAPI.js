@@ -100,7 +100,7 @@ createSectionAnchor.onclick = function(e){
 
 };
 
-
+// ***
 // Update section example
 var updateSectionAnchor = document.getElementById('update-section');
 var updateSectionLoader = document.getElementById('update-section-loader');
@@ -111,6 +111,7 @@ updateSectionAnchor.onclick = function(e){
 
         updateSectionLoader.style.display = 'block';
         e.preventDefault();
+
         var sectionInput = {
             SectionInput : {
                 identifier : "testSection" + Math.random()*1000000,
@@ -134,7 +135,7 @@ updateSectionAnchor.onclick = function(e){
 
 };
 
-
+// ***
 // Delete section example
 var deleteSectionAnchor = document.getElementById('delete-section');
 var deleteSectionLoader = document.getElementById('delete-section-loader');
@@ -202,6 +203,88 @@ loadContentTypeGroupAnchor.onclick = function(e){
 // ******************************
 // ******************************
 
+// ***
+// Create content example
+var createContentAnchor = document.getElementById('create-content');
+var createContentLoader = document.getElementById('create-content-loader');
+createContentAnchor.onclick = function(e){
+
+    createContentLoader.style.display = 'block';
+    e.preventDefault();
+    var contentCreate = {
+        "ContentCreate": {
+            "ContentType": {
+                "_href": "/api/ezp/v2/content/types/18"
+            },
+            "mainLanguageCode": "eng-US",
+            "LocationCreate": {
+                "ParentLocation": {
+                    "_href": "/api/ezp/v2/content/locations/1/2/102"
+                },
+                "priority": "0",
+                "hidden": "false",
+                "sortField": "PATH",
+                "sortOrder": "ASC"
+            },
+            "Section": {
+                "_href": "/api/ezp/v2/content/sections/4"
+            },
+            "alwaysAvailable": "true",
+            "remoteId": Math.round(Math.random()*1000),
+            "fields": {
+                "field": [
+                    {
+                        "fieldDefinitionIdentifier": "title",
+                        "languageCode": "eng-US",
+                        "fieldValue": "This is a title"
+                    }
+                ]
+            }
+        }
+    }
+
+    // compatibility remark: JSON API is supported in all modern browsers (IE-wise since IE8)
+    contentService.createContent(
+        '/api/ezp/v2/content/objects',
+        JSON.stringify(contentCreate),
+        function(data){
+            clientOutput.innerHTML = data;
+            createContentLoader.style.display = 'none';
+        }
+    );
+};
+
+// ***
+// Update content example
+var updateContentAnchor = document.getElementById('update-content');
+var updateContentLoader = document.getElementById('update-content-loader');
+updateContentAnchor.onclick = function(e){
+
+    updateContentLoader.style.display = 'block';
+    e.preventDefault();
+
+    var contentUpdateInfo = {
+        ContentUpdate : {
+            MainLocation : "/api/ezp/v2/content/locations/1/2/102"
+        }
+    }
+
+    var updateContentInput = document.getElementById('update-content-input');
+    if (updateContentInput.value.length){
+        contentService.updateContentInfo(
+            updateContentInput.value,
+            JSON.stringify(contentUpdateInfo),
+            function(data){
+                clientOutput.innerHTML = data;
+                updateContentLoader.style.display = 'none';
+            }
+        );
+    } else {
+        clientOutput.innerHTML = 'Id is missing!';
+    }
+};
+
+// ***
 // Load content info example
 var loadContentInfoAnchor = document.getElementById('load-contentinfo');
 var loadContentInfoLoader = document.getElementById('load-contentinfo-loader');

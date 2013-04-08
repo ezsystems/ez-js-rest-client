@@ -162,19 +162,44 @@ var contentService = (function() {
          * Creates a new content draft assigned to the authenticated user.
          *
          * @method createContent
-         * @param content {href} href to content resource
-         * @param contentInput {JSON} json string describing content to be created
+         * @param contentObjects {href} href to contentObjects resource
+         * @param contentCreate {JSON} json string describing content to be created
          * @param callback {function} function, which will be executed on request success
          */
-        service.prototype.createContent = function(content, contentInput, callback) {
+        service.prototype.createContent = function(contentObjects, contentCreate, callback) {
             connectionManager.request(
-                "GET",
-                content,
-                contentInput,
-                { Accept : "application/vnd.ez.api.ContentInfo+json" },
+                "POST",
+                contentObjects,
+                contentCreate,
+                {
+                    Accept : "application/vnd.ez.api.Content+json",
+                    "Content-Type" : "application/vnd.ez.api.ContentCreate+json"
+                },
                 callback
             );
         };
+
+        /**
+         * Update content info.
+         *
+         * @method updateContentInfo
+         * @param content {href} href to content resource
+         * @param contentUpdate {JSON} json string describing update of the content info
+         * @param callback {function} function, which will be executed on request success
+         */
+        service.prototype.updateContentInfo = function(content, contentUpdate, callback) {
+            connectionManager.request(
+                "PATCH",
+                content,
+                contentUpdate,
+                {
+                    Accept : "application/vnd.ez.api.ContentInfo+json",
+                    "Content-Type" : "application/vnd.ez.api.ContentUpdate+json"
+                },
+                callback
+            );
+        };
+
 
 
 
@@ -228,6 +253,9 @@ var contentService = (function() {
                 callback
             );
         };
+
+
+
 
 
     };
