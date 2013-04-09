@@ -1,4 +1,4 @@
-var contentService = (function() {
+var ContentService = (function() {
     "use strict";
 
     /**
@@ -15,6 +15,7 @@ var contentService = (function() {
          * list Root resources
          *
          * @method root
+         * @param root {href}
          * @param callback {function} function, which will be executed on request success
          */
         service.prototype.root = function(root, callback) {
@@ -35,6 +36,7 @@ var contentService = (function() {
          * List all sections
          *
          * @method loadSections
+         * @param sections {href}
          * @param callback {function} function, which will be executed on request success
          */
         service.prototype.loadSections = function(sections, callback) {
@@ -68,6 +70,7 @@ var contentService = (function() {
          * Create new section
          *
          * @method createSection
+         * @param sections {href}
          * @param sectionInput {JSON} json string describing section to be created
          * @param callback {function} function, which will be executed on request success
          */
@@ -130,6 +133,7 @@ var contentService = (function() {
          * Load all content type groups
          *
          * @method loadContentTypeGroups
+         * @param typegroups {href} reference to type groups resource
          * @param callback {function} function, which will be executed on request success
          */
         service.prototype.loadContentTypeGroups = function(typegroups, callback) {
@@ -185,18 +189,18 @@ var contentService = (function() {
         };
 
         /**
-         * Update content info.
+         * Update content metadata.
          *
-         * @method updateContentInfo
+         * @method updateContentMetadata
          * @param content {href} href to content resource
-         * @param contentUpdate {JSON} json string describing update of the content info
+         * @param contentMetadataUpdate {JSON} json string describing update of the content metadata
          * @param callback {function} function, which will be executed on request success
          */
-        service.prototype.updateContentInfo = function(content, contentUpdate, callback) {
+        service.prototype.updateContentMetadata = function(content, contentMetadataUpdate, callback) {
             connectionManager.request(
                 "PATCH",
                 content,
-                contentUpdate,
+                contentMetadataUpdate,
                 {
                     Accept : "application/vnd.ez.api.ContentInfo+json",
                     "Content-Type" : "application/vnd.ez.api.ContentUpdate+json"
@@ -251,7 +255,7 @@ var contentService = (function() {
             connectionManager.request(
                 "DELETE",
                 contentId,
-                {},
+                "",
                 {},
                 callback
             );
@@ -269,7 +273,7 @@ var contentService = (function() {
             connectionManager.request(
                 "COPY",
                 contentId,
-                {},
+                "",
                 { Destination : destinationId },
                 callback
             );
@@ -278,12 +282,30 @@ var contentService = (function() {
 // ******************************
 // Versions
 
+        /**
+         * Loads a specific version of a content object. This method returns fields and relations
+         *
+         * @method loadContent
+         * @param versionedContentId {href}
+         * @param parameters {JSON} JSON string containing parameters (fields, languages, responseGroups)
+         * @param callback {function} function, which will be executed on request success
+         */
+        service.prototype.loadContent = function(versionedContentId, parameters, callback) {
+            connectionManager.request(
+                "GET",
+                versionedContentId,
+                parameters,
+                { Accept : "application/vnd.ez.api.Version+json" },
+                callback
+            );
+        };
+
 
         /**
          *  Loads all versions for the given content
          *
          * @method loadContentCurrentVersion
-         * @param contentId {href}
+         * @param contentVersions {href}
          * @param callback {function} function, which will be executed on request success
          */
         service.prototype.loadVersions = function(contentVersions, callback) {
@@ -297,6 +319,26 @@ var contentService = (function() {
         };
 
 
+        /**
+         * Updates the fields of a draft
+         *
+         * @method updateContent
+         * @param contentId {href}
+         * @param contentUpdate {JSON} JSON string containing parameters (fields, languages, responseGroups)
+         * @param callback {function} function, which will be executed on request success
+         */
+            service.prototype.updateContent = function(contentId, contentUpdate, callback) {
+            connectionManager.request(
+                "PATCH",
+                contentId,
+                contentUpdate,
+                {
+                    Accept : "application/vnd.ez.api.Version+json",
+                    "Content-Type" : "application/vnd.ez.api.VersionUpdate+json"
+                },
+                callback
+            );
+        };
 
 
 

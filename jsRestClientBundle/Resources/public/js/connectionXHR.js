@@ -1,4 +1,4 @@
-var connectionXHR = (function() {
+var ConnectionXHR = (function() {
     "use strict";
 
     /**
@@ -14,7 +14,7 @@ var connectionXHR = (function() {
         var authMethod = authenticationAgent.authMethod;
 
 
-        var getXHR = function(a){
+        var getXHR = function(){
             var result = null;
             if (window.XMLHttpRequest) {
                 // FireFox, Safari, etc.
@@ -53,7 +53,7 @@ var connectionXHR = (function() {
                 }
                 // Request successful
                 callback(XHR.responseText);
-            }
+            };
 
             // Authentication, if possible and opening connection
             if (authMethod === "HTTPBasicAuth"){

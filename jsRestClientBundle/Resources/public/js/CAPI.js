@@ -25,18 +25,12 @@ var CAPI = (function() {
      */
     API.prototype.getContentService = function(){
         if  (!this.contentService_)  {
-            this.contentService_  =  new contentService(
+            this.contentService_  =  new ContentService(
                 this.connectionManager
             );
         }
         return  this.contentService_;
     };
-
-
-    API.prototype.isConnected = function(){
-        console.log("Is connected?");
-    };
-
 
     return API;
 

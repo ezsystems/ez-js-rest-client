@@ -255,28 +255,28 @@ createContentAnchor.onclick = function(e){
 };
 
 // ***
-// Update content example
-var updateContentAnchor = document.getElementById('update-content');
-var updateContentLoader = document.getElementById('update-content-loader');
-updateContentAnchor.onclick = function(e){
+// Update content metadata example
+var updateContentMetaAnchor = document.getElementById('update-content-meta');
+var updateContentMetaLoader = document.getElementById('update-content-meta-loader');
+updateContentMetaAnchor.onclick = function(e){
 
-    updateContentLoader.style.display = 'block';
+    updateContentMetaLoader.style.display = 'block';
     e.preventDefault();
 
-    var contentUpdateInfo = {
+    var contentMetadataUpdateInfo = {
         ContentUpdate : {
             remoteId : "random-id-" + Math.random()*1000000
         }
     }
 
-    var updateContentInput = document.getElementById('update-content-input');
-    if (updateContentInput.value.length){
-        contentService.updateContentInfo(
-            updateContentInput.value,
-            JSON.stringify(contentUpdateInfo),
+    var updateContentMetaInput = document.getElementById('update-content-meta-input');
+    if (updateContentMetaInput.value.length){
+        contentService.updateContentMetadata(
+            updateContentMetaInput.value,
+            JSON.stringify(contentMetadataUpdateInfo),
             function(data){
                 clientOutput.innerHTML = data;
-                updateContentLoader.style.display = 'none';
+                updateContentMetaLoader.style.display = 'none';
             }
         );
     } else {
@@ -363,10 +363,12 @@ copyContentAnchor.onclick = function(e){
     //create location
 
 
+
     var copyContentInput = document.getElementById('copy-content-input');
     if (copyContentInput.value.length){
         contentService.copyContent(
             copyContentInput.value,
+            "/api/ezp/v2/content/locations/1/2/102",
             function(data){
                 clientOutput.innerHTML = data;
                 copyContentLoader.style.display = 'none';
@@ -395,6 +397,69 @@ loadContentVersionsAnchor.onclick = function(e){
             function(data){
                 clientOutput.innerHTML = data;
                 loadContentVersionsLoader.style.display = 'none';
+            }
+        );
+    } else {
+        clientOutput.innerHTML = 'Id is missing!';
+    }
+};
+
+
+// Load content versions example
+var loadContentAnchor = document.getElementById('load-content');
+var loadContentLoader = document.getElementById('load-content-loader');
+loadContentAnchor.onclick = function(e){
+
+    loadContentLoader.style.display = 'block';
+    e.preventDefault();
+
+    var loadContentInput = document.getElementById('load-content-input');
+    if (loadContentInput.value.length){
+        contentService.loadContent(
+            loadContentInput.value,
+            "",
+            function(data){
+                clientOutput.innerHTML = data;
+                loadContentLoader.style.display = 'none';
+            }
+        );
+    } else {
+        clientOutput.innerHTML = 'Id is missing!';
+    }
+};
+
+// Update content draft example
+var updateContentAnchor = document.getElementById('update-content');
+var updateContentLoader = document.getElementById('update-content-loader');
+updateContentAnchor.onclick = function(e){
+
+    updateContentLoader.style.display = 'block';
+    e.preventDefault();
+
+    var versionUpdate = {
+        "VersionUpdate": {
+            "modificationDate": "2001-12-31T12:00:00",
+            "initialLanguageCode": "eng-US",
+            "fields": {
+                "field": [
+                    {
+                        "fieldDefinitionIdentifier": "title",
+                        "languageCode": "eng-US",
+                        "fieldValue": "This is a new title" + Math.random()*1000000
+                    }
+                ]
+            }
+        }
+    }
+
+    var updateContentInput = document.getElementById('update-content-input');
+    if (updateContentInput.value.length){
+        contentService.updateContent(
+            updateContentInput.value,
+            JSON.stringify(versionUpdate),
+            function(data){
+                clientOutput.innerHTML = data;
+                updateContentLoader.style.display = 'none';
             }
         );
     } else {

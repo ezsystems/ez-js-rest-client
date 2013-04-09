@@ -17,7 +17,7 @@ var RestConnectionManager = (function() {
 
         // Choosing and creating connection of requested type
         if (connectionType === "XHR"){
-            var connection = new connectionXHR(authenticationAgent);
+            var connection = new ConnectionXHR(authenticationAgent);
         } else if (connectionType === "JSONP") {
             // some other connection
         }
