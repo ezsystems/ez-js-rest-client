@@ -265,7 +265,7 @@ updateContentAnchor.onclick = function(e){
 
     var contentUpdateInfo = {
         ContentUpdate : {
-            MainLocation : "/api/ezp/v2/content/locations/1/2/102"
+            remoteId : "random-id-" + Math.random()*1000000
         }
     }
 
@@ -328,6 +328,57 @@ loadContentCurrentAnchor.onclick = function(e){
         clientOutput.innerHTML = 'Id is missing!';
     }
 };
+
+// Delete content
+var deleteContentAnchor = document.getElementById('delete-content');
+var deleteContentLoader = document.getElementById('delete-content-loader');
+deleteContentAnchor.onclick = function(e){
+
+    deleteContentLoader.style.display = 'block';
+    e.preventDefault();
+
+    var deleteContentInput = document.getElementById('delete-content-input');
+    if (deleteContentInput.value.length){
+        contentService.deleteContent(
+            deleteContentInput.value,
+            function(data){
+                clientOutput.innerHTML = data;
+                deleteContentLoader.style.display = 'none';
+            }
+        );
+    } else {
+        clientOutput.innerHTML = 'Id is missing!';
+    }
+};
+
+
+// Copy content
+var copyContentAnchor = document.getElementById('copy-content');
+var copyContentLoader = document.getElementById('copy-content-loader');
+copyContentAnchor.onclick = function(e){
+
+    copyContentLoader.style.display = 'block';
+    e.preventDefault();
+
+    //create location
+
+
+    var copyContentInput = document.getElementById('copy-content-input');
+    if (copyContentInput.value.length){
+        contentService.copyContent(
+            copyContentInput.value,
+            function(data){
+                clientOutput.innerHTML = data;
+                copyContentLoader.style.display = 'none';
+            }
+        );
+    } else {
+        clientOutput.innerHTML = 'Id is missing!';
+    }
+};
+
+
+
 
 // Load content versions example
 var loadContentVersionsAnchor = document.getElementById('load-contentversions');

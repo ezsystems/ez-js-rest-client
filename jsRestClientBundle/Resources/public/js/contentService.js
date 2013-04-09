@@ -27,6 +27,9 @@ var contentService = (function() {
             );
         };
 
+// ******************************
+// Sections management
+// ******************************
 
         /**
          * List all sections
@@ -120,6 +123,7 @@ var contentService = (function() {
         };
 
 // ******************************
+// Content Type groups management
 // ******************************
 
         /**
@@ -156,6 +160,7 @@ var contentService = (function() {
         };
 
 // ******************************
+// Content management
 // ******************************
 
         /**
@@ -201,8 +206,6 @@ var contentService = (function() {
         };
 
 
-
-
         /**
          * Load single content info
          *
@@ -236,6 +239,45 @@ var contentService = (function() {
                 callback
             );
         };
+
+        /**
+         * Delete content
+         *
+         * @method deleteContent
+         * @param contentId {href}
+         * @param callback {function} function, which will be executed on request success
+         */
+        service.prototype.deleteContent = function(contentId, callback) {
+            connectionManager.request(
+                "DELETE",
+                contentId,
+                {},
+                {},
+                callback
+            );
+        };
+
+        /**
+         * Copy content
+         *
+         * @method copyContent
+         * @param contentId {href}
+         * @param destinationId {href} A location resource to which the content object should be copied
+         * @param callback {function} function, which will be executed on request success
+         */
+        service.prototype.copyContent = function(contentId, destinationId, callback) {
+            connectionManager.request(
+                "COPY",
+                contentId,
+                {},
+                { Destination : destinationId },
+                callback
+            );
+        };
+
+// ******************************
+// Versions
+
 
         /**
          *  Loads all versions for the given content
