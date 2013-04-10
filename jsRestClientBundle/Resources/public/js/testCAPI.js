@@ -380,8 +380,6 @@ copyContentAnchor.onclick = function(e){
 };
 
 
-
-
 // Load content versions example
 var loadContentVersionsAnchor = document.getElementById('load-contentversions');
 var loadContentVersionsLoader = document.getElementById('load-contentversions-loader');
@@ -460,6 +458,72 @@ updateContentAnchor.onclick = function(e){
             function(data){
                 clientOutput.innerHTML = data;
                 updateContentLoader.style.display = 'none';
+            }
+        );
+    } else {
+        clientOutput.innerHTML = 'Id is missing!';
+    }
+};
+
+// Create draft from exact version example
+var createContentDraftAnchor = document.getElementById('create-content-draft');
+var createContentDraftLoader = document.getElementById('create-content-draft-loader');
+createContentDraftAnchor.onclick = function(e){
+
+    createContentDraftLoader.style.display = 'block';
+    e.preventDefault();
+
+    var createContentDraftInput = document.getElementById('create-content-draft-input');
+    if (createContentDraftInput.value.length){
+        contentService.createContentDraft(
+            createContentDraftInput.value,
+            function(data){
+                clientOutput.innerHTML = data;
+                createContentDraftLoader.style.display = 'none';
+            }
+        );
+    } else {
+        clientOutput.innerHTML = 'Id is missing!';
+    }
+};
+
+// Delete version example
+var deleteVersionAnchor = document.getElementById('delete-version');
+var deleteVersionLoader = document.getElementById('delete-version-loader');
+deleteVersionAnchor.onclick = function(e){
+
+    deleteVersionLoader.style.display = 'block';
+    e.preventDefault();
+
+    var deleteVersionInput = document.getElementById('delete-version-input');
+    if (deleteVersionInput.value.length){
+        contentService.deleteVersion(
+            deleteVersionInput.value,
+            function(data){
+                clientOutput.innerHTML = data;
+                deleteVersionLoader.style.display = 'none';
+            }
+        );
+    } else {
+        clientOutput.innerHTML = 'Id is missing!';
+    }
+};
+
+// Publish version example
+var publishVersionAnchor = document.getElementById('publish-version');
+var publishVersionLoader = document.getElementById('publish-version-loader');
+publishVersionAnchor.onclick = function(e){
+
+    publishVersionLoader.style.display = 'block';
+    e.preventDefault();
+
+    var publishVersionInput = document.getElementById('publish-version-input');
+    if (publishVersionInput.value.length){
+        contentService.publishVersion(
+            publishVersionInput.value,
+            function(data){
+                clientOutput.innerHTML = data;
+                publishVersionLoader.style.display = 'none';
             }
         );
     } else {

@@ -280,7 +280,7 @@ var ContentService = (function() {
         };
 
 // ******************************
-// Versions
+// Versions management
 
         /**
          * Loads a specific version of a content object. This method returns fields and relations
@@ -340,6 +340,59 @@ var ContentService = (function() {
             );
         };
 
+
+        /**
+         * Creates a draft from a published or archived version.
+         *
+         * @method createContentDraft
+         * @param versionedContentId {href}
+         * @param callback {function} function, which will be executed on request success
+         */
+        service.prototype.createContentDraft = function(versionedContentId, callback) {
+            connectionManager.request(
+                "COPY",
+                versionedContentId,
+                "",
+                { Accept : "application/vnd.ez.api.Version+json" },
+                callback
+            );
+        };
+
+
+        /**
+         * Deletes specific version of the content.
+         *
+         * @method deleteVersion
+         * @param versionedContentId {href}
+         * @param callback {function} function, which will be executed on request success
+         */
+        service.prototype.deleteVersion = function(versionedContentId, callback) {
+            connectionManager.request(
+                "DELETE",
+                versionedContentId,
+                "",
+                {},
+                callback
+            );
+        };
+
+
+        /**
+         * Publishes specific version of the content.
+         *
+         * @method publishVersion
+         * @param versionedContentId {href}
+         * @param callback {function} function, which will be executed on request success
+         */
+        service.prototype.publishVersion = function(versionedContentId, callback) {
+            connectionManager.request(
+                "PUBLISH",
+                versionedContentId,
+                "",
+                {},
+                callback
+            );
+        };
 
 
     };
