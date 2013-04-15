@@ -263,7 +263,8 @@ updateContentMetaAnchor.onclick = function(e){
     updateContentMetaLoader.style.display = 'block';
     e.preventDefault();
 
-    var contentMetadataUpdateInfo = {
+    //TODO: use new structures
+    var contentMetadataUpdateStruct = {
         ContentUpdate : {
             remoteId : "random-id-" + Math.random()*1000000
         }
@@ -273,7 +274,7 @@ updateContentMetaAnchor.onclick = function(e){
     if (updateContentMetaInput.value.length){
         contentService.updateContentMetadata(
             updateContentMetaInput.value,
-            JSON.stringify(contentMetadataUpdateInfo),
+            JSON.stringify(contentMetadataUpdateStruct),
             function(data){
                 clientOutput.innerHTML = data;
                 updateContentMetaLoader.style.display = 'none';
@@ -434,6 +435,7 @@ updateContentAnchor.onclick = function(e){
     updateContentLoader.style.display = 'block';
     e.preventDefault();
 
+    //TODO: use new structures
     var versionUpdate = {
         "VersionUpdate": {
             "modificationDate": "2001-12-31T12:00:00",
@@ -530,3 +532,58 @@ publishVersionAnchor.onclick = function(e){
         clientOutput.innerHTML = 'Id is missing!';
     }
 };
+
+var newContentUpdateStructAnchor = document.getElementById('new-content-update-struct');
+newContentUpdateStructAnchor.onclick = function(e){
+
+    e.preventDefault();
+
+    contentService.newContentUpdateStruct(
+        "eng-US",
+        "DummyUser",
+        function(data){
+
+            var fieldInfo = {
+                "fieldDefinitionIdentifier": "title",
+                "languageCode": "eng-US",
+                "fieldValue": "This is a new title" + Math.random()*1000000
+            }
+
+            data.VersionUpdate.fields.field.push(fieldInfo);
+
+            var anotherFieldInfo = {
+                "fieldDefinitionIdentifier": "text",
+                "languageCode": "eng-US",
+                "fieldValue": "This is a new text" + Math.random()*1000000
+            }
+
+
+            data.VersionUpdate.fields.field.push(anotherFieldInfo);
+
+            clientOutput.innerHTML = JSON.stringify(data);
+        }
+    );
+};
+
+
+contentService.newContentMetadataUpdateStruct(
+    "eng-US",
+    "DummyUser",
+    function(updateStruct){
+
+        updateStruct.ContentUpdate.Section = "/api/ezp/v2/content/sections/2";
+//        updateStruct.ContentUpdate.remoteId = "abcdefghijklmnop";
+
+        console.log(updateStruct);
+
+        contentService.updateContentMetadata(
+            "/api/ezp/v2/content/objects/102",
+            JSON.stringify(updateStruct),
+            function(data){
+                clientOutput.innerHTML = data;
+            }
+        );
+
+
+
+    });

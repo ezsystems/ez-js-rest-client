@@ -281,6 +281,7 @@ var ContentService = (function() {
 
 // ******************************
 // Versions management
+// ******************************
 
         /**
          * Loads a specific version of a content object. This method returns fields and relations
@@ -320,18 +321,50 @@ var ContentService = (function() {
 
 
         /**
+         * Returns update structure for Content
+         *
+         * @method newContentUpdateStruct
+         * @param language {string}
+         * @param user {string}
+         * @param callback {function} function, which will be executed on request success
+         */
+        service.prototype.newContentUpdateStruct = function(language, user, callback) {
+
+            var updateStruct = new ContentUpdateStruct(language, user);
+
+            callback(updateStruct);
+        };
+
+        /**
+         * Returns update structure for Content metadata
+         *
+         * @method newContentMetadataUpdateStruct
+         * @param language {string}
+         * @param user {string}
+         * @param callback {function} function, which will be executed on request success
+         */
+        service.prototype.newContentMetadataUpdateStruct = function(language, user, callback) {
+
+            var updateStruct = new ContentMetadataUpdateStruct(language, user);
+
+            callback(updateStruct);
+        };
+
+
+
+        /**
          * Updates the fields of a draft
          *
          * @method updateContent
-         * @param contentId {href}
-         * @param contentUpdate {JSON} JSON string containing parameters (fields, languages, responseGroups)
+         * @param versionedContentId {href}
+         * @param contentUpdateStruct {JSON} JSON string containing update structure (fields, languages, responseGroups)
          * @param callback {function} function, which will be executed on request success
          */
-            service.prototype.updateContent = function(contentId, contentUpdate, callback) {
+            service.prototype.updateContent = function(versionedContentId, contentUpdateStruct, callback) {
             connectionManager.request(
                 "PATCH",
-                contentId,
-                contentUpdate,
+                contentUpdateStruct,
+                versionUpdateStruct,
                 {
                     Accept : "application/vnd.ez.api.Version+json",
                     "Content-Type" : "application/vnd.ez.api.VersionUpdate+json"
@@ -393,6 +426,7 @@ var ContentService = (function() {
                 callback
             );
         };
+
 
 
     };

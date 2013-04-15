@@ -148,6 +148,13 @@
                     <div id="publish-version-loader" class="ajax-loader"></div>
                 </div>
 
+                <hr/>
+
+                <div class="rest-test">
+                    <a href="#new-content-update-struct" id="new-content-update-struct">Get update structure for Content and populate it with random data</a>
+                </div>
+
+
             </div>
         </div>
         <div class="yui3-u-1-2">
@@ -166,10 +173,16 @@
 
 
 {% javascripts
-    '@jsRestClientBundle/Resources/public/js/CAPI.js'
-    '@jsRestClientBundle/Resources/public/js/contentService.js'
-    '@jsRestClientBundle/Resources/public/js/connectionManager.js'
-    '@jsRestClientBundle/Resources/public/js/connectionXHR.js'
+    '@jsRestClientBundle/Resources/public/js/REST-client/libs/date.format.js'
+
+    '@jsRestClientBundle/Resources/public/js/REST-client/structures/contentUpdateStruct.js'
+    '@jsRestClientBundle/Resources/public/js/REST-client/structures/contentMetadataUpdateStruct.js'
+    '@jsRestClientBundle/Resources/public/js/REST-client/services/contentService.js'
+    '@jsRestClientBundle/Resources/public/js/REST-client/connections/connectionXHR.js'
+
+    '@jsRestClientBundle/Resources/public/js/REST-client/connectionManager.js'
+    '@jsRestClientBundle/Resources/public/js/REST-client/CAPI.js'
+
     '@jsRestClientBundle/Resources/public/js/testCAPI.js'
 %}
     <script src="{{ asset_url }}"></script>
