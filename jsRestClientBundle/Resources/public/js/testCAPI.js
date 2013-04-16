@@ -565,25 +565,21 @@ newContentUpdateStructAnchor.onclick = function(e){
     );
 };
 
+var newContentMetaUpdateStructAnchor = document.getElementById('new-content-meta-update-struct');
+newContentMetaUpdateStructAnchor.onclick = function(e){
 
-contentService.newContentMetadataUpdateStruct(
-    "eng-US",
-    "DummyUser",
-    function(updateStruct){
+    e.preventDefault();
 
-        updateStruct.ContentUpdate.Section = "/api/ezp/v2/content/sections/2";
-//        updateStruct.ContentUpdate.remoteId = "abcdefghijklmnop";
+    contentService.newContentMetadataUpdateStruct(
+        "eng-US",
+        "DummyUser",
+        function(updateStruct){
 
-        console.log(updateStruct);
+            updateStruct.ContentUpdate.Section = "/api/ezp/v2/content/sections/2";
+            updateStruct.ContentUpdate.remoteId = "random-id-" + Math.random()*1000000;
 
-        contentService.updateContentMetadata(
-            "/api/ezp/v2/content/objects/102",
-            JSON.stringify(updateStruct),
-            function(data){
-                clientOutput.innerHTML = data;
-            }
-        );
+            clientOutput.innerHTML = JSON.stringify(updateStruct);
+        });
+}
 
 
-
-    });
