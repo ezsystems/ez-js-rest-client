@@ -211,47 +211,38 @@ createContentAnchor.onclick = function(e){
 
     createContentLoader.style.display = 'block';
     e.preventDefault();
-    var contentCreate = {
-        "ContentCreate": {
-            "ContentType": {
-                "_href": "/api/ezp/v2/content/types/18"
-            },
-            "mainLanguageCode": "eng-US",
-            "LocationCreate": {
-                "ParentLocation": {
-                    "_href": "/api/ezp/v2/content/locations/1/2/102"
-                },
-                "priority": "0",
-                "hidden": "false",
-                "sortField": "PATH",
-                "sortOrder": "ASC"
-            },
-            "Section": {
-                "_href": "/api/ezp/v2/content/sections/4"
-            },
-            "alwaysAvailable": "true",
-            "remoteId": Math.round(Math.random()*1000),
-            "fields": {
-                "field": [
-                    {
+
+    contentService.newLocationCreateStruct(
+        "/api/ezp/v2/content/locations/1/2/102",
+        function(locationCreateStruct){
+            contentService.newContentCreateStruct(
+                "/api/ezp/v2/content/types/18",
+                locationCreateStruct,
+                "eng-US",
+                "DummyUser",
+                function(contentCreateStruct){
+
+                    var fieldInfo = {
                         "fieldDefinitionIdentifier": "title",
                         "languageCode": "eng-US",
                         "fieldValue": "This is a title"
                     }
-                ]
-            }
-        }
-    }
 
-    // compatibility remark: JSON API is supported in all modern browsers (IE-wise since IE8)
-    contentService.createContent(
-        '/api/ezp/v2/content/objects',
-        JSON.stringify(contentCreate),
-        function(data){
-            clientOutput.innerHTML = data;
-            createContentLoader.style.display = 'none';
-        }
-    );
+                    contentCreateStruct.ContentCreate.fields.field.push(fieldInfo);
+
+                    contentService.createContent(
+                        '/api/ezp/v2/content/objects',
+                        JSON.stringify(contentCreateStruct),
+                        function(data){
+                            clientOutput.innerHTML = data;
+                            createContentLoader.style.display = 'none';
+                        }
+                    );
+                }
+            );
+        });
+
+
 };
 
 // ***
@@ -263,23 +254,25 @@ updateContentMetaAnchor.onclick = function(e){
     updateContentMetaLoader.style.display = 'block';
     e.preventDefault();
 
-    //TODO: use new structures
-    var contentMetadataUpdateStruct = {
-        ContentUpdate : {
-            remoteId : "random-id-" + Math.random()*1000000
-        }
-    }
-
     var updateContentMetaInput = document.getElementById('update-content-meta-input');
     if (updateContentMetaInput.value.length){
-        contentService.updateContentMetadata(
-            updateContentMetaInput.value,
-            JSON.stringify(contentMetadataUpdateStruct),
-            function(data){
-                clientOutput.innerHTML = data;
-                updateContentMetaLoader.style.display = 'none';
-            }
-        );
+        contentService.newContentMetadataUpdateStruct(
+            "eng-US",
+            "DummyUser",
+            function(updateStruct){
+
+                updateStruct.ContentUpdate.Section = "/api/ezp/v2/content/sections/2";
+                updateStruct.ContentUpdate.remoteId = "random-id-" + Math.random()*1000000;
+
+                contentService.updateContentMetadata(
+                    updateContentMetaInput.value,
+                    JSON.stringify(updateStruct),
+                    function(data){
+                        clientOutput.innerHTML = data;
+                        updateContentMetaLoader.style.display = 'none';
+                    }
+                );
+            });
     } else {
         clientOutput.innerHTML = 'Id is missing!';
     }
@@ -381,6 +374,9 @@ copyContentAnchor.onclick = function(e){
 };
 
 
+// ******************************
+// ******************************
+
 // Load content versions example
 var loadContentVersionsAnchor = document.getElementById('load-contentversions');
 var loadContentVersionsLoader = document.getElementById('load-contentversions-loader');
@@ -435,31 +431,30 @@ updateContentAnchor.onclick = function(e){
     updateContentLoader.style.display = 'block';
     e.preventDefault();
 
-    //TODO: use new structures
-    var versionUpdate = {
-        "VersionUpdate": {
-            "modificationDate": "2001-12-31T12:00:00",
-            "initialLanguageCode": "eng-US",
-            "fields": {
-                "field": [
-                    {
-                        "fieldDefinitionIdentifier": "title",
-                        "languageCode": "eng-US",
-                        "fieldValue": "This is a new title" + Math.random()*1000000
-                    }
-                ]
-            }
-        }
-    }
-
     var updateContentInput = document.getElementById('update-content-input');
     if (updateContentInput.value.length){
-        contentService.updateContent(
-            updateContentInput.value,
-            JSON.stringify(versionUpdate),
-            function(data){
-                clientOutput.innerHTML = data;
-                updateContentLoader.style.display = 'none';
+
+        contentService.newContentUpdateStruct(
+            "eng-US",
+            "DummyUser",
+            function(contentUpdateStruct){
+
+                var fieldInfo = {
+                    "fieldDefinitionIdentifier": "title",
+                    "languageCode": "eng-US",
+                    "fieldValue": "This is a new title" + Math.random()*1000000
+                }
+
+                contentUpdateStruct.VersionUpdate.fields.field.push(fieldInfo);
+
+                contentService.updateContent(
+                    updateContentInput.value,
+                    JSON.stringify(contentUpdateStruct),
+                    function(data){
+                        clientOutput.innerHTML = data;
+                        updateContentLoader.style.display = 'none';
+                    }
+                );
             }
         );
     } else {
@@ -533,6 +528,10 @@ publishVersionAnchor.onclick = function(e){
     }
 };
 
+// ******************************
+// ******************************
+
+// Content update structure example
 var newContentUpdateStructAnchor = document.getElementById('new-content-update-struct');
 newContentUpdateStructAnchor.onclick = function(e){
 
@@ -565,6 +564,7 @@ newContentUpdateStructAnchor.onclick = function(e){
     );
 };
 
+// Content metadata update structure example
 var newContentMetaUpdateStructAnchor = document.getElementById('new-content-meta-update-struct');
 newContentMetaUpdateStructAnchor.onclick = function(e){
 
@@ -580,6 +580,43 @@ newContentMetaUpdateStructAnchor.onclick = function(e){
 
             clientOutput.innerHTML = JSON.stringify(updateStruct);
         });
-}
+};
+
+
+// Content create structure example
+var newContentCreateStructAnchor = document.getElementById('new-content-create-struct');
+newContentCreateStructAnchor.onclick = function(e){
+
+    e.preventDefault();
+
+    contentService.newLocationCreateStruct(
+        "/api/ezp/v2/content/locations/1/2/102",
+        function(locationCreateStruct){
+            contentService.newContentCreateStruct(
+                "/api/ezp/v2/content/types/18",
+                locationCreateStruct,
+                "eng-US",
+                "DummyUser",
+                function(contentCreateStruct){
+                    clientOutput.innerHTML = JSON.stringify(contentCreateStruct);
+                }
+            );
+        });
+};
+
+// Location create structure example
+var newLocationCreateStructAnchor = document.getElementById('new-location-create-struct');
+newLocationCreateStructAnchor.onclick = function(e){
+
+    e.preventDefault();
+
+    contentService.newLocationCreateStruct(
+        "/api/ezp/v2/content/locations/1/2/102",
+        function(locationCreateStruct){
+
+                clientOutput.innerHTML = JSON.stringify(locationCreateStruct);
+
+        });
+};
 
 

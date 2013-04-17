@@ -350,6 +350,22 @@ var ContentService = (function() {
             callback(updateStruct);
         };
 
+        /**
+         * Returns create structure for Content
+         *
+         * @method newContentCreateStruct
+         * @param contentTypeId {href}
+         * @param locationCreateStruct {object}
+         * @param language {string}
+         * @param user {string}
+         * @param callback {function} function, which will be executed on request success
+         */
+        service.prototype.newContentCreateStruct = function(contentTypeId, locationCreateStruct, language, user, callback) {
+
+            var createStruct = new ContentCreateStruct(contentTypeId, locationCreateStruct, language, user);
+
+            callback(createStruct);
+        };
 
 
         /**
@@ -360,11 +376,11 @@ var ContentService = (function() {
          * @param contentUpdateStruct {JSON} JSON string containing update structure (fields, languages, responseGroups)
          * @param callback {function} function, which will be executed on request success
          */
-            service.prototype.updateContent = function(versionedContentId, contentUpdateStruct, callback) {
+        service.prototype.updateContent = function(versionedContentId, contentUpdateStruct, callback) {
             connectionManager.request(
                 "PATCH",
+                versionedContentId,
                 contentUpdateStruct,
-                versionUpdateStruct,
                 {
                     Accept : "application/vnd.ez.api.Version+json",
                     "Content-Type" : "application/vnd.ez.api.VersionUpdate+json"
@@ -426,6 +442,27 @@ var ContentService = (function() {
                 callback
             );
         };
+
+
+// ******************************
+// Locations management
+// ******************************
+
+        /**
+         * Returns create structure for Location
+         *
+         * @method newLocationCreateStruct
+         * @param parentLocationId {href}
+         * @param callback {function} function, which will be executed on request success
+         */
+        service.prototype.newLocationCreateStruct = function(parentLocationId, callback) {
+
+            var createStruct = new LocationCreateStruct(parentLocationId);
+
+            callback(createStruct);
+        };
+
+
 
 
 
