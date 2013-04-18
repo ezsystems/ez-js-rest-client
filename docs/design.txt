@@ -684,7 +684,7 @@ handle all the requested transactions.
     from the most feature rich to the least feature rich about their
     compatibility (See ``Request#isCompatible`` for more information). This
     does break dependency inversion. In the future it might be interesting to
-    refactor this and move it to a ``RequestDetectionFactory``. For now the
+    refactor this and move it to a ``ConnectionFeatureFactory``. For now the
     more pragmatic approach is chosen.
 
 Connections
