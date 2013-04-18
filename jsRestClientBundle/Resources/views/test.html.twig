@@ -166,6 +166,33 @@
                     <a href="#new-location-create-struct" id="new-location-create-struct">Get create structure for Location</a>
                 </div>
 
+                <hr/>
+
+                <div class="rest-test">
+                    <a href="#create-location" id="create-location">Create new location for content:</a>
+                    <input type="text" id="create-location-input" value="/api/ezp/v2/content/objects/102/locations" />
+                    <div id="create-location-loader" class="ajax-loader"></div>
+                </div>
+
+                <div class="rest-test">
+                    <a href="#load-locations" id="load-locations">Load locations for content:</a>
+                    <input type="text" id="load-locations-input" value="/api/ezp/v2/content/objects/102/locations" />
+                    <div id="load-locations-loader" class="ajax-loader"></div>
+                </div>
+
+                <div class="rest-test">
+                    <a href="#load-location" id="load-location">Load location by id:</a>
+                    <input type="text" id="load-location-input" value="/api/ezp/v2/content/locations/1/2/102" />
+                    <div id="load-location-loader" class="ajax-loader"></div>
+                </div>
+
+                <div class="rest-test">
+                    <a href="#copy-subtree" id="copy-subtree">Copy a subtree into:</a>
+                    <input type="text" id="copy-subtree-input" value="/api/ezp/v2/content/locations/1/2/102" />
+                    <div id="copy-subtree-loader" class="ajax-loader"></div>
+                </div>
+
+
             </div>
         </div>
         <div class="yui3-u-1-2">

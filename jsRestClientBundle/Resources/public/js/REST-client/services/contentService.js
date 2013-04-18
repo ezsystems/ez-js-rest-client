@@ -463,6 +463,103 @@ var ContentService = (function() {
         };
 
 
+        /**
+         * Creates a new location for the given content object
+         *
+         * @method createLocation
+         * @param objectLocations {href}
+         * @param locationCreateStruct {object}
+         * @param callback {function} function, which will be executed on request success
+         */
+        service.prototype.createLocation = function(objectLocations, locationCreateStruct, callback) {
+            connectionManager.request(
+                "POST",
+                objectLocations,
+                JSON.stringify(locationCreateStruct),
+                {
+                    Accept : "application/vnd.ez.api.Location+json",
+                    "Content-Type" : "application/vnd.ez.api.LocationCreate+json"
+                },
+                callback
+            );
+        };
+
+
+        /**
+         *  Loads all locations for the given content object
+         *
+         * @method loadLocations
+         * @param objectLocations {href}
+         * @param callback {function} function, which will be executed on request success
+         */
+        service.prototype.loadLocations = function(objectLocations, callback) {
+            connectionManager.request(
+                "GET",
+                objectLocations,
+                {},
+                { Accept : "application/vnd.ez.api.LocationList+json" },
+                callback
+            );
+        };
+
+
+        /**
+         *  Loads a location object according to given locationId
+         *
+         * @method loadLocation
+         * @param locationId {href}
+         * @param callback {function} function, which will be executed on request success
+         */
+        service.prototype.loadLocation = function(locationId, callback) {
+            connectionManager.request(
+                "GET",
+                locationId,
+                {},
+                { Accept : "application/vnd.ez.api.Location+json" },
+                callback
+            );
+        };
+
+        /**
+         *  Loads a location object according to given remoteId
+         *
+         * @method loadLocationByRemoteId
+         * @param locations {href}
+         * @param remoteId {href}
+         * @param callback {function} function, which will be executed on request success
+         */
+        // DOESN'T work as described in spec
+//        service.prototype.loadLocationByRemoteId = function(locations, remoteId, callback) {
+//            connectionManager.request(
+//                "POST",
+//                locations,
+//                JSON.stringify({
+//                    remoteId : remoteId
+//                }),
+//                { Accept : "application/vnd.ez.api.Location+json" },
+//                callback
+//            );
+//        };
+
+        /**
+         *  Copies the subtree starting from "subtree" as a new subtree of "targetLocation"
+         *
+         * @method loadLocation
+         * @param subtree {href}
+         * @param targetLocation {href}
+         * @param callback {function} function, which will be executed on request success
+         */
+        service.prototype.copySubtree = function(subtree, targetLocation, callback) {
+            connectionManager.request(
+                "COPY",
+                subtree,
+                "",
+                { Destination : targetLocation },
+                callback
+            );
+        };
+
+
 
 
 

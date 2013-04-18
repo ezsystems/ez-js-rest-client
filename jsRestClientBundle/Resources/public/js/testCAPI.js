@@ -620,3 +620,87 @@ newLocationCreateStructAnchor.onclick = function(e){
 };
 
 
+// Create location example
+var CreateLocationAnchor = document.getElementById('create-location');
+var CreateLocationLoader = document.getElementById('create-location-loader');
+CreateLocationAnchor.onclick = function(e){
+
+    CreateLocationLoader.style.display = 'block';
+    e.preventDefault();
+
+    contentService.newLocationCreateStruct(
+        "/api/ezp/v2/content/locations/1/2/107",
+        function(locationCreateStruct){
+            var CreateLocationInput = document.getElementById('create-location-input');
+            if (CreateLocationInput.value.length){
+                contentService.createLocation(
+                    CreateLocationInput.value,
+                    locationCreateStruct,
+                    function(data){
+                        clientOutput.innerHTML = data;
+                        CreateLocationLoader.style.display = 'none';
+                    }
+                );
+            } else {
+                clientOutput.innerHTML = 'Id is missing!';
+            }
+        });
+};
+
+
+// Load locations example
+var LoadLocationsAnchor = document.getElementById('load-locations');
+var LoadLocationsLoader = document.getElementById('load-locations-loader');
+LoadLocationsAnchor.onclick = function(e){
+
+    LoadLocationsLoader.style.display = 'block';
+    e.preventDefault();
+
+    var LoadLocationsInput = document.getElementById('load-locations-input');
+
+    contentService.loadLocations(
+        LoadLocationsInput.value,
+        function(data){
+            clientOutput.innerHTML = data;
+            LoadLocationsLoader.style.display = 'none';
+        });
+};
+
+
+// Load location by id example
+var LoadLocationAnchor = document.getElementById('load-location');
+var LoadLocationLoader = document.getElementById('load-location-loader');
+LoadLocationAnchor.onclick = function(e){
+
+    LoadLocationLoader.style.display = 'block';
+    e.preventDefault();
+
+    var LoadLocationInput = document.getElementById('load-location-input');
+
+    contentService.loadLocation(
+        LoadLocationInput.value,
+        function(data){
+            clientOutput.innerHTML = data;
+            LoadLocationLoader.style.display = 'none';
+        });
+};
+
+
+// Copy subtree example
+var CopySubtreeAnchor = document.getElementById('copy-subtree');
+var CopySubtreeLoader = document.getElementById('copy-subtree-loader');
+CopySubtreeAnchor.onclick = function(e){
+
+    CopySubtreeLoader.style.display = 'block';
+    e.preventDefault();
+
+    var CopySubtreeInput = document.getElementById('copy-subtree-input');
+
+    contentService.copySubtree(
+        "/api/ezp/v2/content/locations/1/2/107",
+        CopySubtreeInput.value,
+        function(data){
+            clientOutput.innerHTML = data;
+            CopySubtreeLoader.style.display = 'none';
+        });
+};
