@@ -1,0 +1,822 @@
+========================================
+eZ-Publish JavaScript REST-Client Design
+========================================
+
+:Author:   Jakob Westhoff
+:Revision: Draft
+:Date:     2013-03-20
+
+.. contents:: Table of contents
+
+
+Scope
+=====
+
+This document describes design decisions made concerning the JavaScript
+REST-API, which allows communication with eZ-Publish backends.
+
+The document does not document a specific implementation, or provides usage
+examples for any kind of realized implementation.
+
+Placement
+=========
+
+The eZ-Publish JavaScript REST-API should ease the communication with the
+eZ-Publish REST-Service and provide a unified interface for all needed
+operations. The client is supposed to be library and framework agnostic,
+therefore usable in conjunction with any other framework (YUI, AngularJS,
+jQuery, ...). Nevertheless it utilizes new technologies and architectural
+structures to create a modern and future-proof API.
+
+Clarification of Terms
+======================
+
+CAPI / Client-API:
+    The JavaScript-Client-API, this document describes the design of.
+
+PAPI:
+    The PHP based public interface to a eZ-Publish content repository.
+
+REST-API:
+    REST API, defined by eZ-Publish to allow external access to mostly all
+    functionality of a content repository. The specification is currently
+    available inside the ``ezpublish-kernel`` repository as `REST-API-V2.rst`__
+
+__ https://github.com/ezsystems/ezpublish-kernel/blob/master/doc/specifications/rest/REST-API-V2.rst
+
+Basic Design Direction
+======================
+
+The JavaScript Client API is heavily based on the REST-API provided by
+eZ-Publish. Several reasons lead to this decision:
+
+1. Different operations may cause different amounts of requests to the backend.
+   The Client-API should reflect the amount of work (requests) which needs to
+   be done, once a certain operation is executed. Otherwise quite costly
+   operations could easily provoke the intuition, they are mostly for free and
+   can be called over and over again. This may lead to massive performance
+   problems.
+
+   The easiest way to overcome a problem like this is to structure the
+   Client-API after the used backend interface, which in this case is the
+   REST-API.
+
+2. The REST-API is mainly modeled after the PHP-PAPI interface to the
+   Repository. Therefore users already familiar with this interface will feel
+   at home with the Client-API.
+
+3. Due to a direct correlation of Client-API calls to made backend requests,
+   debugging of systems using the Client-API is a lot more transparent, as
+   monitored requests could easily be mapped back to Client-API calls made.
+
+Handling Asynchronous Requests
+==============================
+
+By design a communication layer with another system, written in JavaScript
+has a non-blocking asynchronously handled API. Different techniques exist to
+realize an API with those constraints. 
+
+Used Techniques
+---------------
+
+The following sections describes two techniques, which will both be employed
+inside the CAPI, to allow for a modern framework as well as minimal
+dependencies.
+
+Callback Functions
+^^^^^^^^^^^^^^^^^^
+
+The easiest way of handling asynchronous operations in JavaScript is the use of
+simple callbacks, provided in conjunction with each operation call. Once the
+operation finishes the callback is executed with the result of the operation::
+
+    var CAPI = ...
+    CAPI.fetchSomeData(arg1, arg2, function(result) {
+        // Handle result, after the operation has been finished
+    });
+
+Even though this is the easiest and most intuitive solution it has certain major
+drawbacks. Once asynchronous operations need to be executed in a serial manner
+(The result of one operation depends on another), nesting levels of functions
+tend to explode, making the code structure unreadable and very hard to
+maintain::
+
+    CAPI.fetchSomeData(arg1, arg2, function(result) {
+        CAPI.fetchSomeOtherData(result, function(otherResult) {
+            CAPI.storeChange(result, otherResult, function(someOtherResult) {
+                //...
+            });
+        });
+    });
+
+The nesting and code structure gets even worse, once parallel and serial
+execution paths are combined, which is often the case with complex server
+communication backends.
+
+Nevertheless using callbacks has a massive benefit as well. It is understood
+almost instantly by any JavaScript developer. Furthermore it does not depend on
+any other library of code to be handled correctly.
+
+Promises
+^^^^^^^^
+
+An alternative to the simple callback based asynchronous handling are
+a technique called *Promises* (under slightly different circumstances known as
+*Futures* or *Deferreds*). By now Promises are used by a lot of different
+frameworks, to handle asynchronous operations.
+
+Promises are working with a concept, where each call to an asynchronous
+operation returns a specific promise (object) for this unique call to the operation.
+Once the operation is finished the returned and associated promise will be
+fulfilled, or in case of an error rejected. An arbitrary amount of callbacks
+can be registered on any specific promise to be called once the operation
+finished::
+
+    var promise = CAPI.fetchSomeData(arg1, arg2);
+    
+    promise.then(function(result) {
+        // Handle result, after the operation has been finished
+    });
+
+As the promises are associated with a specific operation, handling of
+race-conditions is no problem, even though callbacks are registered after the
+operation might already be finished. If a new callback is registered on an
+already fulfilled promise it will be called immediately with the result of the
+operation.
+
+The whole beauty of promises is mainly visible once asynchronous operations
+are nested. A callback registration on a promise yields a new promise, which
+is fulfilled once the callback has been executed. This fact allows to build up
+serial execution flows of asynchronous operations, while having a maximum
+nesting depth of one (1)::
+
+    CAPI.fetchSomeData(arg1, arg2).then(function(result) {
+        return CAPI.fetchSomeOtherData(result);
+    }).then(function(otherResult) {
+        return CAPI.storeChange(result, otherResult);
+    }).then(function(someOtherResult) {
+        //...
+    });
+
+Promises deliver their full potential once complex asynchronous work flows need
+to be executed, where different operations are carried out in parallel, while
+others are carried out serial. As multiple promises can easily be combined to
+form a new promise, which will be fulfilled, once all or at least one of the
+combined promises is fulfilled.
+
+Specification of Promise Interface
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+In order to harness the full potential of Promises a quite complex
+implementation is needed. To be compatible with other promise-based systems
+a certain set of implementation rules needs to be followed.
+
+The Promise implementation utilized inside of the CAPI should adhere to the
+`CommonJS *Promises/D* specification`__. It is the most feature complete
+version of the Promises concept for JavaScript. Furthermore it is compatible
+with most other implementation of Promises, like the ones used by jQuery for
+example.
+
+__ http://wiki.commonjs.org/wiki/Promises/D
+
+
+Combining Callbacks and Promises
+--------------------------------
+
+As the objective of the CAPI is to be modern and user friendly, while being mostly
+dependency free, including the referenced Promise library as a dependency is
+not ideal.
+
+Furthermore a lot a developers out there still don't grasp the concept of
+Promises. They want to use simple callbacks for asynchronous operations.
+
+Both of these problems are solved by creating a strictly callback-based API,
+while wrapping this API later on with a decorator, which adds Promise
+functionality to every function.
+
+Callback-based Restrictions
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+To allow for this semi-automatic wrapping to be created certain restrictions
+need to be applied onto the callback based API
+
+Callbacks at the End
+~~~~~~~~~~~~~~~~~~~~
+
+Callbacks need to be the last argument of any API function::
+
+    CAPI.fetchSomeInformation(arg1, arg2, callback);
+    CAPI.storeSomeInformation(arg1, callback);
+    CAPI.doSomethingElse(callback);
+    ...
+
+Only if this rule is adhered to by all of the API functions an automatic
+promise wrapping is possible, as otherwise it would not be possible to
+automatically determine, which argument holds the callback.
+
+.. note:: Another possible solution would be to provide the callback always as
+    first argument. This is however not really feasible, as it would make the
+    callback-based API a lot harder to use
+
+No Exceptions - Error first Callbacks
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+To allow for proper error handling, throughout a possibly large chain of
+Promises, Exceptions are not feasible to signal and/or transport error
+information. As the executed operations are asynchronous, the context of the
+thrown Exception is lost. The problem is solved, by providing each callback
+with an ``error`` indicator as first argument.
+
+The provided indicator either contains the error, which might otherwise have
+been thrown, or a value, which evaluates to ``false``::
+
+    CAPI.someOperation(arg1, function(error, result) {
+        if (error) {
+            // Something went wrong. Details available in error
+            return;
+        }
+        
+        // Everything has been fine. result will be filled with the operations
+        // result information.
+    });
+
+For an automatic wrapping into a Promise based structure it is required, that
+every callback is executed with an error indicator first, followed by the
+result.
+
+Only One Result
+~~~~~~~~~~~~~~~
+
+In order to properly map the results provided by the callback API to Promises
+in an automatic and simple way, only one result may be returned by each API
+call. Therefore always resulting in a maximum of two arguments passed to each
+callback: ``error`` and ``result``. It is feasible that the result is empty in
+which case it does not need to be provided.
+
+.. note:: Multiple results of an operation can of course always be encoded as
+    object or array. The only restriction is, that the callback is not been called
+    with more than one result argument.
+
+Promise Related Considerations
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Certain considerations need to be made, to create an automatic promise
+wrapping system.
+
+Optional Arguments
+~~~~~~~~~~~~~~~~~~
+
+Optional arguments are a special case, which need special handling for the
+Promise-API. As the callback is always specified at the end of the CAPI
+function, an automatic promise wrapping process needs to take care of injecting
+``undefined`` values for arguments not provided to the call. Otherwise the
+callback will never be fired and the behavior would be undeterministic.
+
+.. note:: The problem can easily be solved utilizing the ``length`` property of
+    each wrapped function.
+
+
+Separation into multiple Services
+=================================
+
+The API should be divided into multiple different services. The segregation
+boundaries should be chosen to be adequate for the different functionalities
+within the REST-API. Therefore different services should exist **at least**
+for the following three use cases:
+
+- Content-Access
+- Content-Type-Access
+- User-Management
+
+Service Structure
+-----------------
+
+Each service is defined as a JavaScript object, utilizing the concept of
+prototypial inheritance, to allow its children (instances) to access its
+methods::
+
+    ContentService = function(connectionManager) {/*...*/}
+
+    ContentService.prototype.loadContentById = function(id, callback) {
+        //...
+        callback(error, result);
+    };
+    ...
+
+
+.. note:: Currently there does not seem to be the need to have all services
+    inherit the same base prototype. From an OOD semantical point of view this might make
+    sense. However this is hard to understand/read for most JavaScript developers,
+    therefore it should not be done in this case.
+
+
+Services requested from the same CAPI instance are supposed to be always the
+same object. This preserves memory and construction time, should a service be
+requested multiple times. The following pseudo implementation is used to
+describe this *singleton-like* behavior::
+
+    CAPI.prototype.getContentService = function() {
+        if (!this.contentService_) {
+            this.contentService_ = new ContentService(
+                this.connectionManager
+            );
+        }
+        return this.contentService_;
+    };
+
+
+The same ``ConnectionManager`` is provided to each requested service of one
+CAPI entry point. It is therefore effectively shared between one CAPI instance.
+The ``ConnectionManager`` handles requests to the REST-API, taking care of
+authentication, as well all other connection constraints.
+
+Possible adjustments during prototyping phase
+---------------------------------------------
+
+During the development of the CAPI we might realize that certain of those
+services should be divided into more than one service endpoint. During the
+prototyping phase this should be evaluated, discussed and maybe
+adapted/changed. After the final API has been specified, a further change would
+only be possible by splitting services and having the current implementation
+transparently aggregate the newly created parts, in order to not break BC.
+
+The following segregation boundaries should be especially evaluated during
+prototyping, as they represent commonly used task boundaries:
+
+- Search
+    - SimpleSearch
+    - Views
+- Locations
+- Trash
+- ObjectStates
+
+Single entry point into CAPI
+============================
+
+While the CAPI is divided into different services to allow easier usage as well
+as enhance maintainability, it is still desired, to only have one entry point
+into the CAPI implementation. Therefore a CAPI instance should be instantiated,
+which is further on used as a factory to retrieve all the different services
+needed::
+
+    var connection = new CAPI(arg1, arg2, ...);
+
+    var contentService = connection.getContentService();
+    contentService.loadContentById("someId", function(error, content) {
+        //...
+    });
+
+Promise-based Entry point
+-------------------------
+
+To utilize the promise based wrapper API, the instantiated callback interface
+needs simply needs to be wrapped in to a Promise decorator, which does all
+further magic of wrapping the requested services in order to provide
+a promise-based API::
+
+    var connection = new PromiseDecorator(
+        CAPI(arg1, arg2, ...)
+    );
+
+    var contentService = connection.getContentService();
+    
+    var promise = contentService.loadContentById("someId");
+
+    promise.then(function(content) {
+        //...
+    }, function(error) {
+        //...
+    });
+
+Single service do not need to be wrappable in a standalone way, as either the
+Promise-API or the callback API will be used. There is no real use case for
+interdependent usage of both in parallel.
+
+Using ``new`` to instantiate CAPI
+---------------------------------
+
+The usage of ``new`` to instantiate a new API entry point instead of simply
+providing a static API inside a certain object like ``CAPI`` is owed to the
+fact, that certain states need to be shared between all requested service,
+while still being relative to a certain CAPI connection:
+
+- Authentication
+    - Username/Password
+    - Session
+    - CSRF-Token
+- Connection Management
+    - Service Endpoint URL
+    - Open connections
+    - Available connections
+
+CAPI Instantiation Information
+------------------------------
+
+Each instantiation of the CAPI entry point needs certain information to properly
+do its work:
+
+- Authentication Agent
+- REST-Service Endpoint URL
+
+The Authentication agent is optional, while the Service Endpoint URL is
+not.
+
+.. note:: If no authentication is provided the a default ``anonymous`` user authentication
+    will be used by the CAPI automatically. The implementation may need to carry out the
+    necessary login steps for this case automatically then.
+
+The required information is simply provided to the CAPI constructor function::
+
+    var connection = new CAPI(
+        "http://some.communication/endpoint/url",
+        new SessionAuthenticationAgent(
+            "Username",
+            "secret"
+        )
+    );
+
+As defined above the ``AuthentiationAgent`` is optional. Therefore the
+signature of the constructor function is as follows::
+    
+    function CAPI(endpointUrl, [authenticationAgent]);
+
+Lazy Authentication
+^^^^^^^^^^^^^^^^^^^
+
+The instantiation of the CAPI entry point does not actually log-in the user.
+This is done lazy. Essentially all the provided information is stored for later
+usage, either by initiating other modules, like the ``ConnectionManager`` with
+the given information, or simply storing them to instance properties.
+
+The first time an authenticated connection is needed, the proper
+authentication calls will delegated by the ``ConnectionManager`` to the
+provided ``AuthenticationAgent``, before the request itself is processed.
+
+This lazy initialization allows the synchronous creation of a new CAPI
+entry point, as well as synchronous creation of all requested services. If the
+login procedure would be executed right after the needed information had been
+provided the instantiation of the service itself, as well as possibly any
+service request would need to be asynchronous as well. This difficults the
+usage of the CAPI and is therefore avoided using lazy authentication.
+
+AuthenticationAgents
+====================
+
+As the REST-API is designed to be capable of handling different ways of
+authentication, the CAPI needs to reflect this fact.
+
+To provide an easy to use, but still flexible way of handling different
+authentication backends so called ``AuthenticationAgents`` are utilized. An
+``AuthenticationAgent`` may implement arbitrary authentication mechanisms,
+which need to supported by the utilized REST-API of course. Examples of
+possible authentication mechanisms: HTTP-Auth, Session-based, OAuth2, ...
+
+Every AuthenticationAgent has to adhere to a certain interface in order to
+allow for the underlying ``ConnectionManager`` to correctly handle a request
+to the backend including a login/authentication::
+
+    /**
+     * @abstract
+     * @class AuthenticationAgent
+     */
+    AuthenticationAgent = function() {};
+
+    /**
+     * Called every time a new request cycle is started,
+     * to ensure those requests are correctly authenticated.
+     * 
+     * A cycle may contain one or more queued up requests
+     * 
+     * @param done {Function} Callback function, which is to be called by the implementation
+     * to signal the authentication has been completed.
+     */
+    AuthenticationAgent.prototype.ensureAuthentication = function(done) {}
+
+    /**
+     * Hook to allow the modification of any request, for authentication purposes, before
+     * sending it out to the backend
+     * 
+     * @param request {Request}
+     * @param done {Function}
+     */
+    AuthenticationAgent.prototype.authenticateRequest = function(request, done) {}
+
+..note:: The mentioned ``done`` callbacks in this API adhere to the same
+    restrictions as all other callbacks in the system (optional error first,
+    followed by one result object/value). Even though this is not strictly
+    needed here, as no promise comes into play, it does guarantee consistency
+    throughout the codebase.
+
+Initial Authentication
+----------------------
+
+The initial Authentication is handled using the ``ensureAuthentication``
+method. It is to called by the ``ConnectionManager`` each time a request cycle
+is about to begin. A request cycle may contain one or more requests, which
+might have been queued up. The ``ConnectionManager`` needs to suspend all
+further connection attempts until the ``done`` callback is executed by the
+Agent. The asynchronous handling of this process is needed in order to allow
+the ``AuthenticationAgent`` to issue further requests and processing, before
+allowing the connection cycle to continue.
+
+Request Modification
+--------------------
+
+Certain Authentication mechanisms might have a need to modify each
+``Request``, which is about to be made. This might be the case with token or
+HTTP-Auth based approaches for example, which need to add headers and/or other
+information to each ``Request`` *before* it is issued.
+
+The ``authenticateRequest`` method must be called by the ``ConnectionManager``
+once for each ``Request``, which is about to be issued. The
+``AuthenticationAgent`` may modify the ``Request`` in any way needed for the
+correct authentication to take place. The modified Request is supposed to be
+given to the ``done`` callback as result (second argument).
+
+In order to allow the authentication system to be as future proof and flexible
+as possible the ``authenticateRequest`` is implemented in an asynchronous way.
+Even though currently no authentication needs this functionality, there might
+be the need to fire additional requests to authenticate a certain request in
+the future. Using an asynchronous callbacks takes care of this possibility.
+
+
+Managing Connections
+====================
+
+Remote connections to the REST-API need to be managed by central connection
+pool in order to account for certain requirements. First of all an request
+abstraction needs to be in place, which allows the usage of different
+techniques for remote communication, like ``XMLHttpRequest``, *JSONP*,
+``XMLHttpRequest2`` and ``XDomainRequest``. An abstract request interface does
+not only allow the addition of more communication systems in the future, but is
+as well needed, to handle cross browser incompatibilities.
+
+.. note:: Even though for the administrative interface itself we may enforce
+    a modern browser version, there is currently no viable reason, why the CAPI
+    shouldn't be as cross-browser compatible as possible.
+
+In addition to allowing the replacement of the utilized request method, there
+are certain aspects, which need to be shared among executed requests:
+
+- Connection endpoint URL
+- Authentication information
+    - Username/password
+    - CSRF-Token
+    - Session
+
+Those information is shared using a **single** instance of
+a ``ConnectionManager`` for each instance of the CAPI. The
+``ConnectionManager`` does not only store this information, but takes care of
+handling the lazy authentication as well. In the future this service might
+handle things like connection limiting and/or re usage as well, if it should be
+needed.
+
+ConnectionManager
+-----------------
+
+The ``ConnectionManager`` is class, which handles raw requests against the
+REST-API in a defined way. It takes care of having an authenticated user, as
+well as taking care of the lazy authentication process itself utilizing the
+given AuthenticationAgent.
+
+A ``ConnectionManager`` is constructed providing an endpoint URL to the
+REST-API, as well as a username and a password to authenticate with::
+
+    function ConnectionManager(endpointUrl, authenticationAgent);
+
+All of those arguments are mandatory.
+
+The construction of the ``ConnectionManager`` needs to be synchronous,
+therefore no authentication or any other request is supposed to be made during
+construction of this prototype. Authentication is handled lazy, once it is
+needed.
+
+Authentication
+^^^^^^^^^^^^^^
+
+The ``ConnectionManager`` is responsible to inform the AuthenticationAgent
+about requests to be made, by calling ``ensureAuthentication`` and
+``authenticateRequest``. To allow proper authentication and/or request
+modification.
+
+Authentication is supposed to happen lazy. Therefore taking place just before
+the first request which needs it.
+
+Authentication is supposed to be fully transparent. Therefore if a certain
+request fails, because for example the session cookie timed out, the
+``ConnectionManager`` is supposed to inform the ``AuthenticationAgent`` about
+this in order to allow for automatic reauthentication. Once this is done the
+request should be executed again. This action should be completely transparent
+to the calling party.
+
+Suspend Requests during Authentication
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Lazy authentication does need to adhere to certain special considerations.
+A problem might arise, once multiple requests are fired in parallel with a not
+yet authenticated connection. This might result in multiple authenticated
+session request (worst-case: one for each request). In conjunction with eating
+up unnecessary bandwidth the resulting sessions are nearly unable to track and
+manage.
+
+Therefore it is imperative, that the ``ConnectionManager`` waits for the the
+AuthenticationAgent to finish its job, before executing any further requests.
+All further requests need to be queued up until the authentication went
+through. After that it may simply reuse this authenticated session for each of
+the queued requests.
+
+Headers and Connection Configuration
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The ``ConnectionManager`` is supposed to manage all REST-API specific headers,
+which need to be send with each request. This does not include the
+authentication related CSRF-Token, which is handled by the AuthenticationAgent, if needed.
+
+However this does apply to the ``Accept`` header for example,  in order to
+retrieve a JSON response from the service. By default this should be
+``application/json``. It is however possible to specify the needed MediaType
+for each request, by overwriting the appropriate header.
+
+Raw Request Interface
+^^^^^^^^^^^^^^^^^^^^^
+
+The ConnectionManager is supposed to offer the following interface in order to
+communicate with the REST-API::
+
+    ConnectionManager#request(method, url, bodyObject, [headers], callback);
+
+``method`` is supposed to be one of ``"GET"``, ``"POST"``, ``"PUT"``,
+``"DELETE"``, ``"PATCH"``, ``"MOVE"``.
+
+The ``bodyObject`` is a JavaScript-object, which will be *stringified* and send
+to the REST-API as request body.
+
+``headers`` is an optional argument containing an object providing an arbitrary
+hash of headers to be send to the REST-API::
+
+    var headers = {
+        "Accept": "application/vnd.ez.api.Policy+xml",
+        "Content-Type": "application/vnd.ez.api.PolicyUpdate+xml",
+        ...
+    }
+
+The ``callback`` will be called with a response, once the request has been
+completed. If an error occurred the first argument will not evaluate to
+``false`` and contain further error information::
+
+    function callback(error, response);
+
+.. note:: Currently there is only a very basic raw request interface is
+    defined. During prototype development certain request and usage patterns
+    will arise eventually. Those recurring requests should be documented and
+    discussed. Therefore allowing to add more *shortcuts* to the the
+    ``ConnectionManager`` to execute those recurring tasks, without specifying
+    the needed headers and configuration again and again.
+
+.. note:: As the ``ConnectionManager`` is a private API within CAPI, no
+    promise-based version of this interface is needed.
+
+The ``ConnectionManager`` utilizes one or more ``Request`` implementations to
+handle all the requested transactions.
+
+.. note:: For now the ``ConnectionManager`` is supposed to select the most
+    appropriate ``Request`` implementation, by asking all Requests in order
+    from the most feature rich to the least feature rich about their
+    compatibility (See ``Request#isCompatible`` for more information). This
+    does break dependency inversion. In the future it might be interesting to
+    refactor this and move it to a ``ConnectionFeatureFactory``. For now the
+    more pragmatic approach is chosen.
+
+Connections
+-----------
+
+Connections represent a low level API to create and fire requests to a certain
+URL. A ``Connection`` does not alter the provided data anymore. It provides
+shielding from all the cross-browser differences, as well the different
+feature sets of modern browsers, like CORS (``XDomainRequest``) or the
+capability to send arbitrary HTTP-methods.
+
+Method Override
+^^^^^^^^^^^^^^^
+
+Non supported HTTP-methods are the only exception, allowing the alteration of
+the given data, by changing the Method to ``POST`` and adding
+a ``X-HTTP-Method-Override`` header.
+
+Connection Interface
+^^^^^^^^^^^^^^^^^^^^
+
+``Connection`` implementations use prototypial inheritance to allow their children
+(instances) to use their basic implementation. Connections are supposed to adhere
+to the following interface::
+
+    /**
+     * @param request {Request}
+     * @param callback {Function}
+     */
+    Connection#execute(request, callback);
+
+Once the request has finished the provided ``callback`` has to be called with
+an ``error`` indicator as well as a ``Response`` object::
+
+    function callback(error, response);
+
+
+Feature Detection
+^^^^^^^^^^^^^^^^^
+
+In addition to this instance interface each ``Connection`` implementation needs to
+supply the following **static** method::
+
+    Connection.isCompatible()
+
+A call to this method determines if the ``Connection`` implementation is
+compatible with the current environment (browser). The return value is
+a boolean value indicating if the implementation may or may not be used.
+
+.. note:: The decision about the viability of a ``Connection`` implementation in
+    the current environment is supposed to be determined using feature
+    detection, **not** using browser detection. No external library like
+    modernizr should be used here, as the CAPI should not have external
+    dependencies.
+
+Request
+-------
+
+The ``Request`` struct holds information about any ``Request``, which is about
+to be made. All necessary information is encoded in this data structure, to
+allow different services, like ``Connection``s and ``AuthenticationAgent``s to
+easily handle and possibly manipulate those requests, before they are issued.
+
+Each ``Request`` object has to provide access to the following properties
+(Here examples for each value are provided as well)::
+
+    Request = {
+        method: "GET",
+        url: "/content/objects/1337"
+        headers: {
+            "Accept": "application/vnd.ez.api.Content+json",
+            ...
+        },
+        body: '{some: "json-data"}'
+    };
+
+``Request`` is created using prototypial inheritance in mind. Every request
+created is therefore represented by a child (instance) of the
+``Request`` prototype. This eases the addition of further constants and/or
+utility functions to all ``Requests``. (eg. constants for HTTP Methods)
+
+To ease the creation of ``Request`` instances they may be constructed from
+a simple data container::
+
+    var someResponse = new Request({
+        method: "GET",
+        url: ...
+        headers: ...,
+        body: ...
+    });
+
+Response
+--------
+
+A ``Response`` is the result of any ``Connection#execute`` call. The
+``Response`` is provided using the given callback.
+
+Each ``Response`` object has to provide access to the following properties
+(Here examples for each value are provided as well)::
+
+    Response = {
+        status: 200,
+        headers: {
+            "Accept-Patch": "application/vnd.ez.api.PolicyUpdate+json",
+            "ETag": "697850469873043234234",
+            ...
+        },
+        body: '{some: "json-data"}'
+    };
+
+``Response`` is created using prototypial inheritance in mind. Every response
+created by a ``Connection`` is therefore represented by a child (instance) of the
+``Response`` prototype. This eases the addition of further constants and/or
+utility functions to all ``Responses``.
+
+To ease the creation of ``Response`` instances they may be constructed from
+a simple data container::
+
+    var someResponse = new Response({
+        status: 200,
+        headers: ...,
+        body: ...
+    });
+
+    someResponse.status; // 200
+    someResponse.headers; // ...
+    ...
+
+
+..
+   Local Variables:
+   mode: rst
+   fill-column: 79
+   End: 
+   vim: et syn=rst tw=79
