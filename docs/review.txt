@@ -186,7 +186,7 @@ API/Design
 - ``ConnectionType`` should not be injected, but determined through the
   ``ConnectionManager``, as described in the design document section **Feature
   Detection**.
-- ``AuthenticationAgent`` is not supposed to be literal object. See the newly
+- ``AuthenticationAgent`` is not supposed to be a literal object. See the newly
   added section **AuthenticationAgents** for details regarding the used
   interface.
 
@@ -356,12 +356,9 @@ its usage.
 DiscoveryService
 ~~~~~~~~~~~~~~~~
 
-- TODO: elaborate
+- The design document has been updated to contain information about a ``DiscoveryService``, which should be created to take care about the discovery, management and provisioning of urls and media-types.
 
-Service Splitting
-^^^^^^^^^^^^^^^^^
 
-- TODO: elaborate
 
 Further Remarks / Future Ideas / To be discussed
 ================================================
