@@ -3,8 +3,8 @@ eZ-Publish JavaScript REST-Prototype Review
 ===========================================
 
 :Author:   Jakob Westhoff
-:Revision: In-Progress
-:Date:     2013-03-20
+:Revision: Completed
+:Date:     2013-03-21
 
 .. contents:: Table of contents
 
@@ -201,7 +201,11 @@ API/Design
 - ``AuthenticationAgent`` is not supposed to be a literal object. See the newly
   added section **AuthenticationAgents** for details regarding the used
   interface.
-- The ``ConnectionManager`` is not supposed to be a public property. It is only used internally to be injected into the different services. There is no reason for anybody from the outside to make use of the ``ConnectionManager`` directly. The only interaction point with the CAPI from the outside is with the different ``Services``.
+- The ``ConnectionManager`` is not supposed to be a public property. It is only
+  used internally to be injected into the different services. There is no
+  reason for anybody from the outside to make use of the ``ConnectionManager``
+  directly. The only interaction point with the CAPI from the outside is with
+  the different ``Services``.
 
 ``connectionManager.js``
 ------------------------
@@ -513,15 +517,18 @@ General
 ^^^^^^^
 
 - internal/external symbol mismatch
-- The ``struct`` variable is essentially not needed here, the created Structure cold be returned direcly. (Only a cosmetic problem)
+- The ``struct`` variable is essentially not needed here, the created Structure
+  cold be returned direcly. (Only a cosmetic problem)
 
-    - However there is a bigger problem concerning the way this structure is created see the corresponding **API/Design** section for details
+    - However there is a bigger problem concerning the way this structure is
+      created see the corresponding **API/Design** section for details
 
 
 API/Design
 ^^^^^^^^^^
 
-- The returned structures are actually not prototypically inheriting from their constructing prototype
+- The returned structures are actually not prototypically inheriting from their
+  constructing prototype
 
     - Currently something like this would essentially be created::
 
@@ -529,9 +536,12 @@ API/Design
 
         contentCreateStruct instanceof ContentCreateStruct; // false
 
-    - This does not only break the usage pattern of new every developer would assume, but makes it impossible to add further methods to the prototype of the structures as well.
+    - This does not only break the usage pattern of new every developer would
+      assume, but makes it impossible to add further methods to the prototype
+      of the structures as well.
 
-- A proper way of not breaking the prototypial chain of doing this would be the following::
+- A proper way of not breaking the prototypial chain of doing this would be the
+  following::
     
     var createStruct = function(contentTypeId, locationCreateStruct, languageCode, user){
 
@@ -554,11 +564,19 @@ API/Design
         };
     }
 
-- An alternative I prefer (simply for cosmetic/syntactic reasons) would be to pass an object to the constructor instead of the different arguments. This allows for easy integration of optional arguments. On the other hand it makes documentation and syntax completion inside of IDEs harder due to the missing oppurtunity of documenting the different arguments.
+- An alternative I prefer (simply for cosmetic/syntactic reasons) would be to
+  pass an object to the constructor instead of the different arguments. This
+  allows for easy integration of optional arguments. On the other hand it makes
+  documentation and syntax completion inside of IDEs harder due to the missing
+  oppurtunity of documenting the different arguments.
 
-    - Maybe this should be further discussed, as I am not quite sure, which of those features is required more urgently.
+    - Maybe this should be further discussed, as I am not quite sure, which of
+      those features is required more urgently.
 
-- I would furthermore tend to create a simple ``extendObject`` (may of course be named differently) utility function, which simply iterates own properties of a given object and extends a target object with them. This would allow to utilize proper prototypial inheritance, while still having a nicer syntax::
+- I would furthermore tend to create a simple ``extendObject`` (may of course
+  be named differently) utility function, which simply iterates own properties
+  of a given object and extends a target object with them. This would allow to
+  utilize proper prototypial inheritance, while still having a nicer syntax::
 
     var createStruct = function(contentTypeId, locationCreateStruct, languageCode, user){
 
@@ -583,7 +601,9 @@ API/Design
         };
     };
 
-- The ``Request`` and ``Response`` objects could make good use of this function as well, to allow for easy struct-like instantiation as it is described in the design document.
+- The ``Request`` and ``Response`` objects could make good use of this function
+  as well, to allow for easy struct-like instantiation as it is described in
+  the design document.
 
 
 Further Remarks / Future Ideas / To be discussed
