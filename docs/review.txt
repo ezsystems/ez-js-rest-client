@@ -375,6 +375,9 @@ Further Remarks / Future Ideas / To be discussed
   a ``ConnectionFeatureFactory`` is suggested. With the added
   ``AuthenticationAgents`` complexity, maybe this kind of factory should be
   introduced directly, to minimize copy&paste development from the start.
+
+  - I documented a way to implement this thing inside the design document. It should not be much effort to create something like this.
+
 - It needs to be discussed at which point full qualified urls (fqurl) are
   specified and at which points relative ones are specified. Some questions to
   think about this problem:
