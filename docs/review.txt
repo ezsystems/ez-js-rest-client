@@ -22,15 +22,16 @@ General Remarks
 
     - As JavaScript does not provide any structural way of differentiating
       between pseudo-classes and other data types, using the uppercase syntax
-      is mostly the only more or less standard way of doing so.
+      is the only "standard" way of doing so.
 
 - Files should be named after the exported Symbol/Module/Widget/...
 
-    - This does include the Upper/Lowercase of the exported Symbol
-    - Currently every file starts with a lower case (constructor functions as
-      well as other modules).
+    - This does include the Upper/Lowercase style of the exported Symbol
 
-        - The only exception I could find is the ``CAPI.js`` entry point.
+        - Currently every file starts with a lower case (constructor functions as
+          well as other modules).
+
+            - The only exception I could find is the ``CAPI.js`` entry point.
 
 - All used member variables of prototype should be initialized
 
@@ -56,8 +57,8 @@ General Remarks
         SomeConstructor.prototype.someOtherProperty = []
 
     - The reason, why empty properties should be declared as well as pre-
-      initialized ones is that there is not other way to create a doc-block for
-      them otherwise in JavaScript.
+      initialized ones is that there is no other way to create a doc-block for
+      them in JavaScript.
 
 - Added external dependency ``date.format.js``.
 
@@ -69,15 +70,16 @@ General Remarks
         - Even though much bigger a better date formatting/handling library in
           general is `moment.js`__
 
+__ http://momentjs.com/
+
         - ``date.format.js`` modifies the ``Date.prototype``, which is
           considered a bad practice
 
-    - It seems to be only used to retrieve the ISO date time representation format
+    - It is only used to retrieve the ISO date time representation format
 
         - This could easily be implemented in a few lines of code, without the
           need to pull in an external dependency like this.
 
-__ http://momentjs.com/
 
 - Object literals defining HTTP-Header information should always specify every
   key (header-name) as a string.
@@ -98,6 +100,7 @@ __ http://momentjs.com/
       well, which has just been added to overcome certain problems with the
       ``AuthenticationAgents``. 
 
+
 Module Pattern
 ==============
 
@@ -108,7 +111,7 @@ regarding this issue, which this section documents.
 Module Pattern variations and alternatives
 ------------------------------------------
 
-This section tries to clear up, what it exactly meant by the "Module Pattern".
+This section tries to clear up, what is exactly meant by the "Module Pattern".
 
 The *Module Pattern* is an encapsulation of different code modules/segments
 into an anonymous self calling function, to isolate the modules scope from the
@@ -177,6 +180,7 @@ CAPI is an independent library it can easily use those tools to help with
 building, dependency management and module definition. If this path is chosen
 the module-structure and exporting of symbols would need a slight change.
 
+
 Detailed Analysis
 =================
 
@@ -192,12 +196,12 @@ General
   REST-Service, the ``RestConnectionManager`` should most likely be simply
   called ``ConnectionManager`` due to readability reasons.
 
+
 API/Design
 ^^^^^^^^^^
 
-- ``ConnectionType`` should not be injected, but determined through the
-  ``ConnectionManager``, as described in the design document section **Feature
-  Detection**.
+- ``ConnectionType`` should not be injected, but a correctly configured
+  ``ConnectionFeatureFactory``. (See the design document for details)
 - ``AuthenticationAgent`` is not supposed to be a literal object. See the newly
   added section **AuthenticationAgents** for details regarding the used
   interface.
@@ -206,6 +210,7 @@ API/Design
   reason for anybody from the outside to make use of the ``ConnectionManager``
   directly. The only interaction point with the CAPI from the outside is with
   the different ``Services``.
+
 
 ``connectionManager.js``
 ------------------------
@@ -226,7 +231,7 @@ API/Design
 
 - As noted in the `CAPI.js`_ section the ``connectionType`` should not be
   injected, but determined using the ``isCompatible`` feature detection of the
-  ``Connection`` interface.
+  ``Connection`` interface utilizing an injected ``ConnectionFeatureFactory``
 - A ``Connection`` is not supposed to know about the ``AuthenticationAgent``
 
     - As described in the sections **Authentication**,  **Initial
@@ -282,9 +287,10 @@ General
   ``fetchRoot`` or ``loadRoot``
 
     - This method should furthermore most likely be a private method of the
-      service. It then should be used by an abstraction to store and handle
-      auto discovered URLs and media-types. (See `URL-Auto-Discovery`_ as well
-      as `DiscoveryService`_ for details)
+      service or of the ``DiscoveryService`` as it is only used to auto-
+      discover URLs and media-types. (See `URL-Auto-Discovery`_ as well as
+      `DiscoveryService`_ for details)
+
 
 API/Design
 ^^^^^^^^^^
@@ -305,16 +311,17 @@ This section does contain notes about the current creation of structs:
 
     - In general I tend to do object creation as synchronous as possible, as it
       simplifies APIs and their usage significantly. If asynchronous
-      initialization is needed I tend to do that in a lazy manner, like with
-      the ``AuthenticationAgents`` to have a simpler API.
+      initialization is needed I tend to do that in a lazy manner, like it is
+      done with the ``AuthenticationAgents`` to have a simpler API.
 
 - I currently don't see a technical reason, why the creation of the structs is
-  executing using factory functions at all. Why not simply allow the user to
+  executed using factory functions at all. Why not simply allow the user to
   inject/specify them using a usual ``new`` operation, instead of the factory?
   Is there a reason I don't currently see for that? Besides the fact that it is
   done in the PAPI as well? Actually after a quick look into those methods in
   the PAPI I am not 100% sure, why it is done there as well. Therefore I maybe
   overlooking something here.
+
 
 URL-Auto-Discovery
 ~~~~~~~~~~~~~~~~~~
@@ -370,6 +377,7 @@ its usage.
           by the auto-discovery information as well. They should therefore be
           stored and utilized, as they may change in the future.
 
+
 DiscoveryService
 ~~~~~~~~~~~~~~~~
 
@@ -392,7 +400,7 @@ General
 API/Design
 ^^^^^^^^^^
 
-- As mentioned before the ``AuthenticationAgent`` is is separate component,
+- As mentioned before the ``AuthenticationAgent`` is a separate component,
   which is utilized by the ``ConnectionManager``. A ``Connection`` should not
   even know about the ``AuthenticationAgent`` used. It is the most low level
   interface to communicate with the backend, based on a given ``Request``
@@ -474,7 +482,7 @@ API/Design
 - HTTP-Status-codes other than the 2xx range do not indicate a fatal connection
   error
 
-    - They should simply be passed to ``Response`` data structure, which is
+    - They should simply be passed to a ``Response`` data structure, which is
       given to the callback
     - Only real connection error (timeouts, unreachable hosts, ...) are
       considered fatal and are therefore communicated as error to the callback.
@@ -509,6 +517,7 @@ API/Design
       is necessary, as stated in the design, to encapsulate all different kinds
       of request response information property, for the high-level api to
       handle, like the HTTP-Status-Code, Response-Headers and the body.
+
 
 ``structures/*.js``
 -------------------
