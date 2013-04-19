@@ -305,7 +305,7 @@ methods::
 
 
 .. note:: Currently there does not seem to be the need to have all services
-    inherit the same base prototype. From an OOD semantical point of view this might make
+    inherit the same base prototype. From an OOD semantically point of view this might make
     sense. However this is hard to understand/read for most JavaScript developers,
     therefore it should not be done in this case.
 

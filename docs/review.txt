@@ -265,7 +265,7 @@ API/Design
         Furthermore this ``Connection`` takes an instance of the new ``Request``
         struct, which defines what kind of request should be executed. It needs to
         be discussed if the ``ConnectionManager#request`` signature is changed to
-        utilze this ``Request`` struct as well.
+        utilize this ``Request`` struct as well.
 
 - Queuing/Suspending requests during authentication needs to be implemented
   (already marked as TODO)
@@ -392,7 +392,7 @@ General
 API/Design
 ^^^^^^^^^^
 
-- As mentioned before the ``AuthenticationAgent`` is is seperate component,
+- As mentioned before the ``AuthenticationAgent`` is is separate component,
   which is utilized by the ``ConnectionManager``. A ``Connection`` should not
   even know about the ``AuthenticationAgent`` used. It is the most low level
   interface to communicate with the backend, based on a given ``Request``
@@ -415,9 +415,9 @@ API/Design
       ``X-HTTP-Method-Override`` header, should it become a necessity.
 
 - One of the reasons behind the different ``Connection`` implementations is the
-  seperation of concerns regarding the different browser implementations.
+  separation of concerns regarding the different browser implementations.
   Currently the ``conectionXHR.js`` handles ``XmlHttpRequests`` as well as
-  Microsofts legacay ``XMLHTTP``.
+  Microsofts legacy ``XMLHTTP``.
 
     - Consult the design document about **Connections** as well as the
       **ConnectionFeatureFactory** for a better understanding of the
@@ -463,15 +463,15 @@ API/Design
           which is instantiated and provided to the ``Connection`` during
           construction.
 
-    - Deviding the different connection types in such a strict way is not only
-      a clean approach from an ood point of view, but allows us to utilize the
+    - Dividing the different connection types in such a strict way is not only
+      a clean approach from an OOD point of view, but allows us to utilize the
       full potential of modern browsers with regards to
       Cross-Origin-Domain-Requests (``XmlHttpRequest2`` and
       ``XDomainRequest``), while still having a clean ood structure. (See the
       Design document regarding the **ConnectionFeatureFactory** for an idea
       about structuring and aggregation.)
 
-- HTTP-Statuscodes other than the 2xx range do not indicate a fatal connection
+- HTTP-Status-codes other than the 2xx range do not indicate a fatal connection
   error
 
     - They should simply be passed to ``Response`` data structure, which is
@@ -518,7 +518,7 @@ General
 
 - internal/external symbol mismatch
 - The ``struct`` variable is essentially not needed here, the created Structure
-  cold be returned direcly. (Only a cosmetic problem)
+  cold be returned directly. (Only a cosmetic problem)
 
     - However there is a bigger problem concerning the way this structure is
       created see the corresponding **API/Design** section for details
@@ -568,7 +568,7 @@ API/Design
   pass an object to the constructor instead of the different arguments. This
   allows for easy integration of optional arguments. On the other hand it makes
   documentation and syntax completion inside of IDEs harder due to the missing
-  oppurtunity of documenting the different arguments.
+  opportunity of documenting the different arguments.
 
     - Maybe this should be further discussed, as I am not quite sure, which of
       those features is required more urgently.
