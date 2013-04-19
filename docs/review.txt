@@ -201,6 +201,7 @@ API/Design
 - ``AuthenticationAgent`` is not supposed to be a literal object. See the newly
   added section **AuthenticationAgents** for details regarding the used
   interface.
+- The ``ConnectionManager`` is not supposed to be a public property. It is only used internally to be injected into the different services. There is no reason for anybody from the outside to make use of the ``ConnectionManager`` directly. The only interaction point with the CAPI from the outside is with the different ``Services``.
 
 ``connectionManager.js``
 ------------------------
