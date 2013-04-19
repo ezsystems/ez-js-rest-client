@@ -15,8 +15,9 @@ Scope
 This document describes design decisions made concerning the JavaScript
 REST-API, which allows communication with eZ-Publish backends.
 
-The document does not document a specific implementation, or provides usage
+The document does not describe a specific implementation, or provides usage
 examples for any kind of realized implementation.
+
 
 Placement
 =========
@@ -28,21 +29,24 @@ therefore usable in conjunction with any other framework (YUI, AngularJS,
 jQuery, ...). Nevertheless it utilizes new technologies and architectural
 structures to create a modern and future-proof API.
 
+
 Clarification of Terms
 ======================
 
-CAPI / Client-API:
+CAPI:
     The JavaScript-Client-API, this document describes the design of.
 
 PAPI:
-    The PHP based public interface to a eZ-Publish content repository.
+    The PHP based public interface to an eZ-Publish content repository.
 
 REST-API:
     REST API, defined by eZ-Publish to allow external access to mostly all
-    functionality of a content repository. The specification is currently
-    available inside the ``ezpublish-kernel`` repository as `REST-API-V2.rst`__
+    functionality of a content repository. The specification is available
+    inside the `ezpublish-kernel repository`__ as `REST-API-V2.rst`__
 
+__ https://github.com/ezsystems/ezpublish-kernel
 __ https://github.com/ezsystems/ezpublish-kernel/blob/master/doc/specifications/rest/REST-API-V2.rst
+
 
 Basic Design Direction
 ======================
@@ -51,7 +55,7 @@ The JavaScript Client API is heavily based on the REST-API provided by
 eZ-Publish. Several reasons lead to this decision:
 
 1. Different operations may cause different amounts of requests to the backend.
-   The Client-API should reflect the amount of work (requests) which needs to
+   The CAPI should reflect the amount of work (requests) which needs to
    be done, once a certain operation is executed. Otherwise quite costly
    operations could easily provoke the intuition, they are mostly for free and
    can be called over and over again. This may lead to massive performance
@@ -63,11 +67,12 @@ eZ-Publish. Several reasons lead to this decision:
 
 2. The REST-API is mainly modeled after the PHP-PAPI interface to the
    Repository. Therefore users already familiar with this interface will feel
-   at home with the Client-API.
+   at home with the CAPI.
 
-3. Due to a direct correlation of Client-API calls to made backend requests,
-   debugging of systems using the Client-API is a lot more transparent, as
-   monitored requests could easily be mapped back to Client-API calls made.
+3. Due to a direct correlation of CAPI calls to made backend requests,
+   debugging of systems using the CAPI is a lot more transparent, as
+   monitored requests could easily be mapped back to CAPI calls made.
+
 
 Handling Asynchronous Requests
 ==============================
@@ -117,10 +122,11 @@ Nevertheless using callbacks has a massive benefit as well. It is understood
 almost instantly by any JavaScript developer. Furthermore it does not depend on
 any other library of code to be handled correctly.
 
+
 Promises
 ^^^^^^^^
 
-An alternative to the simple callback based asynchronous handling are
+An alternative to the simple callback based asynchronous handling is
 a technique called *Promises* (under slightly different circumstances known as
 *Futures* or *Deferreds*). By now Promises are used by a lot of different
 frameworks, to handle asynchronous operations.
@@ -138,7 +144,7 @@ finished::
         // Handle result, after the operation has been finished
     });
 
-As the promises are associated with a specific operation, handling of
+As promises are associated with a specific operation, handling of
 race-conditions is no problem, even though callbacks are registered after the
 operation might already be finished. If a new callback is registered on an
 already fulfilled promise it will be called immediately with the result of the
@@ -160,7 +166,7 @@ nesting depth of one (1)::
 
 Promises deliver their full potential once complex asynchronous work flows need
 to be executed, where different operations are carried out in parallel, while
-others are carried out serial. As multiple promises can easily be combined to
+others are carried out in serial. As multiple promises can easily be combined to
 form a new promise, which will be fulfilled, once all or at least one of the
 combined promises is fulfilled.
 
@@ -257,11 +263,13 @@ which case it does not need to be provided.
     object or array. The only restriction is, that the callback is not been called
     with more than one result argument.
 
+
 Promise Related Considerations
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Certain considerations need to be made, to create an automatic promise
-wrapping system.
+Certain considerations need to be made, while the automatic promise wrapping
+system is created. Those are documented in this section, as a guideline to
+ease the implementation.
 
 Optional Arguments
 ~~~~~~~~~~~~~~~~~~
@@ -309,7 +317,6 @@ methods::
     sense. However this is hard to understand/read for most JavaScript developers,
     therefore it should not be done in this case.
 
-
 Services requested from the same CAPI instance are supposed to be always the
 same object. This preserves memory and construction time, should a service be
 requested multiple times. The following pseudo implementation is used to
@@ -324,6 +331,11 @@ describe this *singleton-like* behavior::
         return this.contentService_;
     };
 
+.. note:: During the prototype phase it might get obvious, that refactoring
+    this technique to a more generic approach makes sense. In this case this
+    should be done, to save some lines of duplicated code. However this change
+    should only be introduced, if the refactoring does make this approach more
+    readable.
 
 The same ``ConnectionManager`` is provided to each requested service of one
 CAPI entry point. It is therefore effectively shared between one CAPI instance.
@@ -388,7 +400,7 @@ a promise-based API::
         //...
     });
 
-Single service do not need to be wrappable in a standalone way, as either the
+Single services do not need to be wrappable in a standalone way, as either the
 Promise-API or the callback API will be used. There is no real use case for
 interdependent usage of both in parallel.
 
@@ -400,10 +412,11 @@ providing a static API inside a certain object like ``CAPI`` is owed to the
 fact, that certain states need to be shared between all requested service,
 while still being relative to a certain CAPI connection:
 
-- Authentication
+- AuthenticationAgent
     - Username/Password
     - Session
     - CSRF-Token
+    - ...
 - Connection Management
     - Service Endpoint URL
     - Open connections
@@ -415,15 +428,16 @@ CAPI Instantiation Information
 Each instantiation of the CAPI entry point needs certain information to properly
 do its work:
 
-- Authentication Agent
+- AuthenticationAgent
 - REST-Service Endpoint URL
 
-The Authentication agent is optional, while the Service Endpoint URL is
+The ``AuthenticationAgent`` is optional, while the Service Endpoint URL is
 not.
 
-.. note:: If no authentication is provided the a default ``anonymous`` user authentication
-    will be used by the CAPI automatically. The implementation may need to carry out the
-    necessary login steps for this case automatically then.
+.. note:: If no ``AuthenticationAgent`` is provided the a default ``anonymous``
+    user authentication will be used by the CAPI automatically. A proper
+    default ``AuthenticationAgent`` implementation needs to be chosen for
+    this.
 
 The required information is simply provided to the CAPI constructor function::
 
@@ -443,7 +457,7 @@ signature of the constructor function is as follows::
 Lazy Authentication
 ^^^^^^^^^^^^^^^^^^^
 
-The instantiation of the CAPI entry point does not actually log-in the user.
+The instantiation of the CAPI entry point does not actually log the user in.
 This is done lazy. Essentially all the provided information is stored for later
 usage, either by initiating other modules, like the ``ConnectionManager`` with
 the given information, or simply storing them to instance properties.
@@ -468,8 +482,8 @@ authentication, the CAPI needs to reflect this fact.
 To provide an easy to use, but still flexible way of handling different
 authentication backends so called ``AuthenticationAgents`` are utilized. An
 ``AuthenticationAgent`` may implement arbitrary authentication mechanisms,
-which need to supported by the utilized REST-API of course. Examples of
-possible authentication mechanisms: HTTP-Auth, Session-based, OAuth2, ...
+which need to be supported by the utilized REST-API of course. Examples of
+possible authentication mechanisms are HTTP-Auth, Session-based and OAuth2.
 
 Every AuthenticationAgent has to adhere to a certain interface in order to
 allow for the underlying ``ConnectionManager`` to correctly handle a request
@@ -534,10 +548,12 @@ correct authentication to take place. The modified Request is supposed to be
 given to the ``done`` callback as result (second argument).
 
 In order to allow the authentication system to be as future proof and flexible
-as possible the ``authenticateRequest`` is implemented in an asynchronous way.
-Even though currently no authentication needs this functionality, there might
-be the need to fire additional requests to authenticate a certain request in
-the future. Using an asynchronous callbacks takes care of this possibility.
+as possible the ``authenticateRequest`` is implemented in an asynchronous way
+as well. Even though currently no authentication needs this functionality,
+there might be the need to fire additional requests to authenticate a certain
+request in the future. Using an asynchronous callback takes care of this
+possibility.
+
 
 URL-Auto-Discovering
 ====================
@@ -576,7 +592,7 @@ Further traversal down into the system might provide further service urls.
 
 Two different concerns arise with regards to this url-auto-discovery system:
 
-1. Ids of requested resources always have be a url relative to the REST-API
+1. Ids of requested resources always have to be a url relative to the REST-API
    entry point. 
 
    **Example:** ``/content/sections/<sectionId>`` instead of just
@@ -584,9 +600,9 @@ Two different concerns arise with regards to this url-auto-discovery system:
    a valid id.
 
 2. Requests against top-level resource collections should not require the user
-   to the corresponding entry point url. The CAPI is capable of identifying all
-   the necessary urls on its own using the corresponding url-auto-discovery
-   features. 
+   to know the corresponding entry point url. The CAPI is capable of
+   identifying all the necessary urls on its own using the corresponding url-
+   auto-discovery features.
 
    **Example:** A method ``loadSections``, which could be available to load
    a list of all registered sections, should not need a url provided by the
@@ -600,15 +616,15 @@ Two different concerns arise with regards to this url-auto-discovery system:
    the relative url as an id to the section, which should be deleted.
 
 
-As the entry points to the different REST-API services should be cached, once
-they are known, as well as being accessible from different parts of the CAPI
-implementation a common management container for those urls and associated
-media-types is needed, the ``DiscoveryService``.
+Entry points to different REST-API services should be cached, once they are
+known. Furthermore they need to be accessible from different parts of the CAPI
+implementation. Therefore a common management container for those urls and
+associated media-types is needed, which is called the ``DiscoveryService``.
 
 DiscoveryService
 ----------------
 
-The ``DiscoveryService`` is an CAPI internal service, which takes care of
+The ``DiscoveryService`` is a CAPI internal service, which takes care of
 discovering, managing and providing all necessary entry points into the
 url-auto-discovered REST-API.
 
@@ -625,10 +641,10 @@ resource::
     DiscoveryService.prototype.getMediaType(name, callback) {};
 
 **Example:** The ``rootLocation`` url is requested. As it is not stored yet the
-``DiscoveryService`` automatically used the ``ConnectionFeatureFactory`` to
+``DiscoveryService`` automatically uses the ``ConnectionFeatureFactory`` to
 instantiate a new ``Connection`` to request the root ``/`` url resource. The
 result is processed and every returned name/url/media-type mapping stored for
-later usage. Once the request finished the url ``/content/locations/1`` is
+later usage. Once the request is finished the url ``/content/locations/1`` is
 returned as it is the ``rootLocation``.
 
 As the request and detection phase of the service can be asynchronous, due to
@@ -639,16 +655,17 @@ the need to retrieve corresponding information from the REST-API, the
     service for later usage in order to minimize unnecessary requests to the
     REST-API.
 
+
 Managing Connections
 ====================
 
-Remote connections to the REST-API need to be managed by central connection
-pool in order to account for certain requirements. First of all an request
+Remote connections to the REST-API need to be managed by a central connection
+pool in order to account for certain requirements. First of all a request
 abstraction needs to be in place, which allows the usage of different
 techniques for remote communication, like ``XMLHttpRequest``, *JSONP*,
 ``XMLHttpRequest2`` and ``XDomainRequest``. An abstract request interface does
-not only allow the addition of more communication systems in the future, but is
-as well needed, to handle cross browser incompatibilities.
+not only allow the addition of more communication systems in the future, it is
+moreover needed, to handle cross browser incompatibilities.
 
 .. note:: Even though for the administrative interface itself we may enforce
     a modern browser version, there is currently no viable reason, why the CAPI
@@ -658,29 +675,24 @@ In addition to allowing the replacement of the utilized request method, there
 are certain aspects, which need to be shared among executed requests:
 
 - Connection endpoint URL
-- Authentication information
-    - Username/password
-    - CSRF-Token
-    - Session
+- AuthenticationAgent
 
-Those information is shared using a **single** instance of
-a ``ConnectionManager`` for each instance of the CAPI. The
-``ConnectionManager`` does not only store this information, but takes care of
-handling the lazy authentication as well. In the future this service might
-handle things like connection limiting and/or re usage as well, if it should be
-needed.
+Those information is shared using a **single** instance of a
+``ConnectionManager`` for each instance of the CAPI. The ``ConnectionManager``
+does not only store this information, but takes care of handling the lazy
+authentication as well. In the future this service might handle things like
+connection limiting and/or reusage as well, if it should be needed.
 
 ConnectionManager
 -----------------
 
-The ``ConnectionManager`` is class, which handles raw requests against the
-REST-API in a defined way. It takes care of having an authenticated user, as
-well as taking care of the lazy authentication process itself utilizing the
-given AuthenticationAgent.
+The ``ConnectionManager`` is a prototype, which handles raw requests against
+the REST-API in a defined way. It takes care of having an authenticated user,
+as well as taking care of the lazy authentication process itself utilizing the
+given ``AuthenticationAgent``.
 
 A ``ConnectionManager`` is constructed providing an endpoint URL to the REST-
-API, as well as an ``AuthenticationAgent`` and a
-``ConnectionFeatureFactory``::
+API, as well as an ``AuthenticationAgent`` and a ``ConnectionFeatureFactory``::
 
     function ConnectionManager(endpointUrl, authenticationAgent, connectionFactory);
 
@@ -767,7 +779,7 @@ completed. If an error occurred the first argument will not evaluate to
 
     function callback(error, response);
 
-.. note:: Currently there is only a very basic raw request interface is
+.. note:: Currently there is only a very basic raw request interface
     defined. During prototype development certain request and usage patterns
     will arise eventually. Those recurring requests should be documented and
     discussed. Therefore allowing to add more *shortcuts* to the the
@@ -775,9 +787,11 @@ completed. If an error occurred the first argument will not evaluate to
     the needed headers and configuration again and again.
 
 .. note:: As the ``ConnectionManager`` is a private API within CAPI, no
-    promise-based version of this interface is needed.
+    promise-based version of this interface is needed. Callbacks should
+    however adhere to the same rules, which apply to the public api to
+    minimize developer confusion and create a unified codebase.
 
-The ``ConnectionManager`` utilizes one or more ``ConnectionManagern`` implementations to
+The ``ConnectionManager`` utilizes one or more ``Connection`` implementations to
 handle all the requested transactions.
 
 To select an appropriate ``Connection`` implementation the initially provided
@@ -797,9 +811,10 @@ capability to send arbitrary HTTP-methods.
 Method Override
 ^^^^^^^^^^^^^^^
 
-Non supported HTTP-methods are the only exception, allowing the alteration of
-the given data, by changing the Method to ``POST`` and adding
-a ``X-HTTP-Method-Override`` header.
+Non supported HTTP-methods are the only exception, which allow the alteration
+of the given data, by changing the Method to ``POST`` and adding a ``X-HTTP-
+Method-Override`` header.
+
 
 Connection Interface
 ^^^^^^^^^^^^^^^^^^^^
@@ -838,14 +853,15 @@ a boolean value indicating if the implementation may or may not be used.
     modernizr should be used here, as the CAPI should not have external
     dependencies.
 
+
 ConnectionFeatureFactory
 ------------------------
 
 The ``ConnectionFeatureFactory`` takes care of providing ``Connection``
 implementations, which are well suited for the current environment. As it has
 been explained in the `Connections`_ section, cross-browser as well as feature
-related specialization of the ``Connection`` implementation will need to be
-created. To ease the usage of those different implementations, the
+related specialization of the ``Connection`` implementation will be created.
+To ease the usage of those different implementations, the
 ``ConnectionFeatureFactory`` is capable of automatically selecting, creating
 and providing a proper ``Connection`` instance.
 
@@ -854,9 +870,9 @@ method is called upon a pre-ordered list of available ``Connections``. The
 first one, to pass the Test is supposed to be selected, instantiated and
 returned.
 
-The ``ConnectionFeatureFactory`` is constructed with the pre-ordered list of
+The ``ConnectionFeatureFactory`` is constructed with this pre-ordered list of
 available ``Connections``. The different ``Connection`` implementations are
-provided as a reference to their constructor function::
+provided with a reference to their constructor function::
 
     function ConnectionFeatureFactory(connectionList) {};
 
@@ -871,8 +887,8 @@ provided as a reference to their constructor function::
 
 Each ``Connection`` reference is specified as an object with the mandatory key
 ``connection``, which contains the reference. Optionally a second key named
-``factory`` may be specified. The value of this key is a function, which is
-provided with the ``connection`` reference. It's job is to return a new
+``factory`` may be specified. The value of this key is a function, which upon
+calling is given the ``connection`` reference. It's job is to return a new
 instance of the registered ``Connection``. It will be called if the
 ``isCompatible`` check passes.
 
@@ -891,9 +907,9 @@ supposed to be used::
         return new Connection();
     };
 
-As the ``factory`` function is given a the ``connection`` reference, this
-generic implementation needs to be declared only one, and can be reused from
-there on.
+As the ``factory`` function is given the ``connection`` reference, this
+generic implementation needs to be declared only once to be reused from there
+on.
 
 ``Connection`` instances are available using the following public interface::
 
@@ -958,7 +974,7 @@ Each ``Response`` object has to provide access to the following properties
 ``Response`` is created using prototypial inheritance in mind. Every response
 created by a ``Connection`` is therefore represented by a child (instance) of the
 ``Response`` prototype. This eases the addition of further constants and/or
-utility functions to all ``Responses``.
+utility functions to all ``Responses``, like ``getDecodedBody``.
 
 To ease the creation of ``Response`` instances they may be constructed from
 a simple data container::
