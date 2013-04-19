@@ -539,6 +539,103 @@ Even though currently no authentication needs this functionality, there might
 be the need to fire additional requests to authenticate a certain request in
 the future. Using an asynchronous callbacks takes care of this possibility.
 
+URL-Auto-Discovering
+====================
+
+The REST-API is designed with the principle of URL-Auto-Discovery in mind.
+
+The API provides an entry point into the system (Here the root ``/`` url). This
+entry point delivers all information and urls needed to further access and
+traverse the REST-API from there. It does not only provide urls to all
+available top level services, but a ``media-type`` mapping as well::
+
+    {
+      "Root": {
+        "content": { "_href": "/content/objects" },
+        "contentTypes": {
+          "_href": "/content/types",
+          "_media-type": "application/vnd.ez.api.ContentTypeInfoList+json"
+        },
+        "users": {
+          "_href": "/user/users",
+          "_media-type": "application/vnd.ez.api.UserRefList+json"
+        },
+        "roles": {
+          "_href": "/user/roles",
+          "_media-type": "application/vnd.ez.api.RoleList+json"
+        },
+        "rootLocation": {
+          "_href": "/content/locations/1",
+          "_media-type": "application/vnd.ez.api.Location+json"
+        },
+        ...
+      }
+    }
+
+Further traversal down into the system might provide further service urls.
+
+Two different concerns arise with regards to this url-auto-discovery system:
+
+1. Ids of requested resources always have be a url relative to the REST-API
+   entry point. 
+
+   **Example:** ``/content/sections/<sectionId>`` instead of just ``<sectionId>``. Where ``<sectionId>`` of course has to be substituted with a valid id.
+
+2. Requests against top-level resource collections should not require the user
+   to the corresponding entry point url. The CAPI is capable of identifying all
+   the necessary urls on its own using the corresponding url-auto-discovery
+   features. 
+
+   **Example:** A method ``loadSections``, which could be available to load
+   a list of all registered sections, should not need a url provided by the
+   user, as this one can and should be auto-discovered.
+
+   On the other hand something like ``createSection`` doesn't need the url of
+   the section services, but of course information about the new section to be
+   created.
+
+   In contrast to this something like ``deleteSection`` would of course need
+   the relative url as an id to the section, which should be deleted.
+
+
+As the entry points to the different REST-API services should be cached, once
+they are known, as well as being accessible from different parts of the CAPI
+implementation a common management container for those urls and associated
+media-types is needed, the ``DiscoveryService``.
+
+DiscoveryService
+----------------
+
+The ``DiscoveryService`` is an CAPI internal service, which takes care of
+discovering, managing and providing all necessary entry points into the
+url-auto-discovered REST-API.
+
+The constructor of the ``DiscoveryService`` takes
+a ``ConnectionFeatureFactory``, as well as the services base url::
+
+    function DiscoveryService(entrypointUrl, connectionFactory) {};
+
+From this point on it may be used to request any kind of service inside the
+REST-API, by name. The name is the one used by the REST-API to identify the
+resource::
+
+    DiscoveryService.prototype.getUrl(name, callback) {};
+    DiscoveryService.prototype.getMediaType(name, callback) {};
+
+**Example:** The ``rootLocation`` url is requested. As it is not stored yet the
+``DiscoveryService`` automatically used the ``ConnectionFeatureFactory`` to
+instantiate a new ``Connection`` to request the root ``/`` url resource. The
+result is processed and every returned name/url/media-type mapping stored for
+later usage. Once the request finished the url ``/content/locations/1`` is
+returned as it is the ``rootLocation``.
+
+As the request and detection phase of the service can be asynchronous, due to
+the need to retrieve corresponding information from the REST-API, the
+``DiscoveryServices`` retrieval methods utilize the usual callback approach.
+
+..note:: The ``DiscoveryService`` has the obligation to cache any discovered
+    service for later usage in order to minimize unnecessary requests to the
+    REST-API.
 
 Managing Connections
 ====================
@@ -630,7 +727,8 @@ Headers and Connection Configuration
 
 The ``ConnectionManager`` is supposed to manage all REST-API specific headers,
 which need to be send with each request. This does not include the
-authentication related CSRF-Token, which is handled by the AuthenticationAgent, if needed.
+authentication related CSRF-Token, which is handled by the
+AuthenticationAgent, if needed.
 
 However this does apply to the ``Accept`` header for example,  in order to
 retrieve a JSON response from the service. By default this should be
@@ -743,9 +841,9 @@ a boolean value indicating if the implementation may or may not be used.
 Request
 -------
 
-The ``Request`` struct holds information about any ``Request``, which is about
+The ``Request`` struct holds information about any ``Request`` which is about
 to be made. All necessary information is encoded in this data structure, to
-allow different services, like ``Connection``s and ``AuthenticationAgent``s to
+allow different services, like ``Connections`` and ``AuthenticationAgents`` to
 easily handle and possibly manipulate those requests, before they are issued.
 
 Each ``Request`` object has to provide access to the following properties
