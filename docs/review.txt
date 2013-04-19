@@ -57,16 +57,21 @@ General Remarks
       initialized ones is that there is not other way to create a doc-block for
       them otherwise in JavaScript.
 
-- The added external dependency ``date.format.js`` doesn't seem to be used
-  anywhere.
+- Added external dependency ``date.format.js``.
 
     - If possible external dependencies should be avoided (as stated in the
       design)
     - Something small like this ``date.format.js`` could be acceptable, if it
-      would be really needed.
+      is really needed.
 
         - Even though much bigger a better date formatting/handling library in
           general is `moment.js`__
+
+        - ``date.format.js`` modifies the ``Date.prototype``, which is considered a bad practice
+
+    - It seems to be only used to retrieve the ISO date time representation format
+
+        - This could easily be implemented in a few lines of code, without the need to pull in an external dependency like this.
 
 __ http://momentjs.com/
 
