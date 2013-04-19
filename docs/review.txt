@@ -6,6 +6,8 @@ eZ-Publish JavaScript REST-Prototype Review
 :Revision: In-Progress
 :Date:     2013-03-20
 
+.. contents:: Table of contents
+
 General Remarks
 ===============
 
@@ -67,11 +69,13 @@ General Remarks
         - Even though much bigger a better date formatting/handling library in
           general is `moment.js`__
 
-        - ``date.format.js`` modifies the ``Date.prototype``, which is considered a bad practice
+        - ``date.format.js`` modifies the ``Date.prototype``, which is
+          considered a bad practice
 
     - It seems to be only used to retrieve the ISO date time representation format
 
-        - This could easily be implemented in a few lines of code, without the need to pull in an external dependency like this.
+        - This could easily be implemented in a few lines of code, without the
+          need to pull in an external dependency like this.
 
 __ http://momentjs.com/
 
@@ -83,7 +87,9 @@ __ http://momentjs.com/
       a mixture of stringified and non stringified keys should not be used
       inside of those objects. 
 
-- Callbacks always need to be called using two arguments (``error`` and ``result``). See the review of `connections/connectionXHR.js`_ for details about the current problematic implementation.
+- Callbacks always need to be called using two arguments (``error`` and
+  ``result``). See the review of `connections/connectionXHR.js`_ for details
+  about the current problematic implementation.
 
 
 Module Pattern
@@ -468,18 +474,18 @@ API/Design
       is supposed to be created using the following form::
 
         function callback(error, result) {}
-    
-        - The ``error`` property is filled with an error object if a fatal
-          error has occurred
 
-            - If the execution happened error free the supposed ``error`` value
-              is ``false``
+    - The ``error`` property is filled with an error object if a fatal
+      error has occurred
 
-        - The ``result`` property does contain an arbitrary data value
-          reflecting the result of the operation (Scalar, Array, Object, ...).
+        - If the execution happened error free the supposed ``error`` value
+          is ``false``
 
-            - Only one ``result`` property is allowed due to promise
-              transformation constraints.
+    - The ``result`` property does contain an arbitrary data value
+      reflecting the result of the operation (Scalar, Array, Object, ...).
+
+        - Only one ``result`` property is allowed due to promise
+          transformation constraints.
 
     - See the **Combining Callbacks and Promises** section for details about
       the requirements and restrictions applied to callbacks.
