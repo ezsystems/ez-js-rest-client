@@ -91,6 +91,12 @@ __ http://momentjs.com/
   ``result``). See the review of `connections/connectionXHR.js`_ for details
   about the current problematic implementation.
 
+- The ``Response`` struct is not used/defined at all (See the design document
+  for details about this struct).
+
+    - While being at it take a look at the newly added ``Request`` struct as
+      well, which has just been added to overcome certain problems with the
+      ``AuthenticationAgents``. 
 
 Module Pattern
 ==============
@@ -248,7 +254,7 @@ API/Design
       therefore the design document should be adapted accordingly, if
       a renaming is done.
 
-    ..note:: The adaption of the design document with regards to the
+    .. note:: The adaption of the design document with regards to the
         ``AuthenticationAgent`` interface has created the need for a ``Request``
         struct. Therefore the *old* ``Request`` is now named ``Connection``.
         Furthermore this ``Connection`` takes an instance of the new ``Request``
@@ -498,6 +504,7 @@ API/Design
       is necessary, as stated in the design, to encapsulate all different kinds
       of request response information property, for the high-level api to
       handle, like the HTTP-Status-Code, Response-Headers and the body.
+
 
 
 Further Remarks / Future Ideas / To be discussed
