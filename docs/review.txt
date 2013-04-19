@@ -83,6 +83,9 @@ __ http://momentjs.com/
       a mixture of stringified and non stringified keys should not be used
       inside of those objects. 
 
+- Callbacks always need to be called using two arguments (``error`` and ``result``). See the review of `connections/connectionXHR.js`_ for details about the current problematic implementation.
+
+
 Module Pattern
 ==============
 
