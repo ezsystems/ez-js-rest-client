@@ -579,7 +579,9 @@ Two different concerns arise with regards to this url-auto-discovery system:
 1. Ids of requested resources always have be a url relative to the REST-API
    entry point. 
 
-   **Example:** ``/content/sections/<sectionId>`` instead of just ``<sectionId>``. Where ``<sectionId>`` of course has to be substituted with a valid id.
+   **Example:** ``/content/sections/<sectionId>`` instead of just
+   ``<sectionId>``. Where ``<sectionId>`` of course has to be substituted with
+   a valid id.
 
 2. Requests against top-level resource collections should not require the user
    to the corresponding entry point url. The CAPI is capable of identifying all
@@ -676,10 +678,11 @@ REST-API in a defined way. It takes care of having an authenticated user, as
 well as taking care of the lazy authentication process itself utilizing the
 given AuthenticationAgent.
 
-A ``ConnectionManager`` is constructed providing an endpoint URL to the
-REST-API, as well as a username and a password to authenticate with::
+A ``ConnectionManager`` is constructed providing an endpoint URL to the REST-
+API, as well as an ``AuthenticationAgent`` and a
+``ConnectionFeatureFactory``::
 
-    function ConnectionManager(endpointUrl, authenticationAgent);
+    function ConnectionManager(endpointUrl, authenticationAgent, connectionFactory);
 
 All of those arguments are mandatory.
 
@@ -774,16 +777,13 @@ completed. If an error occurred the first argument will not evaluate to
 .. note:: As the ``ConnectionManager`` is a private API within CAPI, no
     promise-based version of this interface is needed.
 
-The ``ConnectionManager`` utilizes one or more ``Request`` implementations to
+The ``ConnectionManager`` utilizes one or more ``ConnectionManagern`` implementations to
 handle all the requested transactions.
 
-.. note:: For now the ``ConnectionManager`` is supposed to select the most
-    appropriate ``Request`` implementation, by asking all Requests in order
-    from the most feature rich to the least feature rich about their
-    compatibility (See ``Request#isCompatible`` for more information). This
-    does break dependency inversion. In the future it might be interesting to
-    refactor this and move it to a ``ConnectionFeatureFactory``. For now the
-    more pragmatic approach is chosen.
+To select an appropriate ``Connection`` implementation the initially provided
+``ConnectionFeatureFactory`` is utilized. (See `ConnectionFeatureFactory`_ for
+details about its implementation.)
+
 
 Connections
 -----------
@@ -837,6 +837,68 @@ a boolean value indicating if the implementation may or may not be used.
     detection, **not** using browser detection. No external library like
     modernizr should be used here, as the CAPI should not have external
     dependencies.
+
+ConnectionFeatureFactory
+------------------------
+
+The ``ConnectionFeatureFactory`` takes care of providing ``Connection``
+implementations, which are well suited for the current environment. As it has
+been explained in the `Connections`_ section, cross-browser as well as feature
+related specialization of the ``Connection`` implementation will need to be
+created. To ease the usage of those different implementations, the
+``ConnectionFeatureFactory`` is capable of automatically selecting, creating
+and providing a proper ``Connection`` instance.
+
+To select a valid ``Connection`` implementation the ``Connection#isCompatible``
+method is called upon a pre-ordered list of available ``Connections``. The
+first one, to pass the Test is supposed to be selected, instantiated and
+returned.
+
+The ``ConnectionFeatureFactory`` is constructed with the pre-ordered list of
+available ``Connections``. The different ``Connection`` implementations are
+provided as a reference to their constructor function::
+
+    function ConnectionFeatureFactory(connectionList) {};
+
+    var factory = new ConnectionFeatureFactory([
+        {connection: XmlHttpRequest2Connection},
+        {connection: XDomainRequestAwareConnection, factory: function(Connection) {
+            return new XDomainRequestAwareConnection(new XmlHttpRequestConnection());
+        }},
+        {connection: XmlHttpRequestConnection},
+        {connection: MethodsicrosoftXmlHttpConnection}
+    ]);
+
+Each ``Connection`` reference is specified as an object with the mandatory key
+``connection``, which contains the reference. Optionally a second key named
+``factory`` may be specified. The value of this key is a function, which is
+provided with the ``connection`` reference. It's job is to return a new
+instance of the registered ``Connection``. It will be called if the
+``isCompatible`` check passes.
+
+Using this technique it is possible to utilize concepts like Aggregation for
+code-reuse, like it is shown in the example with the
+``XDomainRequestAwareConnection``. Essentially we are using the
+`Abstract-Factory-Pattern`__ here, but with JavaScript-Closures instead of
+further classes/prototypes.
+
+__ http://en.wikipedia.org/wiki/Abstract_factory_pattern 
+
+If no ``factory`` function is supplied, the following default implementation is
+supposed to be used::
+
+    var defaultFactory = function(Connection) {
+        return new Connection();
+    };
+
+As the ``factory`` function is given a the ``connection`` reference, this
+generic implementation needs to be declared only one, and can be reused from
+there on.
+
+``Connection`` instances are available using the following public interface::
+
+    ConnectionFeatureFactory.prototype.createConnection = function();
+
 
 Request
 -------
