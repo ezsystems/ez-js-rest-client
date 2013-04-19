@@ -866,7 +866,7 @@ provided as a reference to their constructor function::
             return new XDomainRequestAwareConnection(new XmlHttpRequestConnection());
         }},
         {connection: XmlHttpRequestConnection},
-        {connection: MethodsicrosoftXmlHttpConnection}
+        {connection: MicrosoftXmlHttpConnection}
     ]);
 
 Each ``Connection`` reference is specified as an object with the mandatory key
