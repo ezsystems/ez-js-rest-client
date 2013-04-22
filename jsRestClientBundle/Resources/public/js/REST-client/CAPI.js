@@ -9,10 +9,12 @@ var CAPI = (function() {
      * @param authenticationAgent {object} literal object used to maintain authentication to REST server
      * @param connectionType {string} string related to one of the special connection objects used to implement exact technique ("XHR", "JSONP" etc.)
      */
-    var API = function (endPointUrl, authenticationAgent, connectionType) {
+    var CAPI = function (endPointUrl, authenticationAgent) {
+
+        this.contentService_ = null;
 
         // Public vars and functions for this instance
-        this.connectionManager = new RestConnectionManager(endPointUrl, authenticationAgent, connectionType);
+        this.connectionManager = new ConnectionManager(endPointUrl, authenticationAgent);
 
     };
 
@@ -23,7 +25,7 @@ var CAPI = (function() {
      *
      * @method getContentService
      */
-    API.prototype.getContentService = function(){
+    CAPI.prototype.getContentService = function(){
         if  (!this.contentService_)  {
             this.contentService_  =  new ContentService(
                 this.connectionManager
@@ -32,6 +34,6 @@ var CAPI = (function() {
         return  this.contentService_;
     };
 
-    return API;
+    return CAPI;
 
 }());

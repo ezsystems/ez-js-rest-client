@@ -7,7 +7,7 @@ var ContentService = (function() {
      * @constructor
      * @param connectionManager {object} connection manager that will be used to send requests to REST service
      */
-    var service = function(connectionManager) {
+    var ContentService = function(connectionManager) {
 
         // TODO: store url+method+headers relation to actual request in some preloaded matrix or smth like this?
 
@@ -18,12 +18,12 @@ var ContentService = (function() {
          * @param root {href}
          * @param callback {function} function, which will be executed on request success
          */
-        service.prototype.root = function(root, callback) {
+        ContentService.prototype.root = function(root, callback) {
             connectionManager.request(
                 "GET",
                 root,
                 {},
-                { Accept : "application/vnd.ez.api.Root+json" },
+                { "Accept" : "application/vnd.ez.api.Root+json" },
                 callback
             );
         };
@@ -39,12 +39,12 @@ var ContentService = (function() {
          * @param sections {href}
          * @param callback {function} function, which will be executed on request success
          */
-        service.prototype.loadSections = function(sections, callback) {
+        ContentService.prototype.loadSections = function(sections, callback) {
             connectionManager.request(
                 "GET",
                 sections,
                 {},
-                { Accept : "application/vnd.ez.api.SectionList+json" },
+                { "Accept" : "application/vnd.ez.api.SectionList+json" },
                 callback
             );
         };
@@ -56,12 +56,12 @@ var ContentService = (function() {
          * @param sectionId {href}
          * @param callback {function} function, which will be executed on request success
          */
-        service.prototype.loadSection = function(sectionId, callback) {
+        ContentService.prototype.loadSection = function(sectionId, callback) {
             connectionManager.request(
                 "GET",
                 sectionId,
                 {},
-                { Accept : "application/vnd.ez.api.Section+json" },
+                { "Accept" : "application/vnd.ez.api.Section+json" },
                 callback
             );
         };
@@ -74,13 +74,13 @@ var ContentService = (function() {
          * @param sectionInput {JSON} json string describing section to be created
          * @param callback {function} function, which will be executed on request success
          */
-        service.prototype.createSection = function(sections, sectionInput, callback) {
+        ContentService.prototype.createSection = function(sections, sectionInput, callback) {
             connectionManager.request(
                 "POST",
                 sections,
                 sectionInput,
                 {
-                    Accept : "application/vnd.ez.api.Section+json",
+                    "Accept" : "application/vnd.ez.api.Section+json",
                     "Content-Type" : "application/vnd.ez.api.SectionInput+json"
                 },
                 callback
@@ -95,13 +95,13 @@ var ContentService = (function() {
          * @param sectionInput {JSON} json string describing section to be created
          * @param callback {function} function, which will be executed on request success
          */
-        service.prototype.updateSection = function(sectionId, sectionInput, callback) {
+        ContentService.prototype.updateSection = function(sectionId, sectionInput, callback) {
             connectionManager.request(
                 "PATCH",
                 sectionId,
                 sectionInput,
                 {
-                    Accept : "application/vnd.ez.api.Section+json",
+                    "Accept" : "application/vnd.ez.api.Section+json",
                     "Content-Type" : "application/vnd.ez.api.SectionInput+json"
                 },
                 callback
@@ -115,7 +115,7 @@ var ContentService = (function() {
          * @param sectionId {href}
          * @param callback {function} function, which will be executed on request success
          */
-        service.prototype.deleteSection = function(sectionId, callback) {
+        ContentService.prototype.deleteSection = function(sectionId, callback) {
             connectionManager.request(
                 "DELETE",
                 sectionId,
@@ -136,12 +136,12 @@ var ContentService = (function() {
          * @param typegroups {href} reference to type groups resource
          * @param callback {function} function, which will be executed on request success
          */
-        service.prototype.loadContentTypeGroups = function(typegroups, callback) {
+        ContentService.prototype.loadContentTypeGroups = function(typegroups, callback) {
             connectionManager.request(
                 "GET",
                 typegroups,
                 {},
-                { Accept : "application/vnd.ez.api.ContentTypeGroupList+json" },
+                { "Accept" : "application/vnd.ez.api.ContentTypeGroupList+json" },
                 callback
             );
         };
@@ -153,12 +153,12 @@ var ContentService = (function() {
          * @param contentTypeGroupId {href}
          * @param callback {function} function, which will be executed on request success
          */
-        service.prototype.loadContentTypeGroup = function(contentTypeGroupId, callback) {
+        ContentService.prototype.loadContentTypeGroup = function(contentTypeGroupId, callback) {
             connectionManager.request(
                 "GET",
                 contentTypeGroupId,
                 {},
-                { Accept : "application/vnd.ez.api.ContentTypeGroup+json" },
+                { "Accept" : "application/vnd.ez.api.ContentTypeGroup+json" },
                 callback
             );
         };
@@ -175,13 +175,13 @@ var ContentService = (function() {
          * @param contentCreate {JSON} json string describing content to be created
          * @param callback {function} function, which will be executed on request success
          */
-        service.prototype.createContent = function(contentObjects, contentCreate, callback) {
+        ContentService.prototype.createContent = function(contentObjects, contentCreate, callback) {
             connectionManager.request(
                 "POST",
                 contentObjects,
                 contentCreate,
                 {
-                    Accept : "application/vnd.ez.api.Content+json",
+                    "Accept" : "application/vnd.ez.api.Content+json",
                     "Content-Type" : "application/vnd.ez.api.ContentCreate+json"
                 },
                 callback
@@ -196,13 +196,13 @@ var ContentService = (function() {
          * @param contentMetadataUpdate {JSON} json string describing update of the content metadata
          * @param callback {function} function, which will be executed on request success
          */
-        service.prototype.updateContentMetadata = function(content, contentMetadataUpdate, callback) {
+        ContentService.prototype.updateContentMetadata = function(content, contentMetadataUpdate, callback) {
             connectionManager.request(
                 "PATCH",
                 content,
                 contentMetadataUpdate,
                 {
-                    Accept : "application/vnd.ez.api.ContentInfo+json",
+                    "Accept" : "application/vnd.ez.api.ContentInfo+json",
                     "Content-Type" : "application/vnd.ez.api.ContentUpdate+json"
                 },
                 callback
@@ -217,12 +217,12 @@ var ContentService = (function() {
          * @param contentId {href}
          * @param callback {function} function, which will be executed on request success
          */
-        service.prototype.loadContentInfo = function(contentId, callback) {
+        ContentService.prototype.loadContentInfo = function(contentId, callback) {
             connectionManager.request(
                 "GET",
                 contentId,
                 {},
-                { Accept : "application/vnd.ez.api.ContentInfo+json" },
+                { "Accept" : "application/vnd.ez.api.ContentInfo+json" },
                 callback
             );
         };
@@ -234,12 +234,12 @@ var ContentService = (function() {
          * @param contentId {href}
          * @param callback {function} function, which will be executed on request success
          */
-        service.prototype.loadContentInfoAndCurrentVersion = function(contentId, callback) {
+        ContentService.prototype.loadContentInfoAndCurrentVersion = function(contentId, callback) {
             connectionManager.request(
                 "GET",
                 contentId,
                 {},
-                { Accept : "application/vnd.ez.api.Content+json" },
+                { "Accept" : "application/vnd.ez.api.Content+json" },
                 callback
             );
         };
@@ -251,7 +251,7 @@ var ContentService = (function() {
          * @param contentId {href}
          * @param callback {function} function, which will be executed on request success
          */
-        service.prototype.deleteContent = function(contentId, callback) {
+        ContentService.prototype.deleteContent = function(contentId, callback) {
             connectionManager.request(
                 "DELETE",
                 contentId,
@@ -269,12 +269,12 @@ var ContentService = (function() {
          * @param destinationId {href} A location resource to which the content object should be copied
          * @param callback {function} function, which will be executed on request success
          */
-        service.prototype.copyContent = function(contentId, destinationId, callback) {
+        ContentService.prototype.copyContent = function(contentId, destinationId, callback) {
             connectionManager.request(
                 "COPY",
                 contentId,
                 "",
-                { Destination : destinationId },
+                { "Destination" : destinationId },
                 callback
             );
         };
@@ -291,12 +291,12 @@ var ContentService = (function() {
          * @param parameters {JSON} JSON string containing parameters (fields, languages, responseGroups)
          * @param callback {function} function, which will be executed on request success
          */
-        service.prototype.loadContent = function(versionedContentId, parameters, callback) {
+        ContentService.prototype.loadContent = function(versionedContentId, parameters, callback) {
             connectionManager.request(
                 "GET",
                 versionedContentId,
                 parameters,
-                { Accept : "application/vnd.ez.api.Version+json" },
+                { "Accept" : "application/vnd.ez.api.Version+json" },
                 callback
             );
         };
@@ -309,12 +309,12 @@ var ContentService = (function() {
          * @param contentVersions {href}
          * @param callback {function} function, which will be executed on request success
          */
-        service.prototype.loadVersions = function(contentVersions, callback) {
+        ContentService.prototype.loadVersions = function(contentVersions, callback) {
             connectionManager.request(
                 "GET",
                 contentVersions,
                 {},
-                { Accept : "application/vnd.ez.api.VersionList+json" },
+                { "Accept" : "application/vnd.ez.api.VersionList+json" },
                 callback
             );
         };
@@ -328,7 +328,7 @@ var ContentService = (function() {
          * @param user {string}
          * @param callback {function} function, which will be executed on request success
          */
-        service.prototype.newContentUpdateStruct = function(language, user, callback) {
+        ContentService.prototype.newContentUpdateStruct = function(language, user, callback) {
 
             var updateStruct = new ContentUpdateStruct(language, user);
 
@@ -343,7 +343,7 @@ var ContentService = (function() {
          * @param user {string}
          * @param callback {function} function, which will be executed on request success
          */
-        service.prototype.newContentMetadataUpdateStruct = function(language, user, callback) {
+        ContentService.prototype.newContentMetadataUpdateStruct = function(language, user, callback) {
 
             var updateStruct = new ContentMetadataUpdateStruct(language, user);
 
@@ -360,7 +360,7 @@ var ContentService = (function() {
          * @param user {string}
          * @param callback {function} function, which will be executed on request success
          */
-        service.prototype.newContentCreateStruct = function(contentTypeId, locationCreateStruct, language, user, callback) {
+        ContentService.prototype.newContentCreateStruct = function(contentTypeId, locationCreateStruct, language, user, callback) {
 
             var createStruct = new ContentCreateStruct(contentTypeId, locationCreateStruct, language, user);
 
@@ -376,13 +376,13 @@ var ContentService = (function() {
          * @param contentUpdateStruct {JSON} JSON string containing update structure (fields, languages, responseGroups)
          * @param callback {function} function, which will be executed on request success
          */
-        service.prototype.updateContent = function(versionedContentId, contentUpdateStruct, callback) {
+        ContentService.prototype.updateContent = function(versionedContentId, contentUpdateStruct, callback) {
             connectionManager.request(
                 "PATCH",
                 versionedContentId,
                 contentUpdateStruct,
                 {
-                    Accept : "application/vnd.ez.api.Version+json",
+                    "Accept" : "application/vnd.ez.api.Version+json",
                     "Content-Type" : "application/vnd.ez.api.VersionUpdate+json"
                 },
                 callback
@@ -397,12 +397,12 @@ var ContentService = (function() {
          * @param versionedContentId {href}
          * @param callback {function} function, which will be executed on request success
          */
-        service.prototype.createContentDraft = function(versionedContentId, callback) {
+        ContentService.prototype.createContentDraft = function(versionedContentId, callback) {
             connectionManager.request(
                 "COPY",
                 versionedContentId,
                 "",
-                { Accept : "application/vnd.ez.api.Version+json" },
+                { "Accept" : "application/vnd.ez.api.Version+json" },
                 callback
             );
         };
@@ -415,7 +415,7 @@ var ContentService = (function() {
          * @param versionedContentId {href}
          * @param callback {function} function, which will be executed on request success
          */
-        service.prototype.deleteVersion = function(versionedContentId, callback) {
+        ContentService.prototype.deleteVersion = function(versionedContentId, callback) {
             connectionManager.request(
                 "DELETE",
                 versionedContentId,
@@ -433,7 +433,7 @@ var ContentService = (function() {
          * @param versionedContentId {href}
          * @param callback {function} function, which will be executed on request success
          */
-        service.prototype.publishVersion = function(versionedContentId, callback) {
+        ContentService.prototype.publishVersion = function(versionedContentId, callback) {
             connectionManager.request(
                 "PUBLISH",
                 versionedContentId,
@@ -455,7 +455,7 @@ var ContentService = (function() {
          * @param parentLocationId {href}
          * @param callback {function} function, which will be executed on request success
          */
-        service.prototype.newLocationCreateStruct = function(parentLocationId, callback) {
+        ContentService.prototype.newLocationCreateStruct = function(parentLocationId, callback) {
 
             var createStruct = new LocationCreateStruct(parentLocationId);
 
@@ -471,13 +471,13 @@ var ContentService = (function() {
          * @param locationCreateStruct {object}
          * @param callback {function} function, which will be executed on request success
          */
-        service.prototype.createLocation = function(objectLocations, locationCreateStruct, callback) {
+        ContentService.prototype.createLocation = function(objectLocations, locationCreateStruct, callback) {
             connectionManager.request(
                 "POST",
                 objectLocations,
                 JSON.stringify(locationCreateStruct),
                 {
-                    Accept : "application/vnd.ez.api.Location+json",
+                    "Accept" : "application/vnd.ez.api.Location+json",
                     "Content-Type" : "application/vnd.ez.api.LocationCreate+json"
                 },
                 callback
@@ -492,12 +492,12 @@ var ContentService = (function() {
          * @param objectLocations {href}
          * @param callback {function} function, which will be executed on request success
          */
-        service.prototype.loadLocations = function(objectLocations, callback) {
+        ContentService.prototype.loadLocations = function(objectLocations, callback) {
             connectionManager.request(
                 "GET",
                 objectLocations,
                 {},
-                { Accept : "application/vnd.ez.api.LocationList+json" },
+                { "Accept" : "application/vnd.ez.api.LocationList+json" },
                 callback
             );
         };
@@ -510,12 +510,12 @@ var ContentService = (function() {
          * @param locationId {href}
          * @param callback {function} function, which will be executed on request success
          */
-        service.prototype.loadLocation = function(locationId, callback) {
+        ContentService.prototype.loadLocation = function(locationId, callback) {
             connectionManager.request(
                 "GET",
                 locationId,
                 {},
-                { Accept : "application/vnd.ez.api.Location+json" },
+                { "Accept" : "application/vnd.ez.api.Location+json" },
                 callback
             );
         };
@@ -549,12 +549,12 @@ var ContentService = (function() {
          * @param targetLocation {href}
          * @param callback {function} function, which will be executed on request success
          */
-        service.prototype.copySubtree = function(subtree, targetLocation, callback) {
+        ContentService.prototype.copySubtree = function(subtree, targetLocation, callback) {
             connectionManager.request(
                 "COPY",
                 subtree,
                 "",
-                { Destination : targetLocation },
+                { "Destination" : targetLocation },
                 callback
             );
         };
@@ -565,6 +565,6 @@ var ContentService = (function() {
 
     };
 
-    return service;
+    return ContentService;
 
 }());

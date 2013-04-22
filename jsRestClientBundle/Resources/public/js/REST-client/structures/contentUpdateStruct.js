@@ -1,7 +1,7 @@
 var ContentUpdateStruct = (function() {
     "use strict";
 
-    var updateStruct = function(languageCode, user){
+    var ContentUpdateStruct = function(languageCode, user){
 
         var now = new Date();
 
@@ -20,6 +20,6 @@ var ContentUpdateStruct = (function() {
 
     }
 
-    return updateStruct;
+    return ContentUpdateStruct;
 
 }());

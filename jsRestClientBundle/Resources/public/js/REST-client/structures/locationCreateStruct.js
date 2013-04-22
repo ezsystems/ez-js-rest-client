@@ -1,7 +1,7 @@
 var LocationCreateStruct = (function() {
     "use strict";
 
-    var createStruct = function(parentLocationId){
+    var LocationCreateStruct = function(parentLocationId){
 
         var now = new Date();
 
@@ -22,6 +22,6 @@ var LocationCreateStruct = (function() {
 
     }
 
-    return createStruct;
+    return LocationCreateStruct;
 
 }());

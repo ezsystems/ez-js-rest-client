@@ -6,7 +6,7 @@ var ConnectionXHR = (function() {
      *
      * @constructor
      */
-    var connection = function (authenticationAgent) {
+    var ConnectionXHR = function (authenticationAgent) {
 
         // Private area
         var user = authenticationAgent.user;
@@ -79,7 +79,15 @@ var ConnectionXHR = (function() {
         };
     };
 
-    return connection;
+    // static method
+    ConnectionXHR.isCompatible = function(){
+        if (window.XMLHttpRequest || window.ActiveXObject) {
+            return true;
+        }
+        else return false;
+    }
+
+    return ConnectionXHR;
 
 
 }());

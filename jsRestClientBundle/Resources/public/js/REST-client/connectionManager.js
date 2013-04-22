@@ -1,4 +1,4 @@
-var RestConnectionManager = (function() {
+var ConnectionManager = (function() {
     "use strict";
 
     /**
@@ -9,19 +9,22 @@ var RestConnectionManager = (function() {
      * @param authenticationAgent {object} literal object used to maintain authentication to REST server
      * @param connectionType {string} string related to one of the special connection objects used to implement exact technique ("XHR", "JSONP" etc.)
      */
-    var connectionManager = function(endPointUrl, authenticationAgent, connectionType) {
-
+    var ConnectionManager = function(endPointUrl, authenticationAgent) {
 
         var endPointUrl = endPointUrl;
         var authenticationAgent = authenticationAgent;
 
-        // Choosing and creating connection of requested type
-        if (connectionType === "XHR"){
-            var connection = new ConnectionXHR(authenticationAgent);
-        } else if (connectionType === "JSONP") {
-            // some other connection
-        }
+        // Array of connections, should be filled-in in preferred order
+        //TODO: consider moving to some sort of configuration file...
+        var connectionStack = [ConnectionXHR];
 
+        // Choosing and creating first compatible connection from connection stack
+        for (var index = 0; index < connectionStack.length; ++index) {
+            if (connectionStack[index].isCompatible()) {
+                var connection = new connectionStack[index](authenticationAgent);
+                break;
+            }
+        }
 
         /**
          * Basic request function
@@ -48,6 +51,6 @@ var RestConnectionManager = (function() {
         };
     };
 
-    return connectionManager;
+    return ConnectionManager;
 
 }());

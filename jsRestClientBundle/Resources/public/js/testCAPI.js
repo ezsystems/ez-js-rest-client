@@ -6,11 +6,9 @@ var jsCAPI = new CAPI(
         user : "admin",
         password : "admin",
         authMethod : "HTTPBasicAuth"
-    },
-    "XHR");
+    });
 
 var contentService = jsCAPI.getContentService();
-
 var clientOutput = document.getElementById('output');
 
 

@@ -1,7 +1,7 @@
 var ContentCreateStruct = (function() {
     "use strict";
 
-    var createStruct = function(contentTypeId, locationCreateStruct, languageCode, user){
+    var ContentCreateStruct = function(contentTypeId, locationCreateStruct, languageCode, user){
 
         var now = new Date();
 
@@ -27,6 +27,6 @@ var ContentCreateStruct = (function() {
 
     }
 
-    return createStruct;
+    return ContentCreateStruct;
 
 }());

@@ -1,7 +1,7 @@
 var ContentMetadataUpdateStruct = (function() {
     "use strict";
 
-    var metadataUpdateStruct = function(languageCode, user){
+    var ContentMetadataUpdateStruct = function(languageCode, user){
 
         var now = new Date();
 
@@ -23,6 +23,6 @@ var ContentMetadataUpdateStruct = (function() {
 
     }
 
-    return metadataUpdateStruct;
+    return ContentMetadataUpdateStruct;
 
 }());
