@@ -3,8 +3,10 @@ eZ-Publish JavaScript REST-Prototype Review
 ===========================================
 
 :Author:   Jakob Westhoff
-:Revision: In-Progress
-:Date:     2013-03-20
+:Revision: Completed
+:Date:     2013-03-21
+
+.. contents:: Table of contents
 
 General Remarks
 ===============
@@ -20,15 +22,16 @@ General Remarks
 
     - As JavaScript does not provide any structural way of differentiating
       between pseudo-classes and other data types, using the uppercase syntax
-      is mostly the only more or less standard way of doing so.
+      is the only "standard" way of doing so.
 
 - Files should be named after the exported Symbol/Module/Widget/...
 
-    - This does include the Upper/Lowercase of the exported Symbol
-    - Currently every file starts with a lower case (constructor functions as
-      well as other modules).
+    - This does include the Upper/Lowercase style of the exported Symbol
 
-        - The only exception I could find is the ``CAPI.js`` entry point.
+        - Currently every file starts with a lower case (constructor functions as
+          well as other modules).
+
+            - The only exception I could find is the ``CAPI.js`` entry point.
 
 - All used member variables of prototype should be initialized
 
@@ -54,21 +57,29 @@ General Remarks
         SomeConstructor.prototype.someOtherProperty = []
 
     - The reason, why empty properties should be declared as well as pre-
-      initialized ones is that there is not other way to create a doc-block for
-      them otherwise in JavaScript.
+      initialized ones is that there is no other way to create a doc-block for
+      them in JavaScript.
 
-- The added external dependency ``date.format.js`` doesn't seem to be used
-  anywhere.
+- Added external dependency ``date.format.js``.
 
     - If possible external dependencies should be avoided (as stated in the
       design)
     - Something small like this ``date.format.js`` could be acceptable, if it
-      would be really needed.
+      is really needed.
 
         - Even though much bigger a better date formatting/handling library in
           general is `moment.js`__
 
 __ http://momentjs.com/
+
+        - ``date.format.js`` modifies the ``Date.prototype``, which is
+          considered a bad practice
+
+    - It is only used to retrieve the ISO date time representation format
+
+        - This could easily be implemented in a few lines of code, without the
+          need to pull in an external dependency like this.
+
 
 - Object literals defining HTTP-Header information should always specify every
   key (header-name) as a string.
@@ -77,6 +88,18 @@ __ http://momentjs.com/
       the usage of stringified keys a necessity anyways. To ease readability
       a mixture of stringified and non stringified keys should not be used
       inside of those objects. 
+
+- Callbacks always need to be called using two arguments (``error`` and
+  ``result``). See the review of `connections/connectionXHR.js`_ for details
+  about the current problematic implementation.
+
+- The ``Response`` struct is not used/defined at all (See the design document
+  for details about this struct).
+
+    - While being at it take a look at the newly added ``Request`` struct as
+      well, which has just been added to overcome certain problems with the
+      ``AuthenticationAgents``. 
+
 
 Module Pattern
 ==============
@@ -88,7 +111,7 @@ regarding this issue, which this section documents.
 Module Pattern variations and alternatives
 ------------------------------------------
 
-This section tries to clear up, what it exactly meant by the "Module Pattern".
+This section tries to clear up, what is exactly meant by the "Module Pattern".
 
 The *Module Pattern* is an encapsulation of different code modules/segments
 into an anonymous self calling function, to isolate the modules scope from the
@@ -157,6 +180,7 @@ CAPI is an independent library it can easily use those tools to help with
 building, dependency management and module definition. If this path is chosen
 the module-structure and exporting of symbols would need a slight change.
 
+
 Detailed Analysis
 =================
 
@@ -172,15 +196,21 @@ General
   REST-Service, the ``RestConnectionManager`` should most likely be simply
   called ``ConnectionManager`` due to readability reasons.
 
+
 API/Design
 ^^^^^^^^^^
 
-- ``ConnectionType`` should not be injected, but determined through the
-  ``ConnectionManager``, as described in the design document section **Feature
-  Detection**.
-- ``AuthenticationAgent`` is not supposed to be literal object. See the newly
+- ``ConnectionType`` should not be injected, but a correctly configured
+  ``ConnectionFeatureFactory``. (See the design document for details)
+- ``AuthenticationAgent`` is not supposed to be a literal object. See the newly
   added section **AuthenticationAgents** for details regarding the used
   interface.
+- The ``ConnectionManager`` is not supposed to be a public property. It is only
+  used internally to be injected into the different services. There is no
+  reason for anybody from the outside to make use of the ``ConnectionManager``
+  directly. The only interaction point with the CAPI from the outside is with
+  the different ``Services``.
+
 
 ``connectionManager.js``
 ------------------------
@@ -201,7 +231,7 @@ API/Design
 
 - As noted in the `CAPI.js`_ section the ``connectionType`` should not be
   injected, but determined using the ``isCompatible`` feature detection of the
-  ``Connection`` interface.
+  ``Connection`` interface utilizing an injected ``ConnectionFeatureFactory``
 - A ``Connection`` is not supposed to know about the ``AuthenticationAgent``
 
     - As described in the sections **Authentication**,  **Initial
@@ -234,13 +264,13 @@ API/Design
       therefore the design document should be adapted accordingly, if
       a renaming is done.
 
-    ..note:: The adaption of the design document with regards to the
+    .. note:: The adaption of the design document with regards to the
         ``AuthenticationAgent`` interface has created the need for a ``Request``
         struct. Therefore the *old* ``Request`` is now named ``Connection``.
         Furthermore this ``Connection`` takes an instance of the new ``Request``
         struct, which defines what kind of request should be executed. It needs to
         be discussed if the ``ConnectionManager#request`` signature is changed to
-        utilze this ``Request`` struct as well.
+        utilize this ``Request`` struct as well.
 
 - Queuing/Suspending requests during authentication needs to be implemented
   (already marked as TODO)
@@ -257,9 +287,10 @@ General
   ``fetchRoot`` or ``loadRoot``
 
     - This method should furthermore most likely be a private method of the
-      service. It then should be used by an abstraction to store and handle
-      auto discovered URLs and media-types. (See `URL-Auto-Discovery`_ as well
-      as `DiscoveryService`_ for details)
+      service or of the ``DiscoveryService`` as it is only used to auto-
+      discover URLs and media-types. (See `URL-Auto-Discovery`_ as well as
+      `DiscoveryService`_ for details)
+
 
 API/Design
 ^^^^^^^^^^
@@ -280,16 +311,17 @@ This section does contain notes about the current creation of structs:
 
     - In general I tend to do object creation as synchronous as possible, as it
       simplifies APIs and their usage significantly. If asynchronous
-      initialization is needed I tend to do that in a lazy manner, like with
-      the ``AuthenticationAgents`` to have a simpler API.
+      initialization is needed I tend to do that in a lazy manner, like it is
+      done with the ``AuthenticationAgents`` to have a simpler API.
 
 - I currently don't see a technical reason, why the creation of the structs is
-  executing using factory functions at all. Why not simply allow the user to
+  executed using factory functions at all. Why not simply allow the user to
   inject/specify them using a usual ``new`` operation, instead of the factory?
   Is there a reason I don't currently see for that? Besides the fact that it is
   done in the PAPI as well? Actually after a quick look into those methods in
   the PAPI I am not 100% sure, why it is done there as well. Therefore I maybe
   overlooking something here.
+
 
 URL-Auto-Discovery
 ~~~~~~~~~~~~~~~~~~
@@ -345,15 +377,243 @@ its usage.
           by the auto-discovery information as well. They should therefore be
           stored and utilized, as they may change in the future.
 
+
 DiscoveryService
 ~~~~~~~~~~~~~~~~
 
-- TODO: elaborate
+- The design document has been updated to contain information about
+  a ``DiscoveryService``, which should be created to take care about the
+  discovery, management and provisioning of urls and media-types.
 
-Service Splitting
-^^^^^^^^^^^^^^^^^
 
-- TODO: elaborate
+``connections/connectionXHR.js``
+--------------------------------
+
+General
+^^^^^^^
+
+- internal/external symbol mismatch
+- Please take a look at the changed design regarding ``Request`` structs and
+  the therefore changed signature of the ``Connection`` interface.
+
+
+API/Design
+^^^^^^^^^^
+
+- As mentioned before the ``AuthenticationAgent`` is a separate component,
+  which is utilized by the ``ConnectionManager``. A ``Connection`` should not
+  even know about the ``AuthenticationAgent`` used. It is the most low level
+  interface to communicate with the backend, based on a given ``Request``
+
+    - Therefore The ``Connection`` implementation should not worry at all about
+      authentication. It can assume the connection is already authenticated, or
+      the ``Request`` struct provided for execution does already contain all
+      the necessary information to properly handle the authentication.
+    - In order to not depend on the "basic-auth" functionality of certain
+      XHR-Implementation the corresponding headers will be generated by the
+      corresponding ``AuthenticationAgent``, to be injected into the
+      ``Request`` before processing it.
+    - All of this is happening before the ``Request`` reaches the
+      ``Connection`` interface.
+
+- The ``Request`` should not be modified by the ``Connection`` in any way. It
+  should simply be executed and its response handled.
+    
+    - The only exception, as mentioned in the design document is the
+      ``X-HTTP-Method-Override`` header, should it become a necessity.
+
+- One of the reasons behind the different ``Connection`` implementations is the
+  separation of concerns regarding the different browser implementations.
+  Currently the ``conectionXHR.js`` handles ``XmlHttpRequests`` as well as
+  Microsofts legacy ``XMLHTTP``.
+
+    - Consult the design document about **Connections** as well as the
+      **ConnectionFeatureFactory** for a better understanding of the
+      ``Connection`` interface concept.
+
+    - The following incomplete example of a possible correct implementation
+      structure for this kind of connection is provided below::
+
+        var XmlHttpRequestConnection = function() {
+            this.xhr_ = new XmlHttpRequest();
+        };
+
+        XmlHttpRequestConnection.isCompatible = function() {
+            return !!window.XMLHttpRequest;
+        };
+
+        XmlHttpRequestConnection.prototype.execute = function(request, callback) {
+            // Use this.xhr_ to execute the request and properly call the callback upon completion or error
+        };
+
+        // ---
+
+        var MicrosoftXmlHttpConnection = function() {
+            this.xhr_ = new ActiveXObject("Microsoft.XMLHTTP");
+        };
+
+        MicrosoftXmlHttpConnection.isCompatible = function() {
+            return (
+                !window.XMLHttpRequest
+                && !!window.ActiveXObject
+            );
+        };
+
+        MicrosoftXmlHttpConnection.prototype.exeucte = function(request, callback) {
+            // Mostly the same as with the XmlHttpRequestConnection
+            // X-HTTP-Method-Override needs to kick in here for request methods other then GET and POST
+        };
+
+    - If there is a lot code duplication between different connections
+      aggregation may be used for code reuse
+
+        - Another solution is to isolate the shared code into its own class,
+          which is instantiated and provided to the ``Connection`` during
+          construction.
+
+    - Dividing the different connection types in such a strict way is not only
+      a clean approach from an OOD point of view, but allows us to utilize the
+      full potential of modern browsers with regards to
+      Cross-Origin-Domain-Requests (``XmlHttpRequest2`` and
+      ``XDomainRequest``), while still having a clean ood structure. (See the
+      Design document regarding the **ConnectionFeatureFactory** for an idea
+      about structuring and aggregation.)
+
+- HTTP-Status-codes other than the 2xx range do not indicate a fatal connection
+  error
+
+    - They should simply be passed to a ``Response`` data structure, which is
+      given to the callback
+    - Only real connection error (timeouts, unreachable hosts, ...) are
+      considered fatal and are therefore communicated as error to the callback.
+
+- The result callback is not properly called
+
+    - As defined inside the design document **every** callback inside the CAPI
+      is supposed to be created using the following form::
+
+        function callback(error, result) {}
+
+    - The ``error`` property is filled with an error object if a fatal
+      error has occurred
+
+        - If the execution happened error free the supposed ``error`` value
+          is ``false``
+
+    - The ``result`` property does contain an arbitrary data value
+      reflecting the result of the operation (Scalar, Array, Object, ...).
+
+        - Only one ``result`` property is allowed due to promise
+          transformation constraints.
+
+    - See the **Combining Callbacks and Promises** section for details about
+      the requirements and restrictions applied to callbacks.
+
+    - To minimize complexity throughout the library internal as well as
+      external callbacks should adhere to the same principles.
+
+    - Disregarding the missing ``error`` property the callback is nevertheless
+      called the wrong way, as no ``Response`` object is created and used. This
+      is necessary, as stated in the design, to encapsulate all different kinds
+      of request response information property, for the high-level api to
+      handle, like the HTTP-Status-Code, Response-Headers and the body.
+
+
+``structures/*.js``
+-------------------
+
+General
+^^^^^^^
+
+- internal/external symbol mismatch
+- The ``struct`` variable is essentially not needed here, the created Structure
+  cold be returned directly. (Only a cosmetic problem)
+
+    - However there is a bigger problem concerning the way this structure is
+      created see the corresponding **API/Design** section for details
+
+
+API/Design
+^^^^^^^^^^
+
+- The returned structures are actually not prototypically inheriting from their
+  constructing prototype
+
+    - Currently something like this would essentially be created::
+
+        var contentCreateStruct = new ContentCreateStruct(/*...*/);
+
+        contentCreateStruct instanceof ContentCreateStruct; // false
+
+    - This does not only break the usage pattern of new every developer would
+      assume, but makes it impossible to add further methods to the prototype
+      of the structures as well.
+
+- A proper way of not breaking the prototypial chain of doing this would be the
+  following::
+    
+    var createStruct = function(contentTypeId, locationCreateStruct, languageCode, user){
+
+        var now = new Date();
+
+        this.ContentCreate = {
+            "ContentType": {
+                "_href" : contentTypeId
+            }
+        };
+        this.mainLanguageCode = languageCode;
+        this.LocationCreate = locationCreateStruct.LocationCreate;
+        this.Section = null;
+        this.User = user;
+        this.alwaysAvailable = true;
+        this.remoteId = null;
+        this.modificationDate = now.format("isoDateTime");
+        this.fields = {
+            field: []
+        };
+    }
+
+- An alternative I prefer (simply for cosmetic/syntactic reasons) would be to
+  pass an object to the constructor instead of the different arguments. This
+  allows for easy integration of optional arguments. On the other hand it makes
+  documentation and syntax completion inside of IDEs harder due to the missing
+  opportunity of documenting the different arguments.
+
+    - Maybe this should be further discussed, as I am not quite sure, which of
+      those features is required more urgently.
+
+- I would furthermore tend to create a simple ``extendObject`` (may of course
+  be named differently) utility function, which simply iterates own properties
+  of a given object and extends a target object with them. This would allow to
+  utilize proper prototypial inheritance, while still having a nicer syntax::
+
+    var createStruct = function(contentTypeId, locationCreateStruct, languageCode, user){
+
+        var now = new Date();
+
+        return extendObject(this, {
+            "ContentCreate": {
+                "ContentType": {
+                    "_href" : contentTypeId
+                },
+                "mainLanguageCode": languageCode,
+                "LocationCreate" : locationCreateStruct.LocationCreate,
+                "Section" : null,
+                "User" : user,
+                "alwaysAvailable" : "true",
+                "remoteId" : null,
+                "modificationDate": now.format("isoDateTime"),
+                "fields": {
+                    "field": []
+                }
+            }
+        };
+    };
+
+- The ``Request`` and ``Response`` objects could make good use of this function
+  as well, to allow for easy struct-like instantiation as it is described in
+  the design document.
+
 
 Further Remarks / Future Ideas / To be discussed
 ================================================
@@ -370,6 +630,10 @@ Further Remarks / Future Ideas / To be discussed
   a ``ConnectionFeatureFactory`` is suggested. With the added
   ``AuthenticationAgents`` complexity, maybe this kind of factory should be
   introduced directly, to minimize copy&paste development from the start.
+
+  - I documented a way to implement this thing inside the design document. It
+    should not be much effort to create something like this.
+
 - It needs to be discussed at which point full qualified urls (fqurl) are
   specified and at which points relative ones are specified. Some questions to
   think about this problem:
