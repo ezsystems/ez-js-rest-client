@@ -8,25 +8,9 @@ var ConnectionManager = (function() {
      * @param endPointUrl {string} url to REST root
      * @param authenticationAgent {object} literal object used to maintain authentication to REST server
      */
-    var ConnectionManager = function(endPointUrl, authenticationAgent) {
+    var ConnectionManager = function(endPointUrl, authenticationAgent, connectionFactory) {
 
-        // Array of connections, should be filled-in in preferred order
-        //TODO: consider moving to some sort of configuration file...
-        var connectionStack = [
-            {
-                connection: ConnectionXHR,
-                factory: function(Connection){
-                    console.log("Hello, from injected factory!");
-                    return new Connection();
-                }
-            }
-        ];
-
-        var connectionFeatureFactory = new ConnectionFeatureFactory(connectionStack);
-
-        var activeConnection = connectionFeatureFactory.createConnection();
-
-
+        var activeConnection = connectionFactory.createConnection();
 
         /**
          * Basic request function
@@ -49,7 +33,7 @@ var ConnectionManager = (function() {
 
 
             //TODO: Suspend Requests during Authentication
-            activeConnection.sendRequest(method, endPointUrl + url, data, headers, callback);
+            activeConnection.execute(method, endPointUrl + url, data, headers, callback);
         };
     };
 

@@ -22,7 +22,7 @@ rootAnchor.onclick = function(e){
 
     contentService.root(
         '/api/ezp/v2/',
-        function(data){
+        function(error, data){
             clientOutput.innerHTML = data;
             rootLoader.style.display = 'none';
         }
@@ -43,7 +43,7 @@ loadSectionAnchor.onclick = function(e){
     if (loadSectionInput.value.length){
         contentService.loadSection(
             loadSectionInput.value,
-            function(data){
+            function(error, data){
                 clientOutput.innerHTML = data;
                 loadSectionLoader.style.display = 'none';
             }
@@ -63,7 +63,7 @@ loadSectionsAnchor.onclick = function(e){
     e.preventDefault();
     contentService.loadSections(
         '/api/ezp/v2/content/sections',
-        function(data){
+        function(error, data){
             clientOutput.innerHTML = data;
             loadSectionsLoader.style.display = 'none';
         }
@@ -90,7 +90,7 @@ createSectionAnchor.onclick = function(e){
     contentService.createSection(
         '/api/ezp/v2/content/sections',
         JSON.stringify(sectionInput),
-        function(data){
+        function(error, data){
             clientOutput.innerHTML = data;
             createSectionLoader.style.display = 'none';
         }
@@ -121,7 +121,7 @@ updateSectionAnchor.onclick = function(e){
         contentService.updateSection(
             updateSectionInput.value,
             JSON.stringify(sectionInput),
-            function(data){
+            function(error, data){
                 clientOutput.innerHTML = data;
                 updateSectionLoader.style.display = 'none';
             }
@@ -146,7 +146,7 @@ deleteSectionAnchor.onclick = function(e){
     if (deleteSectionInput.value.length){
         contentService.deleteSection(
             deleteSectionInput.value,
-            function(data){
+            function(error, data){
                 clientOutput.innerHTML = data;
                 deleteSectionLoader.style.display = 'none';
             }
@@ -169,7 +169,7 @@ loadContentTypeGroupsAnchor.onclick = function(e){
 
     contentService.loadContentTypeGroups(
         '/api/ezp/v2/content/typegroups',
-        function(data){
+        function(error, data){
             clientOutput.innerHTML = data;
             loadContentTypeGroupsLoader.style.display = 'none';
         }
@@ -188,7 +188,7 @@ loadContentTypeGroupAnchor.onclick = function(e){
     if (loadContentTypeGroupInput.value.length){
         contentService.loadContentTypeGroup(
             loadContentTypeGroupInput.value,
-            function(data){
+            function(error, data){
                 clientOutput.innerHTML = data;
                 loadContentTypeGroupLoader.style.display = 'none';
             }
@@ -231,7 +231,7 @@ createContentAnchor.onclick = function(e){
                     contentService.createContent(
                         '/api/ezp/v2/content/objects',
                         JSON.stringify(contentCreateStruct),
-                        function(data){
+                        function(error, data){
                             clientOutput.innerHTML = data;
                             createContentLoader.style.display = 'none';
                         }
@@ -265,7 +265,7 @@ updateContentMetaAnchor.onclick = function(e){
                 contentService.updateContentMetadata(
                     updateContentMetaInput.value,
                     JSON.stringify(updateStruct),
-                    function(data){
+                    function(error, data){
                         clientOutput.innerHTML = data;
                         updateContentMetaLoader.style.display = 'none';
                     }
@@ -289,7 +289,7 @@ loadContentInfoAnchor.onclick = function(e){
     if (loadContentInfoInput.value.length){
         contentService.loadContentInfo(
             loadContentInfoInput.value,
-            function(data){
+            function(error, data){
                 clientOutput.innerHTML = data;
                 loadContentInfoLoader.style.display = 'none';
             }
@@ -311,7 +311,7 @@ loadContentCurrentAnchor.onclick = function(e){
     if (loadContentCurrentInput.value.length){
         contentService.loadContentInfoAndCurrentVersion(
             loadContentCurrentInput.value,
-            function(data){
+            function(error, data){
                 clientOutput.innerHTML = data;
                 loadContentCurrentLoader.style.display = 'none';
             }
@@ -333,7 +333,7 @@ deleteContentAnchor.onclick = function(e){
     if (deleteContentInput.value.length){
         contentService.deleteContent(
             deleteContentInput.value,
-            function(data){
+            function(error, data){
                 clientOutput.innerHTML = data;
                 deleteContentLoader.style.display = 'none';
             }
@@ -361,7 +361,7 @@ copyContentAnchor.onclick = function(e){
         contentService.copyContent(
             copyContentInput.value,
             "/api/ezp/v2/content/locations/1/2/102",
-            function(data){
+            function(error, data){
                 clientOutput.innerHTML = data;
                 copyContentLoader.style.display = 'none';
             }
@@ -387,7 +387,7 @@ loadContentVersionsAnchor.onclick = function(e){
     if (loadContentVersionsInput.value.length){
         contentService.loadVersions(
             loadContentVersionsInput.value,
-            function(data){
+            function(error, data){
                 clientOutput.innerHTML = data;
                 loadContentVersionsLoader.style.display = 'none';
             }
@@ -411,7 +411,7 @@ loadContentAnchor.onclick = function(e){
         contentService.loadContent(
             loadContentInput.value,
             "",
-            function(data){
+            function(error, data){
                 clientOutput.innerHTML = data;
                 loadContentLoader.style.display = 'none';
             }
@@ -448,7 +448,7 @@ updateContentAnchor.onclick = function(e){
                 contentService.updateContent(
                     updateContentInput.value,
                     JSON.stringify(contentUpdateStruct),
-                    function(data){
+                    function(error, data){
                         clientOutput.innerHTML = data;
                         updateContentLoader.style.display = 'none';
                     }
@@ -472,7 +472,7 @@ createContentDraftAnchor.onclick = function(e){
     if (createContentDraftInput.value.length){
         contentService.createContentDraft(
             createContentDraftInput.value,
-            function(data){
+            function(error, data){
                 clientOutput.innerHTML = data;
                 createContentDraftLoader.style.display = 'none';
             }
@@ -494,7 +494,7 @@ deleteVersionAnchor.onclick = function(e){
     if (deleteVersionInput.value.length){
         contentService.deleteVersion(
             deleteVersionInput.value,
-            function(data){
+            function(error, data){
                 clientOutput.innerHTML = data;
                 deleteVersionLoader.style.display = 'none';
             }
@@ -516,7 +516,7 @@ publishVersionAnchor.onclick = function(e){
     if (publishVersionInput.value.length){
         contentService.publishVersion(
             publishVersionInput.value,
-            function(data){
+            function(error, data){
                 clientOutput.innerHTML = data;
                 publishVersionLoader.style.display = 'none';
             }
@@ -538,7 +538,7 @@ newContentUpdateStructAnchor.onclick = function(e){
     contentService.newContentUpdateStruct(
         "eng-US",
         "DummyUser",
-        function(data){
+        function(error, data){
 
             var fieldInfo = {
                 "fieldDefinitionIdentifier": "title",
@@ -634,7 +634,7 @@ CreateLocationAnchor.onclick = function(e){
                 contentService.createLocation(
                     CreateLocationInput.value,
                     locationCreateStruct,
-                    function(data){
+                    function(error, data){
                         clientOutput.innerHTML = data;
                         CreateLocationLoader.style.display = 'none';
                     }
@@ -658,7 +658,7 @@ LoadLocationsAnchor.onclick = function(e){
 
     contentService.loadLocations(
         LoadLocationsInput.value,
-        function(data){
+        function(error, data){
             clientOutput.innerHTML = data;
             LoadLocationsLoader.style.display = 'none';
         });
@@ -677,7 +677,7 @@ LoadLocationAnchor.onclick = function(e){
 
     contentService.loadLocation(
         LoadLocationInput.value,
-        function(data){
+        function(error, data){
             clientOutput.innerHTML = data;
             LoadLocationLoader.style.display = 'none';
         });
@@ -697,7 +697,7 @@ CopySubtreeAnchor.onclick = function(e){
     contentService.copySubtree(
         "/api/ezp/v2/content/locations/1/2/107",
         CopySubtreeInput.value,
-        function(data){
+        function(error, data){
             clientOutput.innerHTML = data;
             CopySubtreeLoader.style.display = 'none';
         });

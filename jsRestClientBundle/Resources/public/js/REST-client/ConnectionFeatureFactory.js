@@ -12,7 +12,6 @@ var ConnectionFeatureFactory = (function() {
         this.connectionList = connectionList;
 
         this.defaultFactory = function(Connection) {
-            console.log("Hello, from default factory!");
             return new Connection();
         };
 

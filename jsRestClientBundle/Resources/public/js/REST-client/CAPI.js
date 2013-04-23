@@ -13,8 +13,19 @@ var CAPI = (function() {
 
         this.contentService_ = null;
 
-        // Public vars and functions for this instance
-        this.connectionManager = new ConnectionManager(endPointUrl, authenticationAgent);
+        // Array of connections, should be filled-in in preferred order
+        //TODO: consider moving to some sort of configuration file...
+        var connectionStack = [
+            {
+                connection: XmlHttpRequestConnection
+            },
+            {
+                connection: MicrosoftXmlHttpRequestConnection
+            }
+        ];
+        var connectionFactory = new ConnectionFeatureFactory(connectionStack);
+
+        this.connectionManager = new ConnectionManager(endPointUrl, authenticationAgent, connectionFactory);
 
     };
 

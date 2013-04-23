@@ -1,35 +1,19 @@
-var ConnectionXHR = (function() {
+var MicrosoftXmlHttpRequestConnection = (function() {
     "use strict";
 
     /**
-     * Creates an instance of XHR connection object
+     * Creates an instance of MicrosoftXmlHttpRequestConnection object
      *
      * @constructor
      */
-    var ConnectionXHR = function () {
+    var MicrosoftXmlHttpRequestConnection = function () {
 
         // Private area
         var user = "admin";
         var password = "admin";
         var authMethod = "HTTPBasicAuth";
 
-
-        var getXHR = function(){
-            var result = null;
-            if (window.XMLHttpRequest) {
-                // FireFox, Safari, etc.
-                result = new XMLHttpRequest();
-            }
-            else if (window.ActiveXObject) {
-                // MSIE Old versions
-                result = new ActiveXObject("Microsoft.XMLHTTP");
-            }
-            else {
-                console.log("No known mechanism to build XHR!");
-            }
-            return result;
-        };
-
+        this.xhr_ = new ActiveXObject("Microsoft.XMLHTTP");
 
         /**
          * Basic request implemented via XHR technique
@@ -41,18 +25,19 @@ var ConnectionXHR = (function() {
          * @param headers {object}
          * @param callback {function} function, which will be executed on request success
          */
-        this.sendRequest = function(method, url, data, headers, callback) {
-            var XHR = getXHR();
+        this.execute = function(method, url, data, headers, callback) {
+
+            var XHR = this.xhr_;
 
             // Create the state change handler:
             XHR.onreadystatechange = function() {
                 if (XHR.readyState != 4) return; // Not ready yet
-                if ((XHR.status < 200) && (XHR.status > 204)) {
-                    console.log("Request failed!");
+                if (XHR.status >= 400) {
+                    callback(XHR.status, false);
                     return;
                 }
                 // Request successful
-                callback(XHR.responseText);
+                callback(false, XHR.responseText);
             };
 
             // Authentication, if possible and opening connection
@@ -80,14 +65,10 @@ var ConnectionXHR = (function() {
     };
 
     // static method
-    ConnectionXHR.isCompatible = function(){
-        if (window.XMLHttpRequest || window.ActiveXObject) {
-            return true;
-        }
-        else return false;
+    MicrosoftXmlHttpRequestConnection.isCompatible = function(){
+        return !!window.ActiveXObject;
     }
 
-    return ConnectionXHR;
-
+    return MicrosoftXmlHttpRequestConnection;
 
 }());
