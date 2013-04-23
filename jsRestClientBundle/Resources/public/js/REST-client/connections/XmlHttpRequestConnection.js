@@ -8,11 +8,6 @@ var XmlHttpRequestConnection = (function() {
      */
     var XmlHttpRequestConnection = function () {
 
-        // Private area
-        var user = "admin";
-        var password = "admin";
-        var authMethod = "HTTPBasicAuth";
-
         this.xhr_ = new XMLHttpRequest();
 
         /**
@@ -25,7 +20,7 @@ var XmlHttpRequestConnection = (function() {
          * @param headers {object}
          * @param callback {function} function, which will be executed on request success
          */
-        this.execute = function(method, url, data, headers, callback) {
+        this.execute = function(request, callback) {
 
             var XHR = this.xhr_;
 
@@ -33,34 +28,29 @@ var XmlHttpRequestConnection = (function() {
             XHR.onreadystatechange = function() {
                 if (XHR.readyState != 4) return; // Not ready yet
                 if (XHR.status >= 400) {
-                    callback(XHR.status, false);
+                    callback(XHR.status, XHR.responseText);
                     return;
                 }
                 // Request successful
                 callback(false, XHR.responseText);
             };
 
-            // Authentication, if possible and opening connection
-            if (authMethod === "HTTPBasicAuth"){
-                // Http basic authentication
-                if ( (typeof user !== "undefined") && (typeof password !== "undefined") ) {
-                    XHR.open(method, url, true, user, password);
-                } else {
-                    console.error("Incorrect or not full credentials for HTTP Basic Authentication.");
-                }
+
+            if (request.httpBasicAuth) {
+                XHR.open(request.method, request.url, true, request.user, request.password);
             } else {
-                // No specific authentication method
-                XHR.open(method, url, true);
+                XHR.open(request.method, request.url, true);
             }
 
-            for (var headerType in headers) {
+
+            for (var headerType in request.headers) {
                 XHR.setRequestHeader(
                     headerType,
-                    headers[headerType]
+                    request.headers[headerType]
                 );
             }
 
-            XHR.send(data);
+            XHR.send(request.body);
         };
     };
 

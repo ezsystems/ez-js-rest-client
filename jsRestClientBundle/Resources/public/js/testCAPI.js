@@ -1,12 +1,12 @@
 // Some simple js REST CAPI usage scenario
 
 var jsCAPI = new CAPI(
-    'http://ez.git.local',
-    {
-        user : "admin",
-        password : "admin",
-        authMethod : "HTTPBasicAuth"
-    });
+        'http://ez.git.local',
+        new HttpBasicAuthAgent({
+            user : "admin",
+            password : "admin"
+        })
+    );
 
 var contentService = jsCAPI.getContentService();
 var clientOutput = document.getElementById('output');
@@ -44,7 +44,7 @@ loadSectionAnchor.onclick = function(e){
         contentService.loadSection(
             loadSectionInput.value,
             function(error, data){
-                clientOutput.innerHTML = data;
+                clientOutput.innerHTML = "Errors : " + error + "</br>" + data;
                 loadSectionLoader.style.display = 'none';
             }
         );
