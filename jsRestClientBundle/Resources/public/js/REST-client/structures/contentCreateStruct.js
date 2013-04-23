@@ -3,7 +3,7 @@ var ContentCreateStruct = (function() {
 
     var ContentCreateStruct = function(contentTypeId, locationCreateStruct, languageCode, user){
 
-        var now = new Date();
+        var now = JSON.parse(JSON.stringify(new Date()));
 
         var struct = {
             "ContentCreate": {
@@ -16,7 +16,7 @@ var ContentCreateStruct = (function() {
                 "User" : user,
                 "alwaysAvailable" : "true",
                 "remoteId" : null,
-                "modificationDate": now.format("isoDateTime"),
+                "modificationDate": now,
                 "fields": {
                     "field": []
                 }

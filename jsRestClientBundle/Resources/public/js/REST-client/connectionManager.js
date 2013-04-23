@@ -7,24 +7,26 @@ var ConnectionManager = (function() {
      * @constructor
      * @param endPointUrl {string} url to REST root
      * @param authenticationAgent {object} literal object used to maintain authentication to REST server
-     * @param connectionType {string} string related to one of the special connection objects used to implement exact technique ("XHR", "JSONP" etc.)
      */
     var ConnectionManager = function(endPointUrl, authenticationAgent) {
 
-        var endPointUrl = endPointUrl;
-        var authenticationAgent = authenticationAgent;
-
         // Array of connections, should be filled-in in preferred order
         //TODO: consider moving to some sort of configuration file...
-        var connectionStack = [ConnectionXHR];
-
-        // Choosing and creating first compatible connection from connection stack
-        for (var index = 0; index < connectionStack.length; ++index) {
-            if (connectionStack[index].isCompatible()) {
-                var connection = new connectionStack[index](authenticationAgent);
-                break;
+        var connectionStack = [
+            {
+                connection: ConnectionXHR,
+                factory: function(Connection){
+                    console.log("Hello, from injected factory!");
+                    return new Connection();
+                }
             }
-        }
+        ];
+
+        var connectionFeatureFactory = new ConnectionFeatureFactory(connectionStack);
+
+        var activeConnection = connectionFeatureFactory.createConnection();
+
+
 
         /**
          * Basic request function
@@ -47,7 +49,7 @@ var ConnectionManager = (function() {
 
 
             //TODO: Suspend Requests during Authentication
-            connection.sendRequest(method, endPointUrl + url, data, headers, callback);
+            activeConnection.sendRequest(method, endPointUrl + url, data, headers, callback);
         };
     };
 

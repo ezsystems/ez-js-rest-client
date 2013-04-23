@@ -3,12 +3,12 @@ var ContentUpdateStruct = (function() {
 
     var ContentUpdateStruct = function(languageCode, user){
 
-        var now = new Date();
+        var now = JSON.parse(JSON.stringify(new Date()));
 
         var struct = {
             "VersionUpdate": {
                 "user": user,
-                "modificationDate": now.format("isoDateTime"),
+                "modificationDate": now,
                 "initialLanguageCode": languageCode,
                 "fields": {
                     "field": []

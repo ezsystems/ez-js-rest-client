@@ -3,8 +3,6 @@ var LocationCreateStruct = (function() {
 
     var LocationCreateStruct = function(parentLocationId){
 
-        var now = new Date();
-
         var struct = {
             "LocationCreate": {
                 "ParentLocation": {

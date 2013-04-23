@@ -6,12 +6,12 @@ var ConnectionXHR = (function() {
      *
      * @constructor
      */
-    var ConnectionXHR = function (authenticationAgent) {
+    var ConnectionXHR = function () {
 
         // Private area
-        var user = authenticationAgent.user;
-        var password = authenticationAgent.password;
-        var authMethod = authenticationAgent.authMethod;
+        var user = "admin";
+        var password = "admin";
+        var authMethod = "HTTPBasicAuth";
 
 
         var getXHR = function(){
