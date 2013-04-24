@@ -26,6 +26,10 @@ var CAPI = (function() {
         var connectionFactory = new ConnectionFeatureFactory(connectionStack);
 
         this.connectionManager = new ConnectionManager(endPointUrl, authenticationAgent, connectionFactory);
+        this.discoveryService = new DiscoveryService(this.connectionManager)
+
+        //TODO: move hardcodedrootPath to the same config file as above...
+        this.discoveryService.discoverRoot('/api/ezp/v2/');
 
     };
 
