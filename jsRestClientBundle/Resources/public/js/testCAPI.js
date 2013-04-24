@@ -20,10 +20,10 @@ rootAnchor.onclick = function(e){
     rootLoader.style.display = 'block';
     e.preventDefault();
 
-    contentService.root(
+    contentService.loadRoot(
         '/api/ezp/v2/',
         function(error, data){
-            clientOutput.innerHTML = data;
+            clientOutput.innerHTML = "Errors : " + error + "</br>" + data;
             rootLoader.style.display = 'none';
         }
     );
@@ -64,7 +64,7 @@ loadSectionsAnchor.onclick = function(e){
     contentService.loadSections(
         '/api/ezp/v2/content/sections',
         function(error, data){
-            clientOutput.innerHTML = data;
+            clientOutput.innerHTML = "Errors : " + error + "</br>" + data;
             loadSectionsLoader.style.display = 'none';
         }
     );
@@ -91,7 +91,7 @@ createSectionAnchor.onclick = function(e){
         '/api/ezp/v2/content/sections',
         JSON.stringify(sectionInput),
         function(error, data){
-            clientOutput.innerHTML = data;
+            clientOutput.innerHTML = "Errors : " + error + "</br>" + data;
             createSectionLoader.style.display = 'none';
         }
     );
@@ -122,7 +122,7 @@ updateSectionAnchor.onclick = function(e){
             updateSectionInput.value,
             JSON.stringify(sectionInput),
             function(error, data){
-                clientOutput.innerHTML = data;
+                clientOutput.innerHTML = "Errors : " + error + "</br>" + data;
                 updateSectionLoader.style.display = 'none';
             }
         );
@@ -147,7 +147,7 @@ deleteSectionAnchor.onclick = function(e){
         contentService.deleteSection(
             deleteSectionInput.value,
             function(error, data){
-                clientOutput.innerHTML = data;
+                clientOutput.innerHTML = "Errors : " + error + "</br>" + data;
                 deleteSectionLoader.style.display = 'none';
             }
         );
@@ -170,7 +170,7 @@ loadContentTypeGroupsAnchor.onclick = function(e){
     contentService.loadContentTypeGroups(
         '/api/ezp/v2/content/typegroups',
         function(error, data){
-            clientOutput.innerHTML = data;
+            clientOutput.innerHTML = "Errors : " + error + "</br>" + data;
             loadContentTypeGroupsLoader.style.display = 'none';
         }
     );
@@ -189,7 +189,7 @@ loadContentTypeGroupAnchor.onclick = function(e){
         contentService.loadContentTypeGroup(
             loadContentTypeGroupInput.value,
             function(error, data){
-                clientOutput.innerHTML = data;
+                clientOutput.innerHTML = "Errors : " + error + "</br>" + data;
                 loadContentTypeGroupLoader.style.display = 'none';
             }
         );
@@ -210,35 +210,32 @@ createContentAnchor.onclick = function(e){
     createContentLoader.style.display = 'block';
     e.preventDefault();
 
-    contentService.newLocationCreateStruct(
-        "/api/ezp/v2/content/locations/1/2/102",
-        function(locationCreateStruct){
-            contentService.newContentCreateStruct(
-                "/api/ezp/v2/content/types/18",
-                locationCreateStruct,
-                "eng-US",
-                "DummyUser",
-                function(contentCreateStruct){
+    var locationCreateStruct = contentService.newLocationCreateStruct("/api/ezp/v2/content/locations/1/2/102");
 
-                    var fieldInfo = {
-                        "fieldDefinitionIdentifier": "title",
-                        "languageCode": "eng-US",
-                        "fieldValue": "This is a title"
-                    }
+    var contentCreateStruct = contentService.newContentCreateStruct(
+        "/api/ezp/v2/content/types/18",
+        locationCreateStruct,
+        "eng-US",
+        "DummyUser"
+    );
 
-                    contentCreateStruct.ContentCreate.fields.field.push(fieldInfo);
 
-                    contentService.createContent(
-                        '/api/ezp/v2/content/objects',
-                        JSON.stringify(contentCreateStruct),
-                        function(error, data){
-                            clientOutput.innerHTML = data;
-                            createContentLoader.style.display = 'none';
-                        }
-                    );
-                }
-            );
-        });
+    var fieldInfo = {
+        "fieldDefinitionIdentifier": "title",
+        "languageCode": "eng-US",
+        "fieldValue": "This is a title"
+    }
+
+    contentCreateStruct.ContentCreate.fields.field.push(fieldInfo);
+
+    contentService.createContent(
+        '/api/ezp/v2/content/objects',
+        JSON.stringify(contentCreateStruct),
+        function(error, data){
+            clientOutput.innerHTML = "Errors : " + error + "</br>" + data;
+            createContentLoader.style.display = 'none';
+        }
+    );
 
 
 };
@@ -254,23 +251,23 @@ updateContentMetaAnchor.onclick = function(e){
 
     var updateContentMetaInput = document.getElementById('update-content-meta-input');
     if (updateContentMetaInput.value.length){
-        contentService.newContentMetadataUpdateStruct(
+        var updateStruct = contentService.newContentMetadataUpdateStruct(
             "eng-US",
-            "DummyUser",
-            function(updateStruct){
+            "DummyUser"
+        );
 
-                updateStruct.ContentUpdate.Section = "/api/ezp/v2/content/sections/2";
-                updateStruct.ContentUpdate.remoteId = "random-id-" + Math.random()*1000000;
+        updateStruct.ContentUpdate.Section = "/api/ezp/v2/content/sections/2";
+        updateStruct.ContentUpdate.remoteId = "random-id-" + Math.random()*1000000;
 
-                contentService.updateContentMetadata(
-                    updateContentMetaInput.value,
-                    JSON.stringify(updateStruct),
-                    function(error, data){
-                        clientOutput.innerHTML = data;
-                        updateContentMetaLoader.style.display = 'none';
-                    }
-                );
-            });
+        contentService.updateContentMetadata(
+            updateContentMetaInput.value,
+            JSON.stringify(updateStruct),
+            function(error, data){
+                clientOutput.innerHTML = "Errors : " + error + "</br>" + data;
+                updateContentMetaLoader.style.display = 'none';
+            }
+        );
+
     } else {
         clientOutput.innerHTML = 'Id is missing!';
     }
@@ -290,7 +287,7 @@ loadContentInfoAnchor.onclick = function(e){
         contentService.loadContentInfo(
             loadContentInfoInput.value,
             function(error, data){
-                clientOutput.innerHTML = data;
+                clientOutput.innerHTML = "Errors : " + error + "</br>" + data;
                 loadContentInfoLoader.style.display = 'none';
             }
         );
@@ -312,7 +309,7 @@ loadContentCurrentAnchor.onclick = function(e){
         contentService.loadContentInfoAndCurrentVersion(
             loadContentCurrentInput.value,
             function(error, data){
-                clientOutput.innerHTML = data;
+                clientOutput.innerHTML = "Errors : " + error + "</br>" + data;
                 loadContentCurrentLoader.style.display = 'none';
             }
         );
@@ -334,7 +331,7 @@ deleteContentAnchor.onclick = function(e){
         contentService.deleteContent(
             deleteContentInput.value,
             function(error, data){
-                clientOutput.innerHTML = data;
+                clientOutput.innerHTML = "Errors : " + error + "</br>" + data;
                 deleteContentLoader.style.display = 'none';
             }
         );
@@ -362,7 +359,7 @@ copyContentAnchor.onclick = function(e){
             copyContentInput.value,
             "/api/ezp/v2/content/locations/1/2/102",
             function(error, data){
-                clientOutput.innerHTML = data;
+                clientOutput.innerHTML = "Errors : " + error + "</br>" + data;
                 copyContentLoader.style.display = 'none';
             }
         );
@@ -388,7 +385,7 @@ loadContentVersionsAnchor.onclick = function(e){
         contentService.loadVersions(
             loadContentVersionsInput.value,
             function(error, data){
-                clientOutput.innerHTML = data;
+                clientOutput.innerHTML = "Errors : " + error + "</br>" + data;
                 loadContentVersionsLoader.style.display = 'none';
             }
         );
@@ -412,7 +409,7 @@ loadContentAnchor.onclick = function(e){
             loadContentInput.value,
             "",
             function(error, data){
-                clientOutput.innerHTML = data;
+                clientOutput.innerHTML = "Errors : " + error + "</br>" + data;
                 loadContentLoader.style.display = 'none';
             }
         );
@@ -432,29 +429,28 @@ updateContentAnchor.onclick = function(e){
     var updateContentInput = document.getElementById('update-content-input');
     if (updateContentInput.value.length){
 
-        contentService.newContentUpdateStruct(
+        var contentUpdateStruct = contentService.newContentUpdateStruct(
             "eng-US",
-            "DummyUser",
-            function(contentUpdateStruct){
+            "DummyUser"
+        );
 
-                var fieldInfo = {
-                    "fieldDefinitionIdentifier": "title",
-                    "languageCode": "eng-US",
-                    "fieldValue": "This is a new title" + Math.random()*1000000
-                }
+        var fieldInfo = {
+            "fieldDefinitionIdentifier": "title",
+            "languageCode": "eng-US",
+            "fieldValue": "This is a new title" + Math.random()*1000000
+        }
 
-                contentUpdateStruct.VersionUpdate.fields.field.push(fieldInfo);
+        contentUpdateStruct.VersionUpdate.fields.field.push(fieldInfo);
 
-                contentService.updateContent(
-                    updateContentInput.value,
-                    JSON.stringify(contentUpdateStruct),
-                    function(error, data){
-                        clientOutput.innerHTML = data;
-                        updateContentLoader.style.display = 'none';
-                    }
-                );
+        contentService.updateContent(
+            updateContentInput.value,
+            JSON.stringify(contentUpdateStruct),
+            function(error, data){
+                clientOutput.innerHTML = "Errors : " + error + "</br>" + data;
+                updateContentLoader.style.display = 'none';
             }
         );
+
     } else {
         clientOutput.innerHTML = 'Id is missing!';
     }
@@ -473,7 +469,7 @@ createContentDraftAnchor.onclick = function(e){
         contentService.createContentDraft(
             createContentDraftInput.value,
             function(error, data){
-                clientOutput.innerHTML = data;
+                clientOutput.innerHTML = "Errors : " + error + "</br>" + data;
                 createContentDraftLoader.style.display = 'none';
             }
         );
@@ -495,7 +491,7 @@ deleteVersionAnchor.onclick = function(e){
         contentService.deleteVersion(
             deleteVersionInput.value,
             function(error, data){
-                clientOutput.innerHTML = data;
+                clientOutput.innerHTML = "Errors : " + error + "</br>" + data;
                 deleteVersionLoader.style.display = 'none';
             }
         );
@@ -517,7 +513,7 @@ publishVersionAnchor.onclick = function(e){
         contentService.publishVersion(
             publishVersionInput.value,
             function(error, data){
-                clientOutput.innerHTML = data;
+                clientOutput.innerHTML = "Errors : " + error + "</br>" + data;
                 publishVersionLoader.style.display = 'none';
             }
         );
@@ -535,31 +531,31 @@ newContentUpdateStructAnchor.onclick = function(e){
 
     e.preventDefault();
 
-    contentService.newContentUpdateStruct(
+    var contentUpdateStruct = contentService.newContentUpdateStruct(
         "eng-US",
-        "DummyUser",
-        function(error, data){
-
-            var fieldInfo = {
-                "fieldDefinitionIdentifier": "title",
-                "languageCode": "eng-US",
-                "fieldValue": "This is a new title" + Math.random()*1000000
-            }
-
-            data.VersionUpdate.fields.field.push(fieldInfo);
-
-            var anotherFieldInfo = {
-                "fieldDefinitionIdentifier": "text",
-                "languageCode": "eng-US",
-                "fieldValue": "This is a new text" + Math.random()*1000000
-            }
-
-
-            data.VersionUpdate.fields.field.push(anotherFieldInfo);
-
-            clientOutput.innerHTML = JSON.stringify(data);
-        }
+        "DummyUser"
     );
+
+    var fieldInfo = {
+        "fieldDefinitionIdentifier": "title",
+        "languageCode": "eng-US",
+        "fieldValue": "This is a new title" + Math.random()*1000000
+    }
+
+    contentUpdateStruct.VersionUpdate.fields.field.push(fieldInfo);
+
+    var anotherFieldInfo = {
+        "fieldDefinitionIdentifier": "text",
+        "languageCode": "eng-US",
+        "fieldValue": "This is a new text" + Math.random()*1000000
+    }
+
+
+    contentUpdateStruct.VersionUpdate.fields.field.push(anotherFieldInfo);
+
+    clientOutput.innerHTML = JSON.stringify(contentUpdateStruct);
+
+
 };
 
 // Content metadata update structure example
@@ -568,16 +564,16 @@ newContentMetaUpdateStructAnchor.onclick = function(e){
 
     e.preventDefault();
 
-    contentService.newContentMetadataUpdateStruct(
+    var updateStruct = contentService.newContentMetadataUpdateStruct(
         "eng-US",
-        "DummyUser",
-        function(updateStruct){
+        "DummyUser"
+    );
 
-            updateStruct.ContentUpdate.Section = "/api/ezp/v2/content/sections/2";
-            updateStruct.ContentUpdate.remoteId = "random-id-" + Math.random()*1000000;
+    updateStruct.ContentUpdate.Section = "/api/ezp/v2/content/sections/2";
+    updateStruct.ContentUpdate.remoteId = "random-id-" + Math.random()*1000000;
 
-            clientOutput.innerHTML = JSON.stringify(updateStruct);
-        });
+    clientOutput.innerHTML = JSON.stringify(updateStruct);
+
 };
 
 
@@ -587,19 +583,19 @@ newContentCreateStructAnchor.onclick = function(e){
 
     e.preventDefault();
 
-    contentService.newLocationCreateStruct(
-        "/api/ezp/v2/content/locations/1/2/102",
-        function(locationCreateStruct){
-            contentService.newContentCreateStruct(
-                "/api/ezp/v2/content/types/18",
-                locationCreateStruct,
-                "eng-US",
-                "DummyUser",
-                function(contentCreateStruct){
-                    clientOutput.innerHTML = JSON.stringify(contentCreateStruct);
-                }
-            );
-        });
+    var locationCreateStruct = contentService.newLocationCreateStruct(
+        "/api/ezp/v2/content/locations/1/2/102"
+    );
+
+    var contentCreateStruct = contentService.newContentCreateStruct(
+        "/api/ezp/v2/content/types/18",
+        locationCreateStruct,
+        "eng-US",
+        "DummyUser"
+    );
+
+    clientOutput.innerHTML = JSON.stringify(contentCreateStruct);
+
 };
 
 // Location create structure example
@@ -608,13 +604,11 @@ newLocationCreateStructAnchor.onclick = function(e){
 
     e.preventDefault();
 
-    contentService.newLocationCreateStruct(
-        "/api/ezp/v2/content/locations/1/2/102",
-        function(locationCreateStruct){
+    var locationCreateStruct = contentService.newLocationCreateStruct(
+        "/api/ezp/v2/content/locations/1/2/102"
+    );
 
-                clientOutput.innerHTML = JSON.stringify(locationCreateStruct);
-
-        });
+    clientOutput.innerHTML = JSON.stringify(locationCreateStruct);
 };
 
 
@@ -626,23 +620,25 @@ CreateLocationAnchor.onclick = function(e){
     CreateLocationLoader.style.display = 'block';
     e.preventDefault();
 
-    contentService.newLocationCreateStruct(
-        "/api/ezp/v2/content/locations/1/2/107",
-        function(locationCreateStruct){
-            var CreateLocationInput = document.getElementById('create-location-input');
-            if (CreateLocationInput.value.length){
-                contentService.createLocation(
-                    CreateLocationInput.value,
-                    locationCreateStruct,
-                    function(error, data){
-                        clientOutput.innerHTML = data;
-                        CreateLocationLoader.style.display = 'none';
-                    }
-                );
-            } else {
-                clientOutput.innerHTML = 'Id is missing!';
+
+    locationCreateStruct = contentService.newLocationCreateStruct(
+        "/api/ezp/v2/content/locations/1/2/107"
+    );
+
+    var CreateLocationInput = document.getElementById('create-location-input');
+    if (CreateLocationInput.value.length){
+        contentService.createLocation(
+            CreateLocationInput.value,
+            locationCreateStruct,
+            function(error, data){
+                clientOutput.innerHTML = "Errors : " + error + "</br>" + data;
+                CreateLocationLoader.style.display = 'none';
             }
-        });
+        );
+    } else {
+        clientOutput.innerHTML = 'Id is missing!';
+    }
+
 };
 
 
@@ -659,7 +655,7 @@ LoadLocationsAnchor.onclick = function(e){
     contentService.loadLocations(
         LoadLocationsInput.value,
         function(error, data){
-            clientOutput.innerHTML = data;
+            clientOutput.innerHTML = "Errors : " + error + "</br>" + data;
             LoadLocationsLoader.style.display = 'none';
         });
 };
@@ -678,7 +674,7 @@ LoadLocationAnchor.onclick = function(e){
     contentService.loadLocation(
         LoadLocationInput.value,
         function(error, data){
-            clientOutput.innerHTML = data;
+            clientOutput.innerHTML = "Errors : " + error + "</br>" + data;
             LoadLocationLoader.style.display = 'none';
         });
 };
@@ -698,7 +694,7 @@ CopySubtreeAnchor.onclick = function(e){
         "/api/ezp/v2/content/locations/1/2/107",
         CopySubtreeInput.value,
         function(error, data){
-            clientOutput.innerHTML = data;
+            clientOutput.innerHTML = "Errors : " + error + "</br>" + data;
             CopySubtreeLoader.style.display = 'none';
         });
 };

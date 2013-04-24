@@ -18,7 +18,7 @@ var ContentService = (function() {
          * @param root {href}
          * @param callback {function} function, which will be executed on request success
          */
-        ContentService.prototype.root = function(root, callback) {
+        ContentService.prototype.loadRoot = function(root, callback) {
             connectionManager.request(
                 "GET",
                 root,
@@ -326,13 +326,11 @@ var ContentService = (function() {
          * @method newContentUpdateStruct
          * @param language {string}
          * @param user {string}
-         * @param callback {function} function, which will be executed on request success
          */
-        ContentService.prototype.newContentUpdateStruct = function(language, user, callback) {
+        ContentService.prototype.newContentUpdateStruct = function(language, user) {
 
-            var updateStruct = new ContentUpdateStruct(language, user);
+            return new ContentUpdateStruct(language, user);
 
-            callback(updateStruct);
         };
 
         /**
@@ -341,13 +339,11 @@ var ContentService = (function() {
          * @method newContentMetadataUpdateStruct
          * @param language {string}
          * @param user {string}
-         * @param callback {function} function, which will be executed on request success
          */
-        ContentService.prototype.newContentMetadataUpdateStruct = function(language, user, callback) {
+        ContentService.prototype.newContentMetadataUpdateStruct = function(language, user) {
 
-            var updateStruct = new ContentMetadataUpdateStruct(language, user);
+            return new ContentMetadataUpdateStruct(language, user);
 
-            callback(updateStruct);
         };
 
         /**
@@ -358,13 +354,11 @@ var ContentService = (function() {
          * @param locationCreateStruct {object}
          * @param language {string}
          * @param user {string}
-         * @param callback {function} function, which will be executed on request success
          */
-        ContentService.prototype.newContentCreateStruct = function(contentTypeId, locationCreateStruct, language, user, callback) {
+        ContentService.prototype.newContentCreateStruct = function(contentTypeId, locationCreateStruct, language, user) {
 
-            var createStruct = new ContentCreateStruct(contentTypeId, locationCreateStruct, language, user);
+            return new ContentCreateStruct(contentTypeId, locationCreateStruct, language, user);
 
-            callback(createStruct);
         };
 
 
@@ -453,13 +447,12 @@ var ContentService = (function() {
          *
          * @method newLocationCreateStruct
          * @param parentLocationId {href}
-         * @param callback {function} function, which will be executed on request success
+
          */
-        ContentService.prototype.newLocationCreateStruct = function(parentLocationId, callback) {
+        ContentService.prototype.newLocationCreateStruct = function(parentLocationId) {
 
-            var createStruct = new LocationCreateStruct(parentLocationId);
+            return new LocationCreateStruct(parentLocationId);
 
-            callback(createStruct);
         };
 
 

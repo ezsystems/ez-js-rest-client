@@ -5,21 +5,20 @@ var ContentMetadataUpdateStruct = (function() {
 
         var now = JSON.parse(JSON.stringify(new Date()));
 
-        var struct = {
-            "ContentUpdate" : {
-                "MainLanguageCode" : languageCode,
-                "Section" : null,
-// TODO: find a way to initialize MainLocation with empty value (for now neither "null", nor "" don't work)
-//                "MainLocation" : null,
-                "Owner" : user,
-                "alwaysAvailable" : "true",
-                "remoteId" : null,
-                "modificationDate" : now,
-                "publishDate" : null
-            }
-        }
+        this.ContentUpdate = {};
 
-        return struct;
+        this.ContentUpdate.MainLanguageCode = languageCode;
+        this.ContentUpdate.Section = null;
+        this.ContentUpdate.Owner = user;
+        this.ContentUpdate.alwaysAvailable = "true";
+        this.ContentUpdate.remoteId = null;
+        this.ContentUpdate.modificationDate = now;
+        this.ContentUpdate.publishDate = null;
+
+        // TODO: find a way to initialize MainLocation with empty value (for now neither "null", nor "" don't work)
+//        this.ContentUpdate.MainLocation = null;
+
+        return this;
 
     }
 

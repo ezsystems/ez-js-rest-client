@@ -5,18 +5,16 @@ var ContentUpdateStruct = (function() {
 
         var now = JSON.parse(JSON.stringify(new Date()));
 
-        var struct = {
-            "VersionUpdate": {
-                "user": user,
-                "modificationDate": now,
-                "initialLanguageCode": languageCode,
-                "fields": {
-                    "field": []
-                }
-            }
-        }
+        this.VersionUpdate = {};
 
-        return struct;
+        this.VersionUpdate.user = user;
+        this.VersionUpdate.modificationDate = now;
+        this.VersionUpdate.initialLanguageCode = languageCode;
+        this.VersionUpdate.fields = {
+            "field": []
+        };
+
+        return this;
 
     }
 

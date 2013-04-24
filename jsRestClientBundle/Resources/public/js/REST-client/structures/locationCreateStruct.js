@@ -3,20 +3,19 @@ var LocationCreateStruct = (function() {
 
     var LocationCreateStruct = function(parentLocationId){
 
-        var struct = {
-            "LocationCreate": {
-                "ParentLocation": {
-                    "_href": parentLocationId
-                },
-                "priority": "0",
-                "hidden": "false",
-                "remoteId" : null,
-                "sortField": "PATH",
-                "sortOrder": "ASC"
-            }
-        }
+        this.LocationCreate = {};
 
-        return struct;
+        this.LocationCreate.ParentLocation = {
+            "_href": parentLocationId
+        };
+
+        this.LocationCreate.priority = "0";
+        this.LocationCreate.hidden = "false";
+        this.LocationCreate.remoteId = null;
+        this.LocationCreate.sortField = "PATH";
+        this.LocationCreate.sortOrder = "ASC";
+
+        return this;
 
     }
 
