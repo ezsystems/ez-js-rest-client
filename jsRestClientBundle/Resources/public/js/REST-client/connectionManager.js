@@ -51,7 +51,10 @@ var ConnectionManager = (function() {
                             new Error({
                                 errorText : "An error occured during request authentication!"
                             }),
-                            false
+                            new Response({
+                                status : "error",
+                                body : ""
+                            })
                         );
                     }
                 }

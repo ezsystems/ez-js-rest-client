@@ -30,14 +30,24 @@ var XmlHttpRequestConnection = (function() {
                             errorText : "Connection error : " + XHR.status,
                             errorCode : XHR.status
                         }),
-                        XHR.responseText
+                        new Response({
+                            status : XHR.status,
+                            headers : XHR.getAllResponseHeaders(),
+                            body : XHR.responseText
+                        })
                     );
                     return;
                 }
                 // Request successful
-                callback(false, XHR.responseText);
+                callback(
+                    false,
+                    new Response({
+                        status : XHR.status,
+                        headers : XHR.getAllResponseHeaders(),
+                        body : XHR.responseText
+                    })
+                );
             };
-
 
             if (request.httpBasicAuth) {
                 XHR.open(request.method, request.url, true, request.user, request.password);
@@ -52,7 +62,6 @@ var XmlHttpRequestConnection = (function() {
                     request.headers[headerType]
                 );
             }
-
             XHR.send(request.body);
         };
     };

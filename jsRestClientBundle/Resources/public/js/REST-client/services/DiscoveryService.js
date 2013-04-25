@@ -66,7 +66,7 @@ var DiscoveryService = (function() {
                 function(error, rootJSON) {
                     if (!error) {
 
-                        that.copyToCache(JSON.parse(rootJSON));
+                        that.copyToCache(JSON.parse(rootJSON.body));
 
                     }
                 }
@@ -89,7 +89,10 @@ var DiscoveryService = (function() {
                 new Error({
                     errorText : "Discovery service failed to provide url for given name '" + name + "'"
                 }),
-                false
+                new Response({
+                    status : "error",
+                    body : ""
+                })
             );
         }
     };
@@ -106,7 +109,10 @@ var DiscoveryService = (function() {
                 new Error({
                     errorText : "Discovery service failed to provide media-type for given name '" + name + "'"
                 }),
-                false
+                new Response({
+                    status : "error",
+                    body : ""
+                })
             );
         }
     };
@@ -123,7 +129,10 @@ var DiscoveryService = (function() {
                 new Error({
                     errorText : "Discovery service failed to provide info object for given name '" + name + "'"
                 }),
-                false
+                new Response({
+                    status : "error",
+                    body : ""
+                })
             );
         }
     };

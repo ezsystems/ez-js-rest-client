@@ -22,8 +22,10 @@ rootAnchor.onclick = function(e){
 
     contentService.loadRoot(
         '/api/ezp/v2/',
-        function(error, data){
-            clientOutput.innerHTML = "Errors : " + JSON.stringify(error) + "</br>" + data;
+        function(error, response){
+            clientOutput.innerHTML =    "Errors : " + JSON.stringify(error) + "</br>" + 
+                                        "Status : " + response.status + "</br>" +
+                                        "Body : " + response.body;
             rootLoader.style.display = 'none';
         }
     );
@@ -43,8 +45,10 @@ loadSectionAnchor.onclick = function(e){
     if (loadSectionInput.value.length){
         contentService.loadSection(
             loadSectionInput.value,
-            function(error, data){
-                clientOutput.innerHTML = "Errors : " + JSON.stringify(error) + "</br>" + data;
+            function(error, response){
+                clientOutput.innerHTML =    "Errors : " + JSON.stringify(error) + "</br>" +
+                                            "Status : " + response.status + "</br>" +
+                                            "Body : " + response.body;
                 loadSectionLoader.style.display = 'none';
             }
         );
@@ -62,8 +66,10 @@ loadSectionsAnchor.onclick = function(e){
     loadSectionsLoader.style.display = 'block';
     e.preventDefault();
     contentService.loadSections(
-        function(error, data){
-            clientOutput.innerHTML = "Errors : " + JSON.stringify(error) + "</br>" + data;
+        function(error, response){
+            clientOutput.innerHTML =    "Errors : " + JSON.stringify(error) + "</br>" +
+                "Status : " + response.status + "</br>" +
+                "Body : " + response.body;
             loadSectionsLoader.style.display = 'none';
         }
     );
@@ -89,8 +95,10 @@ createSectionAnchor.onclick = function(e){
     contentService.createSection(
         '/api/ezp/v2/content/sections',
         JSON.stringify(sectionInput),
-        function(error, data){
-            clientOutput.innerHTML = "Errors : " + JSON.stringify(error) + "</br>" + data;
+        function(error, response){
+            clientOutput.innerHTML =    "Errors : " + JSON.stringify(error) + "</br>" +
+                "Status : " + response.status + "</br>" +
+                "Body : " + response.body;
             createSectionLoader.style.display = 'none';
         }
     );
@@ -120,8 +128,10 @@ updateSectionAnchor.onclick = function(e){
         contentService.updateSection(
             updateSectionInput.value,
             JSON.stringify(sectionInput),
-            function(error, data){
-                clientOutput.innerHTML = "Errors : " + JSON.stringify(error) + "</br>" + data;
+            function(error, response){
+                clientOutput.innerHTML =    "Errors : " + JSON.stringify(error) + "</br>" +
+                    "Status : " + response.status + "</br>" +
+                    "Body : " + response.body;
                 updateSectionLoader.style.display = 'none';
             }
         );
@@ -145,8 +155,10 @@ deleteSectionAnchor.onclick = function(e){
     if (deleteSectionInput.value.length){
         contentService.deleteSection(
             deleteSectionInput.value,
-            function(error, data){
-                clientOutput.innerHTML = "Errors : " + JSON.stringify(error) + "</br>" + data;
+            function(error, response){
+                clientOutput.innerHTML =    "Errors : " + JSON.stringify(error) + "</br>" +
+                    "Status : " + response.status + "</br>" +
+                    "Body : " + response.body;
                 deleteSectionLoader.style.display = 'none';
             }
         );
@@ -168,8 +180,10 @@ loadContentTypeGroupsAnchor.onclick = function(e){
 
     contentService.loadContentTypeGroups(
         '/api/ezp/v2/content/typegroups',
-        function(error, data){
-            clientOutput.innerHTML = "Errors : " + JSON.stringify(error) + "</br>" + data;
+        function(error, response){
+            clientOutput.innerHTML =    "Errors : " + JSON.stringify(error) + "</br>" +
+                "Status : " + response.status + "</br>" +
+                "Body : " + response.body;
             loadContentTypeGroupsLoader.style.display = 'none';
         }
     );
@@ -187,8 +201,10 @@ loadContentTypeGroupAnchor.onclick = function(e){
     if (loadContentTypeGroupInput.value.length){
         contentService.loadContentTypeGroup(
             loadContentTypeGroupInput.value,
-            function(error, data){
-                clientOutput.innerHTML = "Errors : " + JSON.stringify(error) + "</br>" + data;
+            function(error, response){
+                clientOutput.innerHTML =    "Errors : " + JSON.stringify(error) + "</br>" +
+                    "Status : " + response.status + "</br>" +
+                    "Body : " + response.body;
                 loadContentTypeGroupLoader.style.display = 'none';
             }
         );
@@ -230,8 +246,10 @@ createContentAnchor.onclick = function(e){
     contentService.createContent(
         '/api/ezp/v2/content/objects',
         JSON.stringify(contentCreateStruct),
-        function(error, data){
-            clientOutput.innerHTML = "Errors : " + JSON.stringify(error) + "</br>" + data;
+        function(error, response){
+            clientOutput.innerHTML =    "Errors : " + JSON.stringify(error) + "</br>" +
+                "Status : " + response.status + "</br>" +
+                "Body : " + response.body;
             createContentLoader.style.display = 'none';
         }
     );
@@ -261,8 +279,10 @@ updateContentMetaAnchor.onclick = function(e){
         contentService.updateContentMetadata(
             updateContentMetaInput.value,
             JSON.stringify(updateStruct),
-            function(error, data){
-                clientOutput.innerHTML = "Errors : " + JSON.stringify(error) + "</br>" + data;
+            function(error, response){
+                clientOutput.innerHTML =    "Errors : " + JSON.stringify(error) + "</br>" +
+                    "Status : " + response.status + "</br>" +
+                    "Body : " + response.body;
                 updateContentMetaLoader.style.display = 'none';
             }
         );
@@ -285,8 +305,10 @@ loadContentInfoAnchor.onclick = function(e){
     if (loadContentInfoInput.value.length){
         contentService.loadContentInfo(
             loadContentInfoInput.value,
-            function(error, data){
-                clientOutput.innerHTML = "Errors : " + JSON.stringify(error) + "</br>" + data;
+            function(error, response){
+                clientOutput.innerHTML =    "Errors : " + JSON.stringify(error) + "</br>" +
+                    "Status : " + response.status + "</br>" +
+                    "Body : " + response.body;
                 loadContentInfoLoader.style.display = 'none';
             }
         );
@@ -307,8 +329,10 @@ loadContentCurrentAnchor.onclick = function(e){
     if (loadContentCurrentInput.value.length){
         contentService.loadContentInfoAndCurrentVersion(
             loadContentCurrentInput.value,
-            function(error, data){
-                clientOutput.innerHTML = "Errors : " + JSON.stringify(error) + "</br>" + data;
+            function(error, response){
+                clientOutput.innerHTML =    "Errors : " + JSON.stringify(error) + "</br>" +
+                    "Status : " + response.status + "</br>" +
+                    "Body : " + response.body;
                 loadContentCurrentLoader.style.display = 'none';
             }
         );
@@ -329,8 +353,10 @@ deleteContentAnchor.onclick = function(e){
     if (deleteContentInput.value.length){
         contentService.deleteContent(
             deleteContentInput.value,
-            function(error, data){
-                clientOutput.innerHTML = "Errors : " + JSON.stringify(error) + "</br>" + data;
+            function(error, response){
+                clientOutput.innerHTML =    "Errors : " + JSON.stringify(error) + "</br>" +
+                    "Status : " + response.status + "</br>" +
+                    "Body : " + response.body;
                 deleteContentLoader.style.display = 'none';
             }
         );
@@ -357,8 +383,10 @@ copyContentAnchor.onclick = function(e){
         contentService.copyContent(
             copyContentInput.value,
             "/api/ezp/v2/content/locations/1/2/102",
-            function(error, data){
-                clientOutput.innerHTML = "Errors : " + JSON.stringify(error) + "</br>" + data;
+            function(error, response){
+                clientOutput.innerHTML =    "Errors : " + JSON.stringify(error) + "</br>" +
+                    "Status : " + response.status + "</br>" +
+                    "Body : " + response.body;
                 copyContentLoader.style.display = 'none';
             }
         );
@@ -383,8 +411,10 @@ loadContentVersionsAnchor.onclick = function(e){
     if (loadContentVersionsInput.value.length){
         contentService.loadVersions(
             loadContentVersionsInput.value,
-            function(error, data){
-                clientOutput.innerHTML = "Errors : " + JSON.stringify(error) + "</br>" + data;
+            function(error, response){
+                clientOutput.innerHTML =    "Errors : " + JSON.stringify(error) + "</br>" +
+                    "Status : " + response.status + "</br>" +
+                    "Body : " + response.body;
                 loadContentVersionsLoader.style.display = 'none';
             }
         );
@@ -407,8 +437,10 @@ loadContentAnchor.onclick = function(e){
         contentService.loadContent(
             loadContentInput.value,
             "",
-            function(error, data){
-                clientOutput.innerHTML = "Errors : " + JSON.stringify(error) + "</br>" + data;
+            function(error, response){
+                clientOutput.innerHTML =    "Errors : " + JSON.stringify(error) + "</br>" +
+                    "Status : " + response.status + "</br>" +
+                    "Body : " + response.body;
                 loadContentLoader.style.display = 'none';
             }
         );
@@ -444,8 +476,10 @@ updateContentAnchor.onclick = function(e){
         contentService.updateContent(
             updateContentInput.value,
             JSON.stringify(contentUpdateStruct),
-            function(error, data){
-                clientOutput.innerHTML = "Errors : " + JSON.stringify(error) + "</br>" + data;
+            function(error, response){
+                clientOutput.innerHTML =    "Errors : " + JSON.stringify(error) + "</br>" +
+                    "Status : " + response.status + "</br>" +
+                    "Body : " + response.body;
                 updateContentLoader.style.display = 'none';
             }
         );
@@ -467,8 +501,10 @@ createContentDraftAnchor.onclick = function(e){
     if (createContentDraftInput.value.length){
         contentService.createContentDraft(
             createContentDraftInput.value,
-            function(error, data){
-                clientOutput.innerHTML = "Errors : " + JSON.stringify(error) + "</br>" + data;
+            function(error, response){
+                clientOutput.innerHTML =    "Errors : " + JSON.stringify(error) + "</br>" +
+                    "Status : " + response.status + "</br>" +
+                    "Body : " + response.body;
                 createContentDraftLoader.style.display = 'none';
             }
         );
@@ -489,8 +525,10 @@ deleteVersionAnchor.onclick = function(e){
     if (deleteVersionInput.value.length){
         contentService.deleteVersion(
             deleteVersionInput.value,
-            function(error, data){
-                clientOutput.innerHTML = "Errors : " + JSON.stringify(error) + "</br>" + data;
+            function(error, response){
+                clientOutput.innerHTML =    "Errors : " + JSON.stringify(error) + "</br>" +
+                    "Status : " + response.status + "</br>" +
+                    "Body : " + response.body;
                 deleteVersionLoader.style.display = 'none';
             }
         );
@@ -511,8 +549,10 @@ publishVersionAnchor.onclick = function(e){
     if (publishVersionInput.value.length){
         contentService.publishVersion(
             publishVersionInput.value,
-            function(error, data){
-                clientOutput.innerHTML = "Errors : " + JSON.stringify(error) + "</br>" + data;
+            function(error, response){
+                clientOutput.innerHTML =    "Errors : " + JSON.stringify(error) + "</br>" +
+                    "Status : " + response.status + "</br>" +
+                    "Body : " + response.body;
                 publishVersionLoader.style.display = 'none';
             }
         );
@@ -629,8 +669,10 @@ CreateLocationAnchor.onclick = function(e){
         contentService.createLocation(
             CreateLocationInput.value,
             locationCreateStruct,
-            function(error, data){
-                clientOutput.innerHTML = "Errors : " + JSON.stringify(error) + "</br>" + data;
+            function(error, response){
+                clientOutput.innerHTML =    "Errors : " + JSON.stringify(error) + "</br>" +
+                    "Status : " + response.status + "</br>" +
+                    "Body : " + response.body;
                 CreateLocationLoader.style.display = 'none';
             }
         );
@@ -653,8 +695,10 @@ LoadLocationsAnchor.onclick = function(e){
 
     contentService.loadLocations(
         LoadLocationsInput.value,
-        function(error, data){
-            clientOutput.innerHTML = "Errors : " + JSON.stringify(error) + "</br>" + data;
+        function(error, response){
+            clientOutput.innerHTML =    "Errors : " + JSON.stringify(error) + "</br>" +
+                "Status : " + response.status + "</br>" +
+                "Body : " + response.body;
             LoadLocationsLoader.style.display = 'none';
         });
 };
@@ -672,8 +716,10 @@ LoadLocationAnchor.onclick = function(e){
 
     contentService.loadLocation(
         LoadLocationInput.value,
-        function(error, data){
-            clientOutput.innerHTML = "Errors : " + JSON.stringify(error) + "</br>" + data;
+        function(error, response){
+            clientOutput.innerHTML =    "Errors : " + JSON.stringify(error) + "</br>" +
+                "Status : " + response.status + "</br>" +
+                "Body : " + response.body;
             LoadLocationLoader.style.display = 'none';
         });
 };
@@ -692,8 +738,10 @@ CopySubtreeAnchor.onclick = function(e){
     contentService.copySubtree(
         "/api/ezp/v2/content/locations/1/2/107",
         CopySubtreeInput.value,
-        function(error, data){
-            clientOutput.innerHTML = "Errors : " + JSON.stringify(error) + "</br>" + data;
+        function(error, response){
+            clientOutput.innerHTML =    "Errors : " + JSON.stringify(error) + "</br>" +
+                "Status : " + response.status + "</br>" +
+                "Body : " + response.body;
             CopySubtreeLoader.style.display = 'none';
         });
 };
