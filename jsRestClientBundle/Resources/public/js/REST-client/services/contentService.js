@@ -7,7 +7,7 @@ var ContentService = (function() {
      * @constructor
      * @param connectionManager {object} connection manager that will be used to send requests to REST service
      */
-    var ContentService = function(connectionManager) {
+    var ContentService = function(connectionManager, discoveryService) {
 
         // TODO: store url+method+headers relation to actual request in some preloaded matrix or smth like this?
 
@@ -36,17 +36,29 @@ var ContentService = (function() {
          * List all sections
          *
          * @method loadSections
-         * @param sections {href}
          * @param callback {function} function, which will be executed on request success
          */
-        ContentService.prototype.loadSections = function(sections, callback) {
-            connectionManager.request(
-                "GET",
-                sections,
-                {},
-                { "Accept" : "application/vnd.ez.api.SectionList+json" },
-                callback
+        ContentService.prototype.loadSections = function(callback) {
+
+            discoveryService.getInfoObject(
+                "sections",
+                function(error, sections) {
+                    if (!error) {
+
+                        connectionManager.request(
+                            "GET",
+                            sections["_href"],
+                            {},
+                            { "Accept" : sections["_media-type"] },
+                            callback
+                        );
+
+                    } else {
+                        callback(error, false)
+                    }
+                }
             );
+
         };
 
         /**

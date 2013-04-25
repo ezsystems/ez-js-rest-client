@@ -18,14 +18,11 @@ var MicrosoftXmlHttpRequestConnection = (function() {
         /**
          * Basic request implemented via XHR technique
          *
-         * @method request
-         * @param method {string} request method ("POST", "GET" etc)
-         * @param url {string} requested REST resource
-         * @param data {JSON}
-         * @param headers {object}
+         * @method execute
+         * @param request {Request} structure containing all needed params and data
          * @param callback {function} function, which will be executed on request success
          */
-        this.execute = function(method, url, data, headers, callback) {
+        this.execute = function(request, callback) {
 
             var XHR = this.xhr_;
 
@@ -33,34 +30,35 @@ var MicrosoftXmlHttpRequestConnection = (function() {
             XHR.onreadystatechange = function() {
                 if (XHR.readyState != 4) return; // Not ready yet
                 if (XHR.status >= 400) {
-                    callback(XHR.status, false);
+                    callback(
+                        new Error({
+                            errorText : "Connection error : " + XHR.status,
+                            errorCode : XHR.status
+                        }),
+                        XHR.responseText
+                    );
                     return;
                 }
                 // Request successful
                 callback(false, XHR.responseText);
             };
 
-            // Authentication, if possible and opening connection
-            if (authMethod === "HTTPBasicAuth"){
-                // Http basic authentication
-                if ( (typeof user !== "undefined") && (typeof password !== "undefined") ) {
-                    XHR.open(method, url, true, user, password);
-                } else {
-                    console.error("Incorrect or not full credentials for HTTP Basic Authentication.");
-                }
+
+            if (request.httpBasicAuth) {
+                XHR.open(request.method, request.url, true, request.user, request.password);
             } else {
-                // No specific authentication method
-                XHR.open(method, url, true);
+                XHR.open(request.method, request.url, true);
             }
 
-            for (var headerType in headers) {
+
+            for (var headerType in request.headers) {
                 XHR.setRequestHeader(
                     headerType,
-                    headers[headerType]
+                    request.headers[headerType]
                 );
             }
 
-            XHR.send(data);
+            XHR.send(request.body);
         };
     };
 

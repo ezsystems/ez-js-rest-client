@@ -28,7 +28,7 @@ var CAPI = (function() {
         this.connectionManager = new ConnectionManager(endPointUrl, authenticationAgent, connectionFactory);
         this.discoveryService = new DiscoveryService(this.connectionManager)
 
-        //TODO: move hardcodedrootPath to the same config file as above...
+        //TODO: move hardcoded rootPath to the same config file as above...
         this.discoveryService.discoverRoot('/api/ezp/v2/');
 
     };
@@ -43,7 +43,8 @@ var CAPI = (function() {
     CAPI.prototype.getContentService = function(){
         if  (!this.contentService_)  {
             this.contentService_  =  new ContentService(
-                this.connectionManager
+                this.connectionManager,
+                this.discoveryService
             );
         }
         return  this.contentService_;

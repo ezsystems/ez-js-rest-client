@@ -1,7 +1,7 @@
-var Request = (function() {
+var Error = (function() {
     "use strict";
 
-    var Request = function(valuesContainer){
+    var Error = function(valuesContainer){
 
         for (var property in valuesContainer) {
             if (valuesContainer.hasOwnProperty(property)) {
@@ -13,6 +13,6 @@ var Request = (function() {
     }
 
 
-    return Request;
+    return Error;
 
 }());

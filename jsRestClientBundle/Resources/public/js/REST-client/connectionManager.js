@@ -48,8 +48,10 @@ var ConnectionManager = (function() {
                         activeConnection.execute(authenticatedRequest, callback);
                     } else {
                         callback(
-                            "An error occured during request authentication!",
-                            null
+                            new Error({
+                                errorText : "An error occured during request authentication!"
+                            }),
+                            false
                         );
                     }
                 }

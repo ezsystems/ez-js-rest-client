@@ -13,11 +13,8 @@ var XmlHttpRequestConnection = (function() {
         /**
          * Basic request implemented via XHR technique
          *
-         * @method request
-         * @param method {string} request method ("POST", "GET" etc)
-         * @param url {string} requested REST resource
-         * @param data {JSON}
-         * @param headers {object}
+         * @method execute
+         * @param request {Request} structure containing all needed params and data
          * @param callback {function} function, which will be executed on request success
          */
         this.execute = function(request, callback) {
@@ -28,7 +25,13 @@ var XmlHttpRequestConnection = (function() {
             XHR.onreadystatechange = function() {
                 if (XHR.readyState != 4) return; // Not ready yet
                 if (XHR.status >= 400) {
-                    callback(XHR.status, XHR.responseText);
+                    callback(
+                        new Error({
+                            errorText : "Connection error : " + XHR.status,
+                            errorCode : XHR.status
+                        }),
+                        XHR.responseText
+                    );
                     return;
                 }
                 // Request successful
