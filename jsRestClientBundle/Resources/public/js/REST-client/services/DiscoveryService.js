@@ -7,11 +7,47 @@ var DiscoveryService = (function() {
      * @constructor
      * @param connectionManager {ConnectionManager}
      */
-    var DiscoveryService = function(connectionManager){
+    var DiscoveryService = function(rootPath, connectionManager){
 
         this.connectionManager = connectionManager;
+        this.rootPath = rootPath;
 
         this.cacheObject = {};
+
+        /**
+         * discover Root object
+         *
+         * @method discoverRoot
+         * @param rootPath {href}
+         * @param callback {Function}
+         */
+        this.discoverRoot = function(rootPath, callback) {
+
+            if (!this.cacheObject.Root) {
+                var that = this;
+                this.connectionManager.request(
+                    "GET",
+                    rootPath,
+                    {},
+                    { "Accept" : "application/vnd.ez.api.Root+json" },
+                    function(error, rootJSON) {
+                        if (!error) {
+
+                            that.copyToCache(JSON.parse(rootJSON.body));
+                            callback(false, true);
+
+                        } else {
+                            callback(
+                                new Error({
+                                    errorText : "Discover service failed to retrieve root object."
+                                }),
+                                false
+                            )
+                        }
+                    }
+                );
+            }
+        };
 
         /**
          * Copy all the properties of a argument object into cache object
@@ -28,113 +64,135 @@ var DiscoveryService = (function() {
         }
 
         /**
-         * Copy all the properties of a argument object into cache object
+         * Try to get object from cacheObject by given 'name'
          *
-         * @method getFromCache
+         * @method getObjectFromCache
          * @param name {String}
-         * @return descriptionObject {Object} description object usually containing url and media-type
+         * @param callback {Function}
          */
-        this.getObjectFromCache = function(name) {
-
+        this.getObjectFromCache = function(name, callback) {
             var object = null;
+            var that = this;
+            // Discovering root, if not yet discovered
+            // on discovery running the request for same 'name' again
+            if (!this.cacheObject.Root) {
+                console.log('no root yet!');
+                this.discoverRoot(this.rootPath, function() {
+                    that.getObjectFromCache(name, callback);
+                });
+                return;
+            }
 
             // Checking most obvious places for now
             // "Root" object (retrieved during root discovery request) and
             // root of a cache object in case we have cached value from some other request
             if (this.cacheObject.Root.hasOwnProperty(name)) {
-                return this.cacheObject.Root[name];
+                object = this.cacheObject.Root[name];
             } else if (this.cacheObject.hasOwnProperty(name)) {
-                return this.cacheObject[name];
+                object = this.cacheObject[name];
             }
 
-            return object;
+            if (object) {
+                callback(
+                    false,
+                    object
+                );
+            } else {
+                callback(
+                    new Error({
+                        errorText : "Discover service failed to find cached object with name '" + name + "'"
+                    }),
+                    false
+                )
+            }
         }
-
     }
 
-    DiscoveryService.prototype.discoverRoot = function(rootPath) {
-
-        if (!this.cacheObject.Root) {
-
-            var that = this;
-
-            this.connectionManager.request(
-                "GET",
-                rootPath,
-                {},
-                { "Accept" : "application/vnd.ez.api.Root+json" },
-                function(error, rootJSON) {
-                    if (!error) {
-
-                        that.copyToCache(JSON.parse(rootJSON.body));
-
-                    }
-                }
-            );
-
-
-        }
-    };
-
-
+    /**
+     * Get url for given 'name'
+     *
+     * @method getUrl
+     * @param name {String}
+     * @param callback {Function}
+     */
     DiscoveryService.prototype.getUrl = function(name, callback) {
-        var cachedObject = this.getObjectFromCache(name);
-        if (cachedObject) {
-            callback(
-                false,
-                cachedObject["_href"]
-            );
-        } else {
-            callback(
-                new Error({
-                    errorText : "Discovery service failed to provide url for given name '" + name + "'"
-                }),
-                new Response({
-                    status : "error",
-                    body : ""
-                })
-            );
-        }
+        this.getObjectFromCache(
+            name,
+            function(error, cachedObject){
+                if (!error) {
+                    callback(
+                        false,
+                        cachedObject["_href"]
+                    );
+                } else {
+                    callback(
+                        error,
+                        new Response({
+                            status : "error",
+                            body : ""
+                        })
+                    );
+                }
+            }
+        );
     };
 
+    /**
+     * Get media type for given 'name'
+     *
+     * @method getMediaType
+     * @param name {String}
+     * @param callback {Function}
+     */
     DiscoveryService.prototype.getMediaType = function(name, callback) {
-        var cachedObject = this.getObjectFromCache(name);
-        if (cachedObject) {
-            callback(
-                false,
-                cachedObject["_media-type"]
-            );
-        } else {
-            callback(
-                new Error({
-                    errorText : "Discovery service failed to provide media-type for given name '" + name + "'"
-                }),
-                new Response({
-                    status : "error",
-                    body : ""
-                })
-            );
-        }
+        this.getObjectFromCache(
+            name,
+            function(error, cachedObject){
+                if (cachedObject) {
+                    callback(
+                        false,
+                        cachedObject["_media-type"]
+                    );
+                } else {
+                    callback(
+                        error,
+                        new Response({
+                            status : "error",
+                            body : ""
+                        })
+                    );
+                }
+            }
+        );
     };
 
+    /**
+     * Get the whole information object for given 'name'
+     *
+     * @method getInfoObject
+     * @param name {String}
+     * @param callback {Function}
+     */
     DiscoveryService.prototype.getInfoObject = function(name, callback) {
-        var cachedObject = this.getObjectFromCache(name);
-        if (cachedObject) {
-            callback(
-                false,
-                cachedObject
-            );
-        } else {
-            callback(
-                new Error({
-                    errorText : "Discovery service failed to provide info object for given name '" + name + "'"
-                }),
-                new Response({
-                    status : "error",
-                    body : ""
-                })
-            );
-        }
+        this.getObjectFromCache(
+            name,
+            function(error, cachedObject){
+                if (cachedObject) {
+                    callback(
+                        false,
+                        cachedObject
+                    );
+                } else {
+                    callback(
+                        error,
+                        new Response({
+                            status : "error",
+                            body : ""
+                        })
+                    );
+                }
+            }
+        );
     };
 
     return DiscoveryService;

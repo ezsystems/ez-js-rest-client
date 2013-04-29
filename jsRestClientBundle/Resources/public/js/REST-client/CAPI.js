@@ -25,29 +25,25 @@ var CAPI = (function() {
         ];
         var connectionFactory = new ConnectionFeatureFactory(connectionStack);
 
-        this.connectionManager = new ConnectionManager(endPointUrl, authenticationAgent, connectionFactory);
-        this.discoveryService = new DiscoveryService(this.connectionManager)
-
+        var connectionManager = new ConnectionManager(endPointUrl, authenticationAgent, connectionFactory);
         //TODO: move hardcoded rootPath to the same config file as above...
-        this.discoveryService.discoverRoot('/api/ezp/v2/');
+        var discoveryService = new DiscoveryService('/api/ezp/v2/', connectionManager)
 
-    };
-
-    // Public shared
-
-    /**
-     * Get instance of Content Service
-     *
-     * @method getContentService
-     */
-    CAPI.prototype.getContentService = function(){
-        if  (!this.contentService_)  {
-            this.contentService_  =  new ContentService(
-                this.connectionManager,
-                this.discoveryService
-            );
-        }
-        return  this.contentService_;
+        /**
+         * Get instance of Content Service
+         *
+         * @method getContentService
+         * @return {ContentService}
+         */
+        this.getContentService = function(){
+            if  (!this.contentService_)  {
+                this.contentService_  =  new ContentService(
+                    connectionManager,
+                    discoveryService
+                );
+            }
+            return  this.contentService_;
+        };
     };
 
     return CAPI;
