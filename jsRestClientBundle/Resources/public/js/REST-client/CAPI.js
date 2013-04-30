@@ -26,6 +26,10 @@ var CAPI = (function() {
         var connectionFactory = new ConnectionFeatureFactory(connectionStack);
 
         var connectionManager = new ConnectionManager(endPointUrl, authenticationAgent, connectionFactory);
+
+        //TODO: move logRequests to the same config file as above...
+        connectionManager.logRequests = true;
+
         //TODO: move hardcoded rootPath to the same config file as above...
         var discoveryService = new DiscoveryService('/api/ezp/v2/', connectionManager)
 

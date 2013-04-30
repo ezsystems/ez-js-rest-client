@@ -12,6 +12,8 @@ var ConnectionManager = (function() {
 
         var activeConnection = connectionFactory.createConnection();
 
+        this.logRequests = false;
+
         /**
          * Basic request function
          *
@@ -23,6 +25,8 @@ var ConnectionManager = (function() {
          * @param callback {function} function, which will be executed on request success
          */
         this.request = function(method, url, body, headers, callback) {
+
+            var that = this;
 
             // default values for all the parameters
             method = (typeof method === "undefined") ? "GET" : method;
@@ -45,6 +49,11 @@ var ConnectionManager = (function() {
                 request,
                 function(error, authenticatedRequest) {
                     if (!error) {
+
+                        if (that.logRequests) {
+                            console.log(request);
+                        }
+                        // Main goal
                         activeConnection.execute(authenticatedRequest, callback);
                     } else {
                         callback(

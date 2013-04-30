@@ -76,7 +76,6 @@ var DiscoveryService = (function() {
             // Discovering root, if not yet discovered
             // on discovery running the request for same 'name' again
             if (!this.cacheObject.Root) {
-                console.log('no root yet!');
                 this.discoverRoot(this.rootPath, function() {
                     that.getObjectFromCache(name, callback);
                 });

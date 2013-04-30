@@ -673,6 +673,7 @@ CreateLocationAnchor.onclick = function(e){
                 clientOutput.innerHTML =    "Errors : " + JSON.stringify(error) + "</br>" +
                     "Status : " + response.status + "</br>" +
                     "Body : " + response.body;
+
                 CreateLocationLoader.style.display = 'none';
             }
         );
@@ -745,3 +746,11 @@ CopySubtreeAnchor.onclick = function(e){
             CopySubtreeLoader.style.display = 'none';
         });
 };
+
+
+contentService.loadContentByRemoteId(
+    "33a92bb0cb224ea4303ac4794c9df521",
+    function(error, data) {
+        console.log(data);
+    }
+)
