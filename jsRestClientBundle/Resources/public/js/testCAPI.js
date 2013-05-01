@@ -3,7 +3,7 @@
 var jsCAPI = new CAPI(
         'http://ez.git.local',
         new HttpBasicAuthAgent({
-            user : "admin",
+            login : "admin",
             password : "admin"
         })
     );
@@ -792,5 +792,3 @@ CopySubtreeAnchor.onclick = function(e){
             CopySubtreeLoader.style.display = 'none';
         });
 };
-
-

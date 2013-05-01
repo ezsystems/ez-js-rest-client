@@ -50,7 +50,7 @@ var XmlHttpRequestConnection = (function() {
             };
 
             if (request.httpBasicAuth) {
-                XHR.open(request.method, request.url, true, request.user, request.password);
+                XHR.open(request.method, request.url, true, request.login, request.password);
             } else {
                 XHR.open(request.method, request.url, true);
             }

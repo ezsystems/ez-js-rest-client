@@ -12,6 +12,10 @@ var CAPI = (function() {
     var CAPI = function (endPointUrl, authenticationAgent) {
 
         this.contentService_ = null;
+        this.userService_ = null;
+
+        authenticationAgent.CAPI = this;
+        // No other way to use session authorization... or is it?
 
         // Array of connections, should be filled-in in preferred order
         //TODO: consider moving to some sort of configuration file...
@@ -48,6 +52,23 @@ var CAPI = (function() {
             }
             return  this.contentService_;
         };
+
+        /**
+         * Get instance of User Service
+         *
+         * @method getUserService
+         * @return {UserService}
+         */
+        this.getUserService = function(){
+            if  (!this.userService_)  {
+                this.userService_  =  new UserService(
+                    connectionManager,
+                    discoveryService
+                );
+            }
+            return  this.userService_;
+        };
+
     };
 
     return CAPI;

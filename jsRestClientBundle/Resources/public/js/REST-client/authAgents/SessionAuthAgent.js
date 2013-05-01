@@ -9,9 +9,11 @@ var SessionAuthAgent = (function() {
      */
     var SessionAuthAgent = function (credentials) {
 
+        this.CAPI = null;
+
         // Private (should be!) area
-        this.user = credentials.user;
-        this.password = credentials.password;
+        this.login_ = credentials.login;
+        this.password_ = credentials.password;
 
         this.sessionName = null;
         this.sessionId = null;
@@ -32,6 +34,23 @@ var SessionAuthAgent = (function() {
     SessionAuthAgent.prototype.ensureAuthentication = function(done) {
         if (!this.sessionId) {
 
+            var userService = this.CAPI.getUserService();
+
+            var sessionCreateStruct = userService.newSessionCreateStruct(
+                this.login_,
+                this.password_
+            )
+
+            // TODO: change hardcoded "sessions" path to discovered
+            userService.createSession(
+                "/api/ezp/v2/user/sessions",
+                sessionCreateStruct,
+                function(error, session){
+
+                    console.log(error, session);
+
+                }
+            );
 
         } else {
             done(false, true);
