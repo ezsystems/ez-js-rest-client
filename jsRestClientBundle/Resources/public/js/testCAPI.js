@@ -89,7 +89,7 @@ createSectionAnchor.onclick = function(e){
             identifier : "testSection" + Math.random()*1000000,
             name : "Test Section"
         }
-    }
+    };
 
     // compatibility remark: JSON API is supported in all modern browsers (IE-wise since IE8)
     contentService.createSection(
@@ -122,7 +122,7 @@ updateSectionAnchor.onclick = function(e){
                 identifier : "testSection" + Math.random()*1000000,
                 name : "Test Section " + Math.round(Math.random()*1000)
             }
-        }
+        };
 
         // compatibility remark: JSON API is supported in all modern browsers (IE-wise since IE8)
         contentService.updateSection(
@@ -239,7 +239,7 @@ createContentAnchor.onclick = function(e){
         "fieldDefinitionIdentifier": "title",
         "languageCode": "eng-US",
         "fieldValue": "This is a title"
-    }
+    };
 
     contentCreateStruct.ContentCreate.fields.field.push(fieldInfo);
 
@@ -469,7 +469,7 @@ updateContentAnchor.onclick = function(e){
             "fieldDefinitionIdentifier": "title",
             "languageCode": "eng-US",
             "fieldValue": "This is a new title" + Math.random()*1000000
-        }
+        };
 
         contentUpdateStruct.VersionUpdate.fields.field.push(fieldInfo);
 
@@ -579,7 +579,7 @@ newContentUpdateStructAnchor.onclick = function(e){
         "fieldDefinitionIdentifier": "title",
         "languageCode": "eng-US",
         "fieldValue": "This is a new title" + Math.random()*1000000
-    }
+    };
 
     contentUpdateStruct.VersionUpdate.fields.field.push(fieldInfo);
 
@@ -587,7 +587,7 @@ newContentUpdateStructAnchor.onclick = function(e){
         "fieldDefinitionIdentifier": "text",
         "languageCode": "eng-US",
         "fieldValue": "This is a new text" + Math.random()*1000000
-    }
+    };
 
 
     contentUpdateStruct.VersionUpdate.fields.field.push(anotherFieldInfo);
@@ -750,6 +750,28 @@ LoadLocationAnchor.onclick = function(e){
         });
 };
 
+// Load location children example
+var LoadLocationChildrenAnchor = document.getElementById('load-location-children');
+var LoadLocationChildrenLoader = document.getElementById('load-location-children-loader');
+LoadLocationChildrenAnchor.onclick = function(e){
+
+    LoadLocationChildrenLoader.style.display = 'block';
+    e.preventDefault();
+
+    var LoadLocationChildrenInput = document.getElementById('load-location-children-input');
+
+    contentService.loadLocationChildren(
+        LoadLocationChildrenInput.value,
+        0,
+        -1,
+        function(error, response){
+            clientOutput.innerHTML =    "Errors : " + JSON.stringify(error) + "</br>" +
+                "Status : " + response.status + "</br>" +
+                "Body : " + response.body;
+            LoadLocationChildrenLoader.style.display = 'none';
+        });
+};
+
 
 // Load location by remote id example
 var LoadLocationByRemoteAnchor = document.getElementById('load-location-by-remote');
@@ -790,5 +812,67 @@ CopySubtreeAnchor.onclick = function(e){
                 "Status : " + response.status + "</br>" +
                 "Body : " + response.body;
             CopySubtreeLoader.style.display = 'none';
+        });
+};
+
+// Move subtree example
+var MoveSubtreeAnchor = document.getElementById('move-subtree');
+var MoveSubtreeLoader = document.getElementById('move-subtree-loader');
+MoveSubtreeAnchor.onclick = function(e){
+
+    MoveSubtreeLoader.style.display = 'block';
+    e.preventDefault();
+
+    var MoveSubtreeInput = document.getElementById('move-subtree-input');
+
+    contentService.moveSubtree(
+        "/api/ezp/v2/content/locations/1/2/107",
+        MoveSubtreeInput.value,
+        function(error, response){
+            clientOutput.innerHTML =    "Errors : " + JSON.stringify(error) + "</br>" +
+                "Status : " + response.status + "</br>" +
+                "Body : " + response.body;
+            MoveSubtreeLoader.style.display = 'none';
+        });
+};
+
+// Swap location example
+var SwapLocationAnchor = document.getElementById('swap-location');
+var SwapLocationLoader = document.getElementById('swap-location-loader');
+SwapLocationAnchor.onclick = function(e){
+
+    SwapLocationLoader.style.display = 'block';
+    e.preventDefault();
+
+    var SwapLocationInput = document.getElementById('swap-location-input');
+
+    contentService.swapLocation(
+        "/api/ezp/v2/content/locations/1/2/102/128",
+        SwapLocationInput.value,
+        function(error, response){
+            clientOutput.innerHTML =    "Errors : " + JSON.stringify(error) + "</br>" +
+                "Status : " + response.status + "</br>" +
+                "Body : " + response.body;
+            SwapLocationLoader.style.display = 'none';
+        });
+};
+
+// Delete location example
+var DeleteLocationAnchor = document.getElementById('delete-location');
+var DeleteLocationLoader = document.getElementById('delete-location-loader');
+DeleteLocationAnchor.onclick = function(e){
+
+    DeleteLocationLoader.style.display = 'block';
+    e.preventDefault();
+
+    var DeleteLocationInput = document.getElementById('delete-location-input');
+
+    contentService.deleteLocation(
+        DeleteLocationInput.value,
+        function(error, response){
+            clientOutput.innerHTML =    "Errors : " + JSON.stringify(error) + "</br>" +
+                "Status : " + response.status + "</br>" +
+                "Body : " + response.body;
+            DeleteLocationLoader.style.display = 'none';
         });
 };

@@ -532,27 +532,6 @@ var ContentService = (function() {
     };
 
     /**
-     * Updates location for the given content object
-     *
-     * @method updateLocation
-     * @param locationId {href}
-     * @param locationUpdateStruct {object}
-     * @param callback {function} function, which will be executed on request success
-     */
-    ContentService.prototype.updateLocation = function(locationId, locationUpdateStruct, callback) {
-        this.connectionManager_.request(
-            "PATCH",
-            locationId,
-            JSON.stringify(locationUpdateStruct),
-            {
-                "Accept" : "application/vnd.ez.api.Location+json",
-                "Content-Type" : "application/vnd.ez.api.LocationUpdate+json"
-            },
-            callback
-        );
-    };
-
-    /**
      *  Loads all locations for the given content object
      *
      * @method loadLocations
@@ -605,6 +584,51 @@ var ContentService = (function() {
     };
 
     /**
+     * Updates location for the given content object
+     *
+     * @method updateLocation
+     * @param locationId {href}
+     * @param locationUpdateStruct {object}
+     * @param callback {function} function, which will be executed on request success
+     */
+    ContentService.prototype.updateLocation = function(locationId, locationUpdateStruct, callback) {
+        this.connectionManager_.request(
+            "PATCH",
+            locationId,
+            JSON.stringify(locationUpdateStruct),
+            {
+                "Accept" : "application/vnd.ez.api.Location+json",
+                "Content-Type" : "application/vnd.ez.api.LocationUpdate+json"
+            },
+            callback
+        );
+    };
+
+    /**
+     *  Loads a locations children
+     *
+     * @method loadLocationChildren
+     * @param locationId {href}
+     * @param offset {int}
+     * @param limit {int}
+     * @param callback {function} function, which will be executed on request success
+     */
+    ContentService.prototype.loadLocationChildren = function(locationId, offset, limit, callback) {
+
+        // default values for all the parameters
+        offset = (typeof offset === "undefined") ? 0 : offset;
+        limit = (typeof limit === "undefined") ? -1 : limit;
+
+        this.connectionManager_.request(
+            "GET",
+            locationId + "/children" + '?offset=' + offset + '&limit=' + limit,
+            {},
+            { "Accept" : "application/vnd.ez.api.LocationList+json" },
+            callback
+        );
+    };
+
+    /**
      *  Copies the subtree starting from "subtree" as a new subtree of "targetLocation"
      *
      * @method copySubtree
@@ -622,7 +646,90 @@ var ContentService = (function() {
         );
     };
 
+    /**
+     *  Moves the subtree to a new subtree of "targetLocation"
+     *
+     * @method moveSubtree
+     * @param subtree {href}
+     * @param targetLocation {href}
+     * @param callback {function} function, which will be executed on request success
+     */
+    ContentService.prototype.moveSubtree = function(subtree, targetLocation, callback) {
+        this.connectionManager_.request(
+            "MOVE",
+            subtree,
+            "",
+            { "Destination" : targetLocation },
+            callback
+        );
+    };
 
+    /**
+     *  Swaps the content of the "subtree" location to a "targetLocation"
+     *
+     * @method swapLocation
+     * @param subtree {href}
+     * @param targetLocation {href}
+     * @param callback {function} function, which will be executed on request success
+     */
+    ContentService.prototype.swapLocation = function(subtree, targetLocation, callback) {
+        this.connectionManager_.request(
+            "SWAP",
+            subtree,
+            "",
+            { "Destination" : targetLocation },
+            callback
+        );
+    };
+
+    /**
+     *  Deletes the location and all it's subtree
+     *  Every content object is deleted which does not have any other location.
+     *  Otherwise the deleted location is removed from the content object.
+     *  The children are recursively deleted.
+     *
+     * @method deleteLocation
+     * @param locationId {href}
+     * @param callback {function} function, which will be executed on request success
+     */
+    ContentService.prototype.deleteLocation = function(locationId, callback) {
+        this.connectionManager_.request(
+            "DELETE",
+            locationId,
+            "",
+            {},
+            callback
+        );
+    };
+
+// ******************************
+// Views management
+// ******************************
+
+    /**
+     * Creates a new view
+     *
+     * @method createView
+     * @param viewCreateStruct {object}
+     * @param callback {function} function, which will be executed on request success
+     */
+    ContentService.prototype.createView = function(viewCreateStruct, callback) {
+
+        // Discover "views"
+
+        this.connectionManager_.request(
+            "POST",
+            views,
+            JSON.stringify(viewCreateStruct),
+            {
+                "Accept" : "application/vnd.ez.api.View+json",
+                "Content-Type" : "application/vnd.ez.api.ViewInput+json"
+            },
+            callback
+        );
+
+
+    };
 
 
 
