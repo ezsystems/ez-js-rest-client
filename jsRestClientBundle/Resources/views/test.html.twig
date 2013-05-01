@@ -175,6 +175,12 @@
                 </div>
 
                 <div class="rest-test">
+                    <a href="#update-location" id="update-location">Update location (random data):</a>
+                    <input type="text" id="update-location-input" value="/api/ezp/v2/content/locations/1/2/102" />
+                    <div id="update-location-loader" class="ajax-loader"></div>
+                </div>
+
+                <div class="rest-test">
                     <a href="#load-locations" id="load-locations">Load locations for content:</a>
                     <input type="text" id="load-locations-input" value="/api/ezp/v2/content/objects/102/locations" />
                     <div id="load-locations-loader" class="ajax-loader"></div>
@@ -184,6 +190,12 @@
                     <a href="#load-location" id="load-location">Load location by id:</a>
                     <input type="text" id="load-location-input" value="/api/ezp/v2/content/locations/1/2/102" />
                     <div id="load-location-loader" class="ajax-loader"></div>
+                </div>
+
+                <div class="rest-test">
+                    <a href="#load-location-by-remote" id="load-location-by-remote">Load location by remote id:</a>
+                    <input type="text" id="load-location-by-remote-input" value="0bae96bd419e141ff3200ccbf2822e4f" />
+                    <div id="load-location-by-remote-loader" class="ajax-loader"></div>
                 </div>
 
                 <div class="rest-test">
@@ -215,6 +227,7 @@
     '@jsRestClientBundle/Resources/public/js/REST-client/structures/ContentUpdateStruct.js'
     '@jsRestClientBundle/Resources/public/js/REST-client/structures/ContentMetadataUpdateStruct.js'
     '@jsRestClientBundle/Resources/public/js/REST-client/structures/LocationCreateStruct.js'
+    '@jsRestClientBundle/Resources/public/js/REST-client/structures/LocationUpdateStruct.js'
     '@jsRestClientBundle/Resources/public/js/REST-client/structures/Request.js'
     '@jsRestClientBundle/Resources/public/js/REST-client/structures/Response.js'
     '@jsRestClientBundle/Resources/public/js/REST-client/structures/Error.js'

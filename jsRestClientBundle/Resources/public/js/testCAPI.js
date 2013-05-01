@@ -684,6 +684,31 @@ CreateLocationAnchor.onclick = function(e){
 };
 
 
+// Update location example
+var UpdateLocationAnchor = document.getElementById('update-location');
+var UpdateLocationLoader = document.getElementById('update-location-loader');
+UpdateLocationAnchor.onclick = function(e){
+
+    UpdateLocationLoader.style.display = 'block';
+    e.preventDefault();
+
+    var locationUpdateStruct = contentService.newLocationUpdateStruct();
+
+    locationUpdateStruct.remoteId = "random-remote-id-" + Math.random()*100000;
+
+    var UpdateLocationInput = document.getElementById('update-location-input');
+    contentService.updateLocation(
+        UpdateLocationInput.value,
+        locationUpdateStruct,
+        function(error, response){
+            clientOutput.innerHTML =    "Errors : " + JSON.stringify(error) + "</br>" +
+                "Status : " + response.status + "</br>" +
+                "Body : " + response.body;
+            UpdateLocationLoader.style.display = 'none';
+        });
+};
+
+
 // Load locations example
 var LoadLocationsAnchor = document.getElementById('load-locations');
 var LoadLocationsLoader = document.getElementById('load-locations-loader');
@@ -726,6 +751,27 @@ LoadLocationAnchor.onclick = function(e){
 };
 
 
+// Load location by remote id example
+var LoadLocationByRemoteAnchor = document.getElementById('load-location-by-remote');
+var LoadLocationByRemoteLoader = document.getElementById('load-location-by-remote-loader');
+LoadLocationByRemoteAnchor.onclick = function(e){
+
+    LoadLocationByRemoteLoader.style.display = 'block';
+    e.preventDefault();
+
+    var LoadLocationByRemoteInput = document.getElementById('load-location-by-remote-input');
+    contentService.loadLocationByRemoteId(
+        "/api/ezp/v2/content/locations",
+        LoadLocationByRemoteInput.value,
+        function(error, response){
+            clientOutput.innerHTML =    "Errors : " + JSON.stringify(error) + "</br>" +
+                "Status : " + response.status + "</br>" +
+                "Body : " + response.body;
+            LoadLocationByRemoteLoader.style.display = 'none';
+        });
+};
+
+
 // Copy subtree example
 var CopySubtreeAnchor = document.getElementById('copy-subtree');
 var CopySubtreeLoader = document.getElementById('copy-subtree-loader');
@@ -748,9 +794,3 @@ CopySubtreeAnchor.onclick = function(e){
 };
 
 
-contentService.loadContentByRemoteId(
-    "33a92bb0cb224ea4303ac4794c9df521",
-    function(error, data) {
-        console.log(data);
-    }
-)
