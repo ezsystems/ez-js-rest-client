@@ -866,7 +866,6 @@ DeleteLocationAnchor.onclick = function(e){
     e.preventDefault();
 
     var DeleteLocationInput = document.getElementById('delete-location-input');
-
     contentService.deleteLocation(
         DeleteLocationInput.value,
         function(error, response){
@@ -874,5 +873,49 @@ DeleteLocationAnchor.onclick = function(e){
                 "Status : " + response.status + "</br>" +
                 "Body : " + response.body;
             DeleteLocationLoader.style.display = 'none';
+        });
+};
+
+
+// Create view example
+var CreateViewAnchor = document.getElementById('create-view');
+var CreateViewLoader = document.getElementById('create-view-loader');
+CreateViewAnchor.onclick = function(e){
+
+    CreateViewLoader.style.display = 'block';
+    e.preventDefault();
+
+    var viewCreateStruct = contentService.newViewCreateStruct('test-id');
+
+    viewCreateStruct.body.ViewInput.Query.Criteria = { FullTextCriterion : "title"};
+
+    contentService.createView(
+        viewCreateStruct,
+        function(error, response){
+            clientOutput.innerHTML =    "Errors : " + JSON.stringify(error) + "</br>" +
+                "Status : " + response.status + "</br>" +
+                "Body : " + response.body;
+            CreateViewLoader.style.display = 'none';
+        });
+};
+
+// Load relations example
+var LoadRelationsAnchor = document.getElementById('load-relations');
+var LoadRelationsLoader = document.getElementById('load-relations-loader');
+LoadRelationsAnchor.onclick = function(e){
+
+    LoadRelationsLoader.style.display = 'block';
+    e.preventDefault();
+
+    var LoadRelationsInput = document.getElementById('load-relations-input');
+    contentService.loadRelations(
+        LoadRelationsInput.value,
+        0,
+        -1,
+        function(error, response){
+            clientOutput.innerHTML =    "Errors : " + JSON.stringify(error) + "</br>" +
+                "Status : " + response.status + "</br>" +
+                "Body : " + response.body;
+            LoadRelationsLoader.style.display = 'none';
         });
 };

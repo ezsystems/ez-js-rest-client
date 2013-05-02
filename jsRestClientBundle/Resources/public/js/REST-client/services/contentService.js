@@ -10,6 +10,7 @@ var ContentService = (function() {
     var ContentService = function(connectionManager, discoveryService) {
 
         this.connectionManager_ = connectionManager;
+        this.discoveryService_ = discoveryService;
 
     };
 
@@ -101,6 +102,19 @@ var ContentService = (function() {
 
     };
 
+    /**
+     * Returns create structure for View
+     *
+     * @method newViewCreateStruct
+     * @param identifier {string}
+
+     */
+    ContentService.prototype.newViewCreateStruct = function(identifier) {
+
+        return new ViewCreateStruct(identifier);
+
+    };
+
 
 // ******************************
 // Sections management
@@ -114,12 +128,14 @@ var ContentService = (function() {
      */
     ContentService.prototype.loadSections = function(callback) {
 
-        discoveryService.getInfoObject(
+        var that = this;
+
+        this.discoveryService_.getInfoObject(
             "sections",
             function(error, sections) {
                 if (!error) {
 
-                    this.connectionManager_.request(
+                    that.connectionManager_.request(
                         "GET",
                         sections["_href"],
                         {},
@@ -304,10 +320,12 @@ var ContentService = (function() {
      */
     ContentService.prototype.loadContentByRemoteId = function(remoteId, callback) {
 
-        discoveryService.getInfoObject(
+        var that = this;
+
+        this.discoveryService_.getInfoObject(
             "content",
             function(error, contentObjects){
-                this.connectionManager_.request(
+                that.connectionManager_.request(
                     "GET",
                     contentObjects["_href"] + '?remoteId=' + remoteId,
                     { "remoteId" : remoteId },
@@ -619,12 +637,23 @@ var ContentService = (function() {
         offset = (typeof offset === "undefined") ? 0 : offset;
         limit = (typeof limit === "undefined") ? -1 : limit;
 
-        this.connectionManager_.request(
-            "GET",
-            locationId + "/children" + '?offset=' + offset + '&limit=' + limit,
-            {},
-            { "Accept" : "application/vnd.ez.api.LocationList+json" },
-            callback
+        var that = this;
+
+        this.loadLocation(
+            locationId,
+            function(error, locationResponse){
+
+                var location = JSON.parse(locationResponse.body).Location;
+
+                that.connectionManager_.request(
+                    "GET",
+                    location.Children["_href"] + '?offset=' + offset + '&limit=' + limit,
+                    {},
+                    { "Accept" : location.Children["_media-type"] },
+                    callback
+                );
+
+            }
         );
     };
 
@@ -715,24 +744,102 @@ var ContentService = (function() {
      */
     ContentService.prototype.createView = function(viewCreateStruct, callback) {
 
-        // Discover "views"
+        var that = this;
 
-        this.connectionManager_.request(
-            "POST",
-            views,
-            JSON.stringify(viewCreateStruct),
-            {
-                "Accept" : "application/vnd.ez.api.View+json",
-                "Content-Type" : "application/vnd.ez.api.ViewInput+json"
-            },
-            callback
+        this.discoveryService_.getInfoObject(
+            "views",
+            function(error, views) {
+                if (!error) {
+
+                    that.connectionManager_.request(
+                        "POST",
+                        views["_href"],
+                        JSON.stringify(viewCreateStruct.body),
+                        {
+                            "Accept" : "application/vnd.ez.api.View+json",
+                            "Content-Type" : viewCreateStruct.contentType
+                        },
+                        callback
+                    );
+
+                } else {
+                    callback(error, false)
+                }
+            }
         );
-
-
     };
 
 
+    /**
+     * Returns a list of view uris. The list includes public view and private view of the authenticated user.
+     *
+     * @method loadViews
+     * @param callback {function} function, which will be executed on request success
+     */
+    ContentService.prototype.loadViews = function(callback) {
+
+        var that = this;
+
+        this.discoveryService_.getInfoObject(
+            "views",
+            function(error, views) {
+                if (!error) {
+
+                    that.connectionManager_.request(
+                        "GET",
+                        views["_href"],
+                        "",
+                        {
+                            "Accept" : views["_media-type"]
+                        },
+                        callback
+                    );
+
+                } else {
+                    callback(error, false)
+                }
+            }
+        );
+    };
+
+// ******************************
+// Relations management
+// ******************************
+
+    /**
+     *  Loads loads the relations of the given version
+     *
+     * @method loadRelations
+     * @param versionedContentId {href}
+     * @param offset {int}
+     * @param limit {int}
+     * @param callback {function} function, which will be executed on request success
+     */
+    ContentService.prototype.loadRelations = function(versionedContentId, offset, limit, callback) {
+
+        var that = this;
+
+        this.loadContent(
+            versionedContentId,
+            {},
+            function(error, contentResponse){
+
+                var content = JSON.parse(contentResponse.body).Version;
+
+                that.connectionManager_.request(
+                    "GET",
+                    content.Relations["_href"] + '?offset=' + offset + '&limit=' + limit,
+                    {},
+                    { "Accept" : content.Relations["_media-type"] },
+                    callback
+                );
+
+            }
+        );
+    };
 
     return ContentService;
 
 }());
+
+
