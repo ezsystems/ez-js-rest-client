@@ -919,3 +919,66 @@ LoadRelationsAnchor.onclick = function(e){
             LoadRelationsLoader.style.display = 'none';
         });
 };
+
+// Load relation example
+var LoadRelationAnchor = document.getElementById('load-relation');
+var LoadRelationLoader = document.getElementById('load-relation-loader');
+LoadRelationAnchor.onclick = function(e){
+
+    LoadRelationLoader.style.display = 'block';
+    e.preventDefault();
+
+    var LoadRelationInput = document.getElementById('load-relation-input');
+    contentService.loadRelation(
+        LoadRelationInput.value,
+        function(error, response){
+            clientOutput.innerHTML =    "Errors : " + JSON.stringify(error) + "</br>" +
+                "Status : " + response.status + "</br>" +
+                "Body : " + response.body;
+            LoadRelationLoader.style.display = 'none';
+        });
+};
+
+// Create relation example
+var CreateRelationAnchor = document.getElementById('create-relation');
+var CreateRelationLoader = document.getElementById('create-relation-loader');
+CreateRelationAnchor.onclick = function(e){
+
+    CreateRelationLoader.style.display = 'block';
+    e.preventDefault();
+
+    var relationCreateStruct = contentService.newRelationCreateStruct("/api/ezp/v2/content/objects/121");
+
+    console.log(relationCreateStruct);
+
+    var CreateRelationInput = document.getElementById('create-relation-input');
+    contentService.addRelation(
+        CreateRelationInput.value,
+        relationCreateStruct,
+        function(error, response){
+            clientOutput.innerHTML =    "Errors : " + JSON.stringify(error) + "</br>" +
+                "Status : " + response.status + "</br>" +
+                "Body : " + response.body;
+            CreateRelationLoader.style.display = 'none';
+        });
+};
+
+// Delete relation example
+var DeleteRelationAnchor = document.getElementById('delete-relation');
+var DeleteRelationLoader = document.getElementById('delete-relation-loader');
+DeleteRelationAnchor.onclick = function(e){
+
+    DeleteRelationLoader.style.display = 'block';
+    e.preventDefault();
+
+    var DeleteRelationInput = document.getElementById('delete-relation-input');
+    contentService.deleteRelation(
+        DeleteRelationInput.value,
+        function(error, response){
+            clientOutput.innerHTML =    "Errors : " + JSON.stringify(error) + "</br>" +
+                "Status : " + response.status + "</br>" +
+                "Body : " + response.body;
+            DeleteRelationLoader.style.display = 'none';
+        });
+};
+

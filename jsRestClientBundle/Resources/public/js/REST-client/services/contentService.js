@@ -115,6 +115,19 @@ var ContentService = (function() {
 
     };
 
+    /**
+     * Returns create structure for Relation
+     *
+     * @method newRelationCreateStruct
+     * @param destination {href}
+
+     */
+    ContentService.prototype.newRelationCreateStruct = function(destination) {
+
+        return new RelationCreateStruct(destination);
+
+    };
+
 
 // ******************************
 // Sections management
@@ -807,7 +820,7 @@ var ContentService = (function() {
 // ******************************
 
     /**
-     *  Loads loads the relations of the given version
+     *  Loads the relations of the given version
      *
      * @method loadRelations
      * @param versionedContentId {href}
@@ -822,21 +835,86 @@ var ContentService = (function() {
         this.loadContent(
             versionedContentId,
             {},
-            function(error, contentResponse){
+            function(error, versionResponse){
 
-                var content = JSON.parse(contentResponse.body).Version;
+                var version = JSON.parse(versionResponse.body).Version;
 
                 that.connectionManager_.request(
                     "GET",
-                    content.Relations["_href"] + '?offset=' + offset + '&limit=' + limit,
+                    version.Relations["_href"] + '?offset=' + offset + '&limit=' + limit,
                     {},
-                    { "Accept" : content.Relations["_media-type"] },
+                    { "Accept" : version.Relations["_media-type"] },
                     callback
                 );
 
             }
         );
     };
+
+    /**
+     *  Loads a relation
+     *
+     * @method loadRelation
+     * @param relationId {href}
+     * @param callback {function} function, which will be executed on request success
+     */
+    ContentService.prototype.loadRelation = function(relationId, callback) {
+        this.connectionManager_.request(
+            "GET",
+            relationId,
+            {},
+            { "Accept" : "application/vnd.ez.api.Relation+json" },
+            callback
+        );
+    };
+
+    /**
+     *  Create a relation
+     *
+     * @method addRelation
+     * @param versionedContentId {href}
+     * @param relationCreateStruct {Object}
+     * @param callback {function} function, which will be executed on request success
+     */
+    ContentService.prototype.addRelation = function(versionedContentId, relationCreateStruct, callback) {
+
+        var that = this;
+
+        this.loadContent(
+            versionedContentId,
+            {},
+            function(error, versionResponse){
+
+                var version = JSON.parse(versionResponse.body).Version;
+
+                that.connectionManager_.request(
+                    "POST",
+                    version.Relations["_href"],
+                    JSON.stringify(relationCreateStruct.body),
+                    relationCreateStruct.headers,
+                    callback
+                );
+            }
+        );
+    };
+
+    /**
+     *  Delete a relation
+     *
+     * @method deleteRelation
+     * @param relationId {href}
+     * @param callback {function} function, which will be executed on request success
+     */
+    ContentService.prototype.deleteRelation = function(relationId, callback) {
+        this.connectionManager_.request(
+            "DELETE",
+            relationId,
+            "",
+            {},
+            callback
+        );
+    };
+
 
     return ContentService;
 

@@ -244,6 +244,24 @@
                     <input type="text" id="load-relations-input" value="/api/ezp/v2/content/objects/102/versions/5" />
                 </div>
 
+                <div class="rest-test">
+                    <a href="#load-relation" id="load-relation">Load a relation with Id:</a>
+                    <div id="load-relation-loader" class="ajax-loader"></div>
+                    <input type="text" id="load-relation-input" value="/api/ezp/v2/content/objects/102/versions/5/relations/1" />
+                </div>
+
+                <div class="rest-test">
+                    <a href="#create-relation" id="create-relation">Creation relation for a version:</a>
+                    <div id="create-relation-loader" class="ajax-loader"></div>
+                    <input type="text" id="create-relation-input" value="/api/ezp/v2/content/objects/102/versions/5" />
+                </div>
+
+                <div class="rest-test">
+                    <a href="#delete-relation" id="delete-relation">Delete relation with Id:</a>
+                    <div id="delete-relation-loader" class="ajax-loader"></div>
+                    <input type="text" id="delete-relation-input" value="/api/ezp/v2/content/objects/102/versions/5/relations/2" />
+                </div>
+
             </div>
         </div>
         <div class="yui3-u-1-2">
@@ -269,6 +287,7 @@
     '@jsRestClientBundle/Resources/public/js/REST-client/structures/LocationUpdateStruct.js'
     '@jsRestClientBundle/Resources/public/js/REST-client/structures/SessionCreateStruct.js'
     '@jsRestClientBundle/Resources/public/js/REST-client/structures/ViewCreateStruct.js'
+    '@jsRestClientBundle/Resources/public/js/REST-client/structures/RelationCreateStruct.js'
     '@jsRestClientBundle/Resources/public/js/REST-client/structures/Request.js'
     '@jsRestClientBundle/Resources/public/js/REST-client/structures/Response.js'
     '@jsRestClientBundle/Resources/public/js/REST-client/structures/Error.js'
