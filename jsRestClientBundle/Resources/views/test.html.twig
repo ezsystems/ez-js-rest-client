@@ -262,6 +262,37 @@
                     <input type="text" id="delete-relation-input" value="/api/ezp/v2/content/objects/102/versions/5/relations/2" />
                 </div>
 
+                <hr/>
+
+                <div class="rest-test">
+                    <a href="#load-trash-items" id="load-trash-items">Load all the trash items</a>
+                    <div id="load-trash-items-loader" class="ajax-loader"></div>
+                </div>
+
+                <div class="rest-test">
+                    <a href="#load-trash-item" id="load-trash-item">Load a single trash item</a>
+                    <div id="load-trash-item-loader" class="ajax-loader"></div>
+                    <input type="text" id="load-trash-item-input" value="/api/ezp/v2/content/trash/1" />
+                </div>
+
+                <div class="rest-test">
+                    <a href="#load-trash-items" id="recover-trash-item">Recover trash item</a>
+                    <div id="recover-trash-item-loader" class="ajax-loader"></div>
+                    <input type="text" id="recover-trash-item-input" value="/api/ezp/v2/content/trash/1" />
+                </div>
+
+                <div class="rest-test">
+                    <a href="#load-trash-items" id="delete-trash-item">Delete trash item</a>
+                    <div id="delete-trash-item-loader" class="ajax-loader"></div>
+                    <input type="text" id="delete-trash-item-input" value="/api/ezp/v2/content/trash/1" />
+                </div>
+
+                <div class="rest-test">
+                    <a href="#empty-trash" id="empty-trash">Empty trash can</a>
+                    <div id="empty-trash-loader" class="ajax-loader"></div>
+                </div>
+
+
             </div>
         </div>
         <div class="yui3-u-1-2">

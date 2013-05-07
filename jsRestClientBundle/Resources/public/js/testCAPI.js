@@ -982,3 +982,96 @@ DeleteRelationAnchor.onclick = function(e){
         });
 };
 
+// Load trash items example
+var LoadTrashItemsAnchor = document.getElementById('load-trash-items');
+var LoadTrashItemsLoader = document.getElementById('load-trash-items-loader');
+LoadTrashItemsAnchor.onclick = function(e){
+
+    LoadTrashItemsLoader.style.display = 'block';
+    e.preventDefault();
+
+    contentService.loadThrashItems(
+        0,
+        -1,
+        function(error, response){
+            clientOutput.innerHTML =    "Errors : " + JSON.stringify(error) + "</br>" +
+                "Status : " + response.status + "</br>" +
+                "Body : " + response.body;
+            LoadTrashItemsLoader.style.display = 'none';
+        });
+};
+
+// Load single trash item example
+var LoadTrashItemAnchor = document.getElementById('load-trash-item');
+var LoadTrashItemLoader = document.getElementById('load-trash-item-loader');
+LoadTrashItemAnchor.onclick = function(e){
+
+    LoadTrashItemLoader.style.display = 'block';
+    e.preventDefault();
+
+    var LoadTrashItemInput = document.getElementById('load-trash-item-input');
+    contentService.loadThrashItem(
+        LoadTrashItemInput.value,
+        function(error, response){
+            clientOutput.innerHTML =    "Errors : " + JSON.stringify(error) + "</br>" +
+                "Status : " + response.status + "</br>" +
+                "Body : " + response.body;
+            LoadTrashItemLoader.style.display = 'none';
+        });
+};
+
+// Recover trash item example
+var RecoverAnchor = document.getElementById('recover-trash-item');
+var RecoverLoader = document.getElementById('recover-trash-item-loader');
+RecoverAnchor.onclick = function(e){
+
+    RecoverLoader.style.display = 'block';
+    e.preventDefault();
+
+    var RecoverInput = document.getElementById('recover-trash-item-input');
+    contentService.recover(
+        RecoverInput.value,
+        null,
+        function(error, response){
+            clientOutput.innerHTML =    "Errors : " + JSON.stringify(error) + "</br>" +
+                "Status : " + response.status + "</br>" +
+                "Body : " + response.body;
+            RecoverLoader.style.display = 'none';
+        });
+};
+
+// Delete trash item example
+var DeleteTrashItemAnchor = document.getElementById('delete-trash-item');
+var DeleteTrashItemLoader = document.getElementById('delete-trash-item-loader');
+DeleteTrashItemAnchor.onclick = function(e){
+
+    DeleteTrashItemLoader.style.display = 'block';
+    e.preventDefault();
+
+    var DeleteTrashItemInput = document.getElementById('delete-trash-item-input');
+    contentService.deleteTrashItem(
+        DeleteTrashItemInput.value,
+        function(error, response){
+            clientOutput.innerHTML =    "Errors : " + JSON.stringify(error) + "</br>" +
+                "Status : " + response.status + "</br>" +
+                "Body : " + response.body;
+            DeleteTrashItemLoader.style.display = 'none';
+        });
+};
+
+// Empty trash can example
+var EmptyTrashAnchor = document.getElementById('empty-trash');
+var EmptyTrashLoader = document.getElementById('empty-trash-loader');
+EmptyTrashAnchor.onclick = function(e){
+
+    EmptyTrashLoader.style.display = 'block';
+    e.preventDefault();
+
+    contentService.emptyThrash(
+        function(error, response){
+            clientOutput.innerHTML =    "Errors : " + JSON.stringify(error) + "</br>" +
+                "Status : " + response.status + "</br>" +
+                "Body : " + response.body;
+            EmptyTrashLoader.style.display = 'none';
+        });
+};
