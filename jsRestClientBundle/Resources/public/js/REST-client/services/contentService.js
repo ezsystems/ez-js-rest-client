@@ -690,6 +690,7 @@ var ContentService = (function() {
 
     /**
      *  Moves the subtree to a new subtree of "targetLocation"
+     *  The targetLocation can also be /content/trash where the location is put into the trash.
      *
      * @method moveSubtree
      * @param subtree {href}
@@ -914,6 +915,135 @@ var ContentService = (function() {
             callback
         );
     };
+
+// ******************************
+// Thrash management
+// ******************************
+
+    /**
+     *  Loads all the thrash can items
+     *
+     * @method loadThrashItems
+     * @param offset {int}
+     * @param limit {int}
+     * @param callback {function} function, which will be executed on request success
+     */
+    ContentService.prototype.loadThrashItems = function(offset, limit, callback) {
+
+        var that = this;
+
+        this.discoveryService_.getInfoObject(
+            "trash",
+            function(error, trash) {
+                if (!error) {
+
+                    that.connectionManager_.request(
+                        "GET",
+                        trash["_href"] + '?offset=' + offset + '&limit=' + limit,
+                        {},
+                        { "Accept" : trash["_media-type"] },
+                        callback
+                    );
+
+                } else {
+                    callback(error, false)
+                }
+            }
+        );
+    };
+
+    /**
+     *  Loads one thrash can item
+     *
+     * @method loadThrashItem
+     * @param trashItemId {href}
+     * @param callback {function} function, which will be executed on request success
+     */
+    ContentService.prototype.loadThrashItem = function(trashItemId, callback) {
+        this.connectionManager_.request(
+            "GET",
+            trashItemId,
+            {},
+            { "Accept" : "application/vnd.ez.api.TrashItem+json" },
+            callback
+        );
+    };
+
+    /**
+     *  Restores a trashItem
+     *
+     * @method recover
+     * @param trashItemId {href}
+     * @param destination {href}
+     * @param callback {function} function, which will be executed on request success
+     */
+    ContentService.prototype.recover = function(trashItemId, destination, callback) {
+
+        var headers = { "Accept" : "application/vnd.ez.api.TrashItem+json" };
+
+        if ((typeof destination !== "undefined") && (destination)) {
+            headers["Destination"] = destination;
+        }
+
+        this.connectionManager_.request(
+            "MOVE",
+            trashItemId,
+            "",
+            headers,
+            callback
+        );
+    };
+
+    /**
+     *  Delete a trashItem
+     *
+     * @method recover
+     * @param trashItemId {href}
+     * @param callback {function} function, which will be executed on request success
+     */
+    ContentService.prototype.deleteTrashItem = function(trashItemId, callback) {
+        this.connectionManager_.request(
+            "DELETE",
+            trashItemId,
+            "",
+            {},
+            callback
+        );
+    };
+
+    /**
+     *  Empty the trash can
+     *
+     * @method emptyThrash
+     * @param callback {function} function, which will be executed on request success
+     */
+    ContentService.prototype.emptyThrash = function(callback) {
+
+        var that = this;
+
+        this.discoveryService_.getInfoObject(
+            "trash",
+            function(error, trash) {
+                if (!error) {
+
+                    that.connectionManager_.request(
+                        "DELETE",
+                        trash["_href"],
+                        "",
+                        {},
+                        callback
+                    );
+
+                } else {
+                    callback(error, false)
+                }
+            }
+        );
+    };
+
+
+
+
 
 
     return ContentService;
