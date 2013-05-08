@@ -1075,3 +1075,128 @@ EmptyTrashAnchor.onclick = function(e){
             EmptyTrashLoader.style.display = 'none';
         });
 };
+
+// Create object state group example
+var CreateObjectStateGroupAnchor = document.getElementById('create-object-state-group');
+var CreateObjectStateGroupLoader = document.getElementById('create-object-state-group-loader');
+CreateObjectStateGroupAnchor.onclick = function(e){
+
+    CreateObjectStateGroupLoader.style.display = 'block';
+    e.preventDefault();
+
+    var objectStateGroupCreateStruct = contentService.newObjectStateGroupCreateStruct(
+        "some-id" + Math.random(10000),
+        "eng-US",
+        [
+            {
+            "_languageCode":"eng-US",
+            "#text":"Some Name " + Math.random(10000)
+            }
+        ]
+    );
+
+    contentService.createObjectStateGroup(
+        "/api/ezp/v2/content/objectstategroups",
+        objectStateGroupCreateStruct,
+        function(error, response){
+            clientOutput.innerHTML =    "Errors : " + JSON.stringify(error) + "</br>" +
+                "Status : " + response.status + "</br>" +
+                "Body : " + response.body;
+            CreateObjectStateGroupLoader.style.display = 'none';
+        });
+};
+
+// Update object state group example
+var UpdateObjectStateGroupAnchor = document.getElementById('update-object-state-group');
+var UpdateObjectStateGroupLoader = document.getElementById('update-object-state-group-loader');
+UpdateObjectStateGroupAnchor.onclick = function(e){
+
+    UpdateObjectStateGroupLoader.style.display = 'block';
+    e.preventDefault();
+
+    var objectStateGroupUpdateStruct = contentService.newObjectStateGroupUpdateStruct(
+        "some-id" + Math.random(10000),
+        "eng-US",
+        [
+            {
+                "_languageCode":"eng-US",
+                "#text":"Some Name " + Math.random(10000)
+            },
+            {
+                "_languageCode":"fin-FI",
+                "#text":"Nimi " + Math.random(10000)
+            }
+
+        ],
+        []
+    );
+
+    var UpdateObjectStateGroupInput = document.getElementById('update-object-state-group-input');
+    contentService.updateObjectStateGroup(
+        UpdateObjectStateGroupInput.value,
+        objectStateGroupUpdateStruct,
+        function(error, response){
+            clientOutput.innerHTML =    "Errors : " + JSON.stringify(error) + "</br>" +
+                "Status : " + response.status + "</br>" +
+                "Body : " + response.body;
+            UpdateObjectStateGroupLoader.style.display = 'none';
+        });
+};
+
+
+// Load the Object States groups list example
+var LoadObjectStateGroupsAnchor = document.getElementById('load-object-state-groups');
+var LoadObjectStateGroupsLoader = document.getElementById('load-object-state-groups-loader');
+LoadObjectStateGroupsAnchor.onclick = function(e){
+
+    LoadObjectStateGroupsLoader.style.display = 'block';
+    e.preventDefault();
+
+    contentService.loadObjectStateGroups(
+        "/api/ezp/v2/content/objectstategroups",
+        function(error, response){
+            clientOutput.innerHTML =    "Errors : " + JSON.stringify(error) + "</br>" +
+                "Status : " + response.status + "</br>" +
+                "Body : " + response.body;
+            LoadObjectStateGroupsLoader.style.display = 'none';
+        });
+};
+
+// Load an Object State group example
+var LoadObjectStateGroupAnchor = document.getElementById('load-object-state-group');
+var LoadObjectStateGroupLoader = document.getElementById('load-object-state-group-loader');
+LoadObjectStateGroupAnchor.onclick = function(e){
+
+    LoadObjectStateGroupLoader.style.display = 'block';
+    e.preventDefault();
+
+    var LoadObjectStateGroupInput = document.getElementById('load-object-state-group-input');
+    contentService.loadObjectStateGroup(
+        LoadObjectStateGroupInput.value,
+        function(error, response){
+            clientOutput.innerHTML =    "Errors : " + JSON.stringify(error) + "</br>" +
+                "Status : " + response.status + "</br>" +
+                "Body : " + response.body;
+            LoadObjectStateGroupLoader.style.display = 'none';
+        });
+};
+
+// Delete an Object State group example
+var DeleteObjectStateGroupAnchor = document.getElementById('delete-object-state-group');
+var DeleteObjectStateGroupLoader = document.getElementById('delete-object-state-group-loader');
+DeleteObjectStateGroupAnchor.onclick = function(e){
+
+    DeleteObjectStateGroupLoader.style.display = 'block';
+    e.preventDefault();
+
+    var DeleteObjectStateGroupInput = document.getElementById('delete-object-state-group-input');
+    contentService.deleteObjectStateGroup(
+        DeleteObjectStateGroupInput.value,
+        function(error, response){
+            clientOutput.innerHTML =    "Errors : " + JSON.stringify(error) + "</br>" +
+                "Status : " + response.status + "</br>" +
+                "Body : " + response.body;
+            DeleteObjectStateGroupLoader.style.display = 'none';
+        });
+};
+

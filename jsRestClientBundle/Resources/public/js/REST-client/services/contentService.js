@@ -128,6 +128,34 @@ var ContentService = (function() {
 
     };
 
+    /**
+     * Returns create structure for ObjectStateGroup
+     *
+     * @method newObjectStateGroupCreateStruct
+     * @param identifier {string}
+     * @param languageCode {string}
+     * @param names {Array} multiLanguageValuesType in JSON format
+     */
+    ContentService.prototype.newObjectStateGroupCreateStruct = function(identifier, languageCode, names) {
+
+        return new ObjectStateGroupCreateStruct(identifier, languageCode, names);
+
+    };
+
+    /**
+     * Returns update structure for ObjectStateGroup
+     *
+     * @method newObjectStateGroupUpdateStruct
+     * @param identifier {string}
+     * @param languageCode {string}
+     * @param names {Array} multiLanguageValuesType in JSON format
+     * @param descriptions {Array} multiLanguageValuesType in JSON format
+     */
+    ContentService.prototype.newObjectStateGroupUpdateStruct = function(identifier, languageCode, names, descriptions) {
+
+        return new ObjectStateGroupUpdateStruct(identifier, languageCode, names, descriptions);
+
+    };
 
 // ******************************
 // Sections management
@@ -974,7 +1002,7 @@ var ContentService = (function() {
      *
      * @method recover
      * @param trashItemId {href}
-     * @param destination {href}
+     * @param destination {href} if given the trash item is restored under this location otherwise under its original parent location
      * @param callback {function} function, which will be executed on request success
      */
     ContentService.prototype.recover = function(trashItemId, destination, callback) {
@@ -1041,9 +1069,97 @@ var ContentService = (function() {
         );
     };
 
+// ******************************
+// ObjectStates management
+// ******************************
+
+    /**
+     *  Loads all the ObjectState groups
+     *
+     * @method loadObjectStateGroups
+     * @param objectStateGroups {href}
+     * @param callback {function} function, which will be executed on request success
+     */
+    ContentService.prototype.loadObjectStateGroups = function(objectStateGroups, callback) {
+        this.connectionManager_.request(
+            "GET",
+            objectStateGroups,
+            {},
+            { "Accept" : "application/vnd.ez.api.ObjectStateGroupList+json" },
+            callback
+        );
+    };
+
+    /**
+     *  Loads an ObjectState group
+     *
+     * @method loadObjectStateGroup
+     * @param objectStateGroupId {href}
+     * @param callback {function} function, which will be executed on request success
+     */
+    ContentService.prototype.loadObjectStateGroup = function(objectStateGroupId, callback) {
+        this.connectionManager_.request(
+            "GET",
+            objectStateGroupId,
+            {},
+            { "Accept" : "application/vnd.ez.api.ObjectStateGroup+json" },
+            callback
+        );
+    };
 
 
+    /**
+     *  Create an ObjectState group
+     *
+     * @method createObjectStateGroup
+     * @param objectStateGroups {href}
+     * @param objectStateGroupCreateStruct {Object}
+     * @param callback {function} function, which will be executed on request success
+     */
+    ContentService.prototype.createObjectStateGroup = function(objectStateGroups, objectStateGroupCreateStruct, callback) {
+        this.connectionManager_.request(
+            "POST",
+            objectStateGroups,
+            JSON.stringify(objectStateGroupCreateStruct.body),
+            objectStateGroupCreateStruct.headers,
+            callback
+        );
+    };
 
+    /**
+     *  Update an ObjectState group
+     *
+     * @method updateObjectStateGroup
+     * @param objectStateGroupId {href}
+     * @param objectStateGroupUpdateStruct {Object}
+     * @param callback {function} function, which will be executed on request success
+     */
+    ContentService.prototype.updateObjectStateGroup = function(objectStateGroupId, objectStateGroupUpdateStruct, callback) {
+        this.connectionManager_.request(
+            "PATCH",
+            objectStateGroupId,
+            JSON.stringify(objectStateGroupUpdateStruct.body),
+            objectStateGroupUpdateStruct.headers,
+            callback
+        );
+    };
+
+    /**
+     *  Delete an ObjectState group
+     *
+     * @method deleteObjectStateGroup
+     * @param objectStateGroupId {href}
+     * @param callback {function} function, which will be executed on request success
+     */
+    ContentService.prototype.deleteObjectStateGroup = function(objectStateGroupId, callback) {
+        this.connectionManager_.request(
+            "DELETE",
+            objectStateGroupId,
+            "",
+            {},
+            callback
+        );
+    };
 
 
     return ContentService;

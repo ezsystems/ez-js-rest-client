@@ -19,9 +19,8 @@ var ContentCreateStruct = (function() {
         this.ContentCreate.alwaysAvailable = "true";
         this.ContentCreate.remoteId = null;
         this.ContentCreate.modificationDate = now;
-        this.ContentCreate.fields = {
-            "field": []
-        };
+        this.ContentCreate.fields = {};
+        this.ContentCreate.fields.field = [];
 
         return this;
     }

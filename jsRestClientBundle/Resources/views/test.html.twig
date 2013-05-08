@@ -292,6 +292,38 @@
                     <div id="empty-trash-loader" class="ajax-loader"></div>
                 </div>
 
+                <hr/>
+
+                <div class="rest-test">
+                    <a href="#create-object-state-group" id="create-object-state-group">Create an Object State group (random data)</a>
+                    <div id="create-object-state-group-loader" class="ajax-loader"></div>
+                </div>
+
+                <div class="rest-test">
+                    <a href="#update-object-state-group" id="update-object-state-group">Update an Object State group (random data)</a>
+                    <div id="update-object-state-group-loader" class="ajax-loader"></div>
+                    <input type="text" id="update-object-state-group-input" value="/api/ezp/v2/content/objectstategroups/2" />
+                </div>
+
+
+                <div class="rest-test">
+                    <a href="#load-object-state-groups" id="load-object-state-groups">Load Object State groups list</a>
+                    <div id="load-object-state-groups-loader" class="ajax-loader"></div>
+                </div>
+
+                <div class="rest-test">
+                    <a href="#load-object-state-group" id="load-object-state-group">Load an Object State group with id:</a>
+                    <div id="load-object-state-group-loader" class="ajax-loader"></div>
+                    <input type="text" id="load-object-state-group-input" value="/api/ezp/v2/content/objectstategroups/2" />
+                </div>
+
+                <div class="rest-test">
+                    <a href="#delete-object-state-group" id="delete-object-state-group">Delete an Object State group with id:</a>
+                    <div id="delete-object-state-group-loader" class="ajax-loader"></div>
+                    <input type="text" id="delete-object-state-group-input" value="/api/ezp/v2/content/objectstategroups/4" />
+                </div>
+
+
 
             </div>
         </div>
@@ -319,6 +351,8 @@
     '@jsRestClientBundle/Resources/public/js/REST-client/structures/SessionCreateStruct.js'
     '@jsRestClientBundle/Resources/public/js/REST-client/structures/ViewCreateStruct.js'
     '@jsRestClientBundle/Resources/public/js/REST-client/structures/RelationCreateStruct.js'
+    '@jsRestClientBundle/Resources/public/js/REST-client/structures/ObjectStateGroupCreateStruct.js'
+    '@jsRestClientBundle/Resources/public/js/REST-client/structures/ObjectStateGroupUpdateStruct.js'
     '@jsRestClientBundle/Resources/public/js/REST-client/structures/Request.js'
     '@jsRestClientBundle/Resources/public/js/REST-client/structures/Response.js'
     '@jsRestClientBundle/Resources/public/js/REST-client/structures/Error.js'
