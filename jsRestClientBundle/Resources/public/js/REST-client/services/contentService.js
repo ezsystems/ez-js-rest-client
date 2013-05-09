@@ -157,6 +157,23 @@ var ContentService = (function() {
 
     };
 
+    /**
+     * Returns update structure for ObjectState
+     *
+     * @method newObjectStateUpdateStruct
+     * @param identifier {string}
+     * @param languageCode {string}
+     * @param priority {int}
+     * @param names {Array} multiLanguageValuesType in JSON format
+     * @param descriptions {Array} multiLanguageValuesType in JSON format
+     */
+    ContentService.prototype.newObjectStateUpdateStruct = function(identifier, languageCode, priority, names, descriptions) {
+
+        return new ObjectStateUpdateStruct(identifier, languageCode, priority, names, descriptions);
+
+    };
+
+
 // ******************************
 // Sections management
 // ******************************
@@ -1009,7 +1026,7 @@ var ContentService = (function() {
 
         var headers = { "Accept" : "application/vnd.ez.api.TrashItem+json" };
 
-        if ((typeof destination !== "undefined") && (destination)) {
+        if ((typeof destination !== "undefined") && (destination !== null)) {
             headers["Destination"] = destination;
         }
 
@@ -1160,6 +1177,117 @@ var ContentService = (function() {
             callback
         );
     };
+
+    /**
+     *  Creates an ObjectState
+     *
+     * @method createObjectState
+     * @param objectStateId {href}
+     * @param callback {function} function, which will be executed on request success
+     */
+    ContentService.prototype.createObjectState = function(objectStateGroupId, objectStateCreateStruct, callback) {
+
+        // TODO: discover objectStateGroupObjectStates
+
+        this.connectionManager_.request(
+            "POST",
+            objectStateGroupObjectStates,
+            JSON.stringify(objectStateCreateStruct.body),
+            objectStateCreateStruct.headers,
+            callback
+        );
+    };
+
+    /**
+     *  Load an ObjectState
+     *
+     * @method loadObjectState
+     * @param objectStateId {href}
+     * @param callback {function} function, which will be executed on request success
+     */
+    ContentService.prototype.loadObjectState = function(objectStateId, callback) {
+        this.connectionManager_.request(
+            "GET",
+            objectStateId,
+            {},
+            { "Accept" : "application/vnd.ez.api.ObjectState+json" },
+            callback
+        );
+    };
+
+    /**
+     *  Update an ObjectState
+     *
+     * @method updateObjectState
+     * @param objectStateId {href}
+     * @param objectStateUpdateStruct {Object}
+     * @param callback {function} function, which will be executed on request success
+     */
+    ContentService.prototype.updateObjectState = function(objectStateId, objectStateUpdateStruct, callback) {
+        this.connectionManager_.request(
+            "PATCH",
+            objectStateId,
+            JSON.stringify(objectStateUpdateStruct.body),
+            objectStateUpdateStruct.headers,
+            callback
+        );
+    };
+
+    /**
+     *  Delete an ObjectState
+     *
+     * @method deleteObjectState
+     * @param objectStateId {href}
+     * @param callback {function} function, which will be executed on request success
+     */
+    ContentService.prototype.deleteObjectState = function(objectStateId, callback) {
+        this.connectionManager_.request(
+            "DELETE",
+            objectStateId,
+            "",
+            {},
+            callback
+        );
+    };
+
+    /**
+     *  Get ObjectStates of a content
+     *
+     * @method getContentState
+     * @param contentId {href}
+     * @param callback {function} function, which will be executed on request success
+     */
+    ContentService.prototype.getContentState = function(contentId, callback) {
+        this.connectionManager_.request(
+            "GET",
+            contentId + "/objectstates",
+            {},
+            { "Accept" : "application/vnd.ez.api.ContentObjectStates+json" },
+            callback
+        );
+    };
+
+    /**
+     *  Set ObjectStates of a content
+     *
+     * @method setContentState
+     * @param contentId {href}
+     * @param objectStates {Array}
+     * @param callback {function} function, which will be executed on request success
+     */
+    ContentService.prototype.setContentState = function(contentId, objectStates, callback) {
+        this.connectionManager_.request(
+            "PATCH",
+            contentId + "/objectstates",
+            JSON.stringify(objectStates),
+            {
+                "Accept" : "application/vnd.ez.api.ContentObjectStates+json",
+                "Content-Type" : "application/vnd.ez.api.ContentObjectStates+json"
+            },
+            callback
+        );
+    };
+
 
 
     return ContentService;

@@ -61,9 +61,12 @@ button:hover {
 
 
 .content {
-    padding: 10px;
+    padding: 20px;
     background: #f8f8ff;
     min-height: 200px;
+    position: fixed;
+    top: 0px;
+    min-width: 50%;
 }
 
 .content strong {

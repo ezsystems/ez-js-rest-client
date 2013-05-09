@@ -1200,3 +1200,94 @@ DeleteObjectStateGroupAnchor.onclick = function(e){
         });
 };
 
+// Load an Object State example
+var LoadObjectStateAnchor = document.getElementById('load-object-state');
+var LoadObjectStateLoader = document.getElementById('load-object-state-loader');
+LoadObjectStateAnchor.onclick = function(e){
+
+    LoadObjectStateLoader.style.display = 'block';
+    e.preventDefault();
+
+    var LoadObjectStateInput = document.getElementById('load-object-state-input');
+
+    contentService.loadObjectState(
+        LoadObjectStateInput.value,
+        function(error, response){
+            clientOutput.innerHTML =    "Errors : " + JSON.stringify(error) + "</br>" +
+                "Status : " + response.status + "</br>" +
+                "Body : " + response.body;
+            LoadObjectStateLoader.style.display = 'none';
+        });
+};
+
+
+// Update an Object State example
+var UpdateObjectStateAnchor = document.getElementById('update-object-state');
+var UpdateObjectStateLoader = document.getElementById('update-object-state-loader');
+UpdateObjectStateAnchor.onclick = function(e){
+
+    UpdateObjectStateLoader.style.display = 'block';
+    e.preventDefault();
+
+    var UpdateObjectStateInput = document.getElementById('update-object-state-input');
+    var objectStateUpdateStruct = contentService.newObjectStateUpdateStruct(
+        "some-id" + Math.random(10000),
+        "eng-US",
+        0,
+        [
+            {
+                "_languageCode":"eng-US",
+                "#text":"Some Name " + Math.random(10000)
+            }
+        ],
+        []
+    );
+
+    contentService.updateObjectState(
+        UpdateObjectStateInput.value,
+        objectStateUpdateStruct,
+        function(error, response){
+            clientOutput.innerHTML =    "Errors : " + JSON.stringify(error) + "</br>" +
+                "Status : " + response.status + "</br>" +
+                "Body : " + response.body;
+            UpdateObjectStateLoader.style.display = 'none';
+        });
+};
+
+// Delete an Object State example
+var DeleteObjectStateAnchor = document.getElementById('delete-object-state');
+var DeleteObjectStateLoader = document.getElementById('delete-object-state-loader');
+DeleteObjectStateAnchor.onclick = function(e){
+
+    DeleteObjectStateLoader.style.display = 'block';
+    e.preventDefault();
+
+    var DeleteObjectStateInput = document.getElementById('delete-object-state-input');
+
+    contentService.deleteObjectState(
+        DeleteObjectStateInput.value,
+        function(error, response){
+            clientOutput.innerHTML =    "Errors : " + JSON.stringify(error) + "</br>" +
+                "Status : " + response.status + "</br>" +
+                "Body : " + response.body;
+            DeleteObjectStateLoader.style.display = 'none';
+        });
+};
+
+contentService.loadObjectState(
+    "/api/ezp/v2/content/objectstategroups/7/objectstates/3",
+    function(error, objectStateResponse){
+
+        contentService.setContentState(
+            "/api/ezp/v2/content/objects/100",
+            [ JSON.parse(objectStateResponse.body) ],
+            function(error, response){
+                clientOutput.innerHTML =    "Errors : " + JSON.stringify(error) + "</br>" +
+                    "Status : " + response.status + "</br>" +
+                    "Body : " + response.body;
+                DeleteObjectStateLoader.style.display = 'none';
+            });
+
+    }
+
+);

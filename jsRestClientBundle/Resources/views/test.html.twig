@@ -323,6 +323,25 @@
                     <input type="text" id="delete-object-state-group-input" value="/api/ezp/v2/content/objectstategroups/4" />
                 </div>
 
+                <hr/>
+
+                <div class="rest-test">
+                    <a href="#delete-object-state" id="load-object-state">Load the Object State:</a>
+                    <div id="load-object-state-loader" class="ajax-loader"></div>
+                    <input type="text" id="load-object-state-input" value="/api/ezp/v2/content/objectstategroups/7/objectstates/5" />
+                </div>
+
+                <div class="rest-test">
+                    <a href="#update-object-state" id="update-object-state">Update the Object State (random data):</a>
+                    <div id="update-object-state-loader" class="ajax-loader"></div>
+                    <input type="text" id="update-object-state-input" value="/api/ezp/v2/content/objectstategroups/7/objectstates/5" />
+                </div>
+
+                <div class="rest-test">
+                    <a href="#delete-object-state" id="delete-object-state">Delete the Object State:</a>
+                    <div id="delete-object-state-loader" class="ajax-loader"></div>
+                    <input type="text" id="delete-object-state-input" value="/api/ezp/v2/content/objectstategroups/7/objectstates/5" />
+                </div>
 
 
             </div>
@@ -353,6 +372,7 @@
     '@jsRestClientBundle/Resources/public/js/REST-client/structures/RelationCreateStruct.js'
     '@jsRestClientBundle/Resources/public/js/REST-client/structures/ObjectStateGroupCreateStruct.js'
     '@jsRestClientBundle/Resources/public/js/REST-client/structures/ObjectStateGroupUpdateStruct.js'
+    '@jsRestClientBundle/Resources/public/js/REST-client/structures/ObjectStateUpdateStruct.js'
     '@jsRestClientBundle/Resources/public/js/REST-client/structures/Request.js'
     '@jsRestClientBundle/Resources/public/js/REST-client/structures/Response.js'
     '@jsRestClientBundle/Resources/public/js/REST-client/structures/Error.js'
