@@ -343,6 +343,38 @@
                     <input type="text" id="delete-object-state-input" value="/api/ezp/v2/content/objectstategroups/7/objectstates/5" />
                 </div>
 
+                <hr/>
+
+                <div class="rest-test">
+                    <a href="#create-url-alias" id="create-url-alias">Create an URL Alias for resource:</a>
+                    <div id="create-url-alias-loader" class="ajax-loader"></div>
+                    <input type="text" id="create-url-alias-input" value="/api/ezp/v2/content/locations/1/2/113" />
+                </div>
+
+                <div class="rest-test">
+                    <a href="#list-global-aliases" id="list-global-aliases">List global URL Aliases</a>
+                    <div id="list-global-aliases-loader" class="ajax-loader"></div>
+                </div>
+
+                <div class="rest-test">
+                    <a href="#list-location-aliases" id="list-location-aliases">List location URL Aliases:</a>
+                    <div id="list-location-aliases-loader" class="ajax-loader"></div>
+                    <input type="text" id="list-location-aliases-input" value="/api/ezp/v2/content/locations/1/2/113" />
+                </div>
+
+                <div class="rest-test">
+                    <a href="#load-url-alias" id="load-url-alias">Load URL Alias</a>
+                    <div id="load-url-alias-loader" class="ajax-loader"></div>
+                    <input type="text" id="load-url-alias-input" value="/api/ezp/v2/content/urlaliases/0-a903c03b86eb2987889afa5fe17004eb" />
+                </div>
+
+                <div class="rest-test">
+                    <a href="#delete-url-alias" id="delete-url-alias">Delete URL Alias:</a>
+                    <div id="delete-url-alias-loader" class="ajax-loader"></div>
+                    <input type="text" id="delete-url-alias-input" value="/api/ezp/v2/content/urlaliases/0-a903c03b86eb2987889afa5fe17004eb" />
+                </div>
+
+
 
             </div>
         </div>
@@ -373,6 +405,7 @@
     '@jsRestClientBundle/Resources/public/js/REST-client/structures/ObjectStateGroupCreateStruct.js'
     '@jsRestClientBundle/Resources/public/js/REST-client/structures/ObjectStateGroupUpdateStruct.js'
     '@jsRestClientBundle/Resources/public/js/REST-client/structures/ObjectStateUpdateStruct.js'
+    '@jsRestClientBundle/Resources/public/js/REST-client/structures/UrlAliasCreateStruct.js'
     '@jsRestClientBundle/Resources/public/js/REST-client/structures/Request.js'
     '@jsRestClientBundle/Resources/public/js/REST-client/structures/Response.js'
     '@jsRestClientBundle/Resources/public/js/REST-client/structures/Error.js'

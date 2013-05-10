@@ -1274,20 +1274,107 @@ DeleteObjectStateAnchor.onclick = function(e){
         });
 };
 
-contentService.loadObjectState(
-    "/api/ezp/v2/content/objectstategroups/7/objectstates/3",
-    function(error, objectStateResponse){
 
-        contentService.setContentState(
-            "/api/ezp/v2/content/objects/100",
-            [ JSON.parse(objectStateResponse.body) ],
-            function(error, response){
-                clientOutput.innerHTML =    "Errors : " + JSON.stringify(error) + "</br>" +
-                    "Status : " + response.status + "</br>" +
-                    "Body : " + response.body;
-                DeleteObjectStateLoader.style.display = 'none';
-            });
+// Create an alias example
+var CreateUrlAliasAnchor = document.getElementById('create-url-alias');
+var CreateUrlAliasLoader = document.getElementById('create-url-alias-loader');
+CreateUrlAliasAnchor.onclick = function(e){
 
-    }
+    CreateUrlAliasLoader.style.display = 'block';
+    e.preventDefault();
 
-);
+    var urlAliasCreateStruct = contentService.newUrlAliasCreateStruct(
+        "eng-US",
+        "findme-alias",
+        "content/search"
+    );
+
+    contentService.createUrlAlias(
+        "/api/ezp/v2/content/urlaliases",
+        urlAliasCreateStruct,
+        function(error, response){
+            clientOutput.innerHTML =    "Errors : " + JSON.stringify(error) + "</br>" +
+                "Status : " + response.status + "</br>" +
+                "Body : " + response.body;
+            CreateUrlAliasLoader.style.display = 'none';
+        });};
+
+
+// List global aliases example
+var ListGlobalAliasesAnchor = document.getElementById('list-global-aliases');
+var ListGlobalAliasesLoader = document.getElementById('list-global-aliases-loader');
+ListGlobalAliasesAnchor.onclick = function(e){
+
+    ListGlobalAliasesLoader.style.display = 'block';
+    e.preventDefault();
+
+    contentService.listGlobalAliases(
+        "/api/ezp/v2/content/urlaliases",
+        function(error, response){
+            clientOutput.innerHTML =    "Errors : " + JSON.stringify(error) + "</br>" +
+                "Status : " + response.status + "</br>" +
+                "Body : " + response.body;
+            ListGlobalAliasesLoader.style.display = 'none';
+        });
+};
+
+// List location aliases example
+var ListLocationAliasesAnchor = document.getElementById('list-location-aliases');
+var ListLocationAliasesLoader = document.getElementById('list-location-aliases-loader');
+ListLocationAliasesAnchor.onclick = function(e){
+
+    ListLocationAliasesLoader.style.display = 'block';
+    e.preventDefault();
+
+    var ListLocationAliasesInput = document.getElementById('list-location-aliases-input');
+    contentService.listLocationAliases(
+        ListLocationAliasesInput.value,
+        false,
+        function(error, response){
+            clientOutput.innerHTML =    "Errors : " + JSON.stringify(error) + "</br>" +
+                "Status : " + response.status + "</br>" +
+                "Body : " + response.body;
+            ListLocationAliasesLoader.style.display = 'none';
+        });
+};
+
+// Load the URL alias example
+var LoadUrlAliasAnchor = document.getElementById('load-url-alias');
+var LoadUrlAliasLoader = document.getElementById('load-url-alias-loader');
+LoadUrlAliasAnchor.onclick = function(e){
+
+    LoadUrlAliasLoader.style.display = 'block';
+    e.preventDefault();
+
+    var LoadUrlAliasInput = document.getElementById('load-url-alias-input');
+    contentService.loadUrlAlias(
+        LoadUrlAliasInput.value,
+        function(error, response){
+            clientOutput.innerHTML =    "Errors : " + JSON.stringify(error) + "</br>" +
+                "Status : " + response.status + "</br>" +
+                "Body : " + response.body;
+            LoadUrlAliasLoader.style.display = 'none';
+        });
+};
+
+// Delete the URL alias example
+var DeleteUrlAliasAnchor = document.getElementById('delete-url-alias');
+var DeleteUrlAliasLoader = document.getElementById('delete-url-alias-loader');
+DeleteUrlAliasAnchor.onclick = function(e){
+
+    DeleteUrlAliasLoader.style.display = 'block';
+    e.preventDefault();
+
+    var DeleteUrlAliasInput = document.getElementById('delete-url-alias-input');
+    contentService.deleteUrlAlias(
+        DeleteUrlAliasInput.value,
+        function(error, response){
+            clientOutput.innerHTML =    "Errors : " + JSON.stringify(error) + "</br>" +
+                "Status : " + response.status + "</br>" +
+                "Body : " + response.body;
+            DeleteUrlAliasLoader.style.display = 'none';
+        });
+};
+
+
+

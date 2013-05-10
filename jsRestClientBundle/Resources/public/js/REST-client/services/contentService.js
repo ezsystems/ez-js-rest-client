@@ -173,6 +173,20 @@ var ContentService = (function() {
 
     };
 
+    /**
+     * Returns create structure for UrlAlias
+     *
+     * @method newUrlAliasCreateStruct
+     * @param languageCode {string}
+     * @param resource {href}
+     * @param path {string}
+     */
+    ContentService.prototype.newUrlAliasCreateStruct = function(languageCode, resource, path) {
+
+        return new UrlAliasCreateStruct(languageCode, resource, path);
+
+    };
+
 
 // ******************************
 // Sections management
@@ -1288,6 +1302,100 @@ var ContentService = (function() {
         );
     };
 
+// ******************************
+// ObjectStates management
+// ******************************
+
+    /**
+     *  Creates an UrlAlias
+     *
+     * @method createUrlAlias
+     * @param urlAliases {href}
+     * @param urlAliasCreateStruct {Object}
+     * @param callback {function} function, which will be executed on request success
+     */
+    ContentService.prototype.createUrlAlias = function(urlAliases, urlAliasCreateStruct, callback) {
+        this.connectionManager_.request(
+            "POST",
+            urlAliases,
+            JSON.stringify(urlAliasCreateStruct.body),
+            urlAliasCreateStruct.headers,
+            callback
+        );
+    };
+
+    /**
+     *  Loads all the global UrlAliases
+     *
+     * @method loadUrlAliases
+     * @param urlAliases {href}
+     * @param callback {function} function, which will be executed on request success
+     */
+    ContentService.prototype.listGlobalAliases = function(urlAliases, callback) {
+        this.connectionManager_.request(
+            "GET",
+            urlAliases,
+            {},
+            { "Accept" : "application/vnd.ez.api.UrlAliasRefList+json" },
+            callback
+        );
+    };
+
+    /**
+     *  Loads all the UrlAliases for a location
+     *
+     * @method listLocationAliases
+     * @param locationUrlAliases {href}
+     * @param custom {boolean}
+     * @param callback {function} function, which will be executed on request success
+     */
+    ContentService.prototype.listLocationAliases = function(locationUrlAliases, custom, callback) {
+
+        custom = (typeof custom === "undefined") ? true : custom;
+        var parameters = (custom === true) ? "" : "?custom=false";
+
+        this.connectionManager_.request(
+            "GET",
+            locationUrlAliases + '/urlaliases' + parameters,
+            {},
+            { "Accept" : "application/vnd.ez.api.UrlAliasRefList+json" },
+            callback
+        );
+    };
+
+    /**
+     *  Load an URL Alias
+     *
+     * @method loadUrlAlias
+     * @param urlAliasId {href}
+     * @param callback {function} function, which will be executed on request success
+     */
+    ContentService.prototype.loadUrlAlias = function(urlAliasId, callback) {
+        this.connectionManager_.request(
+            "GET",
+            urlAliasId,
+            {},
+            { "Accept" : "application/vnd.ez.api.UrlAlias+json" },
+            callback
+        );
+    };
+
+    /**
+     *  Delete an URL Alias
+     *
+     * @method deleteUrlAlias
+     * @param urlAliasId {href}
+     * @param callback {function} function, which will be executed on request success
+     */
+    ContentService.prototype.deleteUrlAlias = function(urlAliasId, callback) {
+        this.connectionManager_.request(
+            "DELETE",
+            urlAliasId,
+            "",
+            {},
+            callback
+        );
+    };
 
 
     return ContentService;
