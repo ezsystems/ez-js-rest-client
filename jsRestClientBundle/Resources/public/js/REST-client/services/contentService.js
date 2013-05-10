@@ -187,6 +187,19 @@ var ContentService = (function() {
 
     };
 
+    /**
+     * Returns create structure for UrlWildcard
+     *
+     * @method newUrlWildcardCreateStruct
+     * @param sourceUrl {href}
+     * @param destinationUrl {href}
+     * @param forward {boolean}
+     */
+    ContentService.prototype.newUrlWildcardCreateStruct = function(sourceUrl, destinationUrl, forward) {
+
+        return new UrlWildcardCreateStruct(sourceUrl, destinationUrl, forward);
+
+    };
 
 // ******************************
 // Sections management
@@ -1303,7 +1316,7 @@ var ContentService = (function() {
     };
 
 // ******************************
-// ObjectStates management
+// URL Aliases management
 // ******************************
 
     /**
@@ -1391,6 +1404,79 @@ var ContentService = (function() {
         this.connectionManager_.request(
             "DELETE",
             urlAliasId,
+            "",
+            {},
+            callback
+        );
+    };
+
+// ******************************
+// URL Wildcards management
+// ******************************
+
+    /**
+     *  Creates an UrlWildcard
+     *
+     * @method createUrlWildcard
+     * @param urlWildcards {href}
+     * @param urlWildcardCreateStruct {Object}
+     * @param callback {function} function, which will be executed on request success
+     */
+    ContentService.prototype.createUrlWildcard = function(urlWildcards, urlWildcardCreateStruct, callback) {
+        this.connectionManager_.request(
+            "POST",
+            urlWildcards,
+            JSON.stringify(urlWildcardCreateStruct.body),
+            urlWildcardCreateStruct.headers,
+            callback
+        );
+    };
+
+    /**
+     *  Loads all UrlWildcards
+     *
+     * @method loadUrlWildcards
+     * @param urlWildcards {href}
+     * @param callback {function} function, which will be executed on request success
+     */
+    ContentService.prototype.loadUrlWildcards = function(urlWildcards, callback) {
+        this.connectionManager_.request(
+            "GET",
+            urlWildcards,
+            "",
+            { "Accept" : "application/vnd.ez.api.UrlWildcardList+json" },
+            callback
+        );
+    };
+
+    /**
+     *  Loads an UrlWildcard
+     *
+     * @method loadUrlWildcard
+     * @param urlWildcardId {href}
+     * @param callback {function} function, which will be executed on request success
+     */
+    ContentService.prototype.loadUrlWildcard = function(urlWildcardId, callback) {
+        this.connectionManager_.request(
+            "GET",
+            urlWildcardId,
+            "",
+            { "Accept" : "application/vnd.ez.api.UrlWildcard+json" },
+            callback
+        );
+    };
+
+    /**
+     *  Deletes an UrlWildcard
+     *
+     * @method deleteUrlWildcard
+     * @param urlWildcardId {href}
+     * @param callback {function} function, which will be executed on request success
+     */
+    ContentService.prototype.deleteUrlWildcard = function(urlWildcardId, callback) {
+        this.connectionManager_.request(
+            "DELETE",
+            urlWildcardId,
             "",
             {},
             callback

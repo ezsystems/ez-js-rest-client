@@ -1297,7 +1297,8 @@ CreateUrlAliasAnchor.onclick = function(e){
                 "Status : " + response.status + "</br>" +
                 "Body : " + response.body;
             CreateUrlAliasLoader.style.display = 'none';
-        });};
+        });
+};
 
 
 // List global aliases example
@@ -1376,5 +1377,84 @@ DeleteUrlAliasAnchor.onclick = function(e){
         });
 };
 
+// Create a URL wildcard example
+var CreateUrlWildcardAnchor = document.getElementById('create-url-wildcard');
+var CreateUrlWildcardLoader = document.getElementById('create-url-wildcard-loader');
+CreateUrlWildcardAnchor.onclick = function(e){
 
+    CreateUrlWildcardLoader.style.display = 'block';
+    e.preventDefault();
 
+    var CreateUrlWildCardInput = document.getElementById('create-url-wildcard-input');
+    var urlWildcardCreateStruct = contentService.newUrlWildcardCreateStruct(
+        "some-new-wildcard-" + Math.random(100) * 1000,
+        CreateUrlWildCardInput.value,
+        false
+    );
+    contentService.createUrlWildcard(
+        "/api/ezp/v2/content/urlwildcards",
+        urlWildcardCreateStruct,
+        function(error, response){
+            clientOutput.innerHTML =    "Errors : " + JSON.stringify(error) + "</br>" +
+                "Status : " + response.status + "</br>" +
+                "Body : " + response.body;
+            CreateUrlWildcardLoader.style.display = 'none';
+        }
+    );
+};
+
+// List URL wildcards example
+var LoadUrlWildcardsAnchor = document.getElementById('load-url-wildcards');
+var LoadUrlWildcardsLoader = document.getElementById('load-url-wildcards-loader');
+LoadUrlWildcardsAnchor.onclick = function(e){
+
+    LoadUrlWildcardsLoader.style.display = 'block';
+    e.preventDefault();
+
+    contentService.loadUrlWildcards(
+        "/api/ezp/v2/content/urlwildcards",
+        function(error, response){
+            clientOutput.innerHTML =    "Errors : " + JSON.stringify(error) + "</br>" +
+                "Status : " + response.status + "</br>" +
+                "Body : " + response.body;
+            LoadUrlWildcardsLoader.style.display = 'none';
+        });
+};
+
+// Load URL wildcard example
+var LoadUrlWildcardAnchor = document.getElementById('load-url-wildcard');
+var LoadUrlWildcardLoader = document.getElementById('load-url-wildcard-loader');
+LoadUrlWildcardAnchor.onclick = function(e){
+
+    LoadUrlWildcardLoader.style.display = 'block';
+    e.preventDefault();
+
+    LoadUrlWildcardInput = document.getElementById('load-url-wildcard-input');
+    contentService.loadUrlWildcard(
+        LoadUrlWildcardInput.value,
+        function(error, response){
+            clientOutput.innerHTML =    "Errors : " + JSON.stringify(error) + "</br>" +
+                "Status : " + response.status + "</br>" +
+                "Body : " + response.body;
+            LoadUrlWildcardLoader.style.display = 'none';
+        });
+};
+
+// Delete URL wildcard example
+var DeleteUrlWildcardAnchor = document.getElementById('delete-url-wildcard');
+var DeleteUrlWildcardLoader = document.getElementById('delete-url-wildcard-loader');
+DeleteUrlWildcardAnchor.onclick = function(e){
+
+    DeleteUrlWildcardLoader.style.display = 'block';
+    e.preventDefault();
+
+    DeleteUrlWildcardInput = document.getElementById('delete-url-wildcard-input');
+    contentService.deleteUrlWildcard(
+        DeleteUrlWildcardInput.value,
+        function(error, response){
+            clientOutput.innerHTML =    "Errors : " + JSON.stringify(error) + "</br>" +
+                "Status : " + response.status + "</br>" +
+                "Body : " + response.body;
+            DeleteUrlWildcardLoader.style.display = 'none';
+        });
+};

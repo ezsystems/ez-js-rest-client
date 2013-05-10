@@ -374,6 +374,30 @@
                     <input type="text" id="delete-url-alias-input" value="/api/ezp/v2/content/urlaliases/0-a903c03b86eb2987889afa5fe17004eb" />
                 </div>
 
+                <hr/>
+
+                <div class="rest-test">
+                    <a href="#create-url-wildcard" id="create-url-wildcard">Create an URL Wildcard for resource:</a>
+                    <div id="create-url-wildcard-loader" class="ajax-loader"></div>
+                    <input type="text" id="create-url-wildcard-input" value="/api/ezp/v2/content/locations/1/2/113" />
+                </div>
+
+                <div class="rest-test">
+                    <a href="#load-url-wildcards" id="load-url-wildcards">Load URL Wildcards</a>
+                    <div id="load-url-wildcards-loader" class="ajax-loader"></div>
+                </div>
+
+                <div class="rest-test">
+                    <a href="#load-url-wildcard" id="load-url-wildcard">Load URL Wildcard:</a>
+                    <div id="load-url-wildcard-loader" class="ajax-loader"></div>
+                    <input type="text" id="load-url-wildcard-input" value="/api/ezp/v2/content/urlwildcards/1" />
+                </div>
+
+                <div class="rest-test">
+                    <a href="#delete-url-wildcard" id="delete-url-wildcard">Delete URL Wildcard:</a>
+                    <div id="delete-url-wildcard-loader" class="ajax-loader"></div>
+                    <input type="text" id="delete-url-wildcard-input" value="/api/ezp/v2/content/urlwildcards/2" />
+                </div>
 
 
             </div>
@@ -406,6 +430,7 @@
     '@jsRestClientBundle/Resources/public/js/REST-client/structures/ObjectStateGroupUpdateStruct.js'
     '@jsRestClientBundle/Resources/public/js/REST-client/structures/ObjectStateUpdateStruct.js'
     '@jsRestClientBundle/Resources/public/js/REST-client/structures/UrlAliasCreateStruct.js'
+    '@jsRestClientBundle/Resources/public/js/REST-client/structures/UrlWildcardCreateStruct.js'
     '@jsRestClientBundle/Resources/public/js/REST-client/structures/Request.js'
     '@jsRestClientBundle/Resources/public/js/REST-client/structures/Response.js'
     '@jsRestClientBundle/Resources/public/js/REST-client/structures/Error.js'
