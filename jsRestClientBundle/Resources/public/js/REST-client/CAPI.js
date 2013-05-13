@@ -54,6 +54,22 @@ var CAPI = (function() {
         };
 
         /**
+         * Get instance of Content Type Service
+         *
+         * @method getContentTypeService
+         * @return {ContentTypeService}
+         */
+        this.getContentTypeService = function(){
+            if  (!this.contentTypeService_)  {
+                this.contentTypeService_  =  new ContentTypeService(
+                    connectionManager,
+                    discoveryService
+                );
+            }
+            return  this.contentTypeService_;
+        };
+
+        /**
          * Get instance of User Service
          *
          * @method getUserService

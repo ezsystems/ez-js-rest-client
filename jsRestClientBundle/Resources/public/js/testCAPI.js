@@ -167,51 +167,6 @@ deleteSectionAnchor.onclick = function(e){
     }
 };
 
-// ******************************
-// ******************************
-
-// Load content type groups list example
-var loadContentTypeGroupsAnchor = document.getElementById('load-contenttype-groups');
-var loadContentTypeGroupsLoader = document.getElementById('load-contenttype-groups-loader');
-loadContentTypeGroupsAnchor.onclick = function(e){
-
-    loadContentTypeGroupsLoader.style.display = 'block';
-    e.preventDefault();
-
-    contentService.loadContentTypeGroups(
-        '/api/ezp/v2/content/typegroups',
-        function(error, response){
-            clientOutput.innerHTML =    "Errors : " + JSON.stringify(error) + "</br>" +
-                "Status : " + response.status + "</br>" +
-                "Body : " + response.body;
-            loadContentTypeGroupsLoader.style.display = 'none';
-        }
-    );
-};
-
-// Load single content type group example
-var loadContentTypeGroupAnchor = document.getElementById('load-contenttype-group');
-var loadContentTypeGroupLoader = document.getElementById('load-contenttype-group-loader');
-loadContentTypeGroupAnchor.onclick = function(e){
-
-    loadContentTypeGroupLoader.style.display = 'block';
-    e.preventDefault();
-
-    var loadContentTypeGroupInput = document.getElementById('load-contenttype-group-input');
-    if (loadContentTypeGroupInput.value.length){
-        contentService.loadContentTypeGroup(
-            loadContentTypeGroupInput.value,
-            function(error, response){
-                clientOutput.innerHTML =    "Errors : " + JSON.stringify(error) + "</br>" +
-                    "Status : " + response.status + "</br>" +
-                    "Body : " + response.body;
-                loadContentTypeGroupLoader.style.display = 'none';
-            }
-        );
-    } else {
-        clientOutput.innerHTML = 'Id is missing!';
-    }
-};
 
 // ******************************
 // ******************************

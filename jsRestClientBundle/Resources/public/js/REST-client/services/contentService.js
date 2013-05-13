@@ -316,39 +316,6 @@ var ContentService = (function() {
 // Content Type groups management
 // ******************************
 
-    /**
-     * Load all content type groups
-     *
-     * @method loadContentTypeGroups
-     * @param typegroups {href} reference to type groups resource
-     * @param callback {function} function, which will be executed on request success
-     */
-    ContentService.prototype.loadContentTypeGroups = function(typegroups, callback) {
-        this.connectionManager_.request(
-            "GET",
-            typegroups,
-            {},
-            { "Accept" : "application/vnd.ez.api.ContentTypeGroupList+json" },
-            callback
-        );
-    };
-
-    /**
-     * Load single content type group
-     *
-     * @method loadContentTypeGroups
-     * @param contentTypeGroupId {href}
-     * @param callback {function} function, which will be executed on request success
-     */
-    ContentService.prototype.loadContentTypeGroup = function(contentTypeGroupId, callback) {
-        this.connectionManager_.request(
-            "GET",
-            contentTypeGroupId,
-            {},
-            { "Accept" : "application/vnd.ez.api.ContentTypeGroup+json" },
-            callback
-        );
-    };
 
 // ******************************
 // Content management
