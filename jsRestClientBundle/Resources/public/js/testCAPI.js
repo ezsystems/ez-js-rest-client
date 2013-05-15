@@ -1081,7 +1081,6 @@ UpdateObjectStateGroupAnchor.onclick = function(e){
                 "_languageCode":"fin-FI",
                 "#text":"Nimi " + Math.random(10000)
             }
-
         ],
         []
     );

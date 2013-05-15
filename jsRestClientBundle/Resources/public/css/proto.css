@@ -61,15 +61,25 @@ button:hover {
 
 
 .content {
-    padding: 20px;
     background: #f8f8ff;
     min-height: 200px;
     position: fixed;
     top: 0px;
+    max-width: 50%;
     min-width: 50%;
 }
 
+.content-inner {
+    padding: 20px;
+}
+
+
+
 .content strong {
     font-weight: bolder;
+}
+
+#output {
+    word-wrap: break-word;
 }
 

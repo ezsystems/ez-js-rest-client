@@ -425,16 +425,50 @@
                     <div id="load-content-types-loader" class="ajax-loader"></div>
                 </div>
 
+                <hr/>
+
+                <div class="rest-test">
+                    <a href="#create-content-type" id="create-content-type">Create Content Type</a>
+                    <div id="create-content-type-loader" class="ajax-loader"></div>
+                </div>
+
+                <div class="rest-test">
+                    <a href="#copy-content-type" id="copy-content-type">Copy Content Type</a>
+                    <input type="text" id="copy-content-type-input" value="/api/ezp/v2/content/types/18" />
+                    <div id="copy-content-type-loader" class="ajax-loader"></div>
+                </div>
+
+                <div class="rest-test">
+                    <a href="#load-content-type" id="load-content-type">Load Content Type</a>
+                    <input type="text" id="load-content-type-input" value="/api/ezp/v2/content/types/18" />
+                    <div id="load-content-type-loader" class="ajax-loader"></div>
+                </div>
+
+                <div class="rest-test">
+                    <a href="#load-content-type-by-identifier" id="load-content-type-by-identifier">Load Content Type by identifier</a>
+                    <input type="text" id="load-content-type-by-identifier-input" value="" />
+                    <div id="load-content-type-by-identifier-loader" class="ajax-loader"></div>
+                </div>
+
+
+                <div class="rest-test">
+                    <a href="#create-content-type-draft" id="create-content-type-draft">Create draft for the Content Type:</a>
+                    <input type="text" id="create-content-type-draft-input" value="/api/ezp/v2/content/types/18" />
+                    <div id="create-content-type-draft-loader" class="ajax-loader"></div>
+                </div>
+
             </div>
         </div>
         <div class="yui3-u-1-2">
             <div class="content">
+                <div class="content-inner">
 
-                <strong>Client output:</strong>
-                <br/><hr/>
+                    <strong>Client output:</strong>
+                    <br/><hr/>
 
-                <div id="output"></div>
+                    <div id="output"></div>
 
+                </div>
             </div>
         </div>
     </div>
@@ -457,6 +491,9 @@
     '@jsRestClientBundle/Resources/public/js/REST-client/structures/UrlAliasCreateStruct.js'
     '@jsRestClientBundle/Resources/public/js/REST-client/structures/UrlWildcardCreateStruct.js'
     '@jsRestClientBundle/Resources/public/js/REST-client/structures/ContentTypeGroupInputStruct.js'
+    '@jsRestClientBundle/Resources/public/js/REST-client/structures/ContentTypeCreateStruct.js'
+    '@jsRestClientBundle/Resources/public/js/REST-client/structures/ContentTypeUpdateStruct.js'
+    '@jsRestClientBundle/Resources/public/js/REST-client/structures/FieldDefinitionCreateStruct.js'
     '@jsRestClientBundle/Resources/public/js/REST-client/structures/Request.js'
     '@jsRestClientBundle/Resources/public/js/REST-client/structures/Response.js'
     '@jsRestClientBundle/Resources/public/js/REST-client/structures/Error.js'

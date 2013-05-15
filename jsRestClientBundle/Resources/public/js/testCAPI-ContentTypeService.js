@@ -146,3 +146,162 @@ LoadContentTypesAnchor.onclick = function(e){
         clientOutput.innerHTML = 'Id is missing!';
     }
 };
+
+
+// Create content type example
+var CreateContentTypeAnchor = document.getElementById('create-content-type');
+var CreateContentTypeLoader = document.getElementById('create-content-type-loader');
+CreateContentTypeAnchor.onclick = function(e){
+
+    CreateContentTypeLoader.style.display = 'block';
+    e.preventDefault();
+
+    var contentTypeCreateStruct = contentTypeService.newContentTypeCreateStruct(
+        "content-type-id-" + Math.random(100),
+        "eng-US",
+        [
+            {
+                "_languageCode":"eng-US",
+                "#text":"Some Name " + Math.random(10000)
+            }
+        ],
+        "DummyUser"
+    );
+
+    var fieldDefinition = contentTypeService.newFieldDefinitionCreateStruct(
+        "fd-id-" + Math.random(100),
+        "ezstring",
+        "content",
+        [
+            {
+                "_languageCode":"eng-US",
+                "#text":"Some FD Name " + Math.random(10000)
+            }
+        ]
+    );
+
+    contentTypeCreateStruct.body.ContentTypeCreate.FieldDefinitions.FieldDefinition.push(fieldDefinition.body.FieldDefinitionCreate);
+
+    contentTypeService.createContentType(
+        "/api/ezp/v2/content/typegroups/1",
+        contentTypeCreateStruct,
+        true,
+        function(error, response){
+            clientOutput.innerHTML =    "Errors : " + JSON.stringify(error) + "</br>" +
+                "Status : " + response.status + "</br>" +
+                "Body : " + response.body;
+            CreateContentTypeLoader.style.display = 'none';
+        }
+    );
+};
+
+// Load content type example
+var LoadContentTypeAnchor = document.getElementById('load-content-type');
+var LoadContentTypeLoader = document.getElementById('load-content-type-loader');
+LoadContentTypeAnchor.onclick = function(e){
+
+    LoadContentTypeLoader.style.display = 'block';
+    e.preventDefault();
+
+    var LoadContentTypeInput = document.getElementById('load-content-type-input');
+    if (LoadContentTypeInput.value.length){
+        contentTypeService.loadContentType(
+            LoadContentTypeInput.value,
+            function(error, response){
+                clientOutput.innerHTML =    "Errors : " + JSON.stringify(error) + "</br>" +
+                    "Status : " + response.status + "</br>" +
+                    "Body : " + response.body;
+                LoadContentTypeLoader.style.display = 'none';
+            }
+        );
+    } else {
+        clientOutput.innerHTML = 'Id is missing!';
+    }
+};
+
+// Load content type by identifier example
+var LoadContentTypeByIdentifierAnchor = document.getElementById('load-content-type-by-identifier');
+var LoadContentTypeByIdentifierLoader = document.getElementById('load-content-type-by-identifier-loader');
+LoadContentTypeByIdentifierAnchor.onclick = function(e){
+
+    LoadContentTypeByIdentifierLoader.style.display = 'block';
+    e.preventDefault();
+
+    var LoadContentTypeByIdentifierInput = document.getElementById('load-content-type-by-identifier-input');
+    if (LoadContentTypeByIdentifierInput.value.length){
+        contentTypeService.loadContentTypeByIdentifier(
+            LoadContentTypeByIdentifierInput.value,
+            function(error, response){
+                clientOutput.innerHTML =    "Errors : " + JSON.stringify(error) + "</br>" +
+                    "Status : " + response.status + "</br>" +
+                    "Body : " + response.body;
+                LoadContentTypeByIdentifierLoader.style.display = 'none';
+            }
+        );
+    } else {
+        clientOutput.innerHTML = 'Id is missing!';
+    }
+};
+
+// Copy content type example
+var CopyContentTypeAnchor = document.getElementById('copy-content-type');
+
+console.log(CopyContentTypeAnchor);
+
+var CopyContentTypeLoader = document.getElementById('copy-content-type-loader');
+CopyContentTypeAnchor.onclick = function(e){
+
+    CopyContentTypeLoader.style.display = 'block';
+    e.preventDefault();
+
+    var CopyContentTypeInput = document.getElementById('copy-content-type-input');
+    if (CopyContentTypeInput.value.length){
+        contentTypeService.copyContentType(
+            CopyContentTypeInput.value,
+            function(error, response){
+                clientOutput.innerHTML =    "Errors : " + JSON.stringify(error) + "</br>" +
+                    "Status : " + response.status + "</br>" +
+                    "Body : " + response.body;
+                CopyContentTypeLoader.style.display = 'none';
+            }
+        );
+    } else {
+        clientOutput.innerHTML = 'Id is missing!';
+    }
+};
+
+// Create content type draft example
+var CreateContentTypeDraftAnchor = document.getElementById('create-content-type-draft');
+var CreateContentTypeDraftLoader = document.getElementById('create-content-type-draft-loader');
+CreateContentTypeDraftAnchor.onclick = function(e){
+
+    CreateContentTypeDraftLoader.style.display = 'block';
+    e.preventDefault();
+
+    var contentTypeUpdateStruct = contentTypeService.newContentTypeUpdateStruct();
+
+    contentTypeUpdateStruct.names = {};
+    contentTypeUpdateStruct.names.value = [
+        {
+            "_languageCode":"eng-US",
+            "#text":"Some new FD Name " + Math.random(10000)
+        }
+    ];
+
+
+    var CreateContentTypeDraftInput = document.getElementById('create-content-type-draft-input');
+    if (CreateContentTypeDraftInput.value.length){
+        contentTypeService.createContentTypeDraft(
+            CreateContentTypeDraftInput.value,
+            contentTypeUpdateStruct,
+            function(error, response){
+                clientOutput.innerHTML =    "Errors : " + JSON.stringify(error) + "</br>" +
+                    "Status : " + response.status + "</br>" +
+                    "Body : " + response.body;
+                CreateContentTypeDraftLoader.style.display = 'none';
+            }
+        );
+    } else {
+        clientOutput.innerHTML = 'Id is missing!';
+    }
+};

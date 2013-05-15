@@ -23,10 +23,50 @@ var ContentTypeService = (function() {
      *
      * @method newContentTypeGroupInputStruct
      * @param identifier {string}
+     * @param languageCode {string}
      */
     ContentTypeService.prototype.newContentTypeGroupInputStruct = function(identifier, languageCode) {
 
         return new ContentTypeGroupInputStruct(identifier, languageCode);
+
+    };
+
+    /**
+     * @method newContentTypeCreateStruct
+     * @param identifier {string}
+     * @param languageCode {string}
+     * @param names {Array}
+     * @param user {string}
+     * @return {ContentTypeCreateStruct}
+     */
+    ContentTypeService.prototype.newContentTypeCreateStruct = function(identifier, languageCode, names, user) {
+
+        return new ContentTypeCreateStruct(identifier, languageCode, names, user);
+
+    };
+
+    /**
+     * @method newContentTypeUpdateStruct
+     * @return {ContentTypeCreateStruct}
+     */
+    ContentTypeService.prototype.newContentTypeUpdateStruct = function() {
+
+        return new ContentTypeUpdateStruct();
+
+    };
+
+
+    /**
+     * @method newFieldDefinitionCreateStruct
+     * @param identifier
+     * @param fieldType
+     * @param fieldGroup
+     * @param names
+     * @return {FieldDefinitionCreateStruct}
+     */
+    ContentTypeService.prototype.newFieldDefinitionCreateStruct = function(identifier, fieldType, fieldGroup, names) {
+
+        return new FieldDefinitionCreateStruct(identifier, fieldType, fieldGroup, names);
 
     };
 
@@ -153,6 +193,137 @@ var ContentTypeService = (function() {
         );
     };
 
+    /**
+     * Create a content type
+     *
+     * @method createContentType
+     * @param contentTypeGroupId {href}
+     * @param contentTypeCreateStruct {Object}
+     * @param publish {boolean}
+     * @param callback {function} function, which will be executed on request success
+     */
+    ContentTypeService.prototype.createContentType = function(contentTypeGroupId, contentTypeCreateStruct, publish, callback) {
+
+        var that = this;
+
+        this.loadContentTypeGroup(
+            contentTypeGroupId,
+            function(error, contentTypeGroupResponse){
+
+                var contentTypeGroup = JSON.parse(contentTypeGroupResponse.body).ContentTypeGroup;
+                var parameters = (publish === true) ? "?publish=true" : "";
+
+                that.connectionManager_.request(
+                    "POST",
+                    contentTypeGroup.ContentTypes["_href"] + parameters,
+                    JSON.stringify(contentTypeCreateStruct.body),
+                    contentTypeCreateStruct.headers,
+                    callback
+                );
+
+            }
+        );
+    };
+
+    /**
+     * Copy content type
+     *
+     * @method copyContentType
+     * @param contentTypeId {href}
+     * @param callback {function} function, which will be executed on request success
+     */
+    ContentTypeService.prototype.copyContentType = function(contentTypeId, callback) {
+        this.connectionManager_.request(
+            "COPY",
+            contentTypeId,
+            "",
+            {},
+            callback
+        );
+    };
+
+    /**
+     * Load content type
+     *
+     * @method loadContentType
+     * @param contentTypeId {href}
+     * @param callback {function} function, which will be executed on request success
+     */
+    ContentTypeService.prototype.loadContentType = function(contentTypeId, callback) {
+        this.connectionManager_.request(
+            "GET",
+            contentTypeId,
+            "",
+            { "Accept" : "application/vnd.ez.api.ContentType+json" },
+            callback
+        );
+    };
+
+    /**
+     * @method loadContentTypeByIdentifier
+     * @param identifier {string}
+     * @param callback {Function}
+     */
+    ContentTypeService.prototype.loadContentTypeByIdentifier = function(identifier, callback) {
+
+        var that = this;
+
+        this.discoveryService_.getInfoObject(
+            "contentTypes",
+            function(error, contentTypes) {
+                if (!error) {
+
+                    that.connectionManager_.request(
+                        "GET",
+                        contentTypes["_href"] + "?identifier=" + identifier,
+                        {},
+                        { "Accept" : contentTypes["_media-type"] },
+                        callback
+                    );
+
+                } else {
+                    callback(error, false)
+                }
+            }
+        );
+    };
+
+    /**
+     * Create content type draft
+     *
+     * @method createContentTypeDraft
+     * @param contentTypeId {href}
+     * @param contentTypeUpdateStruct {Object}
+     * @param callback {function} function, which will be executed on request success
+     */
+    ContentTypeService.prototype.createContentTypeDraft = function(contentTypeId, contentTypeUpdateStruct, callback) {
+        this.connectionManager_.request(
+            "POST",
+            contentTypeId,
+            JSON.stringify(contentTypeUpdateStruct.body),
+            contentTypeUpdateStruct.headers,
+            callback
+        );
+    };
+
+
+    /**
+     * Update content type draft metadata. This method does not handle field definitions
+     *
+     * @method updateContentTypeDraft
+     * @param contentTypeId {href}
+     * @param contentTypeUpdateStruct {Object}
+     * @param callback {function} function, which will be executed on request success
+     */
+    ContentTypeService.prototype.updateContentTypeDraftMetadata = function(contentTypeId, contentTypeUpdateStruct, callback) {
+        this.connectionManager_.request(
+            "PATCH",
+            contentTypeId,
+            "",
+            { "Accept" : "application/vnd.ez.api.ContentType+json" },
+            callback
+        );
+    };
 
     return ContentTypeService;
 
