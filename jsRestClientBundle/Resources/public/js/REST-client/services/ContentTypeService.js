@@ -310,17 +310,17 @@ var ContentTypeService = (function() {
     /**
      * Update content type draft metadata. This method does not handle field definitions
      *
-     * @method updateContentTypeDraft
-     * @param contentTypeId {href}
+     * @method updateContentTypeDraftMetadata
+     * @param contentTypeDraftId {href}
      * @param contentTypeUpdateStruct {Object}
      * @param callback {function} function, which will be executed on request success
      */
-    ContentTypeService.prototype.updateContentTypeDraftMetadata = function(contentTypeId, contentTypeUpdateStruct, callback) {
+    ContentTypeService.prototype.updateContentTypeDraftMetadata = function(contentTypeDraftId, contentTypeUpdateStruct, callback) {
         this.connectionManager_.request(
             "PATCH",
-            contentTypeId,
-            "",
-            { "Accept" : "application/vnd.ez.api.ContentType+json" },
+            contentTypeDraftId,
+            JSON.stringify(contentTypeUpdateStruct.body),
+            contentTypeUpdateStruct.headers,
             callback
         );
     };
