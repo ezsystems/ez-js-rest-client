@@ -306,6 +306,30 @@ CreateContentTypeDraftAnchor.onclick = function(e){
     }
 };
 
+// Load content type draft example
+var LoadContentTypeDraftAnchor = document.getElementById('load-content-type-draft');
+var LoadContentTypeDraftLoader = document.getElementById('load-content-type-draft-loader');
+LoadContentTypeDraftAnchor.onclick = function(e){
+
+    LoadContentTypeDraftLoader.style.display = 'block';
+    e.preventDefault();
+
+    var LoadContentTypeDraftInput = document.getElementById('load-content-type-draft-input');
+    if (LoadContentTypeDraftInput.value.length){
+        contentTypeService.loadContentTypeDraft(
+            LoadContentTypeDraftInput.value,
+            function(error, response){
+                clientOutput.innerHTML =    "Errors : " + JSON.stringify(error) + "</br>" +
+                    "Status : " + response.status + "</br>" +
+                    "Body : " + response.body;
+                LoadContentTypeDraftLoader.style.display = 'none';
+            }
+        );
+    } else {
+        clientOutput.innerHTML = 'Id is missing!';
+    }
+};
+
 // Update content type draft example
 var UpdateContentTypeDraftAnchor = document.getElementById('update-content-type-draft');
 var UpdateContentTypeDraftLoader = document.getElementById('update-content-type-draft-loader');

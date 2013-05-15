@@ -11,6 +11,7 @@ var ContentTypeService = (function() {
     var ContentTypeService = function(connectionManager, discoveryService) {
 
         this.connectionManager_ = connectionManager;
+        this.discoveryService_ = discoveryService;
 
     };
 
@@ -306,6 +307,22 @@ var ContentTypeService = (function() {
         );
     };
 
+    /**
+     * Load content type draft
+     *
+     * @method loadContentTypeDraft
+     * @param contentTypeId {href}
+     * @param callback {function} function, which will be executed on request success
+     */
+    ContentTypeService.prototype.loadContentTypeDraft = function(contentTypeId, callback) {
+        this.connectionManager_.request(
+            "GET",
+            contentTypeId + "/draft",
+            "",
+            { "Accept" : "application/vnd.ez.api.ContentType+json" },
+            callback
+        );
+    };
 
     /**
      * Update content type draft metadata. This method does not handle field definitions
@@ -323,6 +340,31 @@ var ContentTypeService = (function() {
             contentTypeUpdateStruct.headers,
             callback
         );
+    };
+
+    /**
+     * Add field definition to exisiting Content Type draft
+     *
+     * @method addFieldDefinition
+     * @param contentTypeDraftId {href}
+     * @param fieldDefinitionCreateStruct {Object}
+     * @param callback {function} function, which will be executed on request success
+     */
+    ContentTypeService.prototype.addFieldDefinition = function(contentTypeId, fieldDefinitionCreateStruct, callback) {
+
+        var that = this;
+
+        //TODO: loadContentTypeDraft(contentTypeId) here and use FieldDefinitions href and media-type
+
+        this.connectionManager_.request(
+            "POST",
+            contentTypeDraftFieldDefinitions["_href"],
+            JSON.stringify(fieldDefinitionCreateStruct.body),
+            fieldDefinitionCreateStruct.headers,
+            callback
+        );
+
+
     };
 
     return ContentTypeService;
