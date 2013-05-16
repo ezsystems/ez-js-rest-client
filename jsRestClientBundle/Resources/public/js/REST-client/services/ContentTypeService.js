@@ -71,6 +71,20 @@ var ContentTypeService = (function() {
 
     };
 
+    /**
+     * @method newFieldDefinitionUpdateStruct
+     * @param identifier
+     * @param fieldType
+     * @param fieldGroup
+     * @param names
+     * @return {FieldDefinitionCreateStruct}
+     */
+    ContentTypeService.prototype.newFieldDefinitionUpdateStruct = function(identifier, fieldType, fieldGroup, names) {
+
+        return new FieldDefinitionUpdateStruct(identifier, fieldType, fieldGroup, names);
+
+    };
+
 
 // ******************************
 // Content Types Groups management
@@ -193,6 +207,11 @@ var ContentTypeService = (function() {
             }
         );
     };
+
+// ******************************
+// Content Types management
+// ******************************
+
 
     /**
      * Create a content type
@@ -343,10 +362,31 @@ var ContentTypeService = (function() {
     };
 
     /**
+     * Publish content type draft
+     *
+     * @method publishContentTypeDraft
+     * @param contentTypeDraftId {href}
+     * @param callback {function} function, which will be executed on request success
+     */
+    ContentTypeService.prototype.publishContentTypeDraft = function(contentTypeDraftId, callback) {
+        this.connectionManager_.request(
+            "PUBLISH",
+            contentTypeDraftId,
+            "",
+            {},
+            callback
+        );
+    };
+
+// ******************************
+// Field Definitions management
+// ******************************
+
+    /**
      * Add field definition to exisiting Content Type draft
      *
      * @method addFieldDefinition
-     * @param contentTypeDraftId {href}
+     * @param contentTypeId {href}
      * @param fieldDefinitionCreateStruct {Object}
      * @param callback {function} function, which will be executed on request success
      */
@@ -354,17 +394,57 @@ var ContentTypeService = (function() {
 
         var that = this;
 
-        //TODO: loadContentTypeDraft(contentTypeId) here and use FieldDefinitions href and media-type
+        this.loadContentTypeDraft(
+            contentTypeId,
+            function(error, contentTypeDraftResponse){
 
+                var contentTypeDraftFieldDefinitions = JSON.parse(contentTypeDraftResponse.body).ContentType.FieldDefinitions;
+
+                that.connectionManager_.request(
+                    "POST",
+                    contentTypeDraftFieldDefinitions["_href"],
+                    JSON.stringify(fieldDefinitionCreateStruct.body),
+                    fieldDefinitionCreateStruct.headers,
+                    callback
+                );
+
+            }
+        );
+    };
+
+    /**
+     * Update existing field definition
+     *
+     * @method updateFieldDefinition
+     * @param fieldDefinitionId {href}
+     * @param fieldDefinitionUpdateStruct {Object}
+     * @param callback {function} function, which will be executed on request success
+     */
+    ContentTypeService.prototype.updateFieldDefinition = function(fieldDefinitionId, fieldDefinitionUpdateStruct, callback) {
         this.connectionManager_.request(
-            "POST",
-            contentTypeDraftFieldDefinitions["_href"],
-            JSON.stringify(fieldDefinitionCreateStruct.body),
-            fieldDefinitionCreateStruct.headers,
+            "PATCH",
+            fieldDefinitionId,
+            JSON.stringify(fieldDefinitionUpdateStruct.body),
+            fieldDefinitionUpdateStruct.headers,
             callback
         );
+    };
 
-
+    /**
+     * Delete existing field definition
+     *
+     * @method deleteFieldDefinition
+     * @param fieldDefinitionId {href}
+     * @param callback {function} function, which will be executed on request success
+     */
+    ContentTypeService.prototype.deleteFieldDefinition = function(fieldDefinitionId, callback) {
+        this.connectionManager_.request(
+            "DELETE",
+            fieldDefinitionId,
+            "",
+            {},
+            callback
+        );
     };
 
     return ContentTypeService;

@@ -1076,10 +1076,6 @@ UpdateObjectStateGroupAnchor.onclick = function(e){
             {
                 "_languageCode":"eng-US",
                 "#text":"Some Name " + Math.random(10000)
-            },
-            {
-                "_languageCode":"fin-FI",
-                "#text":"Nimi " + Math.random(10000)
             }
         ],
         []
@@ -1227,6 +1223,63 @@ DeleteObjectStateAnchor.onclick = function(e){
             DeleteObjectStateLoader.style.display = 'none';
         });
 };
+
+// Get Object State of a content example
+var GetContentStateAnchor = document.getElementById('get-content-state');
+var GetContentStateLoader = document.getElementById('get-content-state-loader');
+GetContentStateAnchor.onclick = function(e){
+
+    GetContentStateLoader.style.display = 'block';
+    e.preventDefault();
+
+    var GetContentStateInput = document.getElementById('get-content-state-input');
+    contentService.getContentState(
+        GetContentStateInput.value,
+        function(error, response){
+            clientOutput.innerHTML =    "Errors : " + JSON.stringify(error) + "</br>" +
+                "Status : " + response.status + "</br>" +
+                "Body : " + response.body;
+            GetContentStateLoader.style.display = 'none';
+        });
+};
+
+// Set Object State of a content example
+var SetContentStateAnchor = document.getElementById('set-content-state');
+var SetContentStateLoader = document.getElementById('set-content-state-loader');
+SetContentStateAnchor.onclick = function(e){
+
+    SetContentStateLoader.style.display = 'block';
+    e.preventDefault();
+
+    var objectStates = [];
+    var objectState = {};
+    objectState.ObjectState = contentService.newObjectStateCreateStruct(
+        "some-id" + Math.random(10000),
+        "eng-US",
+        0,
+        [
+            {
+                "_languageCode":"eng-US",
+                "#text":"Some Name " + Math.random(10000)
+            }
+        ],
+        []
+    ).body.ObjectStateCreate;
+
+    objectStates.push(objectState);
+
+    var SetContentStateInput = document.getElementById('set-content-state-input');
+    contentService.setContentState(
+        SetContentStateInput.value,
+        objectStates,
+        function(error, response){
+            clientOutput.innerHTML =    "Errors : " + JSON.stringify(error) + "</br>" +
+                "Status : " + response.status + "</br>" +
+                "Body : " + response.body;
+            SetContentStateLoader.style.display = 'none';
+        });
+};
+
 
 
 // Create an alias example

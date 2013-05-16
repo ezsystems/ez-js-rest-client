@@ -174,6 +174,23 @@ var ContentService = (function() {
     };
 
     /**
+     * Returns create structure for ObjectState
+     *
+     * @method newObjectStateCreateStruct
+     * @param identifier {string}
+     * @param languageCode {string}
+     * @param priority {int}
+     * @param names {Array} multiLanguageValuesType in JSON format
+     * @param descriptions {Array} multiLanguageValuesType in JSON format
+     */
+    ContentService.prototype.newObjectStateCreateStruct = function(identifier, languageCode, priority, names, descriptions) {
+
+        return new ObjectStateCreateStruct(identifier, languageCode, priority, names, descriptions);
+
+    };
+
+
+    /**
      * Returns create structure for UrlAlias
      *
      * @method newUrlAliasCreateStruct
@@ -1248,13 +1265,13 @@ var ContentService = (function() {
      *  Get ObjectStates of a content
      *
      * @method getContentState
-     * @param contentId {href}
+     * @param contentStatesId {href}
      * @param callback {function} function, which will be executed on request success
      */
-    ContentService.prototype.getContentState = function(contentId, callback) {
+    ContentService.prototype.getContentState = function(contentStatesId, callback) {
         this.connectionManager_.request(
             "GET",
-            contentId + "/objectstates",
+            contentStatesId,
             {},
             { "Accept" : "application/vnd.ez.api.ContentObjectStates+json" },
             callback
@@ -1265,14 +1282,14 @@ var ContentService = (function() {
      *  Set ObjectStates of a content
      *
      * @method setContentState
-     * @param contentId {href}
+     * @param contentStatesId {href}
      * @param objectStates {Array}
      * @param callback {function} function, which will be executed on request success
      */
-    ContentService.prototype.setContentState = function(contentId, objectStates, callback) {
+    ContentService.prototype.setContentState = function(contentStatesId, objectStates, callback) {
         this.connectionManager_.request(
             "PATCH",
-            contentId + "/objectstates",
+            contentStatesId,
             JSON.stringify(objectStates),
             {
                 "Accept" : "application/vnd.ez.api.ContentObjectStates+json",

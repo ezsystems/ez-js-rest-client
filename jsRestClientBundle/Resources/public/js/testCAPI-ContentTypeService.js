@@ -365,3 +365,85 @@ UpdateContentTypeDraftAnchor.onclick = function(e){
         clientOutput.innerHTML = 'Id is missing!';
     }
 };
+
+// Add field definition to draft example
+var AddFieldDefinitionAnchor = document.getElementById('add-field-definition');
+var AddFieldDefinitionLoader = document.getElementById('add-field-definition-loader');
+AddFieldDefinitionAnchor.onclick = function(e){
+
+    AddFieldDefinitionLoader.style.display = 'block';
+    e.preventDefault();
+
+
+    var fieldDefinitionCreateStruct = contentTypeService.newFieldDefinitionCreateStruct(
+        "fd-id-" + Math.random(100),
+        "ezstring",
+        "content",
+        [
+            {
+                "_languageCode":"eng-US",
+                "#text":"Some FD Name " + Math.random(10000)
+            }
+        ]
+    );
+
+    var AddFieldDefinitionInput = document.getElementById('add-field-definition-input');
+    contentTypeService.addFieldDefinition(
+        AddFieldDefinitionInput.value,
+        fieldDefinitionCreateStruct,
+        function(error, response){
+            clientOutput.innerHTML =    "Errors : " + JSON.stringify(error) + "</br>" +
+                "Status : " + response.status + "</br>" +
+                "Body : " + response.body;
+            AddFieldDefinitionLoader.style.display = 'none';
+        }
+    );
+};
+
+// Update field definition example
+var UpdateFieldDefinitionAnchor = document.getElementById('update-field-definition');
+var UpdateFieldDefinitionLoader = document.getElementById('update-field-definition-loader');
+UpdateFieldDefinitionAnchor.onclick = function(e){
+
+    UpdateFieldDefinitionLoader.style.display = 'block';
+    e.preventDefault();
+
+    var fieldDefinitionUpdateStruct = contentTypeService.newFieldDefinitionUpdateStruct(
+        "dummy",
+        "dummy",
+        "dummy",
+        "dummy"
+    );
+
+    var UpdateFieldDefinitionInput = document.getElementById('update-field-definition-input');
+    contentTypeService.updateFieldDefinition(
+        UpdateFieldDefinitionInput.value,
+        fieldDefinitionUpdateStruct,
+        function(error, response){
+            clientOutput.innerHTML =    "Errors : " + JSON.stringify(error) + "</br>" +
+                "Status : " + response.status + "</br>" +
+                "Body : " + response.body;
+            UpdateFieldDefinitionLoader.style.display = 'none';
+        }
+    );
+};
+
+// Delete field definition example
+var DeleteFieldDefinitionAnchor = document.getElementById('delete-field-definition');
+var DeleteFieldDefinitionLoader = document.getElementById('delete-field-definition-loader');
+DeleteFieldDefinitionAnchor.onclick = function(e){
+
+    DeleteFieldDefinitionLoader.style.display = 'block';
+    e.preventDefault();
+
+    var DeleteFieldDefinitionInput = document.getElementById('delete-field-definition-input');
+    contentTypeService.deleteFieldDefinition(
+        DeleteFieldDefinitionInput.value,
+        function(error, response){
+            clientOutput.innerHTML =    "Errors : " + JSON.stringify(error) + "</br>" +
+                "Status : " + response.status + "</br>" +
+                "Body : " + response.body;
+            DeleteFieldDefinitionLoader.style.display = 'none';
+        }
+    );
+};
