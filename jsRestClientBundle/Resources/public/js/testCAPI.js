@@ -228,12 +228,12 @@ updateContentMetaAnchor.onclick = function(e){
             "DummyUser"
         );
 
-        updateStruct.ContentUpdate.Section = "/api/ezp/v2/content/sections/2";
-        updateStruct.ContentUpdate.remoteId = "random-id-" + Math.random()*1000000;
+        updateStruct.body.ContentUpdate.Section = "/api/ezp/v2/content/sections/2";
+        updateStruct.body.ContentUpdate.remoteId = "random-id-" + Math.random()*1000000;
 
         contentService.updateContentMetadata(
             updateContentMetaInput.value,
-            JSON.stringify(updateStruct),
+            updateStruct,
             function(error, response){
                 clientOutput.innerHTML =    "Errors : " + JSON.stringify(error) + "</br>" +
                     "Status : " + response.status + "</br>" +

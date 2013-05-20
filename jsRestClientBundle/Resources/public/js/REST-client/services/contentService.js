@@ -346,15 +346,12 @@ var ContentService = (function() {
      * @param contentCreate {JSON} json string describing content to be created
      * @param callback {function} function, which will be executed on request success
      */
-    ContentService.prototype.createContent = function(contentObjects, contentCreate, callback) {
+    ContentService.prototype.createContent = function(contentObjects, contentCreateStruct, callback) {
         this.connectionManager_.request(
             "POST",
             contentObjects,
-            contentCreate,
-            {
-                "Accept" : "application/vnd.ez.api.Content+json",
-                "Content-Type" : "application/vnd.ez.api.ContentCreate+json"
-            },
+            JSON.stringify(contentCreateStruct.body),
+            contentCreateStruct.headers,
             callback
         );
     };
@@ -371,11 +368,8 @@ var ContentService = (function() {
         this.connectionManager_.request(
             "PATCH",
             content,
-            contentMetadataUpdate,
-            {
-                "Accept" : "application/vnd.ez.api.ContentInfo+json",
-                "Content-Type" : "application/vnd.ez.api.ContentUpdate+json"
-            },
+            JSON.stringify(contentMetadataUpdate.body),
+            contentMetadataUpdate.headers,
             callback
         );
     };

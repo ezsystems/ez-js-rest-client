@@ -5,22 +5,28 @@ var ContentCreateStruct = (function() {
 
         var now = JSON.parse(JSON.stringify(new Date()));
 
-        this.ContentCreate = {};
+        this.body = {};
+        this.body.ContentCreate = {};
 
-        this.ContentCreate.ContentType = {
+        this.body.ContentCreate.ContentType = {
                 "_href" : contentTypeId
             };
 
-        this.ContentCreate.mainLanguageCode = languageCode;
-        this.ContentCreate.LocationCreate = locationCreateStruct.LocationCreate;
+        this.body.ContentCreate.mainLanguageCode = languageCode;
+        this.body.ContentCreate.LocationCreate = locationCreateStruct.LocationCreate;
 
-        this.ContentCreate.Section = null;
-        this.ContentCreate.User = user;
-        this.ContentCreate.alwaysAvailable = "true";
-        this.ContentCreate.remoteId = null;
-        this.ContentCreate.modificationDate = now;
-        this.ContentCreate.fields = {};
-        this.ContentCreate.fields.field = [];
+        this.body.ContentCreate.Section = null;
+        this.body.ContentCreate.User = user;
+        this.body.ContentCreate.alwaysAvailable = "true";
+        this.body.ContentCreate.remoteId = null;
+        this.body.ContentCreate.modificationDate = now;
+        this.body.ContentCreate.fields = {};
+        this.body.ContentCreate.fields.field = [];
+
+        this.headers = {
+            "Accept" : "application/vnd.ez.api.Content+json",
+            "Content-Type" : "application/vnd.ez.api.ContentCreate+json"
+        }
 
         return this;
     }
