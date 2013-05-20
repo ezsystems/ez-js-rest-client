@@ -309,6 +309,62 @@ var ContentTypeService = (function() {
     };
 
     /**
+     * Delete content type
+     *
+     * @method deleteContentType
+     * @param contentTypeId {href}
+     * @param callback {function} function, which will be executed on request success
+     */
+    ContentTypeService.prototype.deleteContentType = function(contentTypeId, callback) {
+        this.connectionManager_.request(
+            "DELETE",
+            contentTypeId,
+            "",
+            {},
+            callback
+        );
+    };
+
+    /**
+     * Assign a content type to a group
+     *
+     * @method assignContentTypeGroup
+     * @param contentTypeId {href}
+     * @param groupId{href}
+     * @param callback {function} function, which will be executed on request success
+     */
+    ContentTypeService.prototype.assignContentTypeGroup = function(contentTypeId, groupId, callback) {
+        this.connectionManager_.request(
+            "POST",
+            contentTypeId + "/groups" + "?group=" + groupId,
+            "",
+            {},
+            callback
+        );
+    };
+
+    /**
+     * Unassign a content type from group
+     *
+     * @method unassignContentTypeGroup
+     * @param contentTypeAssignedGroupId {href} (/content/type/<ID>/groups/<ID>)
+     * @param callback {function} function, which will be executed on request success
+     */
+    ContentTypeService.prototype.unassignContentTypeGroup = function(contentTypeAssignedGroupId, callback) {
+        this.connectionManager_.request(
+            "DELETE",
+            contentTypeAssignedGroupId,
+            "",
+            {},
+            callback
+        );
+    };
+
+// ******************************
+// Drafts management
+// ******************************
+
+    /**
      * Create content type draft
      *
      * @method createContentTypeDraft
@@ -371,6 +427,23 @@ var ContentTypeService = (function() {
     ContentTypeService.prototype.publishContentTypeDraft = function(contentTypeDraftId, callback) {
         this.connectionManager_.request(
             "PUBLISH",
+            contentTypeDraftId,
+            "",
+            {},
+            callback
+        );
+    };
+
+    /**
+     * Delete content type draft
+     *
+     * @method deleteContentTypeDraft
+     * @param contentTypeDraftId {href}
+     * @param callback {function} function, which will be executed on request success
+     */
+    ContentTypeService.prototype.deleteContentTypeDraft = function(contentTypeDraftId, callback) {
+        this.connectionManager_.request(
+            "DELETE",
             contentTypeDraftId,
             "",
             {},

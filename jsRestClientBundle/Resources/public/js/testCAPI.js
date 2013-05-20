@@ -180,7 +180,7 @@ createContentAnchor.onclick = function(e){
     createContentLoader.style.display = 'block';
     e.preventDefault();
 
-    var locationCreateStruct = contentService.newLocationCreateStruct("/api/ezp/v2/content/locations/1/2/102");
+    var locationCreateStruct = contentService.newLocationCreateStruct("/api/ezp/v2/content/locations/1/2/113");
 
     var contentCreateStruct = contentService.newContentCreateStruct(
         "/api/ezp/v2/content/types/18",
@@ -196,11 +196,11 @@ createContentAnchor.onclick = function(e){
         "fieldValue": "This is a title"
     };
 
-    contentCreateStruct.ContentCreate.fields.field.push(fieldInfo);
+    contentCreateStruct.body.ContentCreate.fields.field.push(fieldInfo);
 
     contentService.createContent(
         '/api/ezp/v2/content/objects',
-        JSON.stringify(contentCreateStruct),
+        contentCreateStruct,
         function(error, response){
             clientOutput.innerHTML =    "Errors : " + JSON.stringify(error) + "</br>" +
                 "Status : " + response.status + "</br>" +

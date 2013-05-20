@@ -447,3 +447,107 @@ DeleteFieldDefinitionAnchor.onclick = function(e){
         }
     );
 };
+
+// Delete content type example
+var DeleteContentTypeAnchor = document.getElementById('delete-content-type');
+var DeleteContentTypeLoader = document.getElementById('delete-content-type-loader');
+DeleteContentTypeAnchor.onclick = function(e){
+
+    DeleteContentTypeLoader.style.display = 'block';
+    e.preventDefault();
+
+    var DeleteContentTypeInput = document.getElementById('delete-content-type-input');
+    contentTypeService.deleteContentType(
+        DeleteContentTypeInput.value,
+        function(error, response){
+            clientOutput.innerHTML =    "Errors : " + JSON.stringify(error) + "</br>" +
+                "Status : " + response.status + "</br>" +
+                "Body : " + response.body;
+            DeleteContentTypeLoader.style.display = 'none';
+        }
+    );
+};
+
+// Assign content type to some group example
+var AssignContentTypeAnchor = document.getElementById('assign-content-type-group');
+var AssignContentTypeLoader = document.getElementById('assign-content-type-group-loader');
+AssignContentTypeAnchor.onclick = function(e){
+
+    AssignContentTypeLoader.style.display = 'block';
+    e.preventDefault();
+
+    var AssignContentTypeInput = document.getElementById('assign-content-type-group-input');
+    contentTypeService.assignContentTypeGroup(
+        AssignContentTypeInput.value,
+        "/api/ezp/v2/content/typegroups/2",
+        function(error, response){
+            clientOutput.innerHTML =    "Errors : " + JSON.stringify(error) + "</br>" +
+                "Status : " + response.status + "</br>" +
+                "Body : " + response.body;
+            AssignContentTypeLoader.style.display = 'none';
+        }
+    );
+};
+
+// Unassign content type from some group example
+var UnassignContentTypeAnchor = document.getElementById('unassign-content-type-group');
+var UnassignContentTypeLoader = document.getElementById('unassign-content-type-group-loader');
+UnassignContentTypeAnchor.onclick = function(e){
+
+    UnassignContentTypeLoader.style.display = 'block';
+    e.preventDefault();
+
+    var UnassignContentTypeInput = document.getElementById('unassign-content-type-group-input');
+    contentTypeService.unassignContentTypeGroup(
+        UnassignContentTypeInput.value,
+        function(error, response){
+            clientOutput.innerHTML =    "Errors : " + JSON.stringify(error) + "</br>" +
+                "Status : " + response.status + "</br>" +
+                "Body : " + response.body;
+            UnassignContentTypeLoader.style.display = 'none';
+        }
+    );
+};
+
+
+// Publish content type draft example
+var PublishContentTypeDraftAnchor = document.getElementById('publish-content-type-draft');
+var PublishContentTypeDraftLoader = document.getElementById('publish-content-type-draft-loader');
+PublishContentTypeDraftAnchor.onclick = function(e){
+
+    PublishContentTypeDraftLoader.style.display = 'block';
+    e.preventDefault();
+
+    var PublishContentTypeDraftInput = document.getElementById('publish-content-type-draft-input');
+    contentTypeService.publishContentTypeDraft(
+        PublishContentTypeDraftInput.value,
+        function(error, response){
+            clientOutput.innerHTML =    "Errors : " + JSON.stringify(error) + "</br>" +
+                "Status : " + response.status + "</br>" +
+                "Body : " + response.body;
+            PublishContentTypeDraftLoader.style.display = 'none';
+        }
+    );
+};
+
+
+// Delete content type draft example
+var DeleteContentTypeDraftAnchor = document.getElementById('delete-content-type-draft');
+var DeleteContentTypeDraftLoader = document.getElementById('delete-content-type-draft-loader');
+DeleteContentTypeDraftAnchor.onclick = function(e){
+
+    DeleteContentTypeDraftLoader.style.display = 'block';
+    e.preventDefault();
+
+    var DeleteContentTypeDraftInput = document.getElementById('delete-content-type-draft-input');
+    contentTypeService.deleteContentTypeDraft(
+        DeleteContentTypeDraftInput.value,
+        function(error, response){
+            clientOutput.innerHTML =    "Errors : " + JSON.stringify(error) + "</br>" +
+                "Status : " + response.status + "</br>" +
+                "Body : " + response.body;
+            DeleteContentTypeDraftLoader.style.display = 'none';
+        }
+    );
+};
+

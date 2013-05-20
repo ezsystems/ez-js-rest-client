@@ -465,6 +465,27 @@
                 </div>
 
                 <div class="rest-test">
+                    <a href="#delete-content-type" id="delete-content-type">Delete the Content Type:</a>
+                    <input type="text" id="delete-content-type-input" value="/api/ezp/v2/content/types/18" />
+                    <div id="delete-content-type-loader" class="ajax-loader"></div>
+                </div>
+
+                <div class="rest-test">
+                    <a href="#assign-content-type-group" id="assign-content-type-group">Assing Content Type to some group</a>
+                    <input type="text" id="assign-content-type-group-input" value="/api/ezp/v2/content/types/100" />
+                    <div id="assign-content-type-group-loader" class="ajax-loader"></div>
+                </div>
+
+                <div class="rest-test">
+                    <a href="#unassign-content-type-group" id="unassign-content-type-group">Unassign Content Type frome some group</a>
+                    <input type="text" id="unassign-content-type-group-input" value="/api/ezp/v2/content/types/101/groups/1" />
+                    <div id="unassign-content-type-group-loader" class="ajax-loader"></div>
+                </div>
+
+
+                <hr/>
+
+                <div class="rest-test">
                     <a href="#create-content-type-draft" id="create-content-type-draft">Create draft for the Content Type:</a>
                     <input type="text" id="create-content-type-draft-input" value="/api/ezp/v2/content/types/18" />
                     <div id="create-content-type-draft-loader" class="ajax-loader"></div>
@@ -481,6 +502,19 @@
                     <input type="text" id="update-content-type-draft-input" value="/api/ezp/v2/content/types/18/draft" />
                     <div id="update-content-type-draft-loader" class="ajax-loader"></div>
                 </div>
+
+                <div class="rest-test">
+                    <a href="#publish-content-type-draft" id="publish-content-type-draft">Publish draft for the Content Type:</a>
+                    <input type="text" id="publish-content-type-draft-input" value="/api/ezp/v2/content/types/18/draft" />
+                    <div id="publish-content-type-draft-loader" class="ajax-loader"></div>
+                </div>
+
+                <div class="rest-test">
+                    <a href="#delete-content-type-draft" id="delete-content-type-draft">Delete draft for the Content Type:</a>
+                    <input type="text" id="delete-content-type-draft-input" value="/api/ezp/v2/content/types/18/draft" />
+                    <div id="delete-content-type-draft-loader" class="ajax-loader"></div>
+                </div>
+
 
                 <hr/>
 
