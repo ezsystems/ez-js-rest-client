@@ -3,13 +3,19 @@ var LocationUpdateStruct = (function() {
 
     var LocationUpdateStruct = function(){
 
-        this.LocationUpdate = {};
+        this.body = {};
+        this.body.LocationUpdate = {};
 
-        this.LocationUpdate.priority = "0";
-        this.LocationUpdate.hidden = "false";
-        this.LocationUpdate.remoteId = null;
-        this.LocationUpdate.sortField = "PATH";
-        this.LocationUpdate.sortOrder = "ASC";
+        this.body.LocationUpdate.priority = "0";
+        this.body.LocationUpdate.hidden = "false";
+        this.body.LocationUpdate.remoteId = null;
+        this.body.LocationUpdate.sortField = "PATH";
+        this.body.LocationUpdate.sortOrder = "ASC";
+
+        this.headers = {
+            "Accept" : "application/vnd.ez.api.Location+json",
+            "Content-Type" : "application/vnd.ez.api.LocationUpdate+json"
+        };
 
         return this;
 

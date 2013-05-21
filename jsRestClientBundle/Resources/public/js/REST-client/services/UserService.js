@@ -47,8 +47,8 @@ var UserService = (function() {
         this.connectionManager_.request(
             "POST",
             sessions,
-            JSON.stringify(sessionCreateStruct),
-            { "Accept" : "application/vnd.ez.api.Root+json" },
+            JSON.stringify(sessionCreateStruct.body),
+            sessionCreateStruct.headers,
             callback
         );
     };

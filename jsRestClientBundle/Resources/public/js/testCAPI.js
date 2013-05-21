@@ -426,11 +426,11 @@ updateContentAnchor.onclick = function(e){
             "fieldValue": "This is a new title" + Math.random()*1000000
         };
 
-        contentUpdateStruct.VersionUpdate.fields.field.push(fieldInfo);
+        contentUpdateStruct.body.VersionUpdate.fields.field.push(fieldInfo);
 
         contentService.updateContent(
             updateContentInput.value,
-            JSON.stringify(contentUpdateStruct),
+            contentUpdateStruct,
             function(error, response){
                 clientOutput.innerHTML =    "Errors : " + JSON.stringify(error) + "</br>" +
                     "Status : " + response.status + "</br>" +
@@ -616,7 +616,7 @@ CreateLocationAnchor.onclick = function(e){
 
 
     locationCreateStruct = contentService.newLocationCreateStruct(
-        "/api/ezp/v2/content/locations/1/2/107"
+        "/api/ezp/v2/content/locations/1/2/113"
     );
 
     var CreateLocationInput = document.getElementById('create-location-input');
