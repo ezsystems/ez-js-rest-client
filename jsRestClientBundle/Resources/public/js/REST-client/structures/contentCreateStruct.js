@@ -13,7 +13,7 @@ var ContentCreateStruct = (function() {
             };
 
         this.body.ContentCreate.mainLanguageCode = languageCode;
-        this.body.ContentCreate.LocationCreate = locationCreateStruct.LocationCreate;
+        this.body.ContentCreate.LocationCreate = locationCreateStruct.body.LocationCreate;
 
         this.body.ContentCreate.Section = null;
         this.body.ContentCreate.User = user;

@@ -1069,17 +1069,8 @@ UpdateObjectStateGroupAnchor.onclick = function(e){
     UpdateObjectStateGroupLoader.style.display = 'block';
     e.preventDefault();
 
-    var objectStateGroupUpdateStruct = contentService.newObjectStateGroupUpdateStruct(
-        "some-id" + Math.random(10000),
-        "eng-US",
-        [
-            {
-                "_languageCode":"eng-US",
-                "#text":"Some Name " + Math.random(10000)
-            }
-        ],
-        []
-    );
+    var objectStateGroupUpdateStruct = contentService.newObjectStateGroupUpdateStruct();
+    objectStateGroupUpdateStruct.body.ObjectStateGroupUpdate.identifier = "some-id" + Math.random(10000);
 
     var UpdateObjectStateGroupInput = document.getElementById('update-object-state-group-input');
     contentService.updateObjectStateGroup(
@@ -1150,6 +1141,41 @@ DeleteObjectStateGroupAnchor.onclick = function(e){
         });
 };
 
+// Create an Object State example
+var CreateObjectStateAnchor = document.getElementById('create-object-state');
+var CreateObjectStateLoader = document.getElementById('create-object-state-loader');
+CreateObjectStateAnchor.onclick = function(e){
+
+    CreateObjectStateLoader.style.display = 'block';
+    e.preventDefault();
+
+    var createObjectStateStruct = contentService.newObjectStateCreateStruct(
+        "some-id" + Math.random(10000),
+        "eng-US",
+        0,
+        [
+            {
+                "_languageCode":"eng-US",
+                "#text":"Some Name " + Math.random(10000)
+            }
+        ],
+        []
+    );
+
+    var CreateObjectStateInput = document.getElementById('create-object-state-input');
+    contentService.createObjectState(
+        CreateObjectStateInput.value,
+        createObjectStateStruct,
+        function(error, response){
+            clientOutput.innerHTML =    "Errors : " + JSON.stringify(error) + "</br>" +
+                "Status : " + response.status + "</br>" +
+                "Body : " + response.body;
+            CreateObjectStateLoader.style.display = 'none';
+        });
+};
+
+
+
 // Load an Object State example
 var LoadObjectStateAnchor = document.getElementById('load-object-state');
 var LoadObjectStateLoader = document.getElementById('load-object-state-loader');
@@ -1179,20 +1205,10 @@ UpdateObjectStateAnchor.onclick = function(e){
     UpdateObjectStateLoader.style.display = 'block';
     e.preventDefault();
 
-    var UpdateObjectStateInput = document.getElementById('update-object-state-input');
-    var objectStateUpdateStruct = contentService.newObjectStateUpdateStruct(
-        "some-id" + Math.random(10000),
-        "eng-US",
-        0,
-        [
-            {
-                "_languageCode":"eng-US",
-                "#text":"Some Name " + Math.random(10000)
-            }
-        ],
-        []
-    );
+    var objectStateUpdateStruct = contentService.newObjectStateUpdateStruct();
+    objectStateUpdateStruct.body.ObjectStateUpdate.identifier = "some-id" + Math.random(10000);
 
+    var UpdateObjectStateInput = document.getElementById('update-object-state-input');
     contentService.updateObjectState(
         UpdateObjectStateInput.value,
         objectStateUpdateStruct,

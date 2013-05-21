@@ -313,7 +313,14 @@
                 <hr/>
 
                 <div class="rest-test">
-                    <a href="#delete-object-state" id="load-object-state">Load the Object State:</a>
+                    <a href="#create-object-state" id="create-object-state">Create an Object State in the group:</a>
+                    <div id="create-object-state-loader" class="ajax-loader"></div>
+                    <input type="text" id="create-object-state-input" value="/api/ezp/v2/content/objectstategroups/8" />
+                </div>
+
+
+                <div class="rest-test">
+                    <a href="#load-object-state" id="load-object-state">Load the Object State:</a>
                     <div id="load-object-state-loader" class="ajax-loader"></div>
                     <input type="text" id="load-object-state-input" value="/api/ezp/v2/content/objectstategroups/7/objectstates/5" />
                 </div>

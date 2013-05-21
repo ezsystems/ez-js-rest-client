@@ -146,32 +146,13 @@ var ContentService = (function() {
      * Returns update structure for ObjectStateGroup
      *
      * @method newObjectStateGroupUpdateStruct
-     * @param identifier {string}
-     * @param languageCode {string}
-     * @param names {Array} multiLanguageValuesType in JSON format
-     * @param descriptions {Array} multiLanguageValuesType in JSON format
      */
-    ContentService.prototype.newObjectStateGroupUpdateStruct = function(identifier, languageCode, names, descriptions) {
+    ContentService.prototype.newObjectStateGroupUpdateStruct = function() {
 
-        return new ObjectStateGroupUpdateStruct(identifier, languageCode, names, descriptions);
+        return new ObjectStateGroupUpdateStruct();
 
     };
 
-    /**
-     * Returns update structure for ObjectState
-     *
-     * @method newObjectStateUpdateStruct
-     * @param identifier {string}
-     * @param languageCode {string}
-     * @param priority {int}
-     * @param names {Array} multiLanguageValuesType in JSON format
-     * @param descriptions {Array} multiLanguageValuesType in JSON format
-     */
-    ContentService.prototype.newObjectStateUpdateStruct = function(identifier, languageCode, priority, names, descriptions) {
-
-        return new ObjectStateUpdateStruct(identifier, languageCode, priority, names, descriptions);
-
-    };
 
     /**
      * Returns create structure for ObjectState
@@ -188,6 +169,18 @@ var ContentService = (function() {
         return new ObjectStateCreateStruct(identifier, languageCode, priority, names, descriptions);
 
     };
+
+    /**
+     * Returns update structure for ObjectState
+     *
+     * @method newObjectStateUpdateStruct
+     */
+    ContentService.prototype.newObjectStateUpdateStruct = function() {
+
+        return new ObjectStateUpdateStruct();
+
+    };
+
 
 
     /**
@@ -523,11 +516,8 @@ var ContentService = (function() {
         this.connectionManager_.request(
             "PATCH",
             versionedContentId,
-            contentUpdateStruct,
-            {
-                "Accept" : "application/vnd.ez.api.Version+json",
-                "Content-Type" : "application/vnd.ez.api.VersionUpdate+json"
-            },
+            JSON.stringify(contentUpdateStruct.body),
+            contentUpdateStruct.headers,
             callback
         );
     };
@@ -603,11 +593,8 @@ var ContentService = (function() {
         this.connectionManager_.request(
             "POST",
             objectLocations,
-            JSON.stringify(locationCreateStruct),
-            {
-                "Accept" : "application/vnd.ez.api.Location+json",
-                "Content-Type" : "application/vnd.ez.api.LocationCreate+json"
-            },
+            JSON.stringify(locationCreateStruct.body),
+            locationCreateStruct.headers,
             callback
         );
     };
@@ -676,11 +663,8 @@ var ContentService = (function() {
         this.connectionManager_.request(
             "PATCH",
             locationId,
-            JSON.stringify(locationUpdateStruct),
-            {
-                "Accept" : "application/vnd.ez.api.Location+json",
-                "Content-Type" : "application/vnd.ez.api.LocationUpdate+json"
-            },
+            JSON.stringify(locationUpdateStruct.body),
+            locationUpdateStruct.headers,
             callback
         );
     };
@@ -1187,20 +1171,20 @@ var ContentService = (function() {
      *  Creates an ObjectState
      *
      * @method createObjectState
-     * @param objectStateId {href}
+     * @param objectStateGroupId {href}
+     * @param objectStateCreateStruct {Object}
      * @param callback {function} function, which will be executed on request success
      */
     ContentService.prototype.createObjectState = function(objectStateGroupId, objectStateCreateStruct, callback) {
 
-        // TODO: discover objectStateGroupObjectStates
-
         this.connectionManager_.request(
             "POST",
-            objectStateGroupObjectStates,
+            objectStateGroupId + "/objectstates",
             JSON.stringify(objectStateCreateStruct.body),
             objectStateCreateStruct.headers,
             callback
         );
+
     };
 
     /**

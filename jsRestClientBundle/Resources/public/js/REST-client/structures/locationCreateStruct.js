@@ -3,17 +3,20 @@ var LocationCreateStruct = (function() {
 
     var LocationCreateStruct = function(parentLocationId){
 
-        this.LocationCreate = {};
+        this.body = {};
+        this.body.LocationCreate = {};
 
-        this.LocationCreate.ParentLocation = {
+        this.body.LocationCreate.ParentLocation = {
             "_href": parentLocationId
         };
 
-        this.LocationCreate.priority = "0";
-        this.LocationCreate.hidden = "false";
-        this.LocationCreate.remoteId = null;
-        this.LocationCreate.sortField = "PATH";
-        this.LocationCreate.sortOrder = "ASC";
+        this.body.LocationCreate.sortField = "PATH";
+        this.body.LocationCreate.sortOrder = "ASC";
+
+        this.headers = {
+            "Accept" : "application/vnd.ez.api.Location+json",
+            "Content-Type" : "application/vnd.ez.api.LocationCreate+json"
+        }
 
         return this;
 

@@ -10,17 +10,10 @@ var ObjectStateGroupUpdateStruct = (function() {
      * @param names {Array} multiLanguageValuesType in JSON format
      * @param descriptions {Array} multiLanguageValuesType in JSON format
      */
-    var ObjectStateGroupUpdateStruct = function(identifier, languageCode, names, descriptions){
+    var ObjectStateGroupUpdateStruct = function(){
 
         this.body = {};
         this.body.ObjectStateGroupUpdate = {};
-
-        this.body.ObjectStateGroupUpdate.identifier = identifier;
-        this.body.ObjectStateGroupUpdate.defaultLanguageCode = languageCode;
-        this.body.ObjectStateGroupUpdate.names = {};
-        this.body.ObjectStateGroupUpdate.names.value = names;
-        this.body.ObjectStateGroupUpdate.descriptions = {};
-        this.body.ObjectStateGroupUpdate.descriptions.value = descriptions;
 
         this.headers = {};
         this.headers["Accept"] = "application/vnd.ez.api.ObjectStateGroup+json";

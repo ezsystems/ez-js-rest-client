@@ -5,14 +5,20 @@ var ContentUpdateStruct = (function() {
 
         var now = JSON.parse(JSON.stringify(new Date()));
 
-        this.VersionUpdate = {};
+        this.body = {};
+        this.body.VersionUpdate = {};
 
-        this.VersionUpdate.user = user;
-        this.VersionUpdate.modificationDate = now;
-        this.VersionUpdate.initialLanguageCode = languageCode;
-        this.VersionUpdate.fields = {
+        this.body.VersionUpdate.user = user;
+        this.body.VersionUpdate.modificationDate = now;
+        this.body.VersionUpdate.initialLanguageCode = languageCode;
+        this.body.VersionUpdate.fields = {
             "field": []
         };
+
+        this.headers = {
+            "Accept" : "application/vnd.ez.api.Version+json",
+            "Content-Type" : "application/vnd.ez.api.VersionUpdate+json"
+        }
 
         return this;
 

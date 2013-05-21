@@ -16,9 +16,6 @@ var ContentMetadataUpdateStruct = (function() {
         this.body.ContentUpdate.modificationDate = now;
         this.body.ContentUpdate.publishDate = null;
 
-        // TODO: find a way to initialize MainLocation with empty value (for now neither "null", nor "" don't work)
-//        this.body.ContentUpdate.MainLocation = null;
-
         this.headers = {
             "Accept" : "application/vnd.ez.api.ContentInfo+json",
             "Content-Type" : "application/vnd.ez.api.ContentUpdate+json"
