@@ -522,7 +522,6 @@
                     <div id="delete-content-type-draft-loader" class="ajax-loader"></div>
                 </div>
 
-
                 <hr/>
 
                 <div class="rest-test">
@@ -542,6 +541,46 @@
                     <input type="text" id="delete-field-definition-input" value="/api/ezp/v2/content/types/18/draft/fieldDefinitions/197" />
                     <div id="delete-field-definition-loader" class="ajax-loader"></div>
                 </div>
+
+                <hr/>
+                <hr/>
+                <hr/>
+
+                <div class="rest-test">
+                    <a href="#create-user-group" id="create-user-group">Create user group as parent of:</a>
+                    <input type="text" id="create-user-group-input" value="/api/ezp/v2/user/groups/1/5" />
+                    <div id="create-user-group-loader" class="ajax-loader"></div>
+                </div>
+
+                <div class="rest-test">
+                    <a href="#update-user-group" id="update-user-group">Update user group (random data):</a>
+                    <input type="text" id="update-user-group-input" value="/api/ezp/v2/user/groups/1/5" />
+                    <div id="update-user-group-loader" class="ajax-loader"></div>
+                </div>
+
+                <div class="rest-test">
+                    <a href="#load-root-user-group" id="load-root-user-group">Load root user group:</a>
+                    <div id="load-root-user-group-loader" class="ajax-loader"></div>
+                </div>
+
+                <div class="rest-test">
+                    <a href="#load-user-group" id="load-user-group">Load user group:</a>
+                    <input type="text" id="load-user-group-input" value="/api/ezp/v2/user/groups/1/5" />
+                    <div id="load-user-group-loader" class="ajax-loader"></div>
+                </div>
+
+                <div class="rest-test">
+                    <a href="#load-sub-user-groups" id="load-sub-user-groups">Load subgroups for the user group:</a>
+                    <input type="text" id="load-sub-user-groups-input" value="/api/ezp/v2/user/groups/1/5" />
+                    <div id="load-sub-user-groups-loader" class="ajax-loader"></div>
+                </div>
+
+                <div class="rest-test">
+                    <a href="#load-user-groups-of-user" id="load-user-groups-of-user">Load user groups for the user:</a>
+                    <input type="text" id="load-user-groups-of-user-input" value="/api/ezp/v2/user/users/14" />
+                    <div id="load-user-groups-of-user-loader" class="ajax-loader"></div>
+                </div>
+
 
             </div>
         </div>
@@ -582,6 +621,8 @@
     '@jsRestClientBundle/Resources/public/js/REST-client/structures/ContentTypeUpdateStruct.js'
     '@jsRestClientBundle/Resources/public/js/REST-client/structures/FieldDefinitionCreateStruct.js'
     '@jsRestClientBundle/Resources/public/js/REST-client/structures/FieldDefinitionUpdateStruct.js'
+    '@jsRestClientBundle/Resources/public/js/REST-client/structures/UserGroupCreateStruct.js'
+    '@jsRestClientBundle/Resources/public/js/REST-client/structures/UserGroupUpdateStruct.js'
 
     '@jsRestClientBundle/Resources/public/js/REST-client/structures/Request.js'
     '@jsRestClientBundle/Resources/public/js/REST-client/structures/Response.js'
@@ -591,6 +632,7 @@
     '@jsRestClientBundle/Resources/public/js/REST-client/services/ContentService.js'
     '@jsRestClientBundle/Resources/public/js/REST-client/services/ContentTypeService.js'
     '@jsRestClientBundle/Resources/public/js/REST-client/services/UserService.js'
+
     '@jsRestClientBundle/Resources/public/js/REST-client/connections/XmlHttpRequestConnection.js'
     '@jsRestClientBundle/Resources/public/js/REST-client/connections/MicrosoftXmlHttpRequestConnection.js'
 
@@ -603,6 +645,7 @@
 
     '@jsRestClientBundle/Resources/public/js/testCAPI.js'
     '@jsRestClientBundle/Resources/public/js/testCAPI-ContentTypeService.js'
+    '@jsRestClientBundle/Resources/public/js/testCAPI-UserService.js'
 %}
     <script src="{{ asset_url }}"></script>
 {% endjavascripts %}

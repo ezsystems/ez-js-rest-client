@@ -2,7 +2,7 @@ var ObjectStateGroupCreateStruct = (function() {
     "use strict";
 
     /**
-     *  Creates an update structure for ObjectStateGroup
+     *  Creates a create structure for ObjectStateGroup
      *
      * @constructor
      * @param identifier {string}

@@ -245,9 +245,6 @@ LoadContentTypeByIdentifierAnchor.onclick = function(e){
 
 // Copy content type example
 var CopyContentTypeAnchor = document.getElementById('copy-content-type');
-
-console.log(CopyContentTypeAnchor);
-
 var CopyContentTypeLoader = document.getElementById('copy-content-type-loader');
 CopyContentTypeAnchor.onclick = function(e){
 
