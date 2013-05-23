@@ -547,7 +547,7 @@
                 <hr/>
 
                 <div class="rest-test">
-                    <a href="#create-user-group" id="create-user-group">Create user group as parent of:</a>
+                    <a href="#create-user-group" id="create-user-group">Create user group as a child of:</a>
                     <input type="text" id="create-user-group-input" value="/api/ezp/v2/user/groups/1/5" />
                     <div id="create-user-group-loader" class="ajax-loader"></div>
                 </div>
@@ -570,15 +570,47 @@
                 </div>
 
                 <div class="rest-test">
+                    <a href="#delete-user-group" id="delete-user-group">Delete user group:</a>
+                    <input type="text" id="delete-user-group-input" value="/api/ezp/v2/user/groups/1/5/119" />
+                    <div id="delete-user-group-loader" class="ajax-loader"></div>
+                </div>
+
+                <div class="rest-test">
+                    <a href="#move-user-group" id="move-user-group">Move user group:</a>
+                    <input type="text" id="move-user-group-input" value="/api/ezp/v2/user/groups/1/5/119" />
+                    <div id="move-user-group-loader" class="ajax-loader"></div>
+                </div>
+
+                <div class="rest-test">
                     <a href="#load-sub-user-groups" id="load-sub-user-groups">Load subgroups for the user group:</a>
                     <input type="text" id="load-sub-user-groups-input" value="/api/ezp/v2/user/groups/1/5" />
                     <div id="load-sub-user-groups-loader" class="ajax-loader"></div>
                 </div>
 
                 <div class="rest-test">
+                    <a href="#load-users-of-user-group" id="load-users-of-user-group">Load users of user group:</a>
+                    <input type="text" id="load-users-of-user-group-input" value="/api/ezp/v2/user/groups/1/5" />
+                    <div id="load-users-of-user-group-loader" class="ajax-loader"></div>
+                </div>
+
+                <div class="rest-test">
                     <a href="#load-user-groups-of-user" id="load-user-groups-of-user">Load user groups for the user:</a>
                     <input type="text" id="load-user-groups-of-user-input" value="/api/ezp/v2/user/users/14" />
                     <div id="load-user-groups-of-user-loader" class="ajax-loader"></div>
+                </div>
+
+                <hr/>
+
+                <div class="rest-test">
+                    <a href="#create-user" id="create-user">Create new user in the group:</a>
+                    <input type="text" id="create-user-input" value="/api/ezp/v2/user/groups/1/5" />
+                    <div id="create-user-loader" class="ajax-loader"></div>
+                </div>
+
+                <div class="rest-test">
+                    <a href="#load-user" id="load-user">Load the user:</a>
+                    <input type="text" id="load-user-input" value="/api/ezp/v2/user/users/149" />
+                    <div id="load-user-loader" class="ajax-loader"></div>
                 </div>
 
 
@@ -623,6 +655,7 @@
     '@jsRestClientBundle/Resources/public/js/REST-client/structures/FieldDefinitionUpdateStruct.js'
     '@jsRestClientBundle/Resources/public/js/REST-client/structures/UserGroupCreateStruct.js'
     '@jsRestClientBundle/Resources/public/js/REST-client/structures/UserGroupUpdateStruct.js'
+    '@jsRestClientBundle/Resources/public/js/REST-client/structures/UserCreateStruct.js'
 
     '@jsRestClientBundle/Resources/public/js/REST-client/structures/Request.js'
     '@jsRestClientBundle/Resources/public/js/REST-client/structures/Response.js'
@@ -643,9 +676,9 @@
     '@jsRestClientBundle/Resources/public/js/REST-client/ConnectionManager.js'
     '@jsRestClientBundle/Resources/public/js/REST-client/CAPI.js'
 
-    '@jsRestClientBundle/Resources/public/js/testCAPI.js'
-    '@jsRestClientBundle/Resources/public/js/testCAPI-ContentTypeService.js'
-    '@jsRestClientBundle/Resources/public/js/testCAPI-UserService.js'
+    '@jsRestClientBundle/Resources/public/js/cookbook-CAPI-ContentService.js'
+    '@jsRestClientBundle/Resources/public/js/cookbook-CAPI-ContentTypeService.js'
+    '@jsRestClientBundle/Resources/public/js/cookbook-CAPI-UserService.js'
 %}
     <script src="{{ asset_url }}"></script>
 {% endjavascripts %}

@@ -55,6 +55,22 @@ var UserService = (function() {
 
     };
 
+    /**
+     * User create structure
+     *
+     * @method newUserCreateStruct
+     * @param languageCode {string}
+     * @param login {string}
+     * @param email {string}
+     * @param password {string}
+     * @param fields {Array}
+     */
+    UserService.prototype.newUserCreateStruct = function(languageCode, login, email, password, fields) {
+
+        return new UserCreateStruct(languageCode, login, email, password, fields);
+
+    };
+
 
 // ******************************
 // User groups management
@@ -105,6 +121,44 @@ var UserService = (function() {
             callback
         );
     };
+
+    /**
+     * Delete user group
+     *
+     * @method deleteUserGroup
+     * @param userGroupId {href}
+     * @param callback {function} function, which will be executed on request success
+     */
+    UserService.prototype.deleteUserGroup = function(userGroupId, callback) {
+        this.connectionManager_.request(
+            "DELETE",
+            userGroupId,
+            "",
+            {},
+            callback
+        );
+    };
+
+    /**
+     * Move user group
+     *
+     * @method moveUserGroup
+     * @param userGroupId {href}
+     * @param destination {href}
+     * @param callback {function} function, which will be executed on request success
+     */
+    UserService.prototype.moveUserGroup = function(userGroupId, destination, callback) {
+        this.connectionManager_.request(
+            "MOVE",
+            userGroupId,
+            "",
+            {
+                "Destination" : destination
+            },
+            callback
+        );
+    };
+
 
     /**
      * Create user group
@@ -186,6 +240,37 @@ var UserService = (function() {
     };
 
     /**
+     * Load users for a user group
+     *
+     * @method loadUsersOfUserGroup
+     * @param userGroupId {href}
+     * @param callback {function} function, which will be executed on request success
+     */
+    UserService.prototype.loadUsersOfUserGroup = function(userGroupId, callback) {
+
+        var that = this;
+
+        this.loadUserGroup(
+            userGroupId,
+            function(error, userGroupResponse){
+
+                var users = JSON.parse(userGroupResponse.body).UserGroup.Users;
+
+                that.connectionManager_.request(
+                    "GET",
+                    users["_href"],
+                    "",
+                    {
+                        "Accept" : users["_media-type"]
+                    },
+                    callback
+                );
+            }
+        )
+
+    };
+
+    /**
      * Load user groups for a user
      *
      * @method loadUserGroupsOfUser
@@ -204,7 +289,57 @@ var UserService = (function() {
         );
     };
 
+// ******************************
+// Users management
+// ******************************
 
+    /**
+     * Create user
+     *
+     * @method createUser
+     * @param userGroupId {href}
+     * @param userCreateStruct {Object}
+     * @param callback {function} function, which will be executed on request success
+     */
+    UserService.prototype.createUser = function(userGroupId, userCreateStruct, callback) {
+
+        var that = this;
+
+        this.loadUserGroup(
+            userGroupId,
+            function(error, userGroupResponse){
+
+                var users = JSON.parse(userGroupResponse.body).UserGroup.Users;
+
+                that.connectionManager_.request(
+                    "POST",
+                    users["_href"],
+                    JSON.stringify(userCreateStruct.body),
+                    userCreateStruct.headers,
+                    callback
+                );
+            }
+        );
+    };
+
+    /**
+     * Load user
+     *
+     * @method loadUser
+     * @param userId {href}
+     * @param callback {function} function, which will be executed on request success
+     */
+    UserService.prototype.loadUser = function(userId, callback) {
+        this.connectionManager_.request(
+            "GET",
+            userId,
+            "",
+            {
+                "Accept" : "application/vnd.ez.api.User+json"
+            },
+            callback
+        );
+    };
 
 
 // ******************************

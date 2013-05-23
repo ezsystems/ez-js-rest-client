@@ -42,6 +42,46 @@ LoadUserGroupAnchor.onclick = function(e){
         });
 };
 
+// Delete user group example
+var DeleteUserGroupAnchor = document.getElementById('delete-user-group');
+var DeleteUserGroupLoader = document.getElementById('delete-user-group-loader');
+DeleteUserGroupAnchor.onclick = function(e){
+
+    DeleteUserGroupLoader.style.display = 'block';
+    e.preventDefault();
+
+    var DeleteUserGroupInput = document.getElementById('delete-user-group-input');
+    userService.deleteUserGroup(
+        DeleteUserGroupInput.value,
+        function(error, response){
+            clientOutput.innerHTML =    "Errors : " + JSON.stringify(error) + "</br>" +
+                "Status : " + response.status + "</br>" +
+                "Body : " + response.body;
+            DeleteUserGroupLoader.style.display = 'none';
+        });
+};
+
+// Move user group example
+var MoveUserGroupAnchor = document.getElementById('move-user-group');
+var MoveUserGroupLoader = document.getElementById('move-user-group-loader');
+MoveUserGroupAnchor.onclick = function(e){
+
+    MoveUserGroupLoader.style.display = 'block';
+    e.preventDefault();
+
+    var MoveUserGroupInput = document.getElementById('move-user-group-input');
+    userService.moveUserGroup(
+        MoveUserGroupInput.value,
+        "/api/ezp/v2/user/groups/1/5",
+        function(error, response){
+            clientOutput.innerHTML =    "Errors : " + JSON.stringify(error) + "</br>" +
+                "Status : " + response.status + "</br>" +
+                "Body : " + response.body;
+            MoveUserGroupLoader.style.display = 'none';
+        });
+};
+
+
 // Create user group example
 var CreateUserGroupAnchor = document.getElementById('create-user-group');
 var CreateUserGroupLoader = document.getElementById('create-user-group-loader');
@@ -133,6 +173,26 @@ LoadSubUserGroupsAnchor.onclick = function(e){
         });
 };
 
+// Load users for a user group
+var LoadUsersOfUserGroupAnchor = document.getElementById('load-users-of-user-group');
+var LoadUsersOfUserGroupLoader = document.getElementById('load-users-of-user-group-loader');
+LoadUsersOfUserGroupAnchor.onclick = function(e){
+
+    LoadUsersOfUserGroupLoader.style.display = 'block';
+    e.preventDefault();
+
+    var LoadUsersOfUserGroupInput = document.getElementById('load-users-of-user-group-input');
+    userService.loadUsersOfUserGroup(
+        LoadUsersOfUserGroupInput.value,
+        function(error, response){
+            clientOutput.innerHTML =    "Errors : " + JSON.stringify(error) + "</br>" +
+                "Status : " + response.status + "</br>" +
+                "Body : " + response.body;
+            LoadUsersOfUserGroupLoader.style.display = 'none';
+        });
+};
+
+
 // Load user groups for a user example
 var LoadUserGroupsOfUserAnchor = document.getElementById('load-user-groups-of-user');
 var LoadUserGroupsOfUserLoader = document.getElementById('load-user-groups-of-user-loader');
@@ -149,5 +209,63 @@ LoadUserGroupsOfUserAnchor.onclick = function(e){
                 "Status : " + response.status + "</br>" +
                 "Body : " + response.body;
             LoadUserGroupsOfUserLoader.style.display = 'none';
+        });
+};
+
+// Create user example
+var CreateUserAnchor = document.getElementById('create-user');
+var CreateUserLoader = document.getElementById('create-user-loader');
+CreateUserAnchor.onclick = function(e){
+
+    CreateUserLoader.style.display = 'block';
+    e.preventDefault();
+
+    var userCreateStruct = userService.newUserCreateStruct(
+        "eng-US",
+        "johndoe",
+        "johndoe@nowhere.no",
+        "johndoepass",
+        [
+            {
+                fieldDefinitionIdentifier : "first_name",
+                languageCode : "eng-US",
+                fieldValue : "John"
+            },
+            {
+                fieldDefinitionIdentifier : "last_name",
+                languageCode : "eng-US",
+                fieldValue : "Doe"
+            }
+        ]
+    );
+
+    var CreateUserInput = document.getElementById('create-user-input');
+    userService.createUser(
+        CreateUserInput.value,
+        userCreateStruct,
+        function(error, response){
+            clientOutput.innerHTML =    "Errors : " + JSON.stringify(error) + "</br>" +
+                "Status : " + response.status + "</br>" +
+                "Body : " + response.body;
+            CreateUserLoader.style.display = 'none';
+        });
+};
+
+// Load user example
+var LoadUserAnchor = document.getElementById('load-user');
+var LoadUserLoader = document.getElementById('load-user-loader');
+LoadUserAnchor.onclick = function(e){
+
+    LoadUserLoader.style.display = 'block';
+    e.preventDefault();
+
+    var LoadUserInput = document.getElementById('load-user-input');
+    userService.loadUser(
+        LoadUserInput.value,
+        function(error, response){
+            clientOutput.innerHTML =    "Errors : " + JSON.stringify(error) + "</br>" +
+                "Status : " + response.status + "</br>" +
+                "Body : " + response.body;
+            LoadUserLoader.style.display = 'none';
         });
 };

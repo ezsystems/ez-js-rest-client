@@ -14,9 +14,6 @@ var UserGroupUpdateStruct = (function() {
         this.body = {};
         this.body.UserGroupUpdate = {};
 
-//        this.body.UserGroupCreate.identifier = identifier;
-//        this.body.UserGroupCreate.defaultLanguageCode = languageCode;
-//
         this.body.UserGroupUpdate.fields = {};
         this.body.UserGroupUpdate.fields.field = [];
 
