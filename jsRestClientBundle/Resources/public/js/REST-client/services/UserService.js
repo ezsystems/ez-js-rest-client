@@ -71,6 +71,17 @@ var UserService = (function() {
 
     };
 
+    /**
+     * User update structure
+     *
+     * @method newUserUpdateStruct
+     */
+    UserService.prototype.newUserUpdateStruct = function() {
+
+        return new UserUpdateStruct();
+
+    };
+
 
 // ******************************
 // User groups management
@@ -339,6 +350,100 @@ var UserService = (function() {
             },
             callback
         );
+    };
+
+    /**
+     * Update user
+     *
+     * @method updateUser
+     * @param userId {href}
+     * @param userUpdateStruct {Object}
+     * @param callback {function} function, which will be executed on request success
+     */
+    UserService.prototype.updateUser = function(userId, userUpdateStruct, callback) {
+        this.connectionManager_.request(
+            "PATCH",
+            userId,
+            JSON.stringify(userUpdateStruct.body),
+            userUpdateStruct.headers,
+            callback
+        );
+    };
+
+    /**
+     * Delete user
+     *
+     * @method deleteUser
+     * @param userId {href}
+     * @param callback {function} function, which will be executed on request success
+     */
+    UserService.prototype.deleteUser = function(userId, callback) {
+        this.connectionManager_.delete(
+            userId,
+            callback
+        );
+    };
+
+// ******************************
+// Users and groups relation management
+// ******************************
+
+    /**
+     * Assign user to a user group
+     *
+     * @method loadUser
+     * @param userId {href}
+     * @param userGroupId {href}
+     * @param callback {function} function, which will be executed on request success
+     */
+    UserService.prototype.assignUserToUserGroup = function(userId, userGroupId, callback) {
+
+        var that = this;
+
+        this.loadUser(
+            userId,
+            function(error, userResponse){
+                if (!error) {
+
+                    var userGroups = JSON.parse(userResponse.body).User.UserGroups;
+
+                    that.connectionManager_.request(
+                        "POST",
+                        userGroups["_href"] + "?group=" + userGroupId,
+                        "",
+                        {
+                            "Accept" : userGroups["_media-type"]
+                        },
+                        callback
+                    );
+
+                } else {
+                    callback(error, false)
+                }
+
+            }
+        )
+    };
+
+    /**
+     * Unassign user from a user group
+     *
+     * @method unAssignUserFromUserGroup
+     * @param userAssignedGroupId {href}
+     * @param callback {function} function, which will be executed on request success
+     */
+    UserService.prototype.unAssignUserFromUserGroup = function(userAssignedGroupId, callback) {
+
+        this.connectionManager_.request(
+            "DELETE",
+            userAssignedGroupId,
+            "",
+            {
+                "Accept" : "application/vnd.ez.api.UserGroupRefList+json"
+            },
+            callback
+        );
+
     };
 
 

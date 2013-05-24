@@ -222,9 +222,9 @@ CreateUserAnchor.onclick = function(e){
 
     var userCreateStruct = userService.newUserCreateStruct(
         "eng-US",
-        "johndoe",
-        "johndoe@nowhere.no",
-        "johndoepass",
+        "johndoe3",
+        "johndoe3@nowhere.no",
+        "johndoepass3",
         [
             {
                 fieldDefinitionIdentifier : "first_name",
@@ -267,5 +267,87 @@ LoadUserAnchor.onclick = function(e){
                 "Status : " + response.status + "</br>" +
                 "Body : " + response.body;
             LoadUserLoader.style.display = 'none';
+        });
+};
+
+// Update user example
+var UpdateUserAnchor = document.getElementById('update-user');
+var UpdateUserLoader = document.getElementById('update-user-loader');
+UpdateUserAnchor.onclick = function(e){
+
+    UpdateUserLoader.style.display = 'block';
+    e.preventDefault();
+
+    var userUpdateStruct = userService.newUserUpdateStruct();
+
+    userUpdateStruct.body.UserUpdate.email = "somenewemail@nowhere.no";
+
+    var UpdateUserInput = document.getElementById('update-user-input');
+    userService.updateUser(
+        UpdateUserInput.value,
+        userUpdateStruct,
+        function(error, response){
+            clientOutput.innerHTML =    "Errors : " + JSON.stringify(error) + "</br>" +
+                "Status : " + response.status + "</br>" +
+                "Body : " + response.body;
+            UpdateUserLoader.style.display = 'none';
+        });
+};
+
+// Delete user example
+var DeleteUserAnchor = document.getElementById('delete-user');
+var DeleteUserLoader = document.getElementById('delete-user-loader');
+DeleteUserAnchor.onclick = function(e){
+
+    DeleteUserLoader.style.display = 'block';
+    e.preventDefault();
+
+    var DeleteUserInput = document.getElementById('delete-user-input');
+    userService.deleteUser(
+        DeleteUserInput.value,
+        function(error, response){
+            clientOutput.innerHTML =    "Errors : " + JSON.stringify(error) + "</br>" +
+                "Status : " + response.status + "</br>" +
+                "Body : " + response.body;
+            DeleteUserLoader.style.display = 'none';
+        });
+};
+
+// Assign user example
+var AssignUserAnchor = document.getElementById('assign-user');
+var AssignUserLoader = document.getElementById('assign-user-loader');
+AssignUserAnchor.onclick = function(e){
+
+    AssignUserLoader.style.display = 'block';
+    e.preventDefault();
+
+    var AssignUserInput = document.getElementById('assign-user-input');
+    userService.assignUserToUserGroup(
+        AssignUserInput.value,
+        "/api/ezp/v2/user/groups/1/5/101",
+        function(error, response){
+            clientOutput.innerHTML =    "Errors : " + JSON.stringify(error) + "</br>" +
+                "Status : " + response.status + "</br>" +
+                "Body : " + response.body;
+            AssignUserLoader.style.display = 'none';
+        });
+};
+
+// unAssign user example
+var unAssignUserAnchor = document.getElementById('unassign-user');
+var unAssignUserLoader = document.getElementById('unassign-user-loader');
+unAssignUserAnchor.onclick = function(e){
+
+    unAssignUserLoader.style.display = 'block';
+    e.preventDefault();
+
+    var unAssignUserInput = document.getElementById('unassign-user-input');
+    userService.unAssignUserFromUserGroup(
+        unAssignUserInput.value,
+        function(error, response){
+            clientOutput.innerHTML =    "Errors : " + JSON.stringify(error) + "</br>" +
+                "Status : " + response.status + "</br>" +
+                "Body : " + response.body;
+            unAssignUserLoader.style.display = 'none';
         });
 };

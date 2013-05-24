@@ -70,6 +70,55 @@ var ConnectionManager = (function() {
             );
 
         };
+
+        /**
+         * Delete - shortcut which handles simple deletion requests in most cases
+         *
+         * @method delete
+         * @param url
+         * @param callback
+         */
+        this.delete = function(url, callback) {
+
+            var that = this;
+
+            // default values for all the parameters
+            url = (typeof url === "undefined") ? "/" : url;
+            callback = (typeof callback === "undefined") ? function(){} : callback;
+
+            var request = new Request({
+                method : "DELETE",
+                url : endPointUrl + url,
+                body : "",
+                headers : {}
+            });
+
+            authenticationAgent.authenticateRequest(
+                request,
+                function(error, authenticatedRequest) {
+                    if (!error) {
+
+                        if (that.logRequests) {
+                            console.log(request);
+                        }
+                        // Main goal
+                        activeConnection.execute(authenticatedRequest, callback);
+                    } else {
+                        callback(
+                            new Error({
+                                errorText : "An error occured during request authentication!"
+                            }),
+                            new Response({
+                                status : "error",
+                                body : ""
+                            })
+                        );
+                    }
+                }
+            );
+
+
+        };
     };
 
     return ConnectionManager;

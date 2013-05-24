@@ -609,8 +609,34 @@
 
                 <div class="rest-test">
                     <a href="#load-user" id="load-user">Load the user:</a>
-                    <input type="text" id="load-user-input" value="/api/ezp/v2/user/users/149" />
+                    <input type="text" id="load-user-input" value="/api/ezp/v2/user/users/144" />
                     <div id="load-user-loader" class="ajax-loader"></div>
+                </div>
+
+                <div class="rest-test">
+                    <a href="#update-user" id="update-user">Update the user:</a>
+                    <input type="text" id="update-user-input" value="/api/ezp/v2/user/users/145" />
+                    <div id="update-user-loader" class="ajax-loader"></div>
+                </div>
+
+                <div class="rest-test">
+                    <a href="#delete-user" id="delete-user">Delete the user:</a>
+                    <input type="text" id="delete-user-input" value="/api/ezp/v2/user/users/146" />
+                    <div id="delete-user-loader" class="ajax-loader"></div>
+                </div>
+
+                <hr/>
+
+                <div class="rest-test">
+                    <a href="#assign-user" id="assign-user">Assign the user to a group</a>
+                    <input type="text" id="assign-user-input" value="/api/ezp/v2/user/users/146" />
+                    <div id="assign-user-loader" class="ajax-loader"></div>
+                </div>
+
+                <div class="rest-test">
+                    <a href="#unassign-user" id="unassign-user">Unassign the user from a group</a>
+                    <input type="text" id="unassign-user-input" value="/api/ezp/v2/user/users/146/groups/1" />
+                    <div id="unassign-user-loader" class="ajax-loader"></div>
                 </div>
 
 
@@ -656,6 +682,7 @@
     '@jsRestClientBundle/Resources/public/js/REST-client/structures/UserGroupCreateStruct.js'
     '@jsRestClientBundle/Resources/public/js/REST-client/structures/UserGroupUpdateStruct.js'
     '@jsRestClientBundle/Resources/public/js/REST-client/structures/UserCreateStruct.js'
+    '@jsRestClientBundle/Resources/public/js/REST-client/structures/UserUpdateStruct.js'
 
     '@jsRestClientBundle/Resources/public/js/REST-client/structures/Request.js'
     '@jsRestClientBundle/Resources/public/js/REST-client/structures/Response.js'
