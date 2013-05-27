@@ -351,3 +351,129 @@ unAssignUserAnchor.onclick = function(e){
             unAssignUserLoader.style.display = 'none';
         });
 };
+
+
+// create Role example
+var CreateRoleAnchor = document.getElementById('create-role');
+var CreateRoleLoader = document.getElementById('create-role-loader');
+CreateRoleAnchor.onclick = function(e){
+
+    CreateRoleLoader.style.display = 'block';
+    e.preventDefault();
+
+    var createRoleStruct = userService.newRoleInputStruct(
+        "random-role-id-" + Math.random()
+    );
+
+    userService.createRole(
+        createRoleStruct,
+        function(error, response){
+            clientOutput.innerHTML =    "Errors : " + JSON.stringify(error) + "</br>" +
+                "Status : " + response.status + "</br>" +
+                "Body : " + response.body;
+            CreateRoleLoader.style.display = 'none';
+        });
+};
+
+// load Role example
+var LoadRoleAnchor = document.getElementById('load-role');
+var LoadRoleLoader = document.getElementById('load-role-loader');
+LoadRoleAnchor.onclick = function(e){
+
+    LoadRoleLoader.style.display = 'block';
+    e.preventDefault();
+
+    var LoadRoleInput = document.getElementById('load-role-input');
+    userService.loadRole(
+        LoadRoleInput.value,
+        function(error, response){
+            clientOutput.innerHTML =    "Errors : " + JSON.stringify(error) + "</br>" +
+                "Status : " + response.status + "</br>" +
+                "Body : " + response.body;
+            LoadRoleLoader.style.display = 'none';
+        });
+};
+
+
+// update Role example
+var UpdateRoleAnchor = document.getElementById('update-role');
+var UpdateRoleLoader = document.getElementById('update-role-loader');
+UpdateRoleAnchor.onclick = function(e){
+
+    UpdateRoleLoader.style.display = 'block';
+    e.preventDefault();
+
+    var roleUpdateStruct = userService.newRoleInputStruct(
+        "random-role-id-" + Math.random()
+    );
+
+    var UpdateRoleInput = document.getElementById('update-role-input');
+    userService.updateRole(
+        UpdateRoleInput.value,
+        roleUpdateStruct,
+        function(error, response){
+            clientOutput.innerHTML =    "Errors : " + JSON.stringify(error) + "</br>" +
+                "Status : " + response.status + "</br>" +
+                "Body : " + response.body;
+            UpdateRoleLoader.style.display = 'none';
+        });
+};
+
+
+// Delete Role example
+var DeleteRoleAnchor = document.getElementById('delete-role');
+var DeleteRoleLoader = document.getElementById('delete-role-loader');
+DeleteRoleAnchor.onclick = function(e){
+
+    DeleteRoleLoader.style.display = 'block';
+    e.preventDefault();
+
+    var DeleteRoleInput = document.getElementById('delete-role-input');
+    userService.deleteRole(
+        DeleteRoleInput.value,
+        function(error, response){
+            clientOutput.innerHTML =    "Errors : " + JSON.stringify(error) + "</br>" +
+                "Status : " + response.status + "</br>" +
+                "Body : " + response.body;
+            DeleteRoleLoader.style.display = 'none';
+        });
+};
+
+
+// Get User Assignments example
+var GetUserAssignmentsAnchor = document.getElementById('get-user-assignments');
+var GetUserAssignmentsLoader = document.getElementById('get-user-assignments-loader');
+GetUserAssignmentsAnchor.onclick = function(e){
+
+    GetUserAssignmentsLoader.style.display = 'block';
+    e.preventDefault();
+
+    var GetUserAssignmentsInput = document.getElementById('get-user-assignments-input');
+    userService.getRoleAssignmentsForUser(
+        GetUserAssignmentsInput.value,
+        function(error, response){
+            clientOutput.innerHTML =    "Errors : " + JSON.stringify(error) + "</br>" +
+                "Status : " + response.status + "</br>" +
+                "Body : " + response.body;
+            GetUserAssignmentsLoader.style.display = 'none';
+        });
+};
+
+// Get User Group Assignments example
+var GetUserGroupAssignmentsAnchor = document.getElementById('get-user-group-assignments');
+var GetUserGroupAssignmentsLoader = document.getElementById('get-user-group-assignments-loader');
+GetUserGroupAssignmentsAnchor.onclick = function(e){
+
+    GetUserGroupAssignmentsLoader.style.display = 'block';
+    e.preventDefault();
+
+    var GetUserGroupAssignmentsInput = document.getElementById('get-user-group-assignments-input');
+    userService.getRoleAssignmentsForUserGroup(
+        GetUserGroupAssignmentsInput.value,
+        function(error, response){
+            clientOutput.innerHTML =    "Errors : " + JSON.stringify(error) + "</br>" +
+                "Status : " + response.status + "</br>" +
+                "Body : " + response.body;
+            GetUserGroupAssignmentsLoader.style.display = 'none';
+        });
+};

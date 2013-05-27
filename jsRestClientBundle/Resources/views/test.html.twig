@@ -639,6 +639,43 @@
                     <div id="unassign-user-loader" class="ajax-loader"></div>
                 </div>
 
+                <hr/>
+
+                <div class="rest-test">
+                    <a href="#create-role" id="create-role">Create new role</a>
+                    <div id="create-role-loader" class="ajax-loader"></div>
+                </div>
+
+                <div class="rest-test">
+                    <a href="#load-role" id="load-role">Load the role:</a>
+                    <input type="text" id="load-role-input" value="/api/ezp/v2/user/roles/5" />
+                    <div id="load-role-loader" class="ajax-loader"></div>
+                </div>
+
+                <div class="rest-test">
+                    <a href="#update-role" id="update-role">Update the role:</a>
+                    <input type="text" id="update-role-input" value="/api/ezp/v2/user/roles/5" />
+                    <div id="update-role-loader" class="ajax-loader"></div>
+                </div>
+
+                <div class="rest-test">
+                    <a href="#delete-role" id="delete-role">Delete the role:</a>
+                    <input type="text" id="delete-role-input" value="/api/ezp/v2/user/roles/5" />
+                    <div id="delete-role-loader" class="ajax-loader"></div>
+                </div>
+
+                <div class="rest-test">
+                    <a href="#get-user-assignments" id="get-user-assignments">Get user's roles assignments:</a>
+                    <input type="text" id="get-user-assignments-input" value="/api/ezp/v2/user/users/110" />
+                    <div id="get-user-assignments-loader" class="ajax-loader"></div>
+                </div>
+
+                <div class="rest-test">
+                    <a href="#get-user-group-assignments" id="get-user-group-assignments">Get user group's roles assignments:</a>
+                    <input type="text" id="get-user-group-assignments-input" value="/api/ezp/v2/user/groups/1/5/110" />
+                    <div id="get-user-group-assignments-loader" class="ajax-loader"></div>
+                </div>
+
 
             </div>
         </div>
@@ -683,6 +720,7 @@
     '@jsRestClientBundle/Resources/public/js/REST-client/structures/UserGroupUpdateStruct.js'
     '@jsRestClientBundle/Resources/public/js/REST-client/structures/UserCreateStruct.js'
     '@jsRestClientBundle/Resources/public/js/REST-client/structures/UserUpdateStruct.js'
+    '@jsRestClientBundle/Resources/public/js/REST-client/structures/RoleInputStruct.js'
 
     '@jsRestClientBundle/Resources/public/js/REST-client/structures/Request.js'
     '@jsRestClientBundle/Resources/public/js/REST-client/structures/Response.js'

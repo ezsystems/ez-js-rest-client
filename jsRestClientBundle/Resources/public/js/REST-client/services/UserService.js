@@ -82,6 +82,17 @@ var UserService = (function() {
 
     };
 
+    /**
+     * Role input structure
+     *
+     * @method newRoleInputStruct
+     */
+    UserService.prototype.newRoleInputStruct = function(identifier) {
+
+        return new RoleInputStruct(identifier);
+
+    };
+
 
 // ******************************
 // User groups management
@@ -444,6 +455,163 @@ var UserService = (function() {
             callback
         );
 
+    };
+
+// ******************************
+// Roles management
+// ******************************
+
+    /**
+     * Create a role
+     *
+     * @method createRole
+     * @param roleCreateStruct {Object}
+     * @param callback {function} function, which will be executed on request success
+     */
+    UserService.prototype.createRole = function(roleCreateStruct, callback) {
+
+        var that = this;
+
+        this.discoveryService_.getInfoObject(
+            "roles",
+            function(error, roles){
+                if (!error) {
+
+                    that.connectionManager_.request(
+                    "POST",
+                    roles["_href"],
+                    JSON.stringify(roleCreateStruct.body),
+                    roleCreateStruct.headers,
+                    callback
+                    );
+
+                } else {
+                    callback(error, false)
+                }
+        });
+    };
+
+    /**
+     * Load a role
+     *
+     * @method loadRole
+     * @param roleId {href}
+     * @param callback {function} function, which will be executed on request success
+     */
+    UserService.prototype.loadRole = function(roleId, callback) {
+        this.connectionManager_.request(
+            "GET",
+            roleId,
+            "",
+            {
+                "Accept" : "application/vnd.ez.api.Role+json"
+            },
+            callback
+        );
+    };
+
+    /**
+     * Update a role
+     *
+     * @method updateRole
+     * @param roleId {href}
+     * @param roleUpdateStruct
+     * @param callback {function} function, which will be executed on request success
+     */
+    UserService.prototype.updateRole = function(roleId, roleUpdateStruct, callback) {
+        this.connectionManager_.request(
+            "PATCH",
+            roleId,
+            JSON.stringify(roleUpdateStruct.body),
+            roleUpdateStruct.headers,
+            callback
+        );
+    };
+
+
+    /**
+     * Delete a role
+     *
+     * @method deleteRole
+     * @param roleId {href}
+     * @param callback {function} function, which will be executed on request success
+     */
+    UserService.prototype.deleteRole = function(roleId, callback) {
+        this.connectionManager_.delete(
+            roleId,
+            callback
+        );
+    };
+
+
+    /**
+     * Get role assignments for a user
+     *
+     * @method getRoleAssignmentsForUser
+     * @param userId {href}
+     * @param callback {function} function, which will be executed on request success
+     */
+    UserService.prototype.getRoleAssignmentsForUser = function(userId, callback) {
+
+        var that = this;
+
+        this.loadUser(
+            userId,
+            function(error, userResponse){
+                if (!error) {
+
+                    var userRoles = JSON.parse(userResponse.body).User.Roles;
+
+                    that.connectionManager_.request(
+                        "GET",
+                        userRoles["_href"],
+                        "",
+                        {
+                            "Accept" : userRoles["_media-type"]
+                        },
+                        callback
+                    );
+
+                } else {
+                    callback(error, false)
+                }
+            }
+        );
+    };
+
+    /**
+     * Get role assignments for a user group
+     *
+     * @method getRoleAssignmentsForUserGroup
+     * @param userGroupId {href}
+     * @param callback {function} function, which will be executed on request success
+     */
+    UserService.prototype.getRoleAssignmentsForUserGroup = function(userGroupId, callback) {
+
+        var that = this;
+
+        this.loadUserGroup(
+            userGroupId,
+            function(error, userGroupResponse){
+                if (!error) {
+
+                    var userGroupRoles = JSON.parse(userGroupResponse.body).UserGroup.Roles;
+
+                    that.connectionManager_.request(
+                        "GET",
+                        userGroupRoles["_href"],
+                        "",
+                        {
+                            "Accept" : userGroupRoles["_media-type"]
+                        },
+                        callback
+                    );
+
+                } else {
+                    callback(error, false)
+                }
+            }
+        );
     };
 
 

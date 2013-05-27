@@ -18,7 +18,10 @@ var ViewCreateStruct = (function() {
         this.body.ViewInput.Query.SortClauses = {};
         this.body.ViewInput.Query.spellcheck = false;
 
-        this.contentType = "application/vnd.ez.api.ViewInput+json";
+        this.headers = {
+            "Accept" : "application/vnd.ez.api.View+json",
+            "Content-Type" : "application/vnd.ez.api.ViewInput+json"
+        };
 
         return this;
 
