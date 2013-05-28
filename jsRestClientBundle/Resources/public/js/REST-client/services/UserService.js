@@ -86,6 +86,7 @@ var UserService = (function() {
      * Role input structure
      *
      * @method newRoleInputStruct
+     * @param identifier {string}
      */
     UserService.prototype.newRoleInputStruct = function(identifier) {
 
@@ -93,6 +94,44 @@ var UserService = (function() {
 
     };
 
+    /**
+     * Role assignment input structure
+     *
+     * @method newRoleAssignmentInputStruct
+     * @param role {Object}
+     * @param limitation {Object}
+     */
+    UserService.prototype.newRoleAssignInputStruct = function(role, limitation) {
+
+        return new RoleAssignInputStruct(role, limitation);
+
+    };
+
+    /**
+     * Policy create structure
+     *
+     * @method newPolicyCreateStruct
+     * @param module {string}
+     * @param theFunction {string}
+     * @param limitations {Object}
+     */
+    UserService.prototype.newPolicyCreateStruct = function(module, theFunction, limitations) {
+
+        return new PolicyCreateStruct(module, theFunction, limitations);
+
+    };
+
+    /**
+     * Policy update structure
+     *
+     * @method newPolicyUpdateStruct
+     * @param limitations {Object}
+     */
+    UserService.prototype.newPolicyUpdateStruct = function(limitations) {
+
+        return new PolicyUpdateStruct(limitations);
+
+    };
 
 // ******************************
 // User groups management
@@ -614,6 +653,208 @@ var UserService = (function() {
         );
     };
 
+    /**
+     * Assign a role to user
+     *
+     * @method assignRoleToUser
+     * @param userId {href}
+     * @param roleAssignInputStruct {Object}
+     * @param callback {function} function, which will be executed on request success
+     */
+    UserService.prototype.assignRoleToUser = function(userId, roleAssignInputStruct, callback) {
+
+        var that = this;
+
+        this.loadUser(
+            userId,
+            function(error, userResponse){
+                if (!error) {
+
+                    var userRoles = JSON.parse(userResponse.body).User.Roles;
+
+                    that.connectionManager_.request(
+                        "POST",
+                        userRoles["_href"],
+                        JSON.stringify(roleAssignInputStruct.body),
+                        roleAssignInputStruct.headers,
+                        callback
+                    );
+                } else {
+                    callback(error, false)
+                }
+            }
+        );
+    };
+
+
+    /**
+     * Assign a role to user group
+     *
+     * @method assignRoleToUserGroup
+     * @param userGroupId {href}
+     * @param roleAssignInputStruct {Object}
+     * @param callback {function} function, which will be executed on request success
+     */
+    UserService.prototype.assignRoleToUserGroup = function(userGroupId, roleAssignInputStruct, callback) {
+
+        var that = this;
+
+        this.loadUserGroup(
+            userGroupId,
+            function(error, userGroupResponse){
+                if (!error) {
+
+                    var userGroupRoles = JSON.parse(userGroupResponse.body).UserGroup.Roles;
+
+                    that.connectionManager_.request(
+                        "POST",
+                        userGroupRoles["_href"],
+                        JSON.stringify(roleAssignInputStruct.body),
+                        roleAssignInputStruct.headers,
+                        callback
+                    );
+                } else {
+                    callback(error, false)
+                }
+            }
+        );
+    };
+
+    /**
+     * Unassign the role from user
+     *
+     * @method unassignRoleFromUser
+     * @param userRoleId {href}
+     * @param callback {function} function, which will be executed on request success
+     */
+    UserService.prototype.unassignRoleFromUser = function(userRoleId, callback) {
+        this.connectionManager_.delete(
+            userRoleId,
+            callback
+        );
+    };
+
+    /**
+     * Unassign the role from user group
+     *
+     * @method unassignRoleFromUserGroup
+     * @param userGroupRoleId {href}
+     * @param callback {function} function, which will be executed on request success
+     */
+    UserService.prototype.unassignRoleFromUserGroup = function(userGroupRoleId, callback) {
+        this.connectionManager_.delete(
+            userGroupRoleId,
+            callback
+        );
+    };
+
+// ******************************
+// Policies management
+// ******************************
+
+    /**
+     * Add new policy to the role
+     *
+     * @method addPolicy
+     * @param roleId {href}
+     * @param policyCreateStruct {Object}
+     * @param callback {function} function, which will be executed on request success
+     */
+    UserService.prototype.addPolicy = function(roleId, policyCreateStruct, callback) {
+
+        var that = this;
+
+        this.loadRole(
+            roleId,
+            function(error, roleResponse){
+                if (!error) {
+
+                    var rolePolicies = JSON.parse(roleResponse.body).Role.Policies;
+
+                    that.connectionManager_.request(
+                        "POST",
+                        rolePolicies["_href"],
+                        JSON.stringify(policyCreateStruct.body),
+                        policyCreateStruct.headers,
+                        callback
+                    );
+                } else {
+                    callback(error, false)
+                }
+            }
+        );
+    };
+
+    /**
+     * Load a policy
+     *
+     * @method loadPolicy
+     * @param policyId {href}
+     * @param callback {function} function, which will be executed on request success
+     */
+    UserService.prototype.loadPolicy = function(policyId, callback) {
+        this.connectionManager_.request(
+            "GET",
+            policyId,
+            "",
+            {
+                "Accept" : "application/vnd.ez.api.Policy+json"
+            },
+            callback
+        );
+    };
+
+    /**
+     * Update a policy
+     *
+     * @method updatePolicy
+     * @param policyId {href}
+     * @param policyUpdateStruct {Object}
+     * @param callback {function} function, which will be executed on request success
+     */
+    UserService.prototype.updatePolicy = function(policyId, policyUpdateStruct, callback) {
+        this.connectionManager_.request(
+            "PATCH",
+            policyId,
+            JSON.stringify(policyUpdateStruct.body),
+            policyUpdateStruct.headers,
+            callback
+        );
+    };
+
+    /**
+     * Delete the policy
+     *
+     * @method deletePolicy
+     * @param policyId {href}
+     * @param callback {function} function, which will be executed on request success
+     */
+    UserService.prototype.deletePolicy = function(policyId, callback) {
+        this.connectionManager_.delete(
+            policyId,
+            callback
+        );
+    };
+
+    /**
+     * Load users policies
+     *
+     * @method loadPoliciesByUserId
+     * @param userPolicies
+     * @param userId {href}
+     * @param callback {function} function, which will be executed on request success
+     */
+    UserService.prototype.loadPoliciesByUserId = function(userPolicies, userId, callback) {
+        this.connectionManager_.request(
+            "GET",
+            userPolicies + "?userId=" + userId,
+            "",
+            {
+                "Accept" : "application/vnd.ez.api.PolicyList+json"
+            },
+            callback
+        );
+    };
 
 // ******************************
 // Sessions management

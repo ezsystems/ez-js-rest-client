@@ -803,10 +803,7 @@ var ContentService = (function() {
                         "POST",
                         views["_href"],
                         JSON.stringify(viewCreateStruct.body),
-                        {
-                            "Accept" : "application/vnd.ez.api.View+json",
-                            "Content-Type" : viewCreateStruct.contentType
-                        },
+                        viewCreateStruct.headers,
                         callback
                     );
 

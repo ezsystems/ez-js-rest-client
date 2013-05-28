@@ -676,6 +676,62 @@
                     <div id="get-user-group-assignments-loader" class="ajax-loader"></div>
                 </div>
 
+                <div class="rest-test">
+                    <a href="#assign-role-to-user" id="assign-role-to-user">Assign role to user:</a>
+                    <input type="text" id="assign-role-to-user-input" value="/api/ezp/v2/user/users/110" />
+                    <div id="assign-role-to-user-loader" class="ajax-loader"></div>
+                </div>
+
+                <div class="rest-test">
+                    <a href="#assign-role-to-user-group" id="assign-role-to-user-group">Assign role to user group:</a>
+                    <input type="text" id="assign-role-to-user-group-input" value="/api/ezp/v2/user/groups/1/5/110" />
+                    <div id="assign-role-to-user-group-loader" class="ajax-loader"></div>
+                </div>
+
+                <div class="rest-test">
+                    <a href="#unassign-role-from-user" id="unassign-role-from-user">Unassign the role from user:</a>
+                    <input type="text" id="unassign-role-from-user-input" value="/api/ezp/v2/user/users/110/roles/7" />
+                    <div id="unassign-role-from-user-loader" class="ajax-loader"></div>
+                </div>
+
+                <div class="rest-test">
+                    <a href="#unassign-role-from-user-group" id="unassign-role-from-user-group">Unassign the role from user group:</a>
+                    <input type="text" id="unassign-role-from-user-group-input" value="/api/ezp/v2/user/groups/1/5/110/roles/7" />
+                    <div id="unassign-role-from-user-group-loader" class="ajax-loader"></div>
+                </div>
+
+                <hr/>
+
+                <div class="rest-test">
+                    <a href="#create-policy" id="create-policy">Add new policy to the role</a>
+                    <input type="text" id="create-policy-input" value="/api/ezp/v2/user/roles/7" />
+                    <div id="create-policy-loader" class="ajax-loader"></div>
+                </div>
+
+                <div class="rest-test">
+                    <a href="#load-policy" id="load-policy">Load the policy:</a>
+                    <input type="text" id="load-policy-input" value="/api/ezp/v2/user/roles/7/policies/1" />
+                    <div id="load-policy-loader" class="ajax-loader"></div>
+                </div>
+
+                <div class="rest-test">
+                    <a href="#update-policy" id="update-policy">Update the policy:</a>
+                    <input type="text" id="update-policy-input" value="/api/ezp/v2/user/roles/7/policies/1" />
+                    <div id="update-policy-loader" class="ajax-loader"></div>
+                </div>
+
+                <div class="rest-test">
+                    <a href="#delete-policy" id="delete-policy">Delete the policy:</a>
+                    <input type="text" id="delete-policy-input" value="/api/ezp/v2/user/roles/7/policies/1" />
+                    <div id="delete-policy-loader" class="ajax-loader"></div>
+                </div>
+
+                <div class="rest-test">
+                    <a href="#load-user-policies" id="load-user-policies">Load list of policies for the user:</a>
+                    <input type="text" id="load-user-policies-input" value="/api/ezp/v2/user/policies" />
+                    <div id="load-user-policies-loader" class="ajax-loader"></div>
+                </div>
+
 
             </div>
         </div>
@@ -721,6 +777,9 @@
     '@jsRestClientBundle/Resources/public/js/REST-client/structures/UserCreateStruct.js'
     '@jsRestClientBundle/Resources/public/js/REST-client/structures/UserUpdateStruct.js'
     '@jsRestClientBundle/Resources/public/js/REST-client/structures/RoleInputStruct.js'
+    '@jsRestClientBundle/Resources/public/js/REST-client/structures/RoleAssignInputStruct.js'
+    '@jsRestClientBundle/Resources/public/js/REST-client/structures/PolicyCreateStruct.js'
+    '@jsRestClientBundle/Resources/public/js/REST-client/structures/PolicyUpdateStruct.js'
 
     '@jsRestClientBundle/Resources/public/js/REST-client/structures/Request.js'
     '@jsRestClientBundle/Resources/public/js/REST-client/structures/Response.js'

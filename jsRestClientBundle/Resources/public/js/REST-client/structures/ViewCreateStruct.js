@@ -11,8 +11,6 @@ var ViewCreateStruct = (function() {
         this.body.ViewInput.Query = {};
 
         this.body.ViewInput.Query.Criteria = {};
-        //TODO: find a safe default value for "limit"
-//        this.body.ViewInput.Query.limit = 0;
         this.body.ViewInput.Query.offset = 0;
         this.body.ViewInput.Query.FacetBuilders = {};
         this.body.ViewInput.Query.SortClauses = {};

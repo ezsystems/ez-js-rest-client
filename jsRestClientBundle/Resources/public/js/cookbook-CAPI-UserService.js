@@ -477,3 +477,274 @@ GetUserGroupAssignmentsAnchor.onclick = function(e){
             GetUserGroupAssignmentsLoader.style.display = 'none';
         });
 };
+
+
+// assign Role to a user example
+var AssignRoleToUserAnchor = document.getElementById('assign-role-to-user');
+var AssignRoleToUserLoader = document.getElementById('assign-role-to-user-loader');
+AssignRoleToUserAnchor.onclick = function(e){
+
+    AssignRoleToUserLoader.style.display = 'block';
+    e.preventDefault();
+
+    var roleAssignCreateStruct = userService.newRoleAssignInputStruct(
+        {
+            "_href" : "/api/ezp/v2/user/roles/7",
+            "_media-type" : "application/vnd.ez.api.RoleAssignInput+json"
+        },
+        {
+            "_identifier" : "Section",
+            "values" : {
+                "ref" : [
+                    {
+                        "_href" : "/api/ezp/v2/content/sections/1",
+                        "_media-type" : "application/vnd.ez.api.Section+json"
+                    },
+                    {
+                        "_href" : "/api/ezp/v2/content/sections/4",
+                        "_media-type" : "application/vnd.ez.api.Section+json"
+                    }
+                ]
+            }
+        }
+
+    );
+
+    var AssignRoleToUserInput = document.getElementById('assign-role-to-user-input');
+    userService.assignRoleToUser(
+        AssignRoleToUserInput.value,
+        roleAssignCreateStruct,
+        function(error, response){
+            clientOutput.innerHTML =    "Errors : " + JSON.stringify(error) + "</br>" +
+                "Status : " + response.status + "</br>" +
+                "Body : " + response.body;
+            AssignRoleToUserLoader.style.display = 'none';
+        });
+};
+
+
+// assign Role to a User Group example
+var AssignRoleToUserGroupAnchor = document.getElementById('assign-role-to-user-group');
+var AssignRoleToUserGroupLoader = document.getElementById('assign-role-to-user-group-loader');
+AssignRoleToUserGroupAnchor.onclick = function(e){
+
+    AssignRoleToUserGroupLoader.style.display = 'block';
+    e.preventDefault();
+
+    var roleAssignCreateStruct = userService.newRoleAssignInputStruct(
+        {
+            "_href" : "/api/ezp/v2/user/roles/7",
+            "_media-type" : "application/vnd.ez.api.RoleAssignInput+json"
+        },
+        {
+            "_identifier" : "Section",
+            "values" : {
+                "ref" : [
+                    {
+                        "_href" : "/api/ezp/v2/content/sections/1",
+                        "_media-type" : "application/vnd.ez.api.Section+json"
+                    },
+                    {
+                        "_href" : "/api/ezp/v2/content/sections/4",
+                        "_media-type" : "application/vnd.ez.api.Section+json"
+                    }
+                ]
+            }
+        }
+
+    );
+
+    var AssignRoleToUserGroupInput = document.getElementById('assign-role-to-user-group-input');
+    userService.assignRoleToUserGroup(
+        AssignRoleToUserGroupInput.value,
+        roleAssignCreateStruct,
+        function(error, response){
+            clientOutput.innerHTML =    "Errors : " + JSON.stringify(error) + "</br>" +
+                "Status : " + response.status + "</br>" +
+                "Body : " + response.body;
+            AssignRoleToUserGroupLoader.style.display = 'none';
+        });
+};
+
+
+// unassign Role from a User example
+var UnassignRoleFromUserAnchor = document.getElementById('unassign-role-from-user');
+var UnassignRoleFromUserLoader = document.getElementById('unassign-role-from-user-loader');
+UnassignRoleFromUserAnchor.onclick = function(e){
+
+    UnassignRoleFromUserLoader.style.display = 'block';
+    e.preventDefault();
+
+    var UnassignRoleFromUserInput = document.getElementById('unassign-role-from-user-input');
+    userService.unassignRoleFromUser(
+        UnassignRoleFromUserInput.value,
+        function(error, response){
+            clientOutput.innerHTML =    "Errors : " + JSON.stringify(error) + "</br>" +
+                "Status : " + response.status + "</br>" +
+                "Body : " + response.body;
+            UnassignRoleFromUserLoader.style.display = 'none';
+        });
+};
+
+// unassign Role from a User Group example
+var UnassignRoleFromUserGroupAnchor = document.getElementById('unassign-role-from-user-group');
+var UnassignRoleFromUserGroupLoader = document.getElementById('unassign-role-from-user-group-loader');
+UnassignRoleFromUserGroupAnchor.onclick = function(e){
+
+    UnassignRoleFromUserGroupLoader.style.display = 'block';
+    e.preventDefault();
+
+    var UnassignRoleFromUserGroupInput = document.getElementById('unassign-role-from-user-group-input');
+    userService.unassignRoleFromUserGroup(
+        UnassignRoleFromUserGroupInput.value,
+        function(error, response){
+            clientOutput.innerHTML =    "Errors : " + JSON.stringify(error) + "</br>" +
+                "Status : " + response.status + "</br>" +
+                "Body : " + response.body;
+            UnassignRoleFromUserGroupLoader.style.display = 'none';
+        });
+};
+
+
+// Add policy to the role example
+var AddPolicyAnchor = document.getElementById('create-policy');
+var AddPolicyLoader = document.getElementById('create-policy-loader');
+AddPolicyAnchor.onclick = function(e){
+
+    AddPolicyLoader.style.display = 'block';
+    e.preventDefault();
+
+    var policyCreateStruct = userService.newPolicyCreateStruct(
+        "content",
+        "publish",
+        [
+            {
+                "_identifier" : "Section",
+                "values" : {
+                    "ref" : [
+                        {
+                            "_href" : "/api/ezp/v2/content/sections/1",
+                            "_media-type" : "application/vnd.ez.api.Section+json"
+                        },
+                        {
+                            "_href" : "/api/ezp/v2/content/sections/4",
+                            "_media-type" : "application/vnd.ez.api.Section+json"
+                        }
+                    ]
+                }
+            }
+        ]
+    );
+
+// TODO: what's up with limitations?
+// REST returns:    "limitations":{"limitation":[{"_identifier":"Class","values":{"ref":[{"_media-type":"application\/vnd.ez.api.ref+json","_href":"18"}]}}]}}}
+
+    var AddPolicyInput = document.getElementById('create-policy-input');
+    userService.addPolicy(
+        AddPolicyInput.value,
+        policyCreateStruct,
+        function(error, response){
+            clientOutput.innerHTML =    "Errors : " + JSON.stringify(error) + "</br>" +
+                "Status : " + response.status + "</br>" +
+                "Body : " + response.body;
+            AddPolicyLoader.style.display = 'none';
+        });
+};
+
+// Update policy example
+var UpdatePolicyAnchor = document.getElementById('update-policy');
+var UpdatePolicyLoader = document.getElementById('update-policy-loader');
+UpdatePolicyAnchor.onclick = function(e){
+
+    UpdatePolicyLoader.style.display = 'block';
+    e.preventDefault();
+
+    var policyCreateStruct = userService.newPolicyUpdateStruct(
+        [
+            {
+                "_identifier" : "Section",
+                "values" : {
+                    "ref" : [
+                        {
+                            "_href" : "/api/ezp/v2/content/sections/1",
+                            "_media-type" : "application/vnd.ez.api.Section+json"
+                        },
+                        {
+                            "_href" : "/api/ezp/v2/content/sections/4",
+                            "_media-type" : "application/vnd.ez.api.Section+json"
+                        }
+                    ]
+                }
+            }
+        ]
+    );
+
+    var UpdatePolicyInput = document.getElementById('update-policy-input');
+    userService.updatePolicy(
+        UpdatePolicyInput.value,
+        policyCreateStruct,
+        function(error, response){
+            clientOutput.innerHTML =    "Errors : " + JSON.stringify(error) + "</br>" +
+                "Status : " + response.status + "</br>" +
+                "Body : " + response.body;
+            UpdatePolicyLoader.style.display = 'none';
+        });
+};
+
+// Load policy example
+var LoadPolicyAnchor = document.getElementById('load-policy');
+var LoadPolicyLoader = document.getElementById('load-policy-loader');
+LoadPolicyAnchor.onclick = function(e){
+
+    LoadPolicyLoader.style.display = 'block';
+    e.preventDefault();
+
+    var LoadPolicyInput = document.getElementById('load-policy-input');
+    userService.loadPolicy(
+        LoadPolicyInput.value,
+        function(error, response){
+            clientOutput.innerHTML =    "Errors : " + JSON.stringify(error) + "</br>" +
+                "Status : " + response.status + "</br>" +
+                "Body : " + response.body;
+            LoadPolicyLoader.style.display = 'none';
+        });
+};
+
+// Delete policy example
+var DeletePolicyAnchor = document.getElementById('delete-policy');
+var DeletePolicyLoader = document.getElementById('delete-policy-loader');
+DeletePolicyAnchor.onclick = function(e){
+
+    DeletePolicyLoader.style.display = 'block';
+    e.preventDefault();
+
+    var DeletePolicyInput = document.getElementById('delete-policy-input');
+    userService.deletePolicy(
+        DeletePolicyInput.value,
+        function(error, response){
+            clientOutput.innerHTML =    "Errors : " + JSON.stringify(error) + "</br>" +
+                "Status : " + response.status + "</br>" +
+                "Body : " + response.body;
+            DeletePolicyLoader.style.display = 'none';
+        });
+};
+
+// Get policies by userId example
+var LoadUserPoliciesAnchor = document.getElementById('load-user-policies');
+var LoadUserPoliciesLoader = document.getElementById('load-user-policies-loader');
+LoadUserPoliciesAnchor.onclick = function(e){
+
+    LoadUserPoliciesLoader.style.display = 'block';
+    e.preventDefault();
+
+    var LoadUserPoliciesInput = document.getElementById('load-user-policies-input');
+    userService.loadPoliciesByUserId(
+        LoadUserPoliciesInput.value,
+        110,
+        function(error, response){
+            clientOutput.innerHTML =    "Errors : " + JSON.stringify(error) + "</br>" +
+                "Status : " + response.status + "</br>" +
+                "Body : " + response.body;
+            LoadUserPoliciesLoader.style.display = 'none';
+        });
+};
