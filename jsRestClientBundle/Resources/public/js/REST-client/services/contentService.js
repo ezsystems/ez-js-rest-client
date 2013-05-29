@@ -490,16 +490,32 @@ var ContentService = (function() {
      *  Loads all versions for the given content
      *
      * @method loadContentCurrentVersion
-     * @param contentVersions {href}
+     * @param contentId {href}
      * @param callback {function} function, which will be executed on request success
      */
-    ContentService.prototype.loadVersions = function(contentVersions, callback) {
-        this.connectionManager_.request(
-            "GET",
-            contentVersions,
-            {},
-            { "Accept" : "application/vnd.ez.api.VersionList+json" },
-            callback
+    ContentService.prototype.loadVersions = function(contentId, callback) {
+
+        var that = this;
+
+        this.loadContentInfo(
+            contentId,
+            function(error, contentResponse){
+                if (!error) {
+
+                    var contentVersions = JSON.parse(contentResponse.body).Content.Versions;
+
+                    that.connectionManager_.request(
+                        "GET",
+                        contentVersions["_href"],
+                        {},
+                        { "Accept" : contentVersions["_media-type"] },
+                        callback
+                    );
+
+                } else {
+                    callback(error, false)
+                }
+            }
         );
     };
 
@@ -527,17 +543,54 @@ var ContentService = (function() {
      * Creates a draft from a published or archived version.
      *
      * @method createContentDraft
-     * @param versionedContentId {href}
+     * @param contentId {href}
+     * @param versionId {int}
      * @param callback {function} function, which will be executed on request success
      */
-    ContentService.prototype.createContentDraft = function(versionedContentId, callback) {
-        this.connectionManager_.request(
-            "COPY",
-            versionedContentId,
-            "",
-            { "Accept" : "application/vnd.ez.api.Version+json" },
-            callback
-        );
+    ContentService.prototype.createContentDraft = function(contentId, versionId, callback) {
+
+        var that = this;
+
+
+            this.loadContentInfo(
+                contentId,
+                function(error, contentResponse){
+                    if (!error) {
+
+                        if (versionId !== null) {
+                            // Version id is declared
+
+                            console.log(versionId);
+
+                            var contentVersions = JSON.parse(contentResponse.body).Content.Versions;
+
+                            that.connectionManager_.request(
+                                "COPY",
+                                contentVersions["_href"] + "/" + versionId,
+                                "",
+                                { "Accept" : "application/vnd.ez.api.Version+json" },
+                                callback
+                            );
+
+                        } else {
+                            // Version id is NOT declared
+
+                            var currentVersion = JSON.parse(contentResponse.body).Content.CurrentVersion;
+
+                            that.connectionManager_.request(
+                                "COPY",
+                                currentVersion["_href"],
+                                "",
+                                { "Accept" : "application/vnd.ez.api.Version+json" },
+                                callback
+                            );
+
+                        }
+                    } else {
+                        callback(error, false)
+                    }
+                }
+            );
     };
 
 

@@ -481,6 +481,7 @@ createContentDraftAnchor.onclick = function(e){
     if (createContentDraftInput.value.length){
         contentService.createContentDraft(
             createContentDraftInput.value,
+            null,
             function(error, response){
                 clientOutput.innerHTML =    "Errors : " + JSON.stringify(error) + "</br>" +
                     "Status : " + response.status + "</br>" +
@@ -1011,7 +1012,7 @@ RecoverAnchor.onclick = function(e){
     var RecoverInput = document.getElementById('recover-trash-item-input');
     contentService.recover(
         RecoverInput.value,
-        null,
+        "/api/ezp/v2/content/locations/1/2/118",
         function(error, response){
             clientOutput.innerHTML =    "Errors : " + JSON.stringify(error) + "</br>" +
                 "Status : " + response.status + "</br>" +
