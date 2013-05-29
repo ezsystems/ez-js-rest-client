@@ -641,16 +641,11 @@ AddPolicyAnchor.onclick = function(e){
         "publish",
         [
             {
-                "_identifier" : "Section",
+                "_identifier" : "Class",
                 "values" : {
                     "ref" : [
                         {
-                            "_href" : "/api/ezp/v2/content/sections/1",
-                            "_media-type" : "application/vnd.ez.api.Section+json"
-                        },
-                        {
-                            "_href" : "/api/ezp/v2/content/sections/4",
-                            "_media-type" : "application/vnd.ez.api.Section+json"
+                            "_href" : "/api/ezp/v2/content/types/18",
                         }
                     ]
                 }

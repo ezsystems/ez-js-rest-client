@@ -1332,8 +1332,8 @@ CreateUrlAliasAnchor.onclick = function(e){
 
     var urlAliasCreateStruct = contentService.newUrlAliasCreateStruct(
         "eng-US",
-        "findme-alias",
-        "content/search"
+        "content/search",
+        "findme-alias"
     );
 
     contentService.createUrlAlias(
