@@ -1,13 +1,12 @@
 var ContentTypeGroupInputStruct = (function() {
     "use strict";
 
-    var ContentTypeGroupInputStruct = function(identifier, languageCode){
+    var ContentTypeGroupInputStruct = function(identifier){
 
         this.body = {};
         this.body.ContentTypeGroupInput = {};
 
         this.body.ContentTypeGroupInput.identifier = identifier;
-        this.body.ContentTypeGroupInput.mainLanguageCode = languageCode;
 
         this.headers = {};
         this.headers["Accept"] = "application/vnd.ez.api.ContentTypeGroup+json";

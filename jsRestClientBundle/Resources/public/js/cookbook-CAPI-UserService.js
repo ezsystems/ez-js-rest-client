@@ -251,6 +251,28 @@ CreateUserAnchor.onclick = function(e){
         });
 };
 
+// Get user list example
+var GetRoleAssignmentsAnchor = document.getElementById('get-role-assignments');
+var GetRoleAssignmentsLoader = document.getElementById('get-role-assignments-loader');
+GetRoleAssignmentsAnchor.onclick = function(e){
+
+    GetRoleAssignmentsLoader.style.display = 'block';
+    e.preventDefault();
+
+    var GetRoleAssignmentsInput = document.getElementById('get-role-assignments-input');
+    userService.getRoleAssignments(
+        "/api/ezp/v2/user/users",
+        GetRoleAssignmentsInput.value,
+        function(error, response){
+            clientOutput.innerHTML =    "Errors : " + JSON.stringify(error) + "</br>" +
+                "Status : " + response.status + "</br>" +
+                "Body : " + response.body;
+            GetRoleAssignmentsLoader.style.display = 'none';
+        });
+};
+
+
+
 // Load user example
 var LoadUserAnchor = document.getElementById('load-user');
 var LoadUserLoader = document.getElementById('load-user-loader');

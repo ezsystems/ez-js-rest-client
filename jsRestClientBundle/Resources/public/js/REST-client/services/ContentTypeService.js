@@ -26,9 +26,9 @@ var ContentTypeService = (function() {
      * @param identifier {string}
      * @param languageCode {string}
      */
-    ContentTypeService.prototype.newContentTypeGroupInputStruct = function(identifier, languageCode) {
+    ContentTypeService.prototype.newContentTypeGroupInputStruct = function(identifier) {
 
-        return new ContentTypeGroupInputStruct(identifier, languageCode);
+        return new ContentTypeGroupInputStruct(identifier);
 
     };
 
@@ -205,6 +205,22 @@ var ContentTypeService = (function() {
                 );
 
             }
+        );
+    };
+
+    /**
+     * @method loadContentTypeGroupByIdentifier
+     * @param contentTypeGroups {href}
+     * @param identifier {string}
+     * @param callback {Function}
+     */
+    ContentTypeService.prototype.loadContentTypeGroupByIdentifier = function(contentTypeGroups, identifier, callback) {
+        this.connectionManager_.request(
+            "GET",
+            contentTypeGroups + "?identifier=" + identifier,
+            "",
+            { "Accept" : "application/vnd.ez.api.ContentTypeGroup+json" },
+            callback
         );
     };
 

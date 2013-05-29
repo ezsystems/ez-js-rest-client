@@ -91,6 +91,13 @@
                     <div id="delete-content-loader" class="ajax-loader"></div>
                 </div>
 
+                <div class="rest-test">
+                    <a href="#load-content-by-remote-id" id="load-content-by-remote-id">Load a Content with remoteId =</a>
+                    <input type="text" id="load-content-by-remote-id-input" value="30847bec12a8a398777493a4bdb10398" />
+                    <div id="load-content-by-remote-id-loader" class="ajax-loader"></div>
+                </div>
+
+
                 <hr/>
 
                 <div class="rest-test">
@@ -101,7 +108,7 @@
 
                 <div class="rest-test">
                     <a href="#load-contentversions" id="load-contentversions">Load versions list for a Content:</a>
-                    <input type="text" id="load-contentversions-input" value="/api/ezp/v2/content/objects/102/versions" />
+                    <input type="text" id="load-contentversions-input" value="/api/ezp/v2/content/objects/102" />
                     <div id="load-contentversions-loader" class="ajax-loader"></div>
                 </div>
 
@@ -429,6 +436,12 @@
                 </div>
 
                 <div class="rest-test">
+                    <a href="#load-contenttype-group-by-identifier" id="load-contenttype-group-by-identifier">Load Content Type group by Identifier =</a>
+                    <input type="text" id="load-contenttype-group-by-identifier-input" value="Media" />
+                    <div id="load-contenttype-group-by-identifier-loader" class="ajax-loader"></div>
+                </div>
+
+                <div class="rest-test">
                     <a href="#update-contenttype-group" id="update-contenttype-group">Update Content Type group (random data):</a>
                     <input type="text" id="update-contenttype-group-input" value="/api/ezp/v2/content/typegroups/5" />
                     <div id="update-contenttype-group-loader" class="ajax-loader"></div>
@@ -674,6 +687,12 @@
                     <a href="#get-user-group-assignments" id="get-user-group-assignments">Get user group's roles assignments:</a>
                     <input type="text" id="get-user-group-assignments-input" value="/api/ezp/v2/user/groups/1/5/110" />
                     <div id="get-user-group-assignments-loader" class="ajax-loader"></div>
+                </div>
+
+                <div class="rest-test">
+                    <a href="#get-role-assignments" id="get-role-assignments">Get role's assignments:</a>
+                    <input type="text" id="get-role-assignments-input" value="/api/ezp/v2/user/roles/7" />
+                    <div id="get-role-assignments-loader" class="ajax-loader"></div>
                 </div>
 
                 <div class="rest-test">

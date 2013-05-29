@@ -351,6 +351,31 @@ copyContentAnchor.onclick = function(e){
 };
 
 
+// Load content by remoteId example
+var LoadContentByRemoteIdAnchor = document.getElementById('load-content-by-remote-id');
+var LoadContentByRemoteIdLoader = document.getElementById('load-content-by-remote-id-loader');
+LoadContentByRemoteIdAnchor.onclick = function(e){
+
+    LoadContentByRemoteIdLoader.style.display = 'block';
+    e.preventDefault();
+
+    var LoadContentByRemoteIdInput = document.getElementById('load-content-by-remote-id-input');
+    if (LoadContentByRemoteIdInput.value.length){
+        contentService.loadContentByRemoteId(
+            LoadContentByRemoteIdInput.value,
+            function(error, response){
+                clientOutput.innerHTML =    "Errors : " + JSON.stringify(error) + "</br>" +
+                    "Status : " + response.status + "</br>" +
+                    "Body : " + response.body;
+                LoadContentByRemoteIdLoader.style.display = 'none';
+            }
+        );
+    } else {
+        clientOutput.innerHTML = 'Id is missing!';
+    }
+};
+
+
 // ******************************
 // ******************************
 
@@ -1267,33 +1292,31 @@ SetContentStateAnchor.onclick = function(e){
     SetContentStateLoader.style.display = 'block';
     e.preventDefault();
 
-    var objectStates = [];
-    var objectState = {};
-    objectState.ObjectState = contentService.newObjectStateCreateStruct(
-        "some-id" + Math.random(10000),
-        "eng-US",
-        0,
-        [
-            {
-                "_languageCode":"eng-US",
-                "#text":"Some Name " + Math.random(10000)
-            }
-        ],
-        []
-    ).body.ObjectStateCreate;
+    contentService.loadObjectState(
+        "/api/ezp/v2/content/objectstategroups/4/objectstates/3",
+        function(error, objectStateResponse){
 
-    objectStates.push(objectState);
 
-    var SetContentStateInput = document.getElementById('set-content-state-input');
-    contentService.setContentState(
-        SetContentStateInput.value,
-        objectStates,
-        function(error, response){
-            clientOutput.innerHTML =    "Errors : " + JSON.stringify(error) + "</br>" +
-                "Status : " + response.status + "</br>" +
-                "Body : " + response.body;
-            SetContentStateLoader.style.display = 'none';
-        });
+            // Extra odd structure, but it works!
+            var objectStates = {};
+            objectStates.ObjectState = {};
+            objectStates.ObjectState.ObjectState = {}
+            objectStates.ObjectState.ObjectState = JSON.parse(objectStateResponse.body);
+
+//            console.log(JSON.parse(objectStateResponse.body));
+
+            var SetContentStateInput = document.getElementById('set-content-state-input');
+            contentService.setContentState(
+                SetContentStateInput.value,
+                objectStates,
+                function(error, response){
+                    clientOutput.innerHTML =    "Errors : " + JSON.stringify(error) + "</br>" +
+                        "Status : " + response.status + "</br>" +
+                        "Body : " + response.body;
+                    SetContentStateLoader.style.display = 'none';
+                });
+        }
+    );
 };
 
 

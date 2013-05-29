@@ -384,6 +384,26 @@ var UserService = (function() {
     };
 
     /**
+     * Load users and usergroups according to roleId
+     *
+     * @method getRoleAssignments
+     * @param userList
+     * @param roleId {href}
+     * @param callback {function} function, which will be executed on request success
+     */
+    UserService.prototype.getRoleAssignments = function(userList, roleId, callback) {
+        this.connectionManager_.request(
+            "GET",
+            userList + '?roleId=' + roleId,
+            "",
+            {
+                "Accept" : "application/vnd.ez.api.UserList+json"
+            },
+            callback
+        );
+    };
+
+    /**
      * Load user
      *
      * @method loadUser

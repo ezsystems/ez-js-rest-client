@@ -15,8 +15,7 @@ CreateContentTypeGroupAnchor.onclick = function(e){
     e.preventDefault();
 
     var contentTypeGroupCreateStruct = contentTypeService.newContentTypeGroupInputStruct(
-        "some-group-id" + Math.random(100),
-        "eng-US"
+        "some-group-id" + Math.random(100)
     );
 
     contentTypeService.createContentTypeGroup(
@@ -74,6 +73,32 @@ loadContentTypeGroupAnchor.onclick = function(e){
     }
 };
 
+
+// Load content type group by identifier example
+var loadContentTypeGroupByIdentifierAnchor = document.getElementById('load-contenttype-group-by-identifier');
+var loadContentTypeGroupByIdentifierLoader = document.getElementById('load-contenttype-group-by-identifier-loader');
+loadContentTypeGroupByIdentifierAnchor.onclick = function(e){
+
+    loadContentTypeGroupByIdentifierLoader.style.display = 'block';
+    e.preventDefault();
+
+    var loadContentTypeGroupByIdentifierInput = document.getElementById('load-contenttype-group-by-identifier-input');
+    if (loadContentTypeGroupByIdentifierInput.value.length){
+        contentTypeService.loadContentTypeGroupByIdentifier(
+            "/api/ezp/v2/content/typegroups",
+            loadContentTypeGroupByIdentifierInput.value,
+            function(error, response){
+                clientOutput.innerHTML =    "Errors : " + JSON.stringify(error) + "</br>" +
+                    "Status : " + response.status + "</br>" +
+                    "Body : " + response.body;
+                loadContentTypeGroupByIdentifierLoader.style.display = 'none';
+            }
+        );
+    } else {
+        clientOutput.innerHTML = 'Id is missing!';
+    }
+};
+
 // Update content type group example
 var UpdateContentTypeGroupAnchor = document.getElementById('update-contenttype-group');
 var UpdateContentTypeGroupLoader = document.getElementById('update-contenttype-group-loader');
@@ -83,8 +108,7 @@ UpdateContentTypeGroupAnchor.onclick = function(e){
     e.preventDefault();
 
     var contentTypeGroupUpdateStruct = contentTypeService.newContentTypeGroupInputStruct(
-        "some-group-id" + Math.random(100),
-        "eng-US"
+        "some-group-id" + Math.random(100)
     );
 
     var updateContentTypeGroupInput = document.getElementById('update-contenttype-group-input');
