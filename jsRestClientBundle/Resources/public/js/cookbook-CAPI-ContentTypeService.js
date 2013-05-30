@@ -188,8 +188,7 @@ CreateContentTypeAnchor.onclick = function(e){
                 "_languageCode":"eng-US",
                 "#text":"Some Name " + Math.random(10000)
             }
-        ],
-        "DummyUser"
+        ]
     );
 
     var fieldDefinition = contentTypeService.newFieldDefinitionCreateStruct(

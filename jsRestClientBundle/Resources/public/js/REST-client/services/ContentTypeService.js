@@ -40,9 +40,9 @@ var ContentTypeService = (function() {
      * @param user {string}
      * @return {ContentTypeCreateStruct}
      */
-    ContentTypeService.prototype.newContentTypeCreateStruct = function(identifier, languageCode, names, user) {
+    ContentTypeService.prototype.newContentTypeCreateStruct = function(identifier, languageCode, names) {
 
-        return new ContentTypeCreateStruct(identifier, languageCode, names, user);
+        return new ContentTypeCreateStruct(identifier, languageCode, names);
 
     };
 

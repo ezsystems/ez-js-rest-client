@@ -1,7 +1,7 @@
 var ContentTypeCreateStruct = (function() {
     "use strict";
 
-    var ContentTypeCreateStruct = function(identifier, languageCode, names, user){
+    var ContentTypeCreateStruct = function(identifier, languageCode, names){
 
         var now = JSON.parse(JSON.stringify(new Date()));
 

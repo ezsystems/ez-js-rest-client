@@ -180,7 +180,7 @@ createContentAnchor.onclick = function(e){
     createContentLoader.style.display = 'block';
     e.preventDefault();
 
-    var locationCreateStruct = contentService.newLocationCreateStruct("/api/ezp/v2/content/locations/1/2/113");
+    var locationCreateStruct = contentService.newLocationCreateStruct("/api/ezp/v2/content/locations/1/2/118");
 
     var contentCreateStruct = contentService.newContentCreateStruct(
         "/api/ezp/v2/content/types/18",
@@ -786,7 +786,7 @@ CopySubtreeAnchor.onclick = function(e){
     var CopySubtreeInput = document.getElementById('copy-subtree-input');
 
     contentService.copySubtree(
-        "/api/ezp/v2/content/locations/1/2/107",
+        "/api/ezp/v2/content/locations/1/2/113",
         CopySubtreeInput.value,
         function(error, response){
             clientOutput.innerHTML =    "Errors : " + JSON.stringify(error) + "</br>" +
@@ -807,7 +807,7 @@ MoveSubtreeAnchor.onclick = function(e){
     var MoveSubtreeInput = document.getElementById('move-subtree-input');
 
     contentService.moveSubtree(
-        "/api/ezp/v2/content/locations/1/2/107",
+        "/api/ezp/v2/content/locations/1/2/119",
         MoveSubtreeInput.value,
         function(error, response){
             clientOutput.innerHTML =    "Errors : " + JSON.stringify(error) + "</br>" +
@@ -828,7 +828,7 @@ SwapLocationAnchor.onclick = function(e){
     var SwapLocationInput = document.getElementById('swap-location-input');
 
     contentService.swapLocation(
-        "/api/ezp/v2/content/locations/1/2/102/128",
+        "/api/ezp/v2/content/locations/1/2/113",
         SwapLocationInput.value,
         function(error, response){
             clientOutput.innerHTML =    "Errors : " + JSON.stringify(error) + "</br>" +
@@ -866,9 +866,11 @@ CreateViewAnchor.onclick = function(e){
     CreateViewLoader.style.display = 'block';
     e.preventDefault();
 
-    var viewCreateStruct = contentService.newViewCreateStruct('test-id');
+    var viewCreateStruct = contentService.newViewCreateStruct('some-test-id');
 
-    viewCreateStruct.body.ViewInput.Query.Criteria = { FullTextCriterion : "title"};
+    viewCreateStruct.body.ViewInput.Query.Criteria = {
+        FullTextCriterion : "title"
+    };
 
     contentService.createView(
         viewCreateStruct,

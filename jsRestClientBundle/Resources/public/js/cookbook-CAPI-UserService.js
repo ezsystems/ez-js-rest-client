@@ -72,7 +72,7 @@ MoveUserGroupAnchor.onclick = function(e){
     var MoveUserGroupInput = document.getElementById('move-user-group-input');
     userService.moveUserGroup(
         MoveUserGroupInput.value,
-        "/api/ezp/v2/user/groups/1/5",
+        "/api/ezp/v2/user/groups/1/5/110",
         function(error, response){
             clientOutput.innerHTML =    "Errors : " + JSON.stringify(error) + "</br>" +
                 "Status : " + response.status + "</br>" +
@@ -222,9 +222,9 @@ CreateUserAnchor.onclick = function(e){
 
     var userCreateStruct = userService.newUserCreateStruct(
         "eng-US",
-        "johndoe3",
-        "johndoe3@nowhere.no",
-        "johndoepass3",
+        "johndoe4",
+        "johndoe4@nowhere.no",
+        "johndoepass4",
         [
             {
                 fieldDefinitionIdentifier : "first_name",
@@ -346,7 +346,7 @@ AssignUserAnchor.onclick = function(e){
     var AssignUserInput = document.getElementById('assign-user-input');
     userService.assignUserToUserGroup(
         AssignUserInput.value,
-        "/api/ezp/v2/user/groups/1/5/101",
+        "/api/ezp/v2/user/groups/1/5/13",
         function(error, response){
             clientOutput.innerHTML =    "Errors : " + JSON.stringify(error) + "</br>" +
                 "Status : " + response.status + "</br>" +
@@ -640,16 +640,16 @@ AddPolicyAnchor.onclick = function(e){
         "content",
         "publish",
         [
-            {
-                "_identifier" : "Class",
-                "values" : {
-                    "ref" : [
-                        {
-                            "_href" : "/api/ezp/v2/content/types/18",
-                        }
-                    ]
-                }
-            }
+//            {
+//                "_identifier" : "Class",
+//                "values" : {
+//                    "ref" : [
+//                        {
+//                            "_href" : "/api/ezp/v2/content/types/18"
+//                        }
+//                    ]
+//                }
+//            }
         ]
     );
 
@@ -756,8 +756,8 @@ LoadUserPoliciesAnchor.onclick = function(e){
 
     var LoadUserPoliciesInput = document.getElementById('load-user-policies-input');
     userService.loadPoliciesByUserId(
+        "/api/ezp/v2/user/policies",
         LoadUserPoliciesInput.value,
-        110,
         function(error, response){
             clientOutput.innerHTML =    "Errors : " + JSON.stringify(error) + "</br>" +
                 "Status : " + response.status + "</br>" +
