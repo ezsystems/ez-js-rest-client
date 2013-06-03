@@ -930,7 +930,7 @@ CreateRelationAnchor.onclick = function(e){
     CreateRelationLoader.style.display = 'block';
     e.preventDefault();
 
-    var relationCreateStruct = contentService.newRelationCreateStruct("/api/ezp/v2/content/objects/121");
+    var relationCreateStruct = contentService.newRelationCreateStruct("/api/ezp/v2/content/objects/132");
 
     console.log(relationCreateStruct);
 

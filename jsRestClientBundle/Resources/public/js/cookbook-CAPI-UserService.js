@@ -668,6 +668,8 @@ AddPolicyAnchor.onclick = function(e){
         });
 };
 
+
+
 // Update policy example
 var UpdatePolicyAnchor = document.getElementById('update-policy');
 var UpdatePolicyLoader = document.getElementById('update-policy-loader');
@@ -707,6 +709,26 @@ UpdatePolicyAnchor.onclick = function(e){
             UpdatePolicyLoader.style.display = 'none';
         });
 };
+
+// Load policies example
+var LoadPoliciesAnchor = document.getElementById('load-policies');
+var LoadPoliciesLoader = document.getElementById('load-policies-loader');
+LoadPoliciesAnchor.onclick = function(e){
+
+    LoadPoliciesLoader.style.display = 'block';
+    e.preventDefault();
+
+    var LoadPoliciesInput = document.getElementById('load-policies-input');
+    userService.loadPolicies(
+        LoadPoliciesInput.value,
+        function(error, response){
+            clientOutput.innerHTML =    "Errors : " + JSON.stringify(error) + "</br>" +
+                "Status : " + response.status + "</br>" +
+                "Body : " + response.body;
+            LoadPoliciesLoader.style.display = 'none';
+        });
+};
+
 
 // Load policy example
 var LoadPolicyAnchor = document.getElementById('load-policy');

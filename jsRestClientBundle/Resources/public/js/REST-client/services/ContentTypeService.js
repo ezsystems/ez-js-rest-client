@@ -170,11 +170,8 @@ var ContentTypeService = (function() {
      * @param callback {function} function, which will be executed on request success
      */
     ContentTypeService.prototype.deleteContentTypeGroup = function(contentTypeGroupId, callback) {
-        this.connectionManager_.request(
-            "DELETE",
+        this.connectionManager_.delete(
             contentTypeGroupId,
-            "",
-            {},
             callback
         );
     };
@@ -332,11 +329,8 @@ var ContentTypeService = (function() {
      * @param callback {function} function, which will be executed on request success
      */
     ContentTypeService.prototype.deleteContentType = function(contentTypeId, callback) {
-        this.connectionManager_.request(
-            "DELETE",
+        this.connectionManager_.delete(
             contentTypeId,
-            "",
-            {},
             callback
         );
     };
@@ -367,11 +361,8 @@ var ContentTypeService = (function() {
      * @param callback {function} function, which will be executed on request success
      */
     ContentTypeService.prototype.unassignContentTypeGroup = function(contentTypeAssignedGroupId, callback) {
-        this.connectionManager_.request(
-            "DELETE",
+        this.connectionManager_.delete(
             contentTypeAssignedGroupId,
-            "",
-            {},
             callback
         );
     };
@@ -458,11 +449,8 @@ var ContentTypeService = (function() {
      * @param callback {function} function, which will be executed on request success
      */
     ContentTypeService.prototype.deleteContentTypeDraft = function(contentTypeDraftId, callback) {
-        this.connectionManager_.request(
-            "DELETE",
+        this.connectionManager_.delete(
             contentTypeDraftId,
-            "",
-            {},
             callback
         );
     };
@@ -527,11 +515,8 @@ var ContentTypeService = (function() {
      * @param callback {function} function, which will be executed on request success
      */
     ContentTypeService.prototype.deleteFieldDefinition = function(fieldDefinitionId, callback) {
-        this.connectionManager_.request(
-            "DELETE",
+        this.connectionManager_.delete(
             fieldDefinitionId,
-            "",
-            {},
             callback
         );
     };

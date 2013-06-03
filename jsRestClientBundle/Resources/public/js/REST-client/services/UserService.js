@@ -191,11 +191,8 @@ var UserService = (function() {
      * @param callback {function} function, which will be executed on request success
      */
     UserService.prototype.deleteUserGroup = function(userGroupId, callback) {
-        this.connectionManager_.request(
-            "DELETE",
+        this.connectionManager_.delete(
             userGroupId,
-            "",
-            {},
             callback
         );
     };
@@ -796,6 +793,40 @@ var UserService = (function() {
                         rolePolicies["_href"],
                         JSON.stringify(policyCreateStruct.body),
                         policyCreateStruct.headers,
+                        callback
+                    );
+                } else {
+                    callback(error, false)
+                }
+            }
+        );
+    };
+
+    /**
+     * Load policies of the role
+     *
+     * @method loadPolicies
+     * @param roleId {href}
+     * @param callback {function} function, which will be executed on request success
+     */
+    UserService.prototype.loadPolicies = function(roleId, callback) {
+
+        var that = this;
+
+        this.loadRole(
+            roleId,
+            function(error, roleResponse){
+                if (!error) {
+
+                    var rolePolicies = JSON.parse(roleResponse.body).Role.Policies;
+
+                    that.connectionManager_.request(
+                        "GET",
+                        rolePolicies["_href"],
+                        "",
+                        {
+                            "Accept" : rolePolicies["_media-type"]
+                        },
                         callback
                     );
                 } else {
