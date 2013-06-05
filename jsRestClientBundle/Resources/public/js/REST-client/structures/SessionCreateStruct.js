@@ -9,7 +9,10 @@ var SessionCreateStruct = (function() {
         this.body.SessionInput.login = login;
         this.body.SessionInput.password = password;
 
-        this.headers = { "Accept" : "application/vnd.ez.api.Root+json" };
+        this.headers = {
+            "Accept" : "application/vnd.ez.api.Root+json",
+            "Content-Type" : "application/vnd.ez.api.SessionInput+json"
+        };
 
         return this;
 

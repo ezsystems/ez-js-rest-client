@@ -184,6 +184,26 @@ var UserService = (function() {
     };
 
     /**
+     * Load user group by remoteId
+     *
+     * @method loadUserGroupByRemoteId
+     * @param userGroups {href}
+     * @param remoteId {string}
+     * @param callback {function} function, which will be executed on request success
+     */
+    UserService.prototype.loadUserGroupByRemoteId = function(userGroups, remoteId, callback) {
+        this.connectionManager_.request(
+            "GET",
+            userGroups + '?remoteId=' + remoteId,
+            "",
+            {
+                "Accept" : "application/vnd.ez.api.UserGroupList+json"
+            },
+            callback
+        );
+    };
+
+    /**
      * Delete user group
      *
      * @method deleteUserGroup
@@ -567,6 +587,50 @@ var UserService = (function() {
     };
 
     /**
+     * Load roles
+     *
+     * @method loadRoles
+     * @param identifier {string}
+     * @param limit {int}
+     * @param offset {int}
+     * @param callback {function} function, which will be executed on request success
+     */
+    UserService.prototype.loadRoles = function(identifier, limit, offset, callback) {
+
+        var that = this;
+        var identifierQuery = (identifier === "") ? "" : "&identifier=" + identifier;
+
+        // default values for some of the parameters
+        offset = (typeof offset === "undefined") ? 0 : offset;
+        limit = (typeof limit === "undefined") ? -1 : limit;
+
+
+
+        this.discoveryService_.getInfoObject(
+            "roles",
+            function(error, roles){
+                if (!error) {
+
+                    that.connectionManager_.request(
+                        "GET",
+                        roles["_href"] + '?offset=' + offset + '&limit=' + limit + identifierQuery,
+                        "",
+                        {
+                            "Accept" : roles["_media-type"]
+                        },
+                        callback
+                    );
+
+                } else {
+                    callback(error, false)
+                }
+            }
+        )
+    };
+
+
+
+    /**
      * Update a role
      *
      * @method updateRole
@@ -669,6 +733,46 @@ var UserService = (function() {
             }
         );
     };
+
+
+    /**
+     * Get roleassignment object for a user
+     *
+     * @method getUserAssignmentObject
+     * @param userAssignmentId {href}
+     * @param callback {function} function, which will be executed on request success
+     */
+    UserService.prototype.getUserAssignmentObject = function(userAssignmentId, callback) {
+        this.connectionManager_.request(
+            "GET",
+            userAssignmentId,
+            "",
+            {
+                "Accept" : "application/vnd.ez.api.RoleAssignment+json"
+            },
+            callback
+        );
+    };
+
+    /**
+     * Get roleassignment object for a user group
+     *
+     * @method getUserGroupAssignmentObject
+     * @param userGroupAssignmentId {href}
+     * @param callback {function} function, which will be executed on request success
+     */
+    UserService.prototype.getUserGroupAssignmentObject = function(userGroupAssignmentId, callback) {
+        this.connectionManager_.request(
+            "GET",
+            userGroupAssignmentId,
+            "",
+            {
+                "Accept" : "application/vnd.ez.api.RoleAssignment+json"
+            },
+            callback
+        );
+    };
+
 
     /**
      * Assign a role to user
@@ -925,6 +1029,26 @@ var UserService = (function() {
             sessions,
             JSON.stringify(sessionCreateStruct.body),
             sessionCreateStruct.headers,
+            callback
+        );
+    };
+
+    /**
+     * Delete the session (logout)
+     *
+     * @method deleteSession
+     * @param sessionId {href}
+     * @param CSRFToken {string}
+     * @param callback {function} function, which will be executed on request success
+     */
+    UserService.prototype.deleteSession = function(sessionId, CSRFToken, callback) {
+        this.connectionManager_.request(
+            "DELETE",
+            sessionId,
+            "",
+            {
+                "X-CSRF-Token" : CSRFToken
+            },
             callback
         );
     };

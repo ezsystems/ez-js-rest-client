@@ -379,6 +379,32 @@ LoadContentByRemoteIdAnchor.onclick = function(e){
 // ******************************
 // ******************************
 
+
+// Load current version example
+var loadCurrentVersionAnchor = document.getElementById('load-current-version');
+var loadCurrentVersionLoader = document.getElementById('load-current-version-loader');
+loadCurrentVersionAnchor.onclick = function(e){
+
+    loadCurrentVersionLoader.style.display = 'block';
+    e.preventDefault();
+
+    var loadCurrentVersionInput = document.getElementById('load-current-version-input');
+    if (loadCurrentVersionInput.value.length){
+        contentService.loadCurrentVersion(
+            loadCurrentVersionInput.value,
+            function(error, response){
+                clientOutput.innerHTML =    "Errors : " + JSON.stringify(error) + "</br>" +
+                    "Status : " + response.status + "</br>" +
+                    "Body : " + response.body;
+                loadCurrentVersionLoader.style.display = 'none';
+            }
+        );
+    } else {
+        clientOutput.innerHTML = 'Id is missing!';
+    }
+};
+
+
 // Load content versions example
 var loadContentVersionsAnchor = document.getElementById('load-contentversions');
 var loadContentVersionsLoader = document.getElementById('load-contentversions-loader');
@@ -881,6 +907,33 @@ CreateViewAnchor.onclick = function(e){
             CreateViewLoader.style.display = 'none';
         });
 };
+
+
+//******************************************
+//******************************************
+
+// Load relations for current version example
+var LoadCurrentRelationsAnchor = document.getElementById('load-current-relations');
+var LoadCurrentRelationsLoader = document.getElementById('load-current-relations-loader');
+LoadCurrentRelationsAnchor.onclick = function(e){
+
+    LoadCurrentRelationsLoader.style.display = 'block';
+    e.preventDefault();
+
+    var LoadCurrentRelationsInput = document.getElementById('load-current-relations-input');
+    contentService.loadCurrentRelations(
+        LoadCurrentRelationsInput.value,
+        0,
+        -1,
+        function(error, response){
+            clientOutput.innerHTML =    "Errors : " + JSON.stringify(error) + "</br>" +
+                "Status : " + response.status + "</br>" +
+                "Body : " + response.body;
+            LoadCurrentRelationsLoader.style.display = 'none';
+        });
+};
+
+
 
 // Load relations example
 var LoadRelationsAnchor = document.getElementById('load-relations');
@@ -1438,7 +1491,7 @@ CreateUrlWildcardAnchor.onclick = function(e){
     var urlWildcardCreateStruct = contentService.newUrlWildcardCreateStruct(
         "some-new-wildcard-" + Math.random(100) * 1000,
         CreateUrlWildCardInput.value,
-        false
+        "false"
     );
     contentService.createUrlWildcard(
         "/api/ezp/v2/content/urlwildcards",

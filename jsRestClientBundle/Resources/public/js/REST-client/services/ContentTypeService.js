@@ -336,6 +336,24 @@ var ContentTypeService = (function() {
     };
 
     /**
+     * Load content type groups
+     *
+     * @method loadContentTypeGroups
+     * @param contentTypeId {href}
+     * @param callback {function} function, which will be executed on request success
+     */
+    ContentTypeService.prototype.loadContentTypeGroups = function(contentTypeId, callback) {
+        this.connectionManager_.request(
+            "GET",
+            contentTypeId + '/groups',
+            "",
+            { "Accept" : "application/vnd.ez.api.ContentTypeGroupRefList+json" },
+            callback
+        );
+    };
+
+
+    /**
      * Assign a content type to a group
      *
      * @method assignContentTypeGroup
@@ -486,6 +504,25 @@ var ContentTypeService = (function() {
                 );
 
             }
+        );
+    };
+
+    /**
+     * Load existing field definition
+     *
+     * @method loadFieldDefinition
+     * @param fieldDefinitionId {href}
+     * @param callback {function} function, which will be executed on request success
+     */
+    ContentTypeService.prototype.loadFieldDefinition = function(fieldDefinitionId, callback) {
+        this.connectionManager_.request(
+            "GET",
+            fieldDefinitionId,
+            "",
+            {
+                "Accept": "application/vnd.ez.api.FieldDefinition+json"
+            },
+            callback
         );
     };
 

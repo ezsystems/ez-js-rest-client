@@ -420,6 +420,26 @@ AddFieldDefinitionAnchor.onclick = function(e){
     );
 };
 
+// Load field definition example
+var LoadFieldDefinitionAnchor = document.getElementById('load-field-definition');
+var LoadFieldDefinitionLoader = document.getElementById('load-field-definition-loader');
+LoadFieldDefinitionAnchor.onclick = function(e){
+
+    LoadFieldDefinitionLoader.style.display = 'block';
+    e.preventDefault();
+
+    var LoadFieldDefinitionInput = document.getElementById('load-field-definition-input');
+    contentTypeService.loadFieldDefinition(
+        LoadFieldDefinitionInput.value,
+        function(error, response){
+            clientOutput.innerHTML =    "Errors : " + JSON.stringify(error) + "</br>" +
+                "Status : " + response.status + "</br>" +
+                "Body : " + response.body;
+            LoadFieldDefinitionLoader.style.display = 'none';
+        }
+    );
+};
+
 // Update field definition example
 var UpdateFieldDefinitionAnchor = document.getElementById('update-field-definition');
 var UpdateFieldDefinitionLoader = document.getElementById('update-field-definition-loader');
@@ -484,6 +504,26 @@ DeleteContentTypeAnchor.onclick = function(e){
                 "Status : " + response.status + "</br>" +
                 "Body : " + response.body;
             DeleteContentTypeLoader.style.display = 'none';
+        }
+    );
+};
+
+// Load content type groups example
+var LoadContentTypeGroupsAnchor = document.getElementById('load-content-type-groups');
+var LoadContentTypeGroupsLoader = document.getElementById('load-content-type-groups-loader');
+LoadContentTypeGroupsAnchor.onclick = function(e){
+
+    LoadContentTypeGroupsLoader.style.display = 'block';
+    e.preventDefault();
+
+    var LoadContentTypeGroupsInput = document.getElementById('load-content-type-groups-input');
+    contentTypeService.loadContentTypeGroups(
+        LoadContentTypeGroupsInput.value,
+        function(error, response){
+            clientOutput.innerHTML =    "Errors : " + JSON.stringify(error) + "</br>" +
+                "Status : " + response.status + "</br>" +
+                "Body : " + response.body;
+            LoadContentTypeGroupsLoader.style.display = 'none';
         }
     );
 };

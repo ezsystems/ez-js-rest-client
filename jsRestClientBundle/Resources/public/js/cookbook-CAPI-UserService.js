@@ -42,6 +42,26 @@ LoadUserGroupAnchor.onclick = function(e){
         });
 };
 
+// Load user group by remoteId example
+var LoadUserGroupByRemoteIdAnchor = document.getElementById('load-user-group-by-remoteid');
+var LoadUserGroupByRemoteIdLoader = document.getElementById('load-user-group-by-remoteid-loader');
+LoadUserGroupByRemoteIdAnchor.onclick = function(e){
+
+    LoadUserGroupByRemoteIdLoader.style.display = 'block';
+    e.preventDefault();
+
+    var LoadUserGroupByRemoteIdInput = document.getElementById('load-user-group-by-remoteid-input');
+    userService.loadUserGroupByRemoteId(
+        "/api/ezp/v2/user/groups",
+        LoadUserGroupByRemoteIdInput.value,
+        function(error, response){
+            clientOutput.innerHTML =    "Errors : " + JSON.stringify(error) + "</br>" +
+                "Status : " + response.status + "</br>" +
+                "Body : " + response.body;
+            LoadUserGroupByRemoteIdLoader.style.display = 'none';
+        });
+};
+
 // Delete user group example
 var DeleteUserGroupAnchor = document.getElementById('delete-user-group');
 var DeleteUserGroupLoader = document.getElementById('delete-user-group-loader');
@@ -416,6 +436,26 @@ LoadRoleAnchor.onclick = function(e){
         });
 };
 
+// load Roles example
+var LoadRolesAnchor = document.getElementById('load-roles');
+var LoadRolesLoader = document.getElementById('load-roles-loader');
+LoadRolesAnchor.onclick = function(e){
+
+    LoadRolesLoader.style.display = 'block';
+    e.preventDefault();
+
+    var LoadRolesInput = document.getElementById('load-roles-input');
+    userService.loadRoles(
+        LoadRolesInput.value,
+        "-1",
+        "0",
+        function(error, response){
+            clientOutput.innerHTML =    "Errors : " + JSON.stringify(error) + "</br>" +
+                "Status : " + response.status + "</br>" +
+                "Body : " + response.body;
+            LoadRolesLoader.style.display = 'none';
+        });
+};
 
 // update Role example
 var UpdateRoleAnchor = document.getElementById('update-role');
@@ -497,6 +537,44 @@ GetUserGroupAssignmentsAnchor.onclick = function(e){
                 "Status : " + response.status + "</br>" +
                 "Body : " + response.body;
             GetUserGroupAssignmentsLoader.style.display = 'none';
+        });
+};
+
+// Get RoleAssignment object for a user example
+var GetUserAssignmentObjectAnchor = document.getElementById('get-user-assignment-object');
+var GetUserAssignmentObjectLoader = document.getElementById('get-user-assignment-object-loader');
+GetUserAssignmentObjectAnchor.onclick = function(e){
+
+    GetUserAssignmentObjectLoader.style.display = 'block';
+    e.preventDefault();
+
+    var GetUserAssignmentObjectInput = document.getElementById('get-user-assignment-object-input');
+    userService.getUserAssignmentObject(
+        GetUserAssignmentObjectInput.value,
+        function(error, response){
+            clientOutput.innerHTML =    "Errors : " + JSON.stringify(error) + "</br>" +
+                "Status : " + response.status + "</br>" +
+                "Body : " + response.body;
+            GetUserAssignmentObjectLoader.style.display = 'none';
+        });
+};
+
+// Get RoleAssignment object for a user group example
+var GetUserGroupAssignmentObjectAnchor = document.getElementById('get-user-group-assignment-object');
+var GetUserGroupAssignmentObjectLoader = document.getElementById('get-user-group-assignment-object-loader');
+GetUserGroupAssignmentObjectAnchor.onclick = function(e){
+
+    GetUserGroupAssignmentObjectLoader.style.display = 'block';
+    e.preventDefault();
+
+    var GetUserGroupAssignmentObjectInput = document.getElementById('get-user-group-assignment-object-input');
+    userService.getUserGroupAssignmentObject(
+        GetUserGroupAssignmentObjectInput.value,
+        function(error, response){
+            clientOutput.innerHTML =    "Errors : " + JSON.stringify(error) + "</br>" +
+                "Status : " + response.status + "</br>" +
+                "Body : " + response.body;
+            GetUserGroupAssignmentObjectLoader.style.display = 'none';
         });
 };
 
@@ -785,5 +863,52 @@ LoadUserPoliciesAnchor.onclick = function(e){
                 "Status : " + response.status + "</br>" +
                 "Body : " + response.body;
             LoadUserPoliciesLoader.style.display = 'none';
+        });
+};
+
+
+// Create session example
+var CreateSessionAnchor = document.getElementById('create-session');
+var CreateSessionLoader = document.getElementById('create-session');
+CreateSessionAnchor.onclick = function(e){
+
+    CreateSessionLoader.style.display = 'block';
+    e.preventDefault();
+
+    var sessionCreate = userService.newSessionCreateStruct(
+        "admin",
+        "admin"
+    );
+
+    userService.createSession(
+        "/api/ezp/v2/user/sessions",
+        sessionCreate,
+        function(error, response){
+            clientOutput.innerHTML =    "Errors : " + JSON.stringify(error) + "</br>" +
+                "Status : " + response.status + "</br>" +
+                "Body : " + response.body;
+            CreateSessionLoader.style.display = 'none';
+        }
+    );
+};
+
+
+// Delete session example
+var DeleteSessionAnchor = document.getElementById('delete-session');
+var DeleteSessionLoader = document.getElementById('delete-session-loader');
+DeleteSessionAnchor.onclick = function(e){
+
+    DeleteSessionLoader.style.display = 'block';
+    e.preventDefault();
+
+    var DeleteSessionInput = document.getElementById('delete-session-input');
+    userService.deleteSession(
+        DeleteSessionInput.value,
+        "CSRF-Token",
+        function(error, response){
+            clientOutput.innerHTML =    "Errors : " + JSON.stringify(error) + "</br>" +
+                "Status : " + response.status + "</br>" +
+                "Body : " + response.body;
+            DeleteSessionLoader.style.display = 'none';
         });
 };

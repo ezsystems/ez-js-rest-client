@@ -12,11 +12,11 @@ var UrlWildcardCreateStruct = (function() {
 
         this.headers = {};
         this.headers["Accept"] = "application/vnd.ez.api.UrlWildcard+json";
-        this.headers["Content-Type"] = "application/vnd.ez.api.UrlAliasCreate+json";
+        this.headers["Content-Type"] = "application/vnd.ez.api.UrlWildcardCreate+json";
 
         return this;
     }
 
-    return UrlAliasCreateStruct;
+    return UrlWildcardCreateStruct;
 
 }());

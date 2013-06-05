@@ -313,11 +313,8 @@ var ContentService = (function() {
      * @param callback {function} function, which will be executed on request success
      */
     ContentService.prototype.deleteSection = function(sectionId, callback) {
-        this.connectionManager_.request(
-            "DELETE",
+        this.connectionManager_.delete(
             sectionId,
-            "",
-            {},
             callback
         );
     };
@@ -414,7 +411,7 @@ var ContentService = (function() {
     /**
      * Load single content info with embedded current version
      *
-     * @method loadContentCurrentVersion
+     * @method loadContentInfoAndCurrentVersion
      * @param contentId {href}
      * @param callback {function} function, which will be executed on request success
      */
@@ -436,11 +433,8 @@ var ContentService = (function() {
      * @param callback {function} function, which will be executed on request success
      */
     ContentService.prototype.deleteContent = function(contentId, callback) {
-        this.connectionManager_.request(
-            "DELETE",
+        this.connectionManager_.delete(
             contentId,
-            "",
-            {},
             callback
         );
     };
@@ -466,6 +460,39 @@ var ContentService = (function() {
 // ******************************
 // Versions management
 // ******************************
+
+    /**
+     * Load current content version
+     *
+     * @method loadCurrentVersion
+     * @param contentId {href}
+     * @param callback {function} function, which will be executed on request success
+     */
+    ContentService.prototype.loadCurrentVersion = function(contentId, callback) {
+        var that = this;
+
+        this.loadContentInfo(
+            contentId,
+            function(error, contentResponse){
+                if (!error) {
+
+                    var currentVersion = JSON.parse(contentResponse.body).Content.CurrentVersion;
+
+                    that.connectionManager_.request(
+                        "GET",
+                        currentVersion["_href"],
+                        {},
+                        { "Accept" : currentVersion["_media-type"] },
+                        callback
+                    );
+
+                } else {
+                    callback(error, false)
+                }
+            }
+        );
+    };
+
 
     /**
      * Loads a specific version of a content object. This method returns fields and relations
@@ -602,11 +629,8 @@ var ContentService = (function() {
      * @param callback {function} function, which will be executed on request success
      */
     ContentService.prototype.deleteVersion = function(versionedContentId, callback) {
-        this.connectionManager_.request(
-            "DELETE",
+        this.connectionManager_.delete(
             versionedContentId,
-            "",
-            {},
             callback
         );
     };
@@ -823,11 +847,8 @@ var ContentService = (function() {
      * @param callback {function} function, which will be executed on request success
      */
     ContentService.prototype.deleteLocation = function(locationId, callback) {
-        this.connectionManager_.request(
-            "DELETE",
+        this.connectionManager_.delete(
             locationId,
-            "",
-            {},
             callback
         );
     };
@@ -937,6 +958,39 @@ var ContentService = (function() {
     };
 
     /**
+     *  Loads the relations of the current version
+     *
+     * @method loadRelations
+     * @param contentId {href}
+     * @param offset {int}
+     * @param limit {int}
+     * @param callback {function} function, which will be executed on request success
+     */
+    ContentService.prototype.loadCurrentRelations = function(contentId, offset, limit, callback) {
+
+        var that = this;
+
+        this.loadCurrentVersion(
+            contentId,
+            {},
+            function(error, currentVersionResponse){
+
+                var currentVersion = JSON.parse(currentVersionResponse.body).Version;
+
+                that.connectionManager_.request(
+                    "GET",
+                    currentVersion.Relations["_href"] + '?offset=' + offset + '&limit=' + limit,
+                    {},
+                    { "Accept" : version.Relations["_media-type"] },
+                    callback
+                );
+
+            }
+        );
+    };
+
+
+    /**
      *  Loads a relation
      *
      * @method loadRelation
@@ -991,11 +1045,8 @@ var ContentService = (function() {
      * @param callback {function} function, which will be executed on request success
      */
     ContentService.prototype.deleteRelation = function(relationId, callback) {
-        this.connectionManager_.request(
-            "DELETE",
+        this.connectionManager_.delete(
             relationId,
-            "",
-            {},
             callback
         );
     };
@@ -1086,11 +1137,8 @@ var ContentService = (function() {
      * @param callback {function} function, which will be executed on request success
      */
     ContentService.prototype.deleteTrashItem = function(trashItemId, callback) {
-        this.connectionManager_.request(
-            "DELETE",
+        this.connectionManager_.delete(
             trashItemId,
-            "",
-            {},
             callback
         );
     };
@@ -1208,11 +1256,8 @@ var ContentService = (function() {
      * @param callback {function} function, which will be executed on request success
      */
     ContentService.prototype.deleteObjectStateGroup = function(objectStateGroupId, callback) {
-        this.connectionManager_.request(
-            "DELETE",
+        this.connectionManager_.delete(
             objectStateGroupId,
-            "",
-            {},
             callback
         );
     };
@@ -1280,11 +1325,8 @@ var ContentService = (function() {
      * @param callback {function} function, which will be executed on request success
      */
     ContentService.prototype.deleteObjectState = function(objectStateId, callback) {
-        this.connectionManager_.request(
-            "DELETE",
+        this.connectionManager_.delete(
             objectStateId,
-            "",
-            {},
             callback
         );
     };
@@ -1413,11 +1455,8 @@ var ContentService = (function() {
      * @param callback {function} function, which will be executed on request success
      */
     ContentService.prototype.deleteUrlAlias = function(urlAliasId, callback) {
-        this.connectionManager_.request(
-            "DELETE",
+        this.connectionManager_.delete(
             urlAliasId,
-            "",
-            {},
             callback
         );
     };
@@ -1486,11 +1525,8 @@ var ContentService = (function() {
      * @param callback {function} function, which will be executed on request success
      */
     ContentService.prototype.deleteUrlWildcard = function(urlWildcardId, callback) {
-        this.connectionManager_.request(
-            "DELETE",
+        this.connectionManager_.delete(
             urlWildcardId,
-            "",
-            {},
             callback
         );
     };

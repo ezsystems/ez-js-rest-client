@@ -113,6 +113,12 @@
                 </div>
 
                 <div class="rest-test">
+                    <a href="#load-current-version" id="load-current-version">Load current version for the Content</a>
+                    <div id="load-current-version-loader" class="ajax-loader"></div>
+                    <input type="text" id="load-current-version-input" value="/api/ezp/v2/content/objects/102" />
+                </div>
+
+                <div class="rest-test">
                     <a href="#load-content" id="load-content">Load exact version for the Content: </a>
                     <input type="text" id="load-content-input" value="/api/ezp/v2/content/objects/102/versions/1" />
                     <div id="load-content-loader" class="ajax-loader"></div>
@@ -231,6 +237,12 @@
                 </div>
 
                 <hr/>
+
+                <div class="rest-test">
+                    <a href="#load-current-relations" id="load-current-relations">Load relations list for the content current version</a>
+                    <div id="load-current-relations-loader" class="ajax-loader"></div>
+                    <input type="text" id="load-current-relations-input" value="/api/ezp/v2/content/objects/102" />
+                </div>
 
                 <div class="rest-test">
                     <a href="#load-relations" id="load-relations">Load relations list for a content version</a>
@@ -491,6 +503,12 @@
                 </div>
 
                 <div class="rest-test">
+                    <a href="#load-content-type-groups" id="load-content-type-groups">Load Content Type groups</a>
+                    <input type="text" id="load-content-type-groups-input" value="/api/ezp/v2/content/types/18" />
+                    <div id="load-content-type-groups-loader" class="ajax-loader"></div>
+                </div>
+
+                <div class="rest-test">
                     <a href="#assign-content-type-group" id="assign-content-type-group">Assing Content Type to some group</a>
                     <input type="text" id="assign-content-type-group-input" value="/api/ezp/v2/content/types/100" />
                     <div id="assign-content-type-group-loader" class="ajax-loader"></div>
@@ -544,6 +562,12 @@
                 </div>
 
                 <div class="rest-test">
+                    <a href="#load-field-definition" id="load-field-definition">Load field definition:</a>
+                    <input type="text" id="load-field-definition-input" value="/api/ezp/v2/content/types/42/fieldDefinitions/311" />
+                    <div id="load-field-definition-loader" class="ajax-loader"></div>
+                </div>
+
+                <div class="rest-test">
                     <a href="#update-field-definition" id="update-field-definition">Update field definition (random data):</a>
                     <input type="text" id="update-field-definition-input" value="/api/ezp/v2/content/types/18/draft/fieldDefinitions/196" />
                     <div id="update-field-definition-loader" class="ajax-loader"></div>
@@ -580,6 +604,12 @@
                     <a href="#load-user-group" id="load-user-group">Load user group:</a>
                     <input type="text" id="load-user-group-input" value="/api/ezp/v2/user/groups/1/5" />
                     <div id="load-user-group-loader" class="ajax-loader"></div>
+                </div>
+
+                <div class="rest-test">
+                    <a href="#load-user-group-by-remoteid" id="load-user-group-by-remoteid">Load user group by remoteId:</a>
+                    <input type="text" id="load-user-group-by-remoteid-input" value="f5c88a2209584891056f987fd965b0ba" />
+                    <div id="load-user-group-by-remoteid-loader" class="ajax-loader"></div>
                 </div>
 
                 <div class="rest-test">
@@ -666,6 +696,12 @@
                 </div>
 
                 <div class="rest-test">
+                    <a href="#load-roles" id="load-roles">Load roles:</a>
+                    <input type="text" id="load-roles-input" value="" />
+                    <div id="load-roles-loader" class="ajax-loader"></div>
+                </div>
+
+                <div class="rest-test">
                     <a href="#update-role" id="update-role">Update the role:</a>
                     <input type="text" id="update-role-input" value="/api/ezp/v2/user/roles/5" />
                     <div id="update-role-loader" class="ajax-loader"></div>
@@ -693,6 +729,18 @@
                     <a href="#get-role-assignments" id="get-role-assignments">Get role's assignments:</a>
                     <input type="text" id="get-role-assignments-input" value="/api/ezp/v2/user/roles/7" />
                     <div id="get-role-assignments-loader" class="ajax-loader"></div>
+                </div>
+
+                <div class="rest-test">
+                    <a href="#get-user-assignment-object" id="get-user-assignment-object">Get roleassignment object for the user</a>
+                    <input type="text" id="get-user-assignment-object-input" value="/api/ezp/v2/user/13/roles/7" />
+                    <div id="get-user-assignment-object-loader" class="ajax-loader"></div>
+                </div>
+
+                <div class="rest-test">
+                    <a href="#get-user-group-assignment-object" id="get-user-group-assignment-object">Get roleassignment object for the user group:</a>
+                    <input type="text" id="get-user-group-assignment-object-input" value="/api/ezp/v2/user/groups/1/5/110/roles/7" />
+                    <div id="get-user-group-assignment-object-loader" class="ajax-loader"></div>
                 </div>
 
                 <div class="rest-test">
@@ -755,6 +803,19 @@
                     <a href="#load-user-policies" id="load-user-policies">Load list of policies for the user with id:</a>
                     <input type="text" id="load-user-policies-input" value="110" />
                     <div id="load-user-policies-loader" class="ajax-loader"></div>
+                </div>
+
+                <hr/>
+
+                <div class="rest-test">
+                    <a href="#create-session" id="create-session">Create session (log in user)</a>
+                    <div id="create-session-loader" class="ajax-loader"></div>
+                </div>
+
+                <div class="rest-test">
+                    <a href="#delete-session" id="delete-session">Delete the session (log out):</a>
+                    <input type="text" id="delete-session-input" value="/api/ezp/v2/user/sessions/o7i8r1sapfc9r84ae53bgq8gp4" />
+                    <div id="delete-session-loader" class="ajax-loader"></div>
                 </div>
 
 
