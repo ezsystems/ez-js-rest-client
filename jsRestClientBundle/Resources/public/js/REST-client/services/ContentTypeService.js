@@ -190,17 +190,21 @@ var ContentTypeService = (function() {
         this.loadContentTypeGroup(
             contentTypeGroupId,
             function(error, contentTypeGroupResponse){
+                if (!error) {
 
-                var contentTypeGroup = JSON.parse(contentTypeGroupResponse.body).ContentTypeGroup;
+                    var contentTypeGroup = JSON.parse(contentTypeGroupResponse.body).ContentTypeGroup;
 
-                that.connectionManager_.request(
-                    "GET",
-                     contentTypeGroup.ContentTypes["_href"],
-                    "",
-                    { "Accept" : contentTypeGroup.ContentTypes["_media-type"] },
-                    callback
-                );
+                    that.connectionManager_.request(
+                        "GET",
+                         contentTypeGroup.ContentTypes["_href"],
+                        "",
+                        { "Accept" : contentTypeGroup.ContentTypes["_media-type"] },
+                        callback
+                    );
 
+                } else {
+                    callback(error, false)
+                }
             }
         );
     };
@@ -242,18 +246,22 @@ var ContentTypeService = (function() {
         this.loadContentTypeGroup(
             contentTypeGroupId,
             function(error, contentTypeGroupResponse){
+                if (!error) {
 
-                var contentTypeGroup = JSON.parse(contentTypeGroupResponse.body).ContentTypeGroup;
-                var parameters = (publish === true) ? "?publish=true" : "";
+                    var contentTypeGroup = JSON.parse(contentTypeGroupResponse.body).ContentTypeGroup;
+                    var parameters = (publish === true) ? "?publish=true" : "";
 
-                that.connectionManager_.request(
-                    "POST",
-                    contentTypeGroup.ContentTypes["_href"] + parameters,
-                    JSON.stringify(contentTypeCreateStruct.body),
-                    contentTypeCreateStruct.headers,
-                    callback
-                );
+                    that.connectionManager_.request(
+                        "POST",
+                        contentTypeGroup.ContentTypes["_href"] + parameters,
+                        JSON.stringify(contentTypeCreateStruct.body),
+                        contentTypeCreateStruct.headers,
+                        callback
+                    );
 
+                } else {
+                    callback(error, false)
+                }
             }
         );
     };
@@ -492,17 +500,21 @@ var ContentTypeService = (function() {
         this.loadContentTypeDraft(
             contentTypeId,
             function(error, contentTypeDraftResponse){
+                if (!error) {
 
-                var contentTypeDraftFieldDefinitions = JSON.parse(contentTypeDraftResponse.body).ContentType.FieldDefinitions;
+                    var contentTypeDraftFieldDefinitions = JSON.parse(contentTypeDraftResponse.body).ContentType.FieldDefinitions;
 
-                that.connectionManager_.request(
-                    "POST",
-                    contentTypeDraftFieldDefinitions["_href"],
-                    JSON.stringify(fieldDefinitionCreateStruct.body),
-                    fieldDefinitionCreateStruct.headers,
-                    callback
-                );
+                    that.connectionManager_.request(
+                        "POST",
+                        contentTypeDraftFieldDefinitions["_href"],
+                        JSON.stringify(fieldDefinitionCreateStruct.body),
+                        fieldDefinitionCreateStruct.headers,
+                        callback
+                    );
 
+                } else {
+                    callback(error, false)
+                }
             }
         );
     };

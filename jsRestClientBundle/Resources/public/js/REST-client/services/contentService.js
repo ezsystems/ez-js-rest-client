@@ -378,13 +378,17 @@ var ContentService = (function() {
         this.discoveryService_.getInfoObject(
             "content",
             function(error, contentObjects){
-                that.connectionManager_.request(
-                    "GET",
-                    contentObjects["_href"] + '?remoteId=' + remoteId,
-                    { "remoteId" : remoteId },
-                    { "Accept" : contentObjects["_media-type"] },
-                    callback
-                );
+                if (!error) {
+                    that.connectionManager_.request(
+                        "GET",
+                        contentObjects["_href"] + '?remoteId=' + remoteId,
+                        { "remoteId" : remoteId },
+                        { "Accept" : contentObjects["_media-type"] },
+                        callback
+                    );
+                } else {
+                    callback(error, false)
+                }
             }
         );
 
@@ -766,17 +770,20 @@ var ContentService = (function() {
         this.loadLocation(
             locationId,
             function(error, locationResponse){
+                if (!error) {
 
-                var location = JSON.parse(locationResponse.body).Location;
+                    var location = JSON.parse(locationResponse.body).Location;
 
-                that.connectionManager_.request(
-                    "GET",
-                    location.Children["_href"] + '?offset=' + offset + '&limit=' + limit,
-                    {},
-                    { "Accept" : location.Children["_media-type"] },
-                    callback
-                );
-
+                    that.connectionManager_.request(
+                        "GET",
+                        location.Children["_href"] + '?offset=' + offset + '&limit=' + limit,
+                        {},
+                        { "Accept" : location.Children["_media-type"] },
+                        callback
+                    );
+                } else {
+                    callback(error, false)
+                }
             }
         );
     };
@@ -942,17 +949,20 @@ var ContentService = (function() {
             versionedContentId,
             {},
             function(error, versionResponse){
+                if (!error) {
 
-                var version = JSON.parse(versionResponse.body).Version;
+                    var version = JSON.parse(versionResponse.body).Version;
 
-                that.connectionManager_.request(
-                    "GET",
-                    version.Relations["_href"] + '?offset=' + offset + '&limit=' + limit,
-                    {},
-                    { "Accept" : version.Relations["_media-type"] },
-                    callback
-                );
-
+                    that.connectionManager_.request(
+                        "GET",
+                        version.Relations["_href"] + '?offset=' + offset + '&limit=' + limit,
+                        {},
+                        { "Accept" : version.Relations["_media-type"] },
+                        callback
+                    );
+                } else {
+                    callback(error, false)
+                }
             }
         );
     };
@@ -974,17 +984,21 @@ var ContentService = (function() {
             contentId,
             {},
             function(error, currentVersionResponse){
+                if (!error) {
 
-                var currentVersion = JSON.parse(currentVersionResponse.body).Version;
+                    var currentVersion = JSON.parse(currentVersionResponse.body).Version;
 
-                that.connectionManager_.request(
-                    "GET",
-                    currentVersion.Relations["_href"] + '?offset=' + offset + '&limit=' + limit,
-                    {},
-                    { "Accept" : version.Relations["_media-type"] },
-                    callback
-                );
+                    that.connectionManager_.request(
+                        "GET",
+                        currentVersion.Relations["_href"] + '?offset=' + offset + '&limit=' + limit,
+                        {},
+                        { "Accept" : version.Relations["_media-type"] },
+                        callback
+                    );
 
+                } else {
+                    callback(error, false)
+                }
             }
         );
     };
@@ -1023,16 +1037,20 @@ var ContentService = (function() {
             versionedContentId,
             {},
             function(error, versionResponse){
+                if (!error) {
 
-                var version = JSON.parse(versionResponse.body).Version;
+                    var version = JSON.parse(versionResponse.body).Version;
 
-                that.connectionManager_.request(
-                    "POST",
-                    version.Relations["_href"],
-                    JSON.stringify(relationCreateStruct.body),
-                    relationCreateStruct.headers,
-                    callback
-                );
+                    that.connectionManager_.request(
+                        "POST",
+                        version.Relations["_href"],
+                        JSON.stringify(relationCreateStruct.body),
+                        relationCreateStruct.headers,
+                        callback
+                    );
+                } else {
+                    callback(error, false)
+                }
             }
         );
     };

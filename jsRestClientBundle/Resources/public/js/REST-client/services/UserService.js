@@ -150,17 +150,21 @@ var UserService = (function() {
         this.discoveryService_.getInfoObject(
             "rootUserGroup",
             function(error, rootUserGroup){
+                if (!error) {
 
-                that.connectionManager_.request(
-                    "GET",
-                    rootUserGroup["_href"],
-                    "",
-                    {
-                        "Accept" : rootUserGroup["_media-type"]
-                    },
-                    callback
-                );
+                    that.connectionManager_.request(
+                        "GET",
+                        rootUserGroup["_href"],
+                        "",
+                        {
+                            "Accept" : rootUserGroup["_media-type"]
+                        },
+                        callback
+                    );
 
+                } else {
+                    callback(error, false)
+                }
             });
     };
 
@@ -253,16 +257,21 @@ var UserService = (function() {
         this.loadUserGroup(
             parentGroupId,
             function(error, userGroupResponse){
+                if (!error) {
 
-                var subGroups = JSON.parse(userGroupResponse.body).UserGroup.Subgroups;
+                    var subGroups = JSON.parse(userGroupResponse.body).UserGroup.Subgroups;
 
-                that.connectionManager_.request(
-                    "POST",
-                    subGroups["_href"],
-                    JSON.stringify(userGroupCreateStruct.body),
-                    userGroupCreateStruct.headers,
-                    callback
-                );
+                    that.connectionManager_.request(
+                        "POST",
+                        subGroups["_href"],
+                        JSON.stringify(userGroupCreateStruct.body),
+                        userGroupCreateStruct.headers,
+                        callback
+                    );
+
+                } else {
+                    callback(error, false)
+                }
             }
         );
     };
@@ -300,19 +309,23 @@ var UserService = (function() {
         this.loadUserGroup(
             userGroupId,
             function(error, userGroupResponse){
+                if (!error) {
 
-                var subGroups = JSON.parse(userGroupResponse.body).UserGroup.Subgroups;
+                    var subGroups = JSON.parse(userGroupResponse.body).UserGroup.Subgroups;
 
-                that.connectionManager_.request(
-                    "GET",
-                    subGroups["_href"],
-                    "",
-                    {
-                        "Accept" : subGroups["_media-type"]
-                    },
-                    callback
-                );
+                    that.connectionManager_.request(
+                        "GET",
+                        subGroups["_href"],
+                        "",
+                        {
+                            "Accept" : subGroups["_media-type"]
+                        },
+                        callback
+                    );
 
+                } else {
+                    callback(error, false)
+                }
             }
         )
     };
@@ -331,18 +344,23 @@ var UserService = (function() {
         this.loadUserGroup(
             userGroupId,
             function(error, userGroupResponse){
+                if (!error) {
 
-                var users = JSON.parse(userGroupResponse.body).UserGroup.Users;
+                    var users = JSON.parse(userGroupResponse.body).UserGroup.Users;
 
-                that.connectionManager_.request(
-                    "GET",
-                    users["_href"],
-                    "",
-                    {
-                        "Accept" : users["_media-type"]
-                    },
-                    callback
-                );
+                    that.connectionManager_.request(
+                        "GET",
+                        users["_href"],
+                        "",
+                        {
+                            "Accept" : users["_media-type"]
+                        },
+                        callback
+                    );
+
+                } else {
+                    callback(error, false)
+                }
             }
         )
 
@@ -386,16 +404,21 @@ var UserService = (function() {
         this.loadUserGroup(
             userGroupId,
             function(error, userGroupResponse){
+                if (!error) {
 
-                var users = JSON.parse(userGroupResponse.body).UserGroup.Users;
+                    var users = JSON.parse(userGroupResponse.body).UserGroup.Users;
 
-                that.connectionManager_.request(
-                    "POST",
-                    users["_href"],
-                    JSON.stringify(userCreateStruct.body),
-                    userCreateStruct.headers,
-                    callback
-                );
+                    that.connectionManager_.request(
+                        "POST",
+                        users["_href"],
+                        JSON.stringify(userCreateStruct.body),
+                        userCreateStruct.headers,
+                        callback
+                    );
+
+                } else {
+                    callback(error, false)
+                }
             }
         );
     };

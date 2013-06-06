@@ -276,7 +276,7 @@ API/Design
   (already marked as TODO)
 
 
-``services/contentService.js``
+``services/ContentService.js``
 ------------------------------
 
 General

@@ -147,19 +147,23 @@ var DiscoveryService = (function() {
         this.getObjectFromCache(
             name,
             function(error, cachedObject){
-                if (cachedObject) {
-                    callback(
-                        false,
-                        cachedObject["_media-type"]
-                    );
+                if (!error) {
+                    if (cachedObject) {
+                        callback(
+                            false,
+                            cachedObject["_media-type"]
+                        );
+                    } else {
+                        callback(
+                            error,
+                            new Response({
+                                status : "error",
+                                body : ""
+                            })
+                        );
+                    }
                 } else {
-                    callback(
-                        error,
-                        new Response({
-                            status : "error",
-                            body : ""
-                        })
-                    );
+                    callback(error, false)
                 }
             }
         );
@@ -176,19 +180,23 @@ var DiscoveryService = (function() {
         this.getObjectFromCache(
             name,
             function(error, cachedObject){
-                if (cachedObject) {
-                    callback(
-                        false,
-                        cachedObject
-                    );
+                if (!error) {
+                    if (cachedObject) {
+                        callback(
+                            false,
+                            cachedObject
+                        );
+                    } else {
+                        callback(
+                            error,
+                            new Response({
+                                status : "error",
+                                body : ""
+                            })
+                        );
+                    }
                 } else {
-                    callback(
-                        error,
-                        new Response({
-                            status : "error",
-                            body : ""
-                        })
-                    );
+                    callback(error, false)
                 }
             }
         );
