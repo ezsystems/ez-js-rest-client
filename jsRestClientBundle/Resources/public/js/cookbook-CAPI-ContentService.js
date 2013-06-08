@@ -2,7 +2,7 @@
 
 var jsCAPI = new CAPI(
         'http://ez.git.local',
-        new HttpBasicAuthAgent({
+        new SessionAuthAgent({
             login : "admin",
             password : "admin"
         })

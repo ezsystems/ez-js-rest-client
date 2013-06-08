@@ -904,11 +904,27 @@ DeleteSessionAnchor.onclick = function(e){
     var DeleteSessionInput = document.getElementById('delete-session-input');
     userService.deleteSession(
         DeleteSessionInput.value,
-        "CSRF-Token",
         function(error, response){
             clientOutput.innerHTML =    "Errors : " + JSON.stringify(error) + "</br>" +
                 "Status : " + response.status + "</br>" +
                 "Body : " + response.body;
             DeleteSessionLoader.style.display = 'none';
+        });
+};
+
+// Logout example
+var LogOutAnchor = document.getElementById('log-out');
+var LogOutLoader = document.getElementById('log-out-loader');
+LogOutAnchor.onclick = function(e){
+
+    LogOutLoader.style.display = 'block';
+    e.preventDefault();
+
+    userService.logOut(
+        function(error, response){
+            clientOutput.innerHTML =    "Errors : " + JSON.stringify(error) + "</br>" +
+                "Status : " + response.status + "</br>" +
+                "Body : " + response.body;
+            LogOutLoader.style.display = 'none';
         });
 };

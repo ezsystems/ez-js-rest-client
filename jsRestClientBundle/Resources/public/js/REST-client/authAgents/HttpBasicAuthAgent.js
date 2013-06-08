@@ -46,7 +46,20 @@ var HttpBasicAuthAgent = (function() {
         request.password = this.password_;
 
         done(false, request);
+
     }
+
+    /**
+     * Log out workflow
+     * No actual logic for HTTP Basic Auth
+     *
+     * @method logOut
+     * @param done {function}
+     */
+    HttpBasicAuthAgent.prototype.logOut = function(done) {
+        done(false, true);
+    }
+
 
     return HttpBasicAuthAgent;
 

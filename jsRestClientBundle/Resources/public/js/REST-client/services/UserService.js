@@ -1047,7 +1047,7 @@ var UserService = (function() {
      * @param callback {function} function, which will be executed on request success
      */
     UserService.prototype.createSession = function(sessions, sessionCreateStruct, callback) {
-        this.connectionManager_.request(
+        this.connectionManager_.notAuthorizedRequest(
             "POST",
             sessions,
             JSON.stringify(sessionCreateStruct.body),
@@ -1057,24 +1057,37 @@ var UserService = (function() {
     };
 
     /**
-     * Delete the session (logout)
+     * Delete the session (without actual client logout)
      *
      * @method deleteSession
      * @param sessionId {href}
-     * @param CSRFToken {string}
      * @param callback {function} function, which will be executed on request success
      */
-    UserService.prototype.deleteSession = function(sessionId, CSRFToken, callback) {
+    UserService.prototype.deleteSession = function(sessionId, callback) {
         this.connectionManager_.request(
             "DELETE",
             sessionId,
             "",
             {
-                "X-CSRF-Token" : CSRFToken
+                "X-CSRF-Token" : "6245d05aa911d064c3f68fcf6b01aaaf65fca8ca"
             },
             callback
         );
     };
+
+    /**
+     * Actual client logout (based on deleteSession)
+     * Kills currently active session and resets localStorage params (sessionId, CSRFToken)
+     *
+     * @method logOut
+     * @param callback {function} function, which will be executed on request success
+     */
+    UserService.prototype.logOut = function(callback) {
+
+        this.connectionManager_.logOut(callback);
+
+    };
+
 
     return UserService;
 

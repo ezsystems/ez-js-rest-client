@@ -42,34 +42,78 @@ var ConnectionManager = (function() {
                 headers : headers
             });
 
-            // TODO: Initial authentication
-            // TODO: Suspend Requests during initial authentication
+            // Check if we are already authenticated, make it happen if not
+            authenticationAgent.ensureAuthentication(
+                function(error, success){
+                    // TODO: Suspend Requests during initial authentication
+                    // TODO: errors handling
 
-            authenticationAgent.authenticateRequest(
-                request,
-                function(error, authenticatedRequest) {
-                    if (!error) {
+                    authenticationAgent.authenticateRequest(
+                        request,
+                        function(error, authenticatedRequest) {
+                            if (!error) {
 
-                        if (that.logRequests) {
-                            console.log(request);
+                                if (that.logRequests) {
+                                    console.log(request);
+                                }
+                                // Main goal
+                                activeConnection.execute(authenticatedRequest, callback);
+                            } else {
+                                callback(
+                                    new Error({
+                                        errorText : "An error occured during request authentication!"
+                                    }),
+                                    new Response({
+                                        status : "error",
+                                        body : ""
+                                    })
+                                );
+                            }
                         }
-                        // Main goal
-                        activeConnection.execute(authenticatedRequest, callback);
-                    } else {
-                        callback(
-                            new Error({
-                                errorText : "An error occured during request authentication!"
-                            }),
-                            new Response({
-                                status : "error",
-                                body : ""
-                            })
-                        );
-                    }
+                    );
+
                 }
             );
+        };
+
+
+        /**
+         * Not authorized request function
+         * Used mainly for initial requests (e.g. createSession)
+         *
+         * @method notAuthorizedRequest
+         * @param method {string} request method ("POST", "GET" etc)
+         * @param url {string} requested REST resource
+         * @param body {JSON}
+         * @param headers {object}
+         * @param callback {function} function, which will be executed on request success
+         */
+        this.notAuthorizedRequest = function(method, url, body, headers, callback) {
+
+            // default values for all the parameters
+            method = (typeof method === "undefined") ? "GET" : method;
+            url = (typeof url === "undefined") ? "/" : url;
+            body = (typeof body === "undefined") ? "" : body;
+            headers = (typeof headers === "undefined") ? {} : headers;
+            callback = (typeof callback === "undefined") ? function(){} : callback;
+
+            var request = new Request({
+                method : method,
+                url : endPointUrl + url,
+                body : body,
+                headers : headers
+            });
+
+            if (this.logRequests) {
+                console.log(request);
+            }
+
+            // Main goal
+            activeConnection.execute(request, callback);
 
         };
+
+
 
         /**
          * Delete - shortcut which handles simple deletion requests in most cases
@@ -119,6 +163,20 @@ var ConnectionManager = (function() {
 
 
         };
+
+        /**
+         * logOut - logout workflow
+         * Kills currently active session and resets localStorage params (sessionId, CSRFToken)
+         *
+         * @method logOut
+         * @param callback {function}
+         */
+        this.logOut = function(callback) {
+
+            authenticationAgent.logOut(callback);
+
+        }
+
     };
 
     return ConnectionManager;

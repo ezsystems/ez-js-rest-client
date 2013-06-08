@@ -9,15 +9,18 @@ var SessionAuthAgent = (function() {
      */
     var SessionAuthAgent = function (credentials) {
 
+        // for now is initiated inside CAPI constructor
         this.CAPI = null;
 
         // Private (should be!) area
         this.login_ = credentials.login;
         this.password_ = credentials.password;
 
-        this.sessionName = null;
-        this.sessionId = null;
-        this.csrfToken = null;
+        this.sessionName = localStorage.getItem('ezpRestClient.sessionName');
+        this.sessionId = localStorage.getItem('ezpRestClient.sessionId');
+        this.csrfToken = localStorage.getItem('ezpRestClient.csrfToken');
+
+        console.log(this.sessionId);
 
     };
 
@@ -34,6 +37,8 @@ var SessionAuthAgent = (function() {
     SessionAuthAgent.prototype.ensureAuthentication = function(done) {
         if (!this.sessionId) {
 
+            var that = this;
+
             var userService = this.CAPI.getUserService();
 
             var sessionCreateStruct = userService.newSessionCreateStruct(
@@ -45,10 +50,26 @@ var SessionAuthAgent = (function() {
             userService.createSession(
                 "/api/ezp/v2/user/sessions",
                 sessionCreateStruct,
-                function(error, session){
+                function(error, sessionResponse){
+                    if (!error){
 
-                    console.log(error, session);
+                        console.log(sessionResponse);
 
+                        var session = JSON.parse(sessionResponse.body).Session;
+
+                        that.sessionName = session.name;
+                        that.sessionId = session._href;
+                        that.csrfToken = session.csrfToken;
+
+                        localStorage.setItem('ezpRestClient.sessionName', that.sessionName);
+                        localStorage.setItem('ezpRestClient.sessionId', that.sessionId);
+                        localStorage.setItem('ezpRestClient.csrfToken', that.csrfToken);
+
+                        done(false, true);
+
+                    } else {
+                        console.log(error, session);
+                    }
                 }
             );
 
@@ -56,7 +77,7 @@ var SessionAuthAgent = (function() {
             done(false, true);
         }
 
-
+//        done(false, true);
     }
 
     /**
@@ -69,12 +90,47 @@ var SessionAuthAgent = (function() {
      */
     SessionAuthAgent.prototype.authenticateRequest = function(request, done) {
 
-//        request.httpBasicAuth = true;
-//        request.user = this.user;
-//        request.password = this.password;
+        request.headers["X-CSRF-Token"] = this.csrfToken;
 
         done(false, request);
+
     }
+
+    /**
+     * Log out workflow
+     * Kills currently active session and resets localStorage params (sessionId, CSRFToken)
+     *
+     * @method logOut
+     * @param done {function}
+     */
+    SessionAuthAgent.prototype.logOut = function(done) {
+
+        var userService = this.CAPI.getUserService();
+        var that = this;
+
+        userService.deleteSession(
+            this.sessionId,
+            function(error, response){
+                if (!error){
+
+                    that.sessionName = "";
+                    that.sessionId = "";
+                    that.csrfToken = "";
+
+                    localStorage.setItem('ezpRestClient.sessionName', that.sessionName);
+                    localStorage.setItem('ezpRestClient.sessionId', that.sessionId);
+                    localStorage.setItem('ezpRestClient.csrfToken', that.csrfToken);
+
+                    done(false, true);
+
+                } else {
+                    done(true, false);
+                }
+            }
+        );
+    }
+
+
 
     return SessionAuthAgent;
 
