@@ -43,7 +43,7 @@ var CAPI = (function() {
          * @method getContentService
          * @return {ContentService}
          */
-        this.getContentService = function(){
+        this.getContentService = function getContentService(){
             if  (!this.contentService_)  {
                 this.contentService_  =  new ContentService(
                     connectionManager,
@@ -59,7 +59,7 @@ var CAPI = (function() {
          * @method getContentTypeService
          * @return {ContentTypeService}
          */
-        this.getContentTypeService = function(){
+        this.getContentTypeService = function getContentTypeService(){
             if  (!this.contentTypeService_)  {
                 this.contentTypeService_  =  new ContentTypeService(
                     connectionManager,
@@ -75,7 +75,7 @@ var CAPI = (function() {
          * @method getUserService
          * @return {UserService}
          */
-        this.getUserService = function(){
+        this.getUserService = function getUserService(){
             if  (!this.userService_)  {
                 this.userService_  =  new UserService(
                     connectionManager,

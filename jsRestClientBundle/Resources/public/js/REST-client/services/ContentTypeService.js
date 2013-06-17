@@ -26,7 +26,7 @@ var ContentTypeService = (function() {
      * @param identifier {string}
      * @param languageCode {string}
      */
-    ContentTypeService.prototype.newContentTypeGroupInputStruct = function(identifier) {
+    ContentTypeService.prototype.newContentTypeGroupInputStruct = function newContentTypeGroupInputStruct(identifier) {
 
         return new ContentTypeGroupInputStruct(identifier);
 
@@ -40,7 +40,7 @@ var ContentTypeService = (function() {
      * @param user {string}
      * @return {ContentTypeCreateStruct}
      */
-    ContentTypeService.prototype.newContentTypeCreateStruct = function(identifier, languageCode, names) {
+    ContentTypeService.prototype.newContentTypeCreateStruct = function newContentTypeCreateStruct(identifier, languageCode, names) {
 
         return new ContentTypeCreateStruct(identifier, languageCode, names);
 
@@ -50,7 +50,7 @@ var ContentTypeService = (function() {
      * @method newContentTypeUpdateStruct
      * @return {ContentTypeCreateStruct}
      */
-    ContentTypeService.prototype.newContentTypeUpdateStruct = function() {
+    ContentTypeService.prototype.newContentTypeUpdateStruct = function newContentTypeUpdateStruct() {
 
         return new ContentTypeUpdateStruct();
 
@@ -65,7 +65,7 @@ var ContentTypeService = (function() {
      * @param names
      * @return {FieldDefinitionCreateStruct}
      */
-    ContentTypeService.prototype.newFieldDefinitionCreateStruct = function(identifier, fieldType, fieldGroup, names) {
+    ContentTypeService.prototype.newFieldDefinitionCreateStruct = function newFieldDefinitionCreateStruct(identifier, fieldType, fieldGroup, names) {
 
         return new FieldDefinitionCreateStruct(identifier, fieldType, fieldGroup, names);
 
@@ -79,7 +79,7 @@ var ContentTypeService = (function() {
      * @param names
      * @return {FieldDefinitionCreateStruct}
      */
-    ContentTypeService.prototype.newFieldDefinitionUpdateStruct = function(identifier, fieldType, fieldGroup, names) {
+    ContentTypeService.prototype.newFieldDefinitionUpdateStruct = function newFieldDefinitionUpdateStruct(identifier, fieldType, fieldGroup, names) {
 
         return new FieldDefinitionUpdateStruct(identifier, fieldType, fieldGroup, names);
 
@@ -98,7 +98,7 @@ var ContentTypeService = (function() {
      * @param contentTypeGroupCreateStruct {Object}
      * @param callback {function} function, which will be executed on request success
      */
-    ContentTypeService.prototype.createContentTypeGroup = function(contentTypeGroups, contentTypeGroupCreateStruct, callback) {
+    ContentTypeService.prototype.createContentTypeGroup = function createContentTypeGroup(contentTypeGroups, contentTypeGroupCreateStruct, callback) {
         this.connectionManager_.request(
             "POST",
             contentTypeGroups,
@@ -116,7 +116,7 @@ var ContentTypeService = (function() {
      * @param contentTypeGroups {href} reference to type groups resource
      * @param callback {function} function, which will be executed on request success
      */
-    ContentTypeService.prototype.loadContentTypeGroups = function(contentTypeGroups, callback) {
+    ContentTypeService.prototype.loadContentTypeGroups = function loadContentTypeGroups(contentTypeGroups, callback) {
         this.connectionManager_.request(
             "GET",
             contentTypeGroups,
@@ -133,7 +133,7 @@ var ContentTypeService = (function() {
      * @param contentTypeGroupId {href}
      * @param callback {function} function, which will be executed on request success
      */
-    ContentTypeService.prototype.loadContentTypeGroup = function(contentTypeGroupId, callback) {
+    ContentTypeService.prototype.loadContentTypeGroup = function loadContentTypeGroup(contentTypeGroupId, callback) {
         this.connectionManager_.request(
             "GET",
             contentTypeGroupId,
@@ -152,7 +152,7 @@ var ContentTypeService = (function() {
      * @param contentTypeGroupUpdateStruct {Object}
      * @param callback {function} function, which will be executed on request success
      */
-    ContentTypeService.prototype.updateContentTypeGroup = function(contentTypeGroupId, contentTypeGroupUpdateStruct, callback) {
+    ContentTypeService.prototype.updateContentTypeGroup = function updateContentTypeGroup(contentTypeGroupId, contentTypeGroupUpdateStruct, callback) {
         this.connectionManager_.request(
             "PATCH",
             contentTypeGroupId,
@@ -169,7 +169,7 @@ var ContentTypeService = (function() {
      * @param contentTypeGroupId {href}
      * @param callback {function} function, which will be executed on request success
      */
-    ContentTypeService.prototype.deleteContentTypeGroup = function(contentTypeGroupId, callback) {
+    ContentTypeService.prototype.deleteContentTypeGroup = function deleteContentTypeGroup(contentTypeGroupId, callback) {
         this.connectionManager_.delete(
             contentTypeGroupId,
             callback
@@ -183,7 +183,7 @@ var ContentTypeService = (function() {
      * @param contentTypeGroupId {href}
      * @param callback {function} function, which will be executed on request success
      */
-    ContentTypeService.prototype.loadContentTypes = function(contentTypeGroupId, callback) {
+    ContentTypeService.prototype.loadContentTypes = function loadContentTypes(contentTypeGroupId, callback) {
 
         var that = this;
 
@@ -215,7 +215,7 @@ var ContentTypeService = (function() {
      * @param identifier {string}
      * @param callback {Function}
      */
-    ContentTypeService.prototype.loadContentTypeGroupByIdentifier = function(contentTypeGroups, identifier, callback) {
+    ContentTypeService.prototype.loadContentTypeGroupByIdentifier = function loadContentTypeGroupByIdentifier(contentTypeGroups, identifier, callback) {
         this.connectionManager_.request(
             "GET",
             contentTypeGroups + "?identifier=" + identifier,
@@ -239,7 +239,7 @@ var ContentTypeService = (function() {
      * @param publish {boolean}
      * @param callback {function} function, which will be executed on request success
      */
-    ContentTypeService.prototype.createContentType = function(contentTypeGroupId, contentTypeCreateStruct, publish, callback) {
+    ContentTypeService.prototype.createContentType = function createContentType(contentTypeGroupId, contentTypeCreateStruct, publish, callback) {
 
         var that = this;
 
@@ -273,7 +273,7 @@ var ContentTypeService = (function() {
      * @param contentTypeId {href}
      * @param callback {function} function, which will be executed on request success
      */
-    ContentTypeService.prototype.copyContentType = function(contentTypeId, callback) {
+    ContentTypeService.prototype.copyContentType = function copyContentType(contentTypeId, callback) {
         this.connectionManager_.request(
             "COPY",
             contentTypeId,
@@ -290,7 +290,7 @@ var ContentTypeService = (function() {
      * @param contentTypeId {href}
      * @param callback {function} function, which will be executed on request success
      */
-    ContentTypeService.prototype.loadContentType = function(contentTypeId, callback) {
+    ContentTypeService.prototype.loadContentType = function loadContentType(contentTypeId, callback) {
         this.connectionManager_.request(
             "GET",
             contentTypeId,
@@ -305,7 +305,7 @@ var ContentTypeService = (function() {
      * @param identifier {string}
      * @param callback {Function}
      */
-    ContentTypeService.prototype.loadContentTypeByIdentifier = function(identifier, callback) {
+    ContentTypeService.prototype.loadContentTypeByIdentifier = function loadContentTypeByIdentifier(identifier, callback) {
 
         var that = this;
 
@@ -336,7 +336,7 @@ var ContentTypeService = (function() {
      * @param contentTypeId {href}
      * @param callback {function} function, which will be executed on request success
      */
-    ContentTypeService.prototype.deleteContentType = function(contentTypeId, callback) {
+    ContentTypeService.prototype.deleteContentType = function deleteContentType(contentTypeId, callback) {
         this.connectionManager_.delete(
             contentTypeId,
             callback
@@ -350,7 +350,7 @@ var ContentTypeService = (function() {
      * @param contentTypeId {href}
      * @param callback {function} function, which will be executed on request success
      */
-    ContentTypeService.prototype.loadContentTypeGroups = function(contentTypeId, callback) {
+    ContentTypeService.prototype.loadContentTypeGroups = function loadContentTypeGroups(contentTypeId, callback) {
         this.connectionManager_.request(
             "GET",
             contentTypeId + '/groups',
@@ -369,7 +369,7 @@ var ContentTypeService = (function() {
      * @param groupId{href}
      * @param callback {function} function, which will be executed on request success
      */
-    ContentTypeService.prototype.assignContentTypeGroup = function(contentTypeId, groupId, callback) {
+    ContentTypeService.prototype.assignContentTypeGroup = function assignContentTypeGroup(contentTypeId, groupId, callback) {
         this.connectionManager_.request(
             "POST",
             contentTypeId + "/groups" + "?group=" + groupId,
@@ -386,7 +386,7 @@ var ContentTypeService = (function() {
      * @param contentTypeAssignedGroupId {href} (/content/type/<ID>/groups/<ID>)
      * @param callback {function} function, which will be executed on request success
      */
-    ContentTypeService.prototype.unassignContentTypeGroup = function(contentTypeAssignedGroupId, callback) {
+    ContentTypeService.prototype.unassignContentTypeGroup = function unassignContentTypeGroup(contentTypeAssignedGroupId, callback) {
         this.connectionManager_.delete(
             contentTypeAssignedGroupId,
             callback
@@ -405,7 +405,7 @@ var ContentTypeService = (function() {
      * @param contentTypeUpdateStruct {Object}
      * @param callback {function} function, which will be executed on request success
      */
-    ContentTypeService.prototype.createContentTypeDraft = function(contentTypeId, contentTypeUpdateStruct, callback) {
+    ContentTypeService.prototype.createContentTypeDraft = function createContentTypeDraft(contentTypeId, contentTypeUpdateStruct, callback) {
         this.connectionManager_.request(
             "POST",
             contentTypeId,
@@ -422,7 +422,7 @@ var ContentTypeService = (function() {
      * @param contentTypeId {href}
      * @param callback {function} function, which will be executed on request success
      */
-    ContentTypeService.prototype.loadContentTypeDraft = function(contentTypeId, callback) {
+    ContentTypeService.prototype.loadContentTypeDraft = function loadContentTypeDraft(contentTypeId, callback) {
         this.connectionManager_.request(
             "GET",
             contentTypeId + "/draft",
@@ -440,7 +440,7 @@ var ContentTypeService = (function() {
      * @param contentTypeUpdateStruct {Object}
      * @param callback {function} function, which will be executed on request success
      */
-    ContentTypeService.prototype.updateContentTypeDraftMetadata = function(contentTypeDraftId, contentTypeUpdateStruct, callback) {
+    ContentTypeService.prototype.updateContentTypeDraftMetadata = function updateContentTypeDraftMetadata(contentTypeDraftId, contentTypeUpdateStruct, callback) {
         this.connectionManager_.request(
             "PATCH",
             contentTypeDraftId,
@@ -457,7 +457,7 @@ var ContentTypeService = (function() {
      * @param contentTypeDraftId {href}
      * @param callback {function} function, which will be executed on request success
      */
-    ContentTypeService.prototype.publishContentTypeDraft = function(contentTypeDraftId, callback) {
+    ContentTypeService.prototype.publishContentTypeDraft = function publishContentTypeDraft(contentTypeDraftId, callback) {
         this.connectionManager_.request(
             "PUBLISH",
             contentTypeDraftId,
@@ -474,7 +474,7 @@ var ContentTypeService = (function() {
      * @param contentTypeDraftId {href}
      * @param callback {function} function, which will be executed on request success
      */
-    ContentTypeService.prototype.deleteContentTypeDraft = function(contentTypeDraftId, callback) {
+    ContentTypeService.prototype.deleteContentTypeDraft = function deleteContentTypeDraft(contentTypeDraftId, callback) {
         this.connectionManager_.delete(
             contentTypeDraftId,
             callback
@@ -493,7 +493,7 @@ var ContentTypeService = (function() {
      * @param fieldDefinitionCreateStruct {Object}
      * @param callback {function} function, which will be executed on request success
      */
-    ContentTypeService.prototype.addFieldDefinition = function(contentTypeId, fieldDefinitionCreateStruct, callback) {
+    ContentTypeService.prototype.addFieldDefinition = function addFieldDefinition(contentTypeId, fieldDefinitionCreateStruct, callback) {
 
         var that = this;
 
@@ -526,7 +526,7 @@ var ContentTypeService = (function() {
      * @param fieldDefinitionId {href}
      * @param callback {function} function, which will be executed on request success
      */
-    ContentTypeService.prototype.loadFieldDefinition = function(fieldDefinitionId, callback) {
+    ContentTypeService.prototype.loadFieldDefinition = function loadFieldDefinition(fieldDefinitionId, callback) {
         this.connectionManager_.request(
             "GET",
             fieldDefinitionId,
@@ -546,7 +546,7 @@ var ContentTypeService = (function() {
      * @param fieldDefinitionUpdateStruct {Object}
      * @param callback {function} function, which will be executed on request success
      */
-    ContentTypeService.prototype.updateFieldDefinition = function(fieldDefinitionId, fieldDefinitionUpdateStruct, callback) {
+    ContentTypeService.prototype.updateFieldDefinition = function updateFieldDefinition(fieldDefinitionId, fieldDefinitionUpdateStruct, callback) {
         this.connectionManager_.request(
             "PATCH",
             fieldDefinitionId,
@@ -563,7 +563,7 @@ var ContentTypeService = (function() {
      * @param fieldDefinitionId {href}
      * @param callback {function} function, which will be executed on request success
      */
-    ContentTypeService.prototype.deleteFieldDefinition = function(fieldDefinitionId, callback) {
+    ContentTypeService.prototype.deleteFieldDefinition = function deleteFieldDefinition(fieldDefinitionId, callback) {
         this.connectionManager_.delete(
             fieldDefinitionId,
             callback

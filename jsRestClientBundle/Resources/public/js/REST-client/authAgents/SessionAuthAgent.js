@@ -20,8 +20,6 @@ var SessionAuthAgent = (function() {
         this.sessionId = localStorage.getItem('ezpRestClient.sessionId');
         this.csrfToken = localStorage.getItem('ezpRestClient.csrfToken');
 
-        console.log(this.sessionId);
-
     };
 
     /**

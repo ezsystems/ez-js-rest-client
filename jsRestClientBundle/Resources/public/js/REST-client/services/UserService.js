@@ -25,7 +25,7 @@ var UserService = (function() {
      * @param login {string}
      * @param password {string}
      */
-    UserService.prototype.newSessionCreateStruct = function(login, password) {
+    UserService.prototype.newSessionCreateStruct = function newSessionCreateStruct(login, password) {
 
         return new SessionCreateStruct(login, password);
 
@@ -38,7 +38,7 @@ var UserService = (function() {
      * @param language {string}
      * @param fields {Array}
      */
-    UserService.prototype.newUserGroupCreateStruct = function(language, fields) {
+    UserService.prototype.newUserGroupCreateStruct = function newUserGroupCreateStruct(language, fields) {
 
         return new UserGroupCreateStruct(language, fields);
 
@@ -49,7 +49,7 @@ var UserService = (function() {
      *
      * @method newUserGroupUpdateStruct
      */
-    UserService.prototype.newUserGroupUpdateStruct = function() {
+    UserService.prototype.newUserGroupUpdateStruct = function newUserGroupUpdateStruct() {
 
         return new UserGroupUpdateStruct();
 
@@ -65,7 +65,7 @@ var UserService = (function() {
      * @param password {string}
      * @param fields {Array}
      */
-    UserService.prototype.newUserCreateStruct = function(languageCode, login, email, password, fields) {
+    UserService.prototype.newUserCreateStruct = function newUserCreateStruct(languageCode, login, email, password, fields) {
 
         return new UserCreateStruct(languageCode, login, email, password, fields);
 
@@ -76,7 +76,7 @@ var UserService = (function() {
      *
      * @method newUserUpdateStruct
      */
-    UserService.prototype.newUserUpdateStruct = function() {
+    UserService.prototype.newUserUpdateStruct = function newUserUpdateStruct() {
 
         return new UserUpdateStruct();
 
@@ -88,7 +88,7 @@ var UserService = (function() {
      * @method newRoleInputStruct
      * @param identifier {string}
      */
-    UserService.prototype.newRoleInputStruct = function(identifier) {
+    UserService.prototype.newRoleInputStruct = function newRoleInputStruct(identifier) {
 
         return new RoleInputStruct(identifier);
 
@@ -101,7 +101,7 @@ var UserService = (function() {
      * @param role {Object}
      * @param limitation {Object}
      */
-    UserService.prototype.newRoleAssignInputStruct = function(role, limitation) {
+    UserService.prototype.newRoleAssignInputStruct = function newRoleAssignInputStruct(role, limitation) {
 
         return new RoleAssignInputStruct(role, limitation);
 
@@ -115,7 +115,7 @@ var UserService = (function() {
      * @param theFunction {string}
      * @param limitations {Object}
      */
-    UserService.prototype.newPolicyCreateStruct = function(module, theFunction, limitations) {
+    UserService.prototype.newPolicyCreateStruct = function newPolicyCreateStruct(module, theFunction, limitations) {
 
         return new PolicyCreateStruct(module, theFunction, limitations);
 
@@ -127,7 +127,7 @@ var UserService = (function() {
      * @method newPolicyUpdateStruct
      * @param limitations {Object}
      */
-    UserService.prototype.newPolicyUpdateStruct = function(limitations) {
+    UserService.prototype.newPolicyUpdateStruct = function newPolicyUpdateStruct(limitations) {
 
         return new PolicyUpdateStruct(limitations);
 
@@ -143,7 +143,7 @@ var UserService = (function() {
      * @method loadRootUserGroup
      * @param callback {function} function, which will be executed on request success
      */
-    UserService.prototype.loadRootUserGroup = function(callback) {
+    UserService.prototype.loadRootUserGroup = function loadRootUserGroup(callback) {
 
         var that = this;
 
@@ -175,7 +175,7 @@ var UserService = (function() {
      * @param userGroupId {href}
      * @param callback {function} function, which will be executed on request success
      */
-    UserService.prototype.loadUserGroup = function(userGroupId, callback) {
+    UserService.prototype.loadUserGroup = function loadUserGroup(userGroupId, callback) {
         this.connectionManager_.request(
             "GET",
             userGroupId,
@@ -195,7 +195,7 @@ var UserService = (function() {
      * @param remoteId {string}
      * @param callback {function} function, which will be executed on request success
      */
-    UserService.prototype.loadUserGroupByRemoteId = function(userGroups, remoteId, callback) {
+    UserService.prototype.loadUserGroupByRemoteId = function loadUserGroupByRemoteId(userGroups, remoteId, callback) {
         this.connectionManager_.request(
             "GET",
             userGroups + '?remoteId=' + remoteId,
@@ -214,7 +214,7 @@ var UserService = (function() {
      * @param userGroupId {href}
      * @param callback {function} function, which will be executed on request success
      */
-    UserService.prototype.deleteUserGroup = function(userGroupId, callback) {
+    UserService.prototype.deleteUserGroup = function deleteUserGroup(userGroupId, callback) {
         this.connectionManager_.delete(
             userGroupId,
             callback
@@ -229,7 +229,7 @@ var UserService = (function() {
      * @param destination {href}
      * @param callback {function} function, which will be executed on request success
      */
-    UserService.prototype.moveUserGroup = function(userGroupId, destination, callback) {
+    UserService.prototype.moveUserGroup = function moveUserGroup(userGroupId, destination, callback) {
         this.connectionManager_.request(
             "MOVE",
             userGroupId,
@@ -250,7 +250,7 @@ var UserService = (function() {
      * @param userGroupCreateStruct {Object}
      * @param callback {function} function, which will be executed on request success
      */
-    UserService.prototype.createUserGroup = function(parentGroupId, userGroupCreateStruct, callback) {
+    UserService.prototype.createUserGroup = function createUserGroup(parentGroupId, userGroupCreateStruct, callback) {
 
         var that = this;
 
@@ -284,7 +284,7 @@ var UserService = (function() {
      * @param userGroupUpdateStruct {Object}
      * @param callback {function} function, which will be executed on request success
      */
-    UserService.prototype.updateUserGroup = function(userGroupId, userGroupUpdateStruct, callback) {
+    UserService.prototype.updateUserGroup = function updateUserGroup(userGroupId, userGroupUpdateStruct, callback) {
         this.connectionManager_.request(
             "PATCH",
             userGroupId,
@@ -302,7 +302,7 @@ var UserService = (function() {
      * @param userGroupId {href}
      * @param callback {function} function, which will be executed on request success
      */
-    UserService.prototype.loadSubUserGroups = function(userGroupId, callback) {
+    UserService.prototype.loadSubUserGroups = function loadSubUserGroups(userGroupId, callback) {
 
         var that = this;
 
@@ -337,7 +337,7 @@ var UserService = (function() {
      * @param userGroupId {href}
      * @param callback {function} function, which will be executed on request success
      */
-    UserService.prototype.loadUsersOfUserGroup = function(userGroupId, callback) {
+    UserService.prototype.loadUsersOfUserGroup = function loadUsersOfUserGroup(userGroupId, callback) {
 
         var that = this;
 
@@ -373,7 +373,7 @@ var UserService = (function() {
      * @param userId {href}
      * @param callback {function} function, which will be executed on request success
      */
-    UserService.prototype.loadUserGroupsOfUser = function(userId, callback) {
+    UserService.prototype.loadUserGroupsOfUser = function loadUserGroupsOfUser(userId, callback) {
         this.connectionManager_.request(
             "GET",
             userId + '/groups',
@@ -397,7 +397,7 @@ var UserService = (function() {
      * @param userCreateStruct {Object}
      * @param callback {function} function, which will be executed on request success
      */
-    UserService.prototype.createUser = function(userGroupId, userCreateStruct, callback) {
+    UserService.prototype.createUser = function createUser(userGroupId, userCreateStruct, callback) {
 
         var that = this;
 
@@ -431,7 +431,7 @@ var UserService = (function() {
      * @param roleId {href}
      * @param callback {function} function, which will be executed on request success
      */
-    UserService.prototype.getRoleAssignments = function(userList, roleId, callback) {
+    UserService.prototype.getRoleAssignments = function getRoleAssignments(userList, roleId, callback) {
         this.connectionManager_.request(
             "GET",
             userList + '?roleId=' + roleId,
@@ -450,7 +450,7 @@ var UserService = (function() {
      * @param userId {href}
      * @param callback {function} function, which will be executed on request success
      */
-    UserService.prototype.loadUser = function(userId, callback) {
+    UserService.prototype.loadUser = function loadUser(userId, callback) {
         this.connectionManager_.request(
             "GET",
             userId,
@@ -470,7 +470,7 @@ var UserService = (function() {
      * @param userUpdateStruct {Object}
      * @param callback {function} function, which will be executed on request success
      */
-    UserService.prototype.updateUser = function(userId, userUpdateStruct, callback) {
+    UserService.prototype.updateUser = function updateUser(userId, userUpdateStruct, callback) {
         this.connectionManager_.request(
             "PATCH",
             userId,
@@ -487,7 +487,7 @@ var UserService = (function() {
      * @param userId {href}
      * @param callback {function} function, which will be executed on request success
      */
-    UserService.prototype.deleteUser = function(userId, callback) {
+    UserService.prototype.deleteUser = function deleteUser(userId, callback) {
         this.connectionManager_.delete(
             userId,
             callback
@@ -506,7 +506,7 @@ var UserService = (function() {
      * @param userGroupId {href}
      * @param callback {function} function, which will be executed on request success
      */
-    UserService.prototype.assignUserToUserGroup = function(userId, userGroupId, callback) {
+    UserService.prototype.assignUserToUserGroup = function assignUserToUserGroup(userId, userGroupId, callback) {
 
         var that = this;
 
@@ -542,7 +542,7 @@ var UserService = (function() {
      * @param userAssignedGroupId {href}
      * @param callback {function} function, which will be executed on request success
      */
-    UserService.prototype.unAssignUserFromUserGroup = function(userAssignedGroupId, callback) {
+    UserService.prototype.unAssignUserFromUserGroup = function unAssignUserFromUserGroup(userAssignedGroupId, callback) {
 
         this.connectionManager_.request(
             "DELETE",
@@ -567,7 +567,7 @@ var UserService = (function() {
      * @param roleCreateStruct {Object}
      * @param callback {function} function, which will be executed on request success
      */
-    UserService.prototype.createRole = function(roleCreateStruct, callback) {
+    UserService.prototype.createRole = function createRole(roleCreateStruct, callback) {
 
         var that = this;
 
@@ -597,7 +597,7 @@ var UserService = (function() {
      * @param roleId {href}
      * @param callback {function} function, which will be executed on request success
      */
-    UserService.prototype.loadRole = function(roleId, callback) {
+    UserService.prototype.loadRole = function loadRole(roleId, callback) {
         this.connectionManager_.request(
             "GET",
             roleId,
@@ -618,7 +618,7 @@ var UserService = (function() {
      * @param offset {int}
      * @param callback {function} function, which will be executed on request success
      */
-    UserService.prototype.loadRoles = function(identifier, limit, offset, callback) {
+    UserService.prototype.loadRoles = function loadRoles(identifier, limit, offset, callback) {
 
         var that = this;
         var identifierQuery = (identifier === "") ? "" : "&identifier=" + identifier;
@@ -661,7 +661,7 @@ var UserService = (function() {
      * @param roleUpdateStruct
      * @param callback {function} function, which will be executed on request success
      */
-    UserService.prototype.updateRole = function(roleId, roleUpdateStruct, callback) {
+    UserService.prototype.updateRole = function updateRole(roleId, roleUpdateStruct, callback) {
         this.connectionManager_.request(
             "PATCH",
             roleId,
@@ -679,7 +679,7 @@ var UserService = (function() {
      * @param roleId {href}
      * @param callback {function} function, which will be executed on request success
      */
-    UserService.prototype.deleteRole = function(roleId, callback) {
+    UserService.prototype.deleteRole = function deleteRole(roleId, callback) {
         this.connectionManager_.delete(
             roleId,
             callback
@@ -694,7 +694,7 @@ var UserService = (function() {
      * @param userId {href}
      * @param callback {function} function, which will be executed on request success
      */
-    UserService.prototype.getRoleAssignmentsForUser = function(userId, callback) {
+    UserService.prototype.getRoleAssignmentsForUser = function getRoleAssignmentsForUser(userId, callback) {
 
         var that = this;
 
@@ -729,7 +729,7 @@ var UserService = (function() {
      * @param userGroupId {href}
      * @param callback {function} function, which will be executed on request success
      */
-    UserService.prototype.getRoleAssignmentsForUserGroup = function(userGroupId, callback) {
+    UserService.prototype.getRoleAssignmentsForUserGroup = function getRoleAssignmentsForUserGroup(userGroupId, callback) {
 
         var that = this;
 
@@ -765,7 +765,7 @@ var UserService = (function() {
      * @param userAssignmentId {href}
      * @param callback {function} function, which will be executed on request success
      */
-    UserService.prototype.getUserAssignmentObject = function(userAssignmentId, callback) {
+    UserService.prototype.getUserAssignmentObject = function getUserAssignmentObject(userAssignmentId, callback) {
         this.connectionManager_.request(
             "GET",
             userAssignmentId,
@@ -784,7 +784,7 @@ var UserService = (function() {
      * @param userGroupAssignmentId {href}
      * @param callback {function} function, which will be executed on request success
      */
-    UserService.prototype.getUserGroupAssignmentObject = function(userGroupAssignmentId, callback) {
+    UserService.prototype.getUserGroupAssignmentObject = function getUserGroupAssignmentObject(userGroupAssignmentId, callback) {
         this.connectionManager_.request(
             "GET",
             userGroupAssignmentId,
@@ -805,7 +805,7 @@ var UserService = (function() {
      * @param roleAssignInputStruct {Object}
      * @param callback {function} function, which will be executed on request success
      */
-    UserService.prototype.assignRoleToUser = function(userId, roleAssignInputStruct, callback) {
+    UserService.prototype.assignRoleToUser = function assignRoleToUser(userId, roleAssignInputStruct, callback) {
 
         var that = this;
 
@@ -839,7 +839,7 @@ var UserService = (function() {
      * @param roleAssignInputStruct {Object}
      * @param callback {function} function, which will be executed on request success
      */
-    UserService.prototype.assignRoleToUserGroup = function(userGroupId, roleAssignInputStruct, callback) {
+    UserService.prototype.assignRoleToUserGroup = function assignRoleToUserGroup(userGroupId, roleAssignInputStruct, callback) {
 
         var that = this;
 
@@ -871,7 +871,7 @@ var UserService = (function() {
      * @param userRoleId {href}
      * @param callback {function} function, which will be executed on request success
      */
-    UserService.prototype.unassignRoleFromUser = function(userRoleId, callback) {
+    UserService.prototype.unassignRoleFromUser = function unassignRoleFromUser(userRoleId, callback) {
         this.connectionManager_.delete(
             userRoleId,
             callback
@@ -885,7 +885,7 @@ var UserService = (function() {
      * @param userGroupRoleId {href}
      * @param callback {function} function, which will be executed on request success
      */
-    UserService.prototype.unassignRoleFromUserGroup = function(userGroupRoleId, callback) {
+    UserService.prototype.unassignRoleFromUserGroup = function unassignRoleFromUserGroup(userGroupRoleId, callback) {
         this.connectionManager_.delete(
             userGroupRoleId,
             callback
@@ -904,7 +904,7 @@ var UserService = (function() {
      * @param policyCreateStruct {Object}
      * @param callback {function} function, which will be executed on request success
      */
-    UserService.prototype.addPolicy = function(roleId, policyCreateStruct, callback) {
+    UserService.prototype.addPolicy = function addPolicy(roleId, policyCreateStruct, callback) {
 
         var that = this;
 
@@ -936,7 +936,7 @@ var UserService = (function() {
      * @param roleId {href}
      * @param callback {function} function, which will be executed on request success
      */
-    UserService.prototype.loadPolicies = function(roleId, callback) {
+    UserService.prototype.loadPolicies = function loadPolicies(roleId, callback) {
 
         var that = this;
 
@@ -970,7 +970,7 @@ var UserService = (function() {
      * @param policyId {href}
      * @param callback {function} function, which will be executed on request success
      */
-    UserService.prototype.loadPolicy = function(policyId, callback) {
+    UserService.prototype.loadPolicy = function loadPolicy(policyId, callback) {
         this.connectionManager_.request(
             "GET",
             policyId,
@@ -990,7 +990,7 @@ var UserService = (function() {
      * @param policyUpdateStruct {Object}
      * @param callback {function} function, which will be executed on request success
      */
-    UserService.prototype.updatePolicy = function(policyId, policyUpdateStruct, callback) {
+    UserService.prototype.updatePolicy = function updatePolicy(policyId, policyUpdateStruct, callback) {
         this.connectionManager_.request(
             "PATCH",
             policyId,
@@ -1007,7 +1007,7 @@ var UserService = (function() {
      * @param policyId {href}
      * @param callback {function} function, which will be executed on request success
      */
-    UserService.prototype.deletePolicy = function(policyId, callback) {
+    UserService.prototype.deletePolicy = function deletePolicy(policyId, callback) {
         this.connectionManager_.delete(
             policyId,
             callback
@@ -1022,7 +1022,7 @@ var UserService = (function() {
      * @param userId {href}
      * @param callback {function} function, which will be executed on request success
      */
-    UserService.prototype.loadPoliciesByUserId = function(userPolicies, userId, callback) {
+    UserService.prototype.loadPoliciesByUserId = function loadPoliciesByUserId(userPolicies, userId, callback) {
         this.connectionManager_.request(
             "GET",
             userPolicies + "?userId=" + userId,
@@ -1046,7 +1046,7 @@ var UserService = (function() {
      * @param sessionCreateStruct {Object}
      * @param callback {function} function, which will be executed on request success
      */
-    UserService.prototype.createSession = function(sessions, sessionCreateStruct, callback) {
+    UserService.prototype.createSession = function createSession(sessions, sessionCreateStruct, callback) {
         this.connectionManager_.notAuthorizedRequest(
             "POST",
             sessions,
@@ -1063,7 +1063,7 @@ var UserService = (function() {
      * @param sessionId {href}
      * @param callback {function} function, which will be executed on request success
      */
-    UserService.prototype.deleteSession = function(sessionId, callback) {
+    UserService.prototype.deleteSession = function deleteSession(sessionId, callback) {
         this.connectionManager_.request(
             "DELETE",
             sessionId,
@@ -1082,7 +1082,7 @@ var UserService = (function() {
      * @method logOut
      * @param callback {function} function, which will be executed on request success
      */
-    UserService.prototype.logOut = function(callback) {
+    UserService.prototype.logOut = function logOut(callback) {
 
         this.connectionManager_.logOut(callback);
 
