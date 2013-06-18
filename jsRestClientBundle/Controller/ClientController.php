@@ -19,4 +19,12 @@ class ClientController extends Controller
     {
         return $this->render( "jsRestClientBundle::test.html.twig" );
     }
+
+    /**
+     * Useful for session authorization testing
+     */
+    public function killSession()
+    {
+        session_destroy();
+    }
 }

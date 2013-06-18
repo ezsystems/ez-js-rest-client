@@ -33,7 +33,7 @@ var SessionAuthAgent = (function() {
      * to signal the authentication has been completed.
      */
     SessionAuthAgent.prototype.ensureAuthentication = function(done) {
-        if (!this.sessionId) {
+        if (this.sessionId === null) {
 
             var that = this;
 
@@ -74,8 +74,6 @@ var SessionAuthAgent = (function() {
         } else {
             done(false, true);
         }
-
-//        done(false, true);
     }
 
     /**
@@ -111,13 +109,13 @@ var SessionAuthAgent = (function() {
             function(error, response){
                 if (!error){
 
-                    that.sessionName = "";
-                    that.sessionId = "";
-                    that.csrfToken = "";
+                    that.sessionName = null;
+                    that.sessionId = null;
+                    that.csrfToken = null;
 
-                    localStorage.setItem('ezpRestClient.sessionName', that.sessionName);
-                    localStorage.setItem('ezpRestClient.sessionId', that.sessionId);
-                    localStorage.setItem('ezpRestClient.csrfToken', that.csrfToken);
+                    localStorage.removeItem('ezpRestClient.sessionName');
+                    localStorage.removeItem('ezpRestClient.sessionId');
+                    localStorage.removeItem('ezpRestClient.csrfToken');
 
                     done(false, true);
 

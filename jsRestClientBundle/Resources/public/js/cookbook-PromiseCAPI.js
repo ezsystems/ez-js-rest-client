@@ -1,5 +1,6 @@
 // Some simple PromiseCAPI usage scenario
 
+
 var jsCAPI = new CAPI(
         'http://ez.git.local',
         new SessionAuthAgent({
