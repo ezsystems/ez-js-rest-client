@@ -16,9 +16,10 @@ var SessionAuthAgent = (function() {
         this.login_ = credentials.login;
         this.password_ = credentials.password;
 
-        this.sessionName = localStorage.getItem('ezpRestClient.sessionName');
-        this.sessionId = localStorage.getItem('ezpRestClient.sessionId');
-        this.csrfToken = localStorage.getItem('ezpRestClient.csrfToken');
+        //TODO: implement storage selection mechanism
+        this.sessionName = sessionStorage.getItem('ezpRestClient.sessionName');
+        this.sessionId = sessionStorage.getItem('ezpRestClient.sessionId');
+        this.csrfToken = sessionStorage.getItem('ezpRestClient.csrfToken');
 
     };
 
@@ -59,9 +60,9 @@ var SessionAuthAgent = (function() {
                         that.sessionId = session._href;
                         that.csrfToken = session.csrfToken;
 
-                        localStorage.setItem('ezpRestClient.sessionName', that.sessionName);
-                        localStorage.setItem('ezpRestClient.sessionId', that.sessionId);
-                        localStorage.setItem('ezpRestClient.csrfToken', that.csrfToken);
+                        sessionStorage.setItem('ezpRestClient.sessionName', that.sessionName);
+                        sessionStorage.setItem('ezpRestClient.sessionId', that.sessionId);
+                        sessionStorage.setItem('ezpRestClient.csrfToken', that.csrfToken);
 
                         done(false, true);
 
@@ -94,7 +95,7 @@ var SessionAuthAgent = (function() {
 
     /**
      * Log out workflow
-     * Kills currently active session and resets localStorage params (sessionId, CSRFToken)
+     * Kills currently active session and resets sessionStorage params (sessionId, CSRFToken)
      *
      * @method logOut
      * @param done {function}
@@ -113,9 +114,9 @@ var SessionAuthAgent = (function() {
                     that.sessionId = null;
                     that.csrfToken = null;
 
-                    localStorage.removeItem('ezpRestClient.sessionName');
-                    localStorage.removeItem('ezpRestClient.sessionId');
-                    localStorage.removeItem('ezpRestClient.csrfToken');
+                    sessionStorage.removeItem('ezpRestClient.sessionName');
+                    sessionStorage.removeItem('ezpRestClient.sessionId');
+                    sessionStorage.removeItem('ezpRestClient.csrfToken');
 
                     done(false, true);
 
