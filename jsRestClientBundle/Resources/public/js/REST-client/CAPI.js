@@ -11,8 +11,8 @@ var CAPI = (function() {
      */
     var CAPI = function (endPointUrl, authenticationAgent) {
 
-        this.contentService_ = null;
-        this.userService_ = null;
+        this._contentService = null;
+        this._userService = null;
 
         authenticationAgent.CAPI = this;
         // No other way to use session authorization... or is it?
@@ -26,16 +26,14 @@ var CAPI = (function() {
             {
                 connection: MicrosoftXmlHttpRequestConnection
             }
-        ];
-        var connectionFactory = new ConnectionFeatureFactory(connectionStack);
-
-        var connectionManager = new ConnectionManager(endPointUrl, authenticationAgent, connectionFactory);
+        ],
+        connectionFactory = new ConnectionFeatureFactory(connectionStack),
+        connectionManager = new ConnectionManager(endPointUrl, authenticationAgent, connectionFactory),
+        //TODO: move hardcoded rootPath to the same config file as above...
+        discoveryService = new DiscoveryService('/api/ezp/v2/', connectionManager);
 
         //TODO: move logRequests to the same config file as above...
         connectionManager.logRequests = true;
-
-        //TODO: move hardcoded rootPath to the same config file as above...
-        var discoveryService = new DiscoveryService('/api/ezp/v2/', connectionManager)
 
         /**
          * Get instance of Content Service
@@ -44,13 +42,13 @@ var CAPI = (function() {
          * @return {ContentService}
          */
         this.getContentService = function getContentService(){
-            if  (!this.contentService_)  {
-                this.contentService_  =  new ContentService(
+            if  (!this._contentService)  {
+                this._contentService  =  new ContentService(
                     connectionManager,
                     discoveryService
                 );
             }
-            return  this.contentService_;
+            return  this._contentService;
         };
 
         /**
@@ -60,13 +58,13 @@ var CAPI = (function() {
          * @return {ContentTypeService}
          */
         this.getContentTypeService = function getContentTypeService(){
-            if  (!this.contentTypeService_)  {
-                this.contentTypeService_  =  new ContentTypeService(
+            if  (!this._contentTypeService)  {
+                this._contentTypeService  =  new ContentTypeService(
                     connectionManager,
                     discoveryService
                 );
             }
-            return  this.contentTypeService_;
+            return  this._contentTypeService;
         };
 
         /**
@@ -76,13 +74,13 @@ var CAPI = (function() {
          * @return {UserService}
          */
         this.getUserService = function getUserService(){
-            if  (!this.userService_)  {
-                this.userService_  =  new UserService(
+            if  (!this._userService)  {
+                this._userService  =  new UserService(
                     connectionManager,
                     discoveryService
                 );
             }
-            return  this.userService_;
+            return  this._userService;
         };
 
     };

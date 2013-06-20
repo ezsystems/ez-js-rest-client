@@ -4657,7 +4657,7 @@ var ContentCreateStruct = (function() {
                 // TODO: Suspend Requests during initial authentication
                 // TODO: errors handling
 
-                that.authenticationAgent_.authenticateRequest(
+                that._authenticationAgent.authenticateRequest(
                     request,
                     function(error, authenticatedRequest) {
                         if (!error) {
@@ -4666,7 +4666,7 @@ var ContentCreateStruct = (function() {
                                 console.log(request);
                             }
                             // Main goal
-                            that.activeConnection_.execute(authenticatedRequest, callback);
+                            that._activeConnection.execute(authenticatedRequest, callback);
                         } else {
                             callback(
                                 new Error({
@@ -4708,7 +4708,7 @@ var ContentCreateStruct = (function() {
 
         var request = new Request({
             method : method,
-            url : this.endPointUrl_ + url,
+            url : this._endPointUrl + url,
             body : body,
             headers : headers
         });
@@ -4718,7 +4718,7 @@ var ContentCreateStruct = (function() {
         }
 
         // Main goal
-        this.activeConnection_.execute(request, callback);
+        this._activeConnection.execute(request, callback);
 
     };
 
@@ -4741,12 +4741,12 @@ var ContentCreateStruct = (function() {
 
         var request = new Request({
             method : "DELETE",
-            url : this.endPointUrl_ + url,
+            url : this._endPointUrl + url,
             body : "",
             headers : {}
         });
 
-        this.authenticationAgent_.authenticateRequest(
+        this._authenticationAgent.authenticateRequest(
             request,
             function(error, authenticatedRequest) {
                 if (!error) {
@@ -4755,7 +4755,7 @@ var ContentCreateStruct = (function() {
                         console.log(request);
                     }
                     // Main goal
-                    that.activeConnection_.execute(authenticatedRequest, callback);
+                    that._activeConnection.execute(authenticatedRequest, callback);
                 } else {
                     callback(
                         new Error({
@@ -4782,7 +4782,7 @@ var ContentCreateStruct = (function() {
      */
     ConnectionManager.prototype.logOut = function(callback) {
 
-        this.authenticationAgent_.logOut(callback);
+        this._authenticationAgent.logOut(callback);
 
     }
 
@@ -4803,8 +4803,8 @@ var ContentCreateStruct = (function() {
      */
     var CAPI = function (endPointUrl, authenticationAgent) {
 
-        this.contentService_ = null;
-        this.userService_ = null;
+        this._contentService = null;
+        this._userService = null;
 
         authenticationAgent.CAPI = this;
         // No other way to use session authorization... or is it?
@@ -4836,13 +4836,13 @@ var ContentCreateStruct = (function() {
          * @return {ContentService}
          */
         this.getContentService = function getContentService(){
-            if  (!this.contentService_)  {
-                this.contentService_  =  new ContentService(
+            if  (!this._contentService)  {
+                this._contentService  =  new ContentService(
                     connectionManager,
                     discoveryService
                 );
             }
-            return  this.contentService_;
+            return  this._contentService;
         };
 
         /**
@@ -4852,13 +4852,13 @@ var ContentCreateStruct = (function() {
          * @return {ContentTypeService}
          */
         this.getContentTypeService = function getContentTypeService(){
-            if  (!this.contentTypeService_)  {
-                this.contentTypeService_  =  new ContentTypeService(
+            if  (!this._contentTypeService)  {
+                this._contentTypeService  =  new ContentTypeService(
                     connectionManager,
                     discoveryService
                 );
             }
-            return  this.contentTypeService_;
+            return  this._contentTypeService;
         };
 
         /**
@@ -4868,13 +4868,13 @@ var ContentCreateStruct = (function() {
          * @return {UserService}
          */
         this.getUserService = function getUserService(){
-            if  (!this.userService_)  {
-                this.userService_  =  new UserService(
+            if  (!this._userService)  {
+                this._userService  =  new UserService(
                     connectionManager,
                     discoveryService
                 );
             }
-            return  this.userService_;
+            return  this._userService;
         };
 
     };

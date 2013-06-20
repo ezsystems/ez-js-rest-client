@@ -53,7 +53,7 @@ var ConnectionManager = (function() {
                 // TODO: Suspend Requests during initial authentication
                 // TODO: errors handling
 
-                that.authenticationAgent_.authenticateRequest(
+                that._authenticationAgent.authenticateRequest(
                     request,
                     function(error, authenticatedRequest) {
                         if (!error) {
@@ -62,7 +62,7 @@ var ConnectionManager = (function() {
                                 console.log(request);
                             }
                             // Main goal
-                            that.activeConnection_.execute(authenticatedRequest, callback);
+                            that._activeConnection.execute(authenticatedRequest, callback);
                         } else {
                             callback(
                                 new Error({
@@ -104,7 +104,7 @@ var ConnectionManager = (function() {
 
         var request = new Request({
             method : method,
-            url : this.endPointUrl_ + url,
+            url : this._endPointUrl + url,
             body : body,
             headers : headers
         });
@@ -114,7 +114,7 @@ var ConnectionManager = (function() {
         }
 
         // Main goal
-        this.activeConnection_.execute(request, callback);
+        this._activeConnection.execute(request, callback);
 
     };
 
@@ -137,12 +137,12 @@ var ConnectionManager = (function() {
 
         var request = new Request({
             method : "DELETE",
-            url : this.endPointUrl_ + url,
+            url : this._endPointUrl + url,
             body : "",
             headers : {}
         });
 
-        this.authenticationAgent_.authenticateRequest(
+        this._authenticationAgent.authenticateRequest(
             request,
             function(error, authenticatedRequest) {
                 if (!error) {
@@ -151,7 +151,7 @@ var ConnectionManager = (function() {
                         console.log(request);
                     }
                     // Main goal
-                    that.activeConnection_.execute(authenticatedRequest, callback);
+                    that._activeConnection.execute(authenticatedRequest, callback);
                 } else {
                     callback(
                         new Error({
@@ -178,7 +178,7 @@ var ConnectionManager = (function() {
      */
     ConnectionManager.prototype.logOut = function(callback) {
 
-        this.authenticationAgent_.logOut(callback);
+        this._authenticationAgent.logOut(callback);
 
     }
 
