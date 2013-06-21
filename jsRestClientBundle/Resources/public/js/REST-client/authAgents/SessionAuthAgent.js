@@ -13,8 +13,8 @@ var SessionAuthAgent = (function() {
         this.CAPI = null;
 
         // Private (should be!) area
-        this.login_ = credentials.login;
-        this.password_ = credentials.password;
+        this._login = credentials.login;
+        this._password = credentials.password;
 
         //TODO: implement storage selection mechanism
         this.sessionName = sessionStorage.getItem('ezpRestClient.sessionName');
@@ -41,8 +41,8 @@ var SessionAuthAgent = (function() {
             var userService = this.CAPI.getUserService();
 
             var sessionCreateStruct = userService.newSessionCreateStruct(
-                this.login_,
-                this.password_
+                this._login,
+                this._password
             )
 
             // TODO: change hardcoded "sessions" path to discovered

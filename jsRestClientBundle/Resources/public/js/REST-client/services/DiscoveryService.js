@@ -42,7 +42,7 @@ var DiscoveryService = (function() {
                                     errorText : "Discover service failed to retrieve root object."
                                 }),
                                 false
-                            )
+                            );
                         }
                     }
                 );
@@ -61,7 +61,7 @@ var DiscoveryService = (function() {
                     this.cacheObject[property] = object[property];
                 }
             }
-        }
+        };
 
         /**
          * Try to get object from cacheObject by given 'name'
@@ -71,8 +71,8 @@ var DiscoveryService = (function() {
          * @param callback {Function}
          */
         this.getObjectFromCache = function(name, callback) {
-            var object = null;
-            var that = this;
+            var object = null,
+                that = this;
             // Discovering root, if not yet discovered
             // on discovery running the request for same 'name' again
             if (!this.cacheObject.Root) {
@@ -102,10 +102,10 @@ var DiscoveryService = (function() {
                         errorText : "Discover service failed to find cached object with name '" + name + "'"
                     }),
                     false
-                )
+                );
             }
-        }
-    }
+        };
+    };
 
     /**
      * Get url for given 'name'
@@ -121,7 +121,7 @@ var DiscoveryService = (function() {
                 if (!error) {
                     callback(
                         false,
-                        cachedObject["_href"]
+                        cachedObject._href
                     );
                 } else {
                     callback(
@@ -163,7 +163,7 @@ var DiscoveryService = (function() {
                         );
                     }
                 } else {
-                    callback(error, false)
+                    callback(error, false);
                 }
             }
         );
@@ -196,7 +196,7 @@ var DiscoveryService = (function() {
                         );
                     }
                 } else {
-                    callback(error, false)
+                    callback(error, false);
                 }
             }
         );

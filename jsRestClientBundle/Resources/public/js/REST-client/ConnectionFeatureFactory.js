@@ -24,10 +24,11 @@ var ConnectionFeatureFactory = (function() {
      * @return  {Connection}
      */
     ConnectionFeatureFactory.prototype.createConnection = function(){
-        var connection = null;
+        var connection = null,
+            index = 0;
 
         // Choosing and creating first compatible connection from connection list
-        for (var index = 0; index < this.connectionList.length; ++index) {
+        for (index = 0; index < this.connectionList.length; ++index) {
 
             if (this.connectionList[index].connection.isCompatible()) {
 

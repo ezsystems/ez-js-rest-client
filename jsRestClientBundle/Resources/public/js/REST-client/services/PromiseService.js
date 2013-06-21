@@ -13,7 +13,7 @@ var PromiseService = (function() {
 
         console.log("Entered promiseService based on:", originalService);
 
-        this.originalService_ = originalService;
+        this._originalService = originalService;
 
         this.generatePromiseFunction = function(originalFunction) {
 
@@ -21,8 +21,8 @@ var PromiseService = (function() {
 
             return function() {
 
-                var toBeCalledArguments = Array.prototype.slice.call(arguments);
-                var deferred = Q.defer();
+                var toBeCalledArguments = Array.prototype.slice.call(arguments),
+                    deferred = Q.defer();
 
                 if (originalFunction.length - 1 !== arguments.length) {
                     throw new EvalError("Wrong numner of arguments provided");
@@ -38,19 +38,19 @@ var PromiseService = (function() {
 
                 });
 
-                originalFunction.apply(that.originalService_, toBeCalledArguments);
+                originalFunction.apply(that._originalService, toBeCalledArguments);
 
                 return deferred.promise;
-            }
+            };
 
         };
 
         // Auto-generating promise-based functions based on every existing service function
         // taking into account all the functions with signature different from "new....Struct"
-        for(key in this.originalService_) {
-            if ((typeof this.originalService_[key] === "function") && ( Object.prototype.toString.call(this.originalService_[key].toString().match(/^function\s*(new[^\s(]+Struct)/)) != '[object Array]')) {
+        for(key in this._originalService) {
+            if ((typeof this._originalService[key] === "function") && ( Object.prototype.toString.call(this._originalService[key].toString().match(/^function\s*(new[^\s(]+Struct)/)) != '[object Array]')) {
 
-                this[key] = this.generatePromiseFunction(this.originalService_[key]);
+                this[key] = this.generatePromiseFunction(this._originalService[key]);
 
             }
         }

@@ -12,8 +12,8 @@ var HttpBasicAuthAgent = (function() {
         this.CAPI = null;
 
         // Private (should be!) area
-        this.login_ = credentials.login;
-        this.password_ = credentials.password;
+        this._login = credentials.login;
+        this._password = credentials.password;
 
     };
 
@@ -42,8 +42,8 @@ var HttpBasicAuthAgent = (function() {
     HttpBasicAuthAgent.prototype.authenticateRequest = function(request, done) {
 
         request.httpBasicAuth = true;
-        request.login = this.login_;
-        request.password = this.password_;
+        request.login = this._login;
+        request.password = this._password;
 
         done(false, request);
 

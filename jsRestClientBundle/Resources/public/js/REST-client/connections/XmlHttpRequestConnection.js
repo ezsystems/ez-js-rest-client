@@ -8,7 +8,7 @@ var XmlHttpRequestConnection = (function() {
      */
     var XmlHttpRequestConnection = function () {
 
-        this.xhr_ = new XMLHttpRequest();
+        this._xhr = new XMLHttpRequest();
 
         /**
          * Basic request implemented via XHR technique
@@ -19,11 +19,12 @@ var XmlHttpRequestConnection = (function() {
          */
         this.execute = function(request, callback) {
 
-            var XHR = this.xhr_;
+            var XHR = this._xhr,
+                headerType;
 
             // Create the state change handler:
             XHR.onreadystatechange = function() {
-                if (XHR.readyState != 4) return; // Not ready yet
+                if (XHR.readyState != 4) {return;} // Not ready yet
                 if (XHR.status >= 400) {
                     callback(
                         new Error({
@@ -56,11 +57,13 @@ var XmlHttpRequestConnection = (function() {
             }
 
 
-            for (var headerType in request.headers) {
-                XHR.setRequestHeader(
-                    headerType,
-                    request.headers[headerType]
-                );
+            for (headerType in request.headers) {
+                if (request.headers.hasOwnProperty(headerType)) {
+                    XHR.setRequestHeader(
+                        headerType,
+                        request.headers[headerType]
+                    );
+                }
             }
             XHR.send(request.body);
         };
@@ -69,7 +72,7 @@ var XmlHttpRequestConnection = (function() {
     // static method
     XmlHttpRequestConnection.isCompatible = function(){
         return !!window.XMLHttpRequest;
-    }
+    };
 
     return XmlHttpRequestConnection;
 

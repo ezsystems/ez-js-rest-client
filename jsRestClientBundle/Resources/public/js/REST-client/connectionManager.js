@@ -10,10 +10,10 @@ var ConnectionManager = (function() {
      */
     var ConnectionManager = function(endPointUrl, authenticationAgent, connectionFactory) {
 
-        this.endPointUrl_ = endPointUrl;
-        this.authenticationAgent_ = authenticationAgent;
+        this._endPointUrl = endPointUrl;
+        this._authenticationAgent = authenticationAgent;
 
-        this.activeConnection_ = connectionFactory.createConnection();
+        this._activeConnection = connectionFactory.createConnection();
 
         this.logRequests = false;
 
@@ -31,8 +31,6 @@ var ConnectionManager = (function() {
      */
     ConnectionManager.prototype.request = function(method, url, body, headers, callback) {
 
-        var that = this;
-
         // default values for all the parameters
         method = (typeof method === "undefined") ? "GET" : method;
         url = (typeof url === "undefined") ? "/" : url;
@@ -40,15 +38,16 @@ var ConnectionManager = (function() {
         headers = (typeof headers === "undefined") ? {} : headers;
         callback = (typeof callback === "undefined") ? function(){} : callback;
 
-        var request = new Request({
-            method : method,
-            url : this.endPointUrl_ + url,
-            body : body,
-            headers : headers
-        });
+        var that = this,
+            request = new Request({
+                method : method,
+                url : this._endPointUrl + url,
+                body : body,
+                headers : headers
+            });
 
         // Check if we are already authenticated, make it happen if not
-        this.authenticationAgent_.ensureAuthentication(
+        this._authenticationAgent.ensureAuthentication(
             function(error, success){
                 // TODO: Suspend Requests during initial authentication
                 // TODO: errors handling
@@ -129,43 +128,17 @@ var ConnectionManager = (function() {
      */
     ConnectionManager.prototype.delete = function(url, callback) {
 
-        var that = this;
-
         // default values for all the parameters
         url = (typeof url === "undefined") ? "/" : url;
         callback = (typeof callback === "undefined") ? function(){} : callback;
 
-        var request = new Request({
-            method : "DELETE",
-            url : this._endPointUrl + url,
-            body : "",
-            headers : {}
-        });
-
-        this._authenticationAgent.authenticateRequest(
-            request,
-            function(error, authenticatedRequest) {
-                if (!error) {
-
-                    if (that.logRequests) {
-                        console.log(request);
-                    }
-                    // Main goal
-                    that._activeConnection.execute(authenticatedRequest, callback);
-                } else {
-                    callback(
-                        new Error({
-                            errorText : "An error occured during request authentication!"
-                        }),
-                        new Response({
-                            status : "error",
-                            body : ""
-                        })
-                    );
-                }
-            }
+        this.request(
+            "DELETE",
+            url,
+            "",
+            {},
+            callback
         );
-
 
     };
 
@@ -180,7 +153,7 @@ var ConnectionManager = (function() {
 
         this._authenticationAgent.logOut(callback);
 
-    }
+    };
 
 
 

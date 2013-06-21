@@ -10,8 +10,8 @@ var ContentTypeService = (function() {
      */
     var ContentTypeService = function(connectionManager, discoveryService) {
 
-        this.connectionManager_ = connectionManager;
-        this.discoveryService_ = discoveryService;
+        this._connectionManager = connectionManager;
+        this._discoveryService = discoveryService;
 
     };
 
@@ -99,7 +99,7 @@ var ContentTypeService = (function() {
      * @param callback {function} function, which will be executed on request success
      */
     ContentTypeService.prototype.createContentTypeGroup = function createContentTypeGroup(contentTypeGroups, contentTypeGroupCreateStruct, callback) {
-        this.connectionManager_.request(
+        this._connectionManager.request(
             "POST",
             contentTypeGroups,
             JSON.stringify(contentTypeGroupCreateStruct.body),
@@ -117,7 +117,7 @@ var ContentTypeService = (function() {
      * @param callback {function} function, which will be executed on request success
      */
     ContentTypeService.prototype.loadContentTypeGroups = function loadContentTypeGroups(contentTypeGroups, callback) {
-        this.connectionManager_.request(
+        this._connectionManager.request(
             "GET",
             contentTypeGroups,
             {},
@@ -134,7 +134,7 @@ var ContentTypeService = (function() {
      * @param callback {function} function, which will be executed on request success
      */
     ContentTypeService.prototype.loadContentTypeGroup = function loadContentTypeGroup(contentTypeGroupId, callback) {
-        this.connectionManager_.request(
+        this._connectionManager.request(
             "GET",
             contentTypeGroupId,
             {},
@@ -153,7 +153,7 @@ var ContentTypeService = (function() {
      * @param callback {function} function, which will be executed on request success
      */
     ContentTypeService.prototype.updateContentTypeGroup = function updateContentTypeGroup(contentTypeGroupId, contentTypeGroupUpdateStruct, callback) {
-        this.connectionManager_.request(
+        this._connectionManager.request(
             "PATCH",
             contentTypeGroupId,
             JSON.stringify(contentTypeGroupUpdateStruct.body),
@@ -170,7 +170,7 @@ var ContentTypeService = (function() {
      * @param callback {function} function, which will be executed on request success
      */
     ContentTypeService.prototype.deleteContentTypeGroup = function deleteContentTypeGroup(contentTypeGroupId, callback) {
-        this.connectionManager_.delete(
+        this._connectionManager.delete(
             contentTypeGroupId,
             callback
         );
@@ -194,16 +194,16 @@ var ContentTypeService = (function() {
 
                     var contentTypeGroup = JSON.parse(contentTypeGroupResponse.body).ContentTypeGroup;
 
-                    that.connectionManager_.request(
+                    that._connectionManager.request(
                         "GET",
-                         contentTypeGroup.ContentTypes["_href"],
+                         contentTypeGroup.ContentTypes._href,
                         "",
                         { "Accept" : contentTypeGroup.ContentTypes["_media-type"] },
                         callback
                     );
 
                 } else {
-                    callback(error, false)
+                    callback(error, false);
                 }
             }
         );
@@ -216,7 +216,7 @@ var ContentTypeService = (function() {
      * @param callback {Function}
      */
     ContentTypeService.prototype.loadContentTypeGroupByIdentifier = function loadContentTypeGroupByIdentifier(contentTypeGroups, identifier, callback) {
-        this.connectionManager_.request(
+        this._connectionManager.request(
             "GET",
             contentTypeGroups + "?identifier=" + identifier,
             "",
@@ -248,19 +248,19 @@ var ContentTypeService = (function() {
             function(error, contentTypeGroupResponse){
                 if (!error) {
 
-                    var contentTypeGroup = JSON.parse(contentTypeGroupResponse.body).ContentTypeGroup;
-                    var parameters = (publish === true) ? "?publish=true" : "";
+                    var contentTypeGroup = JSON.parse(contentTypeGroupResponse.body).ContentTypeGroup,
+                        parameters = (publish === true) ? "?publish=true" : "";
 
-                    that.connectionManager_.request(
+                    that._connectionManager.request(
                         "POST",
-                        contentTypeGroup.ContentTypes["_href"] + parameters,
+                        contentTypeGroup.ContentTypes._href + parameters,
                         JSON.stringify(contentTypeCreateStruct.body),
                         contentTypeCreateStruct.headers,
                         callback
                     );
 
                 } else {
-                    callback(error, false)
+                    callback(error, false);
                 }
             }
         );
@@ -274,7 +274,7 @@ var ContentTypeService = (function() {
      * @param callback {function} function, which will be executed on request success
      */
     ContentTypeService.prototype.copyContentType = function copyContentType(contentTypeId, callback) {
-        this.connectionManager_.request(
+        this._connectionManager.request(
             "COPY",
             contentTypeId,
             "",
@@ -291,7 +291,7 @@ var ContentTypeService = (function() {
      * @param callback {function} function, which will be executed on request success
      */
     ContentTypeService.prototype.loadContentType = function loadContentType(contentTypeId, callback) {
-        this.connectionManager_.request(
+        this._connectionManager.request(
             "GET",
             contentTypeId,
             "",
@@ -309,21 +309,21 @@ var ContentTypeService = (function() {
 
         var that = this;
 
-        this.discoveryService_.getInfoObject(
+        this._discoveryService.getInfoObject(
             "contentTypes",
             function(error, contentTypes) {
                 if (!error) {
 
-                    that.connectionManager_.request(
+                    that._connectionManager.request(
                         "GET",
-                        contentTypes["_href"] + "?identifier=" + identifier,
+                        contentTypes._href + "?identifier=" + identifier,
                         {},
                         { "Accept" : contentTypes["_media-type"] },
                         callback
                     );
 
                 } else {
-                    callback(error, false)
+                    callback(error, false);
                 }
             }
         );
@@ -337,7 +337,7 @@ var ContentTypeService = (function() {
      * @param callback {function} function, which will be executed on request success
      */
     ContentTypeService.prototype.deleteContentType = function deleteContentType(contentTypeId, callback) {
-        this.connectionManager_.delete(
+        this._connectionManager.delete(
             contentTypeId,
             callback
         );
@@ -351,7 +351,7 @@ var ContentTypeService = (function() {
      * @param callback {function} function, which will be executed on request success
      */
     ContentTypeService.prototype.loadContentTypeGroups = function loadContentTypeGroups(contentTypeId, callback) {
-        this.connectionManager_.request(
+        this._connectionManager.request(
             "GET",
             contentTypeId + '/groups',
             "",
@@ -370,7 +370,7 @@ var ContentTypeService = (function() {
      * @param callback {function} function, which will be executed on request success
      */
     ContentTypeService.prototype.assignContentTypeGroup = function assignContentTypeGroup(contentTypeId, groupId, callback) {
-        this.connectionManager_.request(
+        this._connectionManager.request(
             "POST",
             contentTypeId + "/groups" + "?group=" + groupId,
             "",
@@ -387,7 +387,7 @@ var ContentTypeService = (function() {
      * @param callback {function} function, which will be executed on request success
      */
     ContentTypeService.prototype.unassignContentTypeGroup = function unassignContentTypeGroup(contentTypeAssignedGroupId, callback) {
-        this.connectionManager_.delete(
+        this._connectionManager.delete(
             contentTypeAssignedGroupId,
             callback
         );
@@ -406,7 +406,7 @@ var ContentTypeService = (function() {
      * @param callback {function} function, which will be executed on request success
      */
     ContentTypeService.prototype.createContentTypeDraft = function createContentTypeDraft(contentTypeId, contentTypeUpdateStruct, callback) {
-        this.connectionManager_.request(
+        this._connectionManager.request(
             "POST",
             contentTypeId,
             JSON.stringify(contentTypeUpdateStruct.body),
@@ -423,7 +423,7 @@ var ContentTypeService = (function() {
      * @param callback {function} function, which will be executed on request success
      */
     ContentTypeService.prototype.loadContentTypeDraft = function loadContentTypeDraft(contentTypeId, callback) {
-        this.connectionManager_.request(
+        this._connectionManager.request(
             "GET",
             contentTypeId + "/draft",
             "",
@@ -441,7 +441,7 @@ var ContentTypeService = (function() {
      * @param callback {function} function, which will be executed on request success
      */
     ContentTypeService.prototype.updateContentTypeDraftMetadata = function updateContentTypeDraftMetadata(contentTypeDraftId, contentTypeUpdateStruct, callback) {
-        this.connectionManager_.request(
+        this._connectionManager.request(
             "PATCH",
             contentTypeDraftId,
             JSON.stringify(contentTypeUpdateStruct.body),
@@ -458,7 +458,7 @@ var ContentTypeService = (function() {
      * @param callback {function} function, which will be executed on request success
      */
     ContentTypeService.prototype.publishContentTypeDraft = function publishContentTypeDraft(contentTypeDraftId, callback) {
-        this.connectionManager_.request(
+        this._connectionManager.request(
             "PUBLISH",
             contentTypeDraftId,
             "",
@@ -475,7 +475,7 @@ var ContentTypeService = (function() {
      * @param callback {function} function, which will be executed on request success
      */
     ContentTypeService.prototype.deleteContentTypeDraft = function deleteContentTypeDraft(contentTypeDraftId, callback) {
-        this.connectionManager_.delete(
+        this._connectionManager.delete(
             contentTypeDraftId,
             callback
         );
@@ -504,16 +504,16 @@ var ContentTypeService = (function() {
 
                     var contentTypeDraftFieldDefinitions = JSON.parse(contentTypeDraftResponse.body).ContentType.FieldDefinitions;
 
-                    that.connectionManager_.request(
+                    that._connectionManager.request(
                         "POST",
-                        contentTypeDraftFieldDefinitions["_href"],
+                        contentTypeDraftFieldDefinitions._href,
                         JSON.stringify(fieldDefinitionCreateStruct.body),
                         fieldDefinitionCreateStruct.headers,
                         callback
                     );
 
                 } else {
-                    callback(error, false)
+                    callback(error, false);
                 }
             }
         );
@@ -527,7 +527,7 @@ var ContentTypeService = (function() {
      * @param callback {function} function, which will be executed on request success
      */
     ContentTypeService.prototype.loadFieldDefinition = function loadFieldDefinition(fieldDefinitionId, callback) {
-        this.connectionManager_.request(
+        this._connectionManager.request(
             "GET",
             fieldDefinitionId,
             "",
@@ -547,7 +547,7 @@ var ContentTypeService = (function() {
      * @param callback {function} function, which will be executed on request success
      */
     ContentTypeService.prototype.updateFieldDefinition = function updateFieldDefinition(fieldDefinitionId, fieldDefinitionUpdateStruct, callback) {
-        this.connectionManager_.request(
+        this._connectionManager.request(
             "PATCH",
             fieldDefinitionId,
             JSON.stringify(fieldDefinitionUpdateStruct.body),
@@ -564,7 +564,7 @@ var ContentTypeService = (function() {
      * @param callback {function} function, which will be executed on request success
      */
     ContentTypeService.prototype.deleteFieldDefinition = function deleteFieldDefinition(fieldDefinitionId, callback) {
-        this.connectionManager_.delete(
+        this._connectionManager.delete(
             fieldDefinitionId,
             callback
         );

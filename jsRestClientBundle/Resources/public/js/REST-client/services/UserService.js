@@ -9,8 +9,8 @@ var UserService = (function() {
      */
     var UserService = function(connectionManager, discoveryService) {
 
-        this.connectionManager_ = connectionManager;
-        this.discoveryService_ = discoveryService;
+        this._connectionManager = connectionManager;
+        this._discoveryService = discoveryService;
 
     };
 
@@ -147,14 +147,14 @@ var UserService = (function() {
 
         var that = this;
 
-        this.discoveryService_.getInfoObject(
+        this._discoveryService.getInfoObject(
             "rootUserGroup",
             function(error, rootUserGroup){
                 if (!error) {
 
-                    that.connectionManager_.request(
+                    that._connectionManager.request(
                         "GET",
-                        rootUserGroup["_href"],
+                        rootUserGroup._href,
                         "",
                         {
                             "Accept" : rootUserGroup["_media-type"]
@@ -163,7 +163,7 @@ var UserService = (function() {
                     );
 
                 } else {
-                    callback(error, false)
+                    callback(error, false);
                 }
             });
     };
@@ -176,7 +176,7 @@ var UserService = (function() {
      * @param callback {function} function, which will be executed on request success
      */
     UserService.prototype.loadUserGroup = function loadUserGroup(userGroupId, callback) {
-        this.connectionManager_.request(
+        this._connectionManager.request(
             "GET",
             userGroupId,
             "",
@@ -196,7 +196,7 @@ var UserService = (function() {
      * @param callback {function} function, which will be executed on request success
      */
     UserService.prototype.loadUserGroupByRemoteId = function loadUserGroupByRemoteId(userGroups, remoteId, callback) {
-        this.connectionManager_.request(
+        this._connectionManager.request(
             "GET",
             userGroups + '?remoteId=' + remoteId,
             "",
@@ -215,7 +215,7 @@ var UserService = (function() {
      * @param callback {function} function, which will be executed on request success
      */
     UserService.prototype.deleteUserGroup = function deleteUserGroup(userGroupId, callback) {
-        this.connectionManager_.delete(
+        this._connectionManager.delete(
             userGroupId,
             callback
         );
@@ -230,7 +230,7 @@ var UserService = (function() {
      * @param callback {function} function, which will be executed on request success
      */
     UserService.prototype.moveUserGroup = function moveUserGroup(userGroupId, destination, callback) {
-        this.connectionManager_.request(
+        this._connectionManager.request(
             "MOVE",
             userGroupId,
             "",
@@ -261,16 +261,16 @@ var UserService = (function() {
 
                     var subGroups = JSON.parse(userGroupResponse.body).UserGroup.Subgroups;
 
-                    that.connectionManager_.request(
+                    that._connectionManager.request(
                         "POST",
-                        subGroups["_href"],
+                        subGroups._href,
                         JSON.stringify(userGroupCreateStruct.body),
                         userGroupCreateStruct.headers,
                         callback
                     );
 
                 } else {
-                    callback(error, false)
+                    callback(error, false);
                 }
             }
         );
@@ -285,7 +285,7 @@ var UserService = (function() {
      * @param callback {function} function, which will be executed on request success
      */
     UserService.prototype.updateUserGroup = function updateUserGroup(userGroupId, userGroupUpdateStruct, callback) {
-        this.connectionManager_.request(
+        this._connectionManager.request(
             "PATCH",
             userGroupId,
             JSON.stringify(userGroupUpdateStruct.body),
@@ -313,9 +313,9 @@ var UserService = (function() {
 
                     var subGroups = JSON.parse(userGroupResponse.body).UserGroup.Subgroups;
 
-                    that.connectionManager_.request(
+                    that._connectionManager.request(
                         "GET",
-                        subGroups["_href"],
+                        subGroups._href,
                         "",
                         {
                             "Accept" : subGroups["_media-type"]
@@ -324,10 +324,10 @@ var UserService = (function() {
                     );
 
                 } else {
-                    callback(error, false)
+                    callback(error, false);
                 }
             }
-        )
+        );
     };
 
     /**
@@ -348,9 +348,9 @@ var UserService = (function() {
 
                     var users = JSON.parse(userGroupResponse.body).UserGroup.Users;
 
-                    that.connectionManager_.request(
+                    that._connectionManager.request(
                         "GET",
-                        users["_href"],
+                        users._href,
                         "",
                         {
                             "Accept" : users["_media-type"]
@@ -359,10 +359,10 @@ var UserService = (function() {
                     );
 
                 } else {
-                    callback(error, false)
+                    callback(error, false);
                 }
             }
-        )
+        );
 
     };
 
@@ -374,7 +374,7 @@ var UserService = (function() {
      * @param callback {function} function, which will be executed on request success
      */
     UserService.prototype.loadUserGroupsOfUser = function loadUserGroupsOfUser(userId, callback) {
-        this.connectionManager_.request(
+        this._connectionManager.request(
             "GET",
             userId + '/groups',
             "",
@@ -408,16 +408,16 @@ var UserService = (function() {
 
                     var users = JSON.parse(userGroupResponse.body).UserGroup.Users;
 
-                    that.connectionManager_.request(
+                    that._connectionManager.request(
                         "POST",
-                        users["_href"],
+                        users._href,
                         JSON.stringify(userCreateStruct.body),
                         userCreateStruct.headers,
                         callback
                     );
 
                 } else {
-                    callback(error, false)
+                    callback(error, false);
                 }
             }
         );
@@ -432,7 +432,7 @@ var UserService = (function() {
      * @param callback {function} function, which will be executed on request success
      */
     UserService.prototype.getRoleAssignments = function getRoleAssignments(userList, roleId, callback) {
-        this.connectionManager_.request(
+        this._connectionManager.request(
             "GET",
             userList + '?roleId=' + roleId,
             "",
@@ -451,7 +451,7 @@ var UserService = (function() {
      * @param callback {function} function, which will be executed on request success
      */
     UserService.prototype.loadUser = function loadUser(userId, callback) {
-        this.connectionManager_.request(
+        this._connectionManager.request(
             "GET",
             userId,
             "",
@@ -471,7 +471,7 @@ var UserService = (function() {
      * @param callback {function} function, which will be executed on request success
      */
     UserService.prototype.updateUser = function updateUser(userId, userUpdateStruct, callback) {
-        this.connectionManager_.request(
+        this._connectionManager.request(
             "PATCH",
             userId,
             JSON.stringify(userUpdateStruct.body),
@@ -488,7 +488,7 @@ var UserService = (function() {
      * @param callback {function} function, which will be executed on request success
      */
     UserService.prototype.deleteUser = function deleteUser(userId, callback) {
-        this.connectionManager_.delete(
+        this._connectionManager.delete(
             userId,
             callback
         );
@@ -517,9 +517,9 @@ var UserService = (function() {
 
                     var userGroups = JSON.parse(userResponse.body).User.UserGroups;
 
-                    that.connectionManager_.request(
+                    that._connectionManager.request(
                         "POST",
-                        userGroups["_href"] + "?group=" + userGroupId,
+                        userGroups._href + "?group=" + userGroupId,
                         "",
                         {
                             "Accept" : userGroups["_media-type"]
@@ -528,11 +528,11 @@ var UserService = (function() {
                     );
 
                 } else {
-                    callback(error, false)
+                    callback(error, false);
                 }
 
             }
-        )
+        );
     };
 
     /**
@@ -544,7 +544,7 @@ var UserService = (function() {
      */
     UserService.prototype.unAssignUserFromUserGroup = function unAssignUserFromUserGroup(userAssignedGroupId, callback) {
 
-        this.connectionManager_.request(
+        this._connectionManager.request(
             "DELETE",
             userAssignedGroupId,
             "",
@@ -571,23 +571,24 @@ var UserService = (function() {
 
         var that = this;
 
-        this.discoveryService_.getInfoObject(
+        this._discoveryService.getInfoObject(
             "roles",
             function(error, roles){
                 if (!error) {
 
-                    that.connectionManager_.request(
+                    that._connectionManager.request(
                     "POST",
-                    roles["_href"],
+                    roles._href,
                     JSON.stringify(roleCreateStruct.body),
                     roleCreateStruct.headers,
                     callback
                     );
 
                 } else {
-                    callback(error, false)
+                    callback(error, false);
                 }
-        });
+            }
+        );
     };
 
     /**
@@ -598,7 +599,7 @@ var UserService = (function() {
      * @param callback {function} function, which will be executed on request success
      */
     UserService.prototype.loadRole = function loadRole(roleId, callback) {
-        this.connectionManager_.request(
+        this._connectionManager.request(
             "GET",
             roleId,
             "",
@@ -620,8 +621,8 @@ var UserService = (function() {
      */
     UserService.prototype.loadRoles = function loadRoles(identifier, limit, offset, callback) {
 
-        var that = this;
-        var identifierQuery = (identifier === "") ? "" : "&identifier=" + identifier;
+        var that = this,
+            identifierQuery = (identifier === "") ? "" : "&identifier=" + identifier;
 
         // default values for some of the parameters
         offset = (typeof offset === "undefined") ? 0 : offset;
@@ -629,14 +630,14 @@ var UserService = (function() {
 
 
 
-        this.discoveryService_.getInfoObject(
+        this._discoveryService.getInfoObject(
             "roles",
             function(error, roles){
                 if (!error) {
 
-                    that.connectionManager_.request(
+                    that._connectionManager.request(
                         "GET",
-                        roles["_href"] + '?offset=' + offset + '&limit=' + limit + identifierQuery,
+                        roles._href + '?offset=' + offset + '&limit=' + limit + identifierQuery,
                         "",
                         {
                             "Accept" : roles["_media-type"]
@@ -645,13 +646,11 @@ var UserService = (function() {
                     );
 
                 } else {
-                    callback(error, false)
+                    callback(error, false);
                 }
             }
-        )
+        );
     };
-
-
 
     /**
      * Update a role
@@ -662,7 +661,7 @@ var UserService = (function() {
      * @param callback {function} function, which will be executed on request success
      */
     UserService.prototype.updateRole = function updateRole(roleId, roleUpdateStruct, callback) {
-        this.connectionManager_.request(
+        this._connectionManager.request(
             "PATCH",
             roleId,
             JSON.stringify(roleUpdateStruct.body),
@@ -680,7 +679,7 @@ var UserService = (function() {
      * @param callback {function} function, which will be executed on request success
      */
     UserService.prototype.deleteRole = function deleteRole(roleId, callback) {
-        this.connectionManager_.delete(
+        this._connectionManager.delete(
             roleId,
             callback
         );
@@ -705,9 +704,9 @@ var UserService = (function() {
 
                     var userRoles = JSON.parse(userResponse.body).User.Roles;
 
-                    that.connectionManager_.request(
+                    that._connectionManager.request(
                         "GET",
-                        userRoles["_href"],
+                        userRoles._href,
                         "",
                         {
                             "Accept" : userRoles["_media-type"]
@@ -716,7 +715,7 @@ var UserService = (function() {
                     );
 
                 } else {
-                    callback(error, false)
+                    callback(error, false);
                 }
             }
         );
@@ -740,9 +739,9 @@ var UserService = (function() {
 
                     var userGroupRoles = JSON.parse(userGroupResponse.body).UserGroup.Roles;
 
-                    that.connectionManager_.request(
+                    that._connectionManager.request(
                         "GET",
-                        userGroupRoles["_href"],
+                        userGroupRoles._href,
                         "",
                         {
                             "Accept" : userGroupRoles["_media-type"]
@@ -751,7 +750,7 @@ var UserService = (function() {
                     );
 
                 } else {
-                    callback(error, false)
+                    callback(error, false);
                 }
             }
         );
@@ -766,7 +765,7 @@ var UserService = (function() {
      * @param callback {function} function, which will be executed on request success
      */
     UserService.prototype.getUserAssignmentObject = function getUserAssignmentObject(userAssignmentId, callback) {
-        this.connectionManager_.request(
+        this._connectionManager.request(
             "GET",
             userAssignmentId,
             "",
@@ -785,7 +784,7 @@ var UserService = (function() {
      * @param callback {function} function, which will be executed on request success
      */
     UserService.prototype.getUserGroupAssignmentObject = function getUserGroupAssignmentObject(userGroupAssignmentId, callback) {
-        this.connectionManager_.request(
+        this._connectionManager.request(
             "GET",
             userGroupAssignmentId,
             "",
@@ -816,15 +815,15 @@ var UserService = (function() {
 
                     var userRoles = JSON.parse(userResponse.body).User.Roles;
 
-                    that.connectionManager_.request(
+                    that._connectionManager.request(
                         "POST",
-                        userRoles["_href"],
+                        userRoles._href,
                         JSON.stringify(roleAssignInputStruct.body),
                         roleAssignInputStruct.headers,
                         callback
                     );
                 } else {
-                    callback(error, false)
+                    callback(error, false);
                 }
             }
         );
@@ -850,15 +849,15 @@ var UserService = (function() {
 
                     var userGroupRoles = JSON.parse(userGroupResponse.body).UserGroup.Roles;
 
-                    that.connectionManager_.request(
+                    that._connectionManager.request(
                         "POST",
-                        userGroupRoles["_href"],
+                        userGroupRoles._href,
                         JSON.stringify(roleAssignInputStruct.body),
                         roleAssignInputStruct.headers,
                         callback
                     );
                 } else {
-                    callback(error, false)
+                    callback(error, false);
                 }
             }
         );
@@ -872,7 +871,7 @@ var UserService = (function() {
      * @param callback {function} function, which will be executed on request success
      */
     UserService.prototype.unassignRoleFromUser = function unassignRoleFromUser(userRoleId, callback) {
-        this.connectionManager_.delete(
+        this._connectionManager.delete(
             userRoleId,
             callback
         );
@@ -886,7 +885,7 @@ var UserService = (function() {
      * @param callback {function} function, which will be executed on request success
      */
     UserService.prototype.unassignRoleFromUserGroup = function unassignRoleFromUserGroup(userGroupRoleId, callback) {
-        this.connectionManager_.delete(
+        this._connectionManager.delete(
             userGroupRoleId,
             callback
         );
@@ -915,15 +914,15 @@ var UserService = (function() {
 
                     var rolePolicies = JSON.parse(roleResponse.body).Role.Policies;
 
-                    that.connectionManager_.request(
+                    that._connectionManager.request(
                         "POST",
-                        rolePolicies["_href"],
+                        rolePolicies._href,
                         JSON.stringify(policyCreateStruct.body),
                         policyCreateStruct.headers,
                         callback
                     );
                 } else {
-                    callback(error, false)
+                    callback(error, false);
                 }
             }
         );
@@ -947,9 +946,9 @@ var UserService = (function() {
 
                     var rolePolicies = JSON.parse(roleResponse.body).Role.Policies;
 
-                    that.connectionManager_.request(
+                    that._connectionManager.request(
                         "GET",
-                        rolePolicies["_href"],
+                        rolePolicies._href,
                         "",
                         {
                             "Accept" : rolePolicies["_media-type"]
@@ -957,7 +956,7 @@ var UserService = (function() {
                         callback
                     );
                 } else {
-                    callback(error, false)
+                    callback(error, false);
                 }
             }
         );
@@ -971,7 +970,7 @@ var UserService = (function() {
      * @param callback {function} function, which will be executed on request success
      */
     UserService.prototype.loadPolicy = function loadPolicy(policyId, callback) {
-        this.connectionManager_.request(
+        this._connectionManager.request(
             "GET",
             policyId,
             "",
@@ -991,7 +990,7 @@ var UserService = (function() {
      * @param callback {function} function, which will be executed on request success
      */
     UserService.prototype.updatePolicy = function updatePolicy(policyId, policyUpdateStruct, callback) {
-        this.connectionManager_.request(
+        this._connectionManager.request(
             "PATCH",
             policyId,
             JSON.stringify(policyUpdateStruct.body),
@@ -1008,7 +1007,7 @@ var UserService = (function() {
      * @param callback {function} function, which will be executed on request success
      */
     UserService.prototype.deletePolicy = function deletePolicy(policyId, callback) {
-        this.connectionManager_.delete(
+        this._connectionManager.delete(
             policyId,
             callback
         );
@@ -1023,7 +1022,7 @@ var UserService = (function() {
      * @param callback {function} function, which will be executed on request success
      */
     UserService.prototype.loadPoliciesByUserId = function loadPoliciesByUserId(userPolicies, userId, callback) {
-        this.connectionManager_.request(
+        this._connectionManager.request(
             "GET",
             userPolicies + "?userId=" + userId,
             "",
@@ -1047,7 +1046,7 @@ var UserService = (function() {
      * @param callback {function} function, which will be executed on request success
      */
     UserService.prototype.createSession = function createSession(sessions, sessionCreateStruct, callback) {
-        this.connectionManager_.notAuthorizedRequest(
+        this._connectionManager.notAuthorizedRequest(
             "POST",
             sessions,
             JSON.stringify(sessionCreateStruct.body),
@@ -1064,7 +1063,7 @@ var UserService = (function() {
      * @param callback {function} function, which will be executed on request success
      */
     UserService.prototype.deleteSession = function deleteSession(sessionId, callback) {
-        this.connectionManager_.request(
+        this._connectionManager.request(
             "DELETE",
             sessionId,
             "",
@@ -1084,7 +1083,7 @@ var UserService = (function() {
      */
     UserService.prototype.logOut = function logOut(callback) {
 
-        this.connectionManager_.logOut(callback);
+        this._connectionManager.logOut(callback);
 
     };
 

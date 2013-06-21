@@ -14,7 +14,7 @@ var PromiseCAPI = (function() {
         var key;
         var that = this;
 
-        this.capi_ = CAPI;
+        this._capi = CAPI;
 
         console.log('entered PromiseCAPI');
 
@@ -28,17 +28,17 @@ var PromiseCAPI = (function() {
         this.generatePromiseService = function(serviceFactory){
             return function() {
                 return new PromiseService(
-                    serviceFactory.call(that.capi_)
+                    serviceFactory.call(that._capi)
                 )
             }
         };
 
         // Auto-generating promise-based services based on every existing CAPI service
         // taking into account only functions with "get....Service" signature
-        for(key in this.capi_) {
-            if ((typeof this.capi_[key] === "function") && ( Object.prototype.toString.call(this.capi_[key].toString().match(/^function\s*(get[^\s(]+Service)/)) === '[object Array]')) {
+        for(key in this._capi) {
+            if ((typeof this._capi[key] === "function") && ( Object.prototype.toString.call(this._capi[key].toString().match(/^function\s*(get[^\s(]+Service)/)) === '[object Array]')) {
 
-                this[key] = this.generatePromiseService(this.capi_[key]);
+                this[key] = this.generatePromiseService(this._capi[key]);
 
             }
         }

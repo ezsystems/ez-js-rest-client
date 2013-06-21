@@ -9,8 +9,8 @@ var ContentService = (function() {
      */
     var ContentService = function(connectionManager, discoveryService) {
 
-        this.connectionManager_ = connectionManager;
-        this.discoveryService_ = discoveryService;
+        this._connectionManager = connectionManager;
+        this._discoveryService = discoveryService;
 
     };
 
@@ -22,7 +22,7 @@ var ContentService = (function() {
      * @param callback {function} function, which will be executed on request success
      */
     ContentService.prototype.loadRoot = function loadRoot(root, callback) {
-        this.connectionManager_.request(
+        this._connectionManager.request(
             "GET",
             root,
             {},
@@ -164,7 +164,7 @@ var ContentService = (function() {
      * @param names {Array} multiLanguageValuesType in JSON format
      * @param descriptions {Array} multiLanguageValuesType in JSON format
      */
-    ContentService.prototype.newObjectStateCreateStruct = function newObjectStateCreateStruct(identifier, languageCode, priority, names, descriptions) {
+    ContentService.prototype.newObjectStateCreateStruct = function (identifier, languageCode, priority, names, descriptions) {
 
         return new ObjectStateCreateStruct(identifier, languageCode, priority, names, descriptions);
 
@@ -225,21 +225,21 @@ var ContentService = (function() {
 
         var that = this;
 
-        this.discoveryService_.getInfoObject(
+        this._discoveryService.getInfoObject(
             "sections",
             function(error, sections) {
                 if (!error) {
 
-                    that.connectionManager_.request(
+                    that._connectionManager.request(
                         "GET",
-                        sections["_href"],
+                        sections._href,
                         {},
                         { "Accept" : sections["_media-type"] },
                         callback
                     );
 
                 } else {
-                    callback(error, false)
+                    callback(error, false);
                 }
             }
         );
@@ -254,7 +254,7 @@ var ContentService = (function() {
      * @param callback {function} function, which will be executed on request success
      */
     ContentService.prototype.loadSection = function loadSection(sectionId, callback) {
-        this.connectionManager_.request(
+        this._connectionManager.request(
             "GET",
             sectionId,
             {},
@@ -272,7 +272,7 @@ var ContentService = (function() {
      * @param callback {function} function, which will be executed on request success
      */
     ContentService.prototype.createSection = function createSection(sections, sectionInput, callback) {
-        this.connectionManager_.request(
+        this._connectionManager.request(
             "POST",
             sections,
             sectionInput,
@@ -293,7 +293,7 @@ var ContentService = (function() {
      * @param callback {function} function, which will be executed on request success
      */
     ContentService.prototype.updateSection = function updateSection(sectionId, sectionInput, callback) {
-        this.connectionManager_.request(
+        this._connectionManager.request(
             "PATCH",
             sectionId,
             sectionInput,
@@ -313,7 +313,7 @@ var ContentService = (function() {
      * @param callback {function} function, which will be executed on request success
      */
     ContentService.prototype.deleteSection = function deleteSection(sectionId, callback) {
-        this.connectionManager_.delete(
+        this._connectionManager.delete(
             sectionId,
             callback
         );
@@ -337,7 +337,7 @@ var ContentService = (function() {
      * @param callback {function} function, which will be executed on request success
      */
     ContentService.prototype.createContent = function createContent(contentObjects, contentCreateStruct, callback) {
-        this.connectionManager_.request(
+        this._connectionManager.request(
             "POST",
             contentObjects,
             JSON.stringify(contentCreateStruct.body),
@@ -355,7 +355,7 @@ var ContentService = (function() {
      * @param callback {function} function, which will be executed on request success
      */
     ContentService.prototype.updateContentMetadata = function updateContentMetadata(content, contentMetadataUpdate, callback) {
-        this.connectionManager_.request(
+        this._connectionManager.request(
             "PATCH",
             content,
             JSON.stringify(contentMetadataUpdate.body),
@@ -375,19 +375,19 @@ var ContentService = (function() {
 
         var that = this;
 
-        this.discoveryService_.getInfoObject(
+        this._discoveryService.getInfoObject(
             "content",
             function(error, contentObjects){
                 if (!error) {
-                    that.connectionManager_.request(
+                    that._connectionManager.request(
                         "GET",
-                        contentObjects["_href"] + '?remoteId=' + remoteId,
+                        contentObjects._href + '?remoteId=' + remoteId,
                         { "remoteId" : remoteId },
                         { "Accept" : contentObjects["_media-type"] },
                         callback
                     );
                 } else {
-                    callback(error, false)
+                    callback(error, false);
                 }
             }
         );
@@ -403,7 +403,7 @@ var ContentService = (function() {
      * @param callback {function} function, which will be executed on request success
      */
     ContentService.prototype.loadContentInfo = function loadContentInfo(contentId, callback) {
-        this.connectionManager_.request(
+        this._connectionManager.request(
             "GET",
             contentId,
             {},
@@ -420,7 +420,7 @@ var ContentService = (function() {
      * @param callback {function} function, which will be executed on request success
      */
     ContentService.prototype.loadContentInfoAndCurrentVersion = function loadContentInfoAndCurrentVersion(contentId, callback) {
-        this.connectionManager_.request(
+        this._connectionManager.request(
             "GET",
             contentId,
             {},
@@ -437,7 +437,7 @@ var ContentService = (function() {
      * @param callback {function} function, which will be executed on request success
      */
     ContentService.prototype.deleteContent = function deleteContent(contentId, callback) {
-        this.connectionManager_.delete(
+        this._connectionManager.delete(
             contentId,
             callback
         );
@@ -452,7 +452,7 @@ var ContentService = (function() {
      * @param callback {function} function, which will be executed on request success
      */
     ContentService.prototype.copyContent = function copyContent(contentId, destinationId, callback) {
-        this.connectionManager_.request(
+        this._connectionManager.request(
             "COPY",
             contentId,
             "",
@@ -482,16 +482,16 @@ var ContentService = (function() {
 
                     var currentVersion = JSON.parse(contentResponse.body).Content.CurrentVersion;
 
-                    that.connectionManager_.request(
+                    that._connectionManager.request(
                         "GET",
-                        currentVersion["_href"],
+                        currentVersion._href,
                         {},
                         { "Accept" : currentVersion["_media-type"] },
                         callback
                     );
 
                 } else {
-                    callback(error, false)
+                    callback(error, false);
                 }
             }
         );
@@ -507,7 +507,7 @@ var ContentService = (function() {
      * @param callback {function} function, which will be executed on request success
      */
     ContentService.prototype.loadContent = function loadContent(versionedContentId, parameters, callback) {
-        this.connectionManager_.request(
+        this._connectionManager.request(
             "GET",
             versionedContentId,
             parameters,
@@ -535,16 +535,16 @@ var ContentService = (function() {
 
                     var contentVersions = JSON.parse(contentResponse.body).Content.Versions;
 
-                    that.connectionManager_.request(
+                    that._connectionManager.request(
                         "GET",
-                        contentVersions["_href"],
+                        contentVersions._href,
                         {},
                         { "Accept" : contentVersions["_media-type"] },
                         callback
                     );
 
                 } else {
-                    callback(error, false)
+                    callback(error, false);
                 }
             }
         );
@@ -560,7 +560,7 @@ var ContentService = (function() {
      * @param callback {function} function, which will be executed on request success
      */
     ContentService.prototype.updateContent = function updateContent(versionedContentId, contentUpdateStruct, callback) {
-        this.connectionManager_.request(
+        this._connectionManager.request(
             "PATCH",
             versionedContentId,
             JSON.stringify(contentUpdateStruct.body),
@@ -580,48 +580,49 @@ var ContentService = (function() {
      */
     ContentService.prototype.createContentDraft = function createContentDraft(contentId, versionId, callback) {
 
-        var that = this;
+        var that = this,
+            contentVersions,
+            currentVersion;
 
+        this.loadContentInfo(
+            contentId,
+            function(error, contentResponse){
+                if (!error) {
 
-            this.loadContentInfo(
-                contentId,
-                function(error, contentResponse){
-                    if (!error) {
+                    if (versionId !== null) {
+                        // Version id is declared
 
-                        if (versionId !== null) {
-                            // Version id is declared
+                        console.log(versionId);
 
-                            console.log(versionId);
+                        contentVersions = JSON.parse(contentResponse.body).Content.Versions;
 
-                            var contentVersions = JSON.parse(contentResponse.body).Content.Versions;
+                        that._connectionManager.request(
+                            "COPY",
+                            contentVersions._href + "/" + versionId,
+                            "",
+                            { "Accept" : "application/vnd.ez.api.Version+json" },
+                            callback
+                        );
 
-                            that.connectionManager_.request(
-                                "COPY",
-                                contentVersions["_href"] + "/" + versionId,
-                                "",
-                                { "Accept" : "application/vnd.ez.api.Version+json" },
-                                callback
-                            );
-
-                        } else {
-                            // Version id is NOT declared
-
-                            var currentVersion = JSON.parse(contentResponse.body).Content.CurrentVersion;
-
-                            that.connectionManager_.request(
-                                "COPY",
-                                currentVersion["_href"],
-                                "",
-                                { "Accept" : "application/vnd.ez.api.Version+json" },
-                                callback
-                            );
-
-                        }
                     } else {
-                        callback(error, false)
+                        // Version id is NOT declared
+
+                        currentVersion = JSON.parse(contentResponse.body).Content.CurrentVersion;
+
+                        that._connectionManager.request(
+                            "COPY",
+                            currentVersion._href,
+                            "",
+                            { "Accept" : "application/vnd.ez.api.Version+json" },
+                            callback
+                        );
+
                     }
+                } else {
+                    callback(error, false);
                 }
-            );
+            }
+        );
     };
 
 
@@ -633,7 +634,7 @@ var ContentService = (function() {
      * @param callback {function} function, which will be executed on request success
      */
     ContentService.prototype.deleteVersion = function deleteVersion(versionedContentId, callback) {
-        this.connectionManager_.delete(
+        this._connectionManager.delete(
             versionedContentId,
             callback
         );
@@ -648,7 +649,7 @@ var ContentService = (function() {
      * @param callback {function} function, which will be executed on request success
      */
     ContentService.prototype.publishVersion = function publishVersion(versionedContentId, callback) {
-        this.connectionManager_.request(
+        this._connectionManager.request(
             "PUBLISH",
             versionedContentId,
             "",
@@ -671,7 +672,7 @@ var ContentService = (function() {
      * @param callback {function} function, which will be executed on request success
      */
     ContentService.prototype.createLocation = function createLocation(objectLocations, locationCreateStruct, callback) {
-        this.connectionManager_.request(
+        this._connectionManager.request(
             "POST",
             objectLocations,
             JSON.stringify(locationCreateStruct.body),
@@ -688,7 +689,7 @@ var ContentService = (function() {
      * @param callback {function} function, which will be executed on request success
      */
     ContentService.prototype.loadLocations = function loadLocations(objectLocations, callback) {
-        this.connectionManager_.request(
+        this._connectionManager.request(
             "GET",
             objectLocations,
             {},
@@ -705,7 +706,7 @@ var ContentService = (function() {
      * @param callback {function} function, which will be executed on request success
      */
     ContentService.prototype.loadLocation = function loadLocation(locationId, callback) {
-        this.connectionManager_.request(
+        this._connectionManager.request(
             "GET",
             locationId,
             {},
@@ -723,7 +724,7 @@ var ContentService = (function() {
      * @param callback {function} function, which will be executed on request success
      */
     ContentService.prototype.loadLocationByRemoteId = function loadLocationByRemoteId(locations, remoteId, callback) {
-        this.connectionManager_.request(
+        this._connectionManager.request(
             "GET",
             locations + '?remoteId=' + remoteId,
             "",
@@ -741,7 +742,7 @@ var ContentService = (function() {
      * @param callback {function} function, which will be executed on request success
      */
     ContentService.prototype.updateLocation = function updateLocation(locationId, locationUpdateStruct, callback) {
-        this.connectionManager_.request(
+        this._connectionManager.request(
             "PATCH",
             locationId,
             JSON.stringify(locationUpdateStruct.body),
@@ -774,15 +775,15 @@ var ContentService = (function() {
 
                     var location = JSON.parse(locationResponse.body).Location;
 
-                    that.connectionManager_.request(
+                    that._connectionManager.request(
                         "GET",
-                        location.Children["_href"] + '?offset=' + offset + '&limit=' + limit,
+                        location.Children._href + '?offset=' + offset + '&limit=' + limit,
                         {},
                         { "Accept" : location.Children["_media-type"] },
                         callback
                     );
                 } else {
-                    callback(error, false)
+                    callback(error, false);
                 }
             }
         );
@@ -797,7 +798,7 @@ var ContentService = (function() {
      * @param callback {function} function, which will be executed on request success
      */
     ContentService.prototype.copySubtree = function copySubtree(subtree, targetLocation, callback) {
-        this.connectionManager_.request(
+        this._connectionManager.request(
             "COPY",
             subtree,
             "",
@@ -816,7 +817,7 @@ var ContentService = (function() {
      * @param callback {function} function, which will be executed on request success
      */
     ContentService.prototype.moveSubtree = function moveSubtree(subtree, targetLocation, callback) {
-        this.connectionManager_.request(
+        this._connectionManager.request(
             "MOVE",
             subtree,
             "",
@@ -834,7 +835,7 @@ var ContentService = (function() {
      * @param callback {function} function, which will be executed on request success
      */
     ContentService.prototype.swapLocation = function swapLocation(subtree, targetLocation, callback) {
-        this.connectionManager_.request(
+        this._connectionManager.request(
             "SWAP",
             subtree,
             "",
@@ -854,7 +855,7 @@ var ContentService = (function() {
      * @param callback {function} function, which will be executed on request success
      */
     ContentService.prototype.deleteLocation = function deleteLocation(locationId, callback) {
-        this.connectionManager_.delete(
+        this._connectionManager.delete(
             locationId,
             callback
         );
@@ -875,21 +876,21 @@ var ContentService = (function() {
 
         var that = this;
 
-        this.discoveryService_.getInfoObject(
+        this._discoveryService.getInfoObject(
             "views",
             function(error, views) {
                 if (!error) {
 
-                    that.connectionManager_.request(
+                    that._connectionManager.request(
                         "POST",
-                        views["_href"],
+                        views._href,
                         JSON.stringify(viewCreateStruct.body),
                         viewCreateStruct.headers,
                         callback
                     );
 
                 } else {
-                    callback(error, false)
+                    callback(error, false);
                 }
             }
         );
@@ -906,14 +907,14 @@ var ContentService = (function() {
 
         var that = this;
 
-        this.discoveryService_.getInfoObject(
+        this._discoveryService.getInfoObject(
             "views",
             function(error, views) {
                 if (!error) {
 
-                    that.connectionManager_.request(
+                    that._connectionManager.request(
                         "GET",
-                        views["_href"],
+                        views._href,
                         "",
                         {
                             "Accept" : views["_media-type"]
@@ -922,7 +923,7 @@ var ContentService = (function() {
                     );
 
                 } else {
-                    callback(error, false)
+                    callback(error, false);
                 }
             }
         );
@@ -953,15 +954,15 @@ var ContentService = (function() {
 
                     var version = JSON.parse(versionResponse.body).Version;
 
-                    that.connectionManager_.request(
+                    that._connectionManager.request(
                         "GET",
-                        version.Relations["_href"] + '?offset=' + offset + '&limit=' + limit,
+                        version.Relations._href + '?offset=' + offset + '&limit=' + limit,
                         {},
                         { "Accept" : version.Relations["_media-type"] },
                         callback
                     );
                 } else {
-                    callback(error, false)
+                    callback(error, false);
                 }
             }
         );
@@ -988,16 +989,16 @@ var ContentService = (function() {
 
                     var currentVersion = JSON.parse(currentVersionResponse.body).Version;
 
-                    that.connectionManager_.request(
+                    that._connectionManager.request(
                         "GET",
-                        currentVersion.Relations["_href"] + '?offset=' + offset + '&limit=' + limit,
+                        currentVersion.Relations._href + '?offset=' + offset + '&limit=' + limit,
                         {},
                         { "Accept" : version.Relations["_media-type"] },
                         callback
                     );
 
                 } else {
-                    callback(error, false)
+                    callback(error, false);
                 }
             }
         );
@@ -1012,7 +1013,7 @@ var ContentService = (function() {
      * @param callback {function} function, which will be executed on request success
      */
     ContentService.prototype.loadRelation = function loadRelation(relationId, callback) {
-        this.connectionManager_.request(
+        this._connectionManager.request(
             "GET",
             relationId,
             {},
@@ -1041,15 +1042,15 @@ var ContentService = (function() {
 
                     var version = JSON.parse(versionResponse.body).Version;
 
-                    that.connectionManager_.request(
+                    that._connectionManager.request(
                         "POST",
-                        version.Relations["_href"],
+                        version.Relations._href,
                         JSON.stringify(relationCreateStruct.body),
                         relationCreateStruct.headers,
                         callback
                     );
                 } else {
-                    callback(error, false)
+                    callback(error, false);
                 }
             }
         );
@@ -1063,7 +1064,7 @@ var ContentService = (function() {
      * @param callback {function} function, which will be executed on request success
      */
     ContentService.prototype.deleteRelation = function deleteRelation(relationId, callback) {
-        this.connectionManager_.delete(
+        this._connectionManager.delete(
             relationId,
             callback
         );
@@ -1085,21 +1086,21 @@ var ContentService = (function() {
 
         var that = this;
 
-        this.discoveryService_.getInfoObject(
+        this._discoveryService.getInfoObject(
             "trash",
             function(error, trash) {
                 if (!error) {
 
-                    that.connectionManager_.request(
+                    that._connectionManager.request(
                         "GET",
-                        trash["_href"] + '?offset=' + offset + '&limit=' + limit,
+                        trash._href + '?offset=' + offset + '&limit=' + limit,
                         {},
                         { "Accept" : trash["_media-type"] },
                         callback
                     );
 
                 } else {
-                    callback(error, false)
+                    callback(error, false);
                 }
             }
         );
@@ -1113,7 +1114,7 @@ var ContentService = (function() {
      * @param callback {function} function, which will be executed on request success
      */
     ContentService.prototype.loadThrashItem = function loadThrashItem(trashItemId, callback) {
-        this.connectionManager_.request(
+        this._connectionManager.request(
             "GET",
             trashItemId,
             {},
@@ -1135,10 +1136,10 @@ var ContentService = (function() {
         var headers = { "Accept" : "application/vnd.ez.api.TrashItem+json" };
 
         if ((typeof destination !== "undefined") && (destination !== null)) {
-            headers["Destination"] = destination;
+            headers.Destination = destination;
         }
 
-        this.connectionManager_.request(
+        this._connectionManager.request(
             "MOVE",
             trashItemId,
             "",
@@ -1155,7 +1156,7 @@ var ContentService = (function() {
      * @param callback {function} function, which will be executed on request success
      */
     ContentService.prototype.deleteTrashItem = function deleteTrashItem(trashItemId, callback) {
-        this.connectionManager_.delete(
+        this._connectionManager.delete(
             trashItemId,
             callback
         );
@@ -1171,21 +1172,21 @@ var ContentService = (function() {
 
         var that = this;
 
-        this.discoveryService_.getInfoObject(
+        this._discoveryService.getInfoObject(
             "trash",
             function(error, trash) {
                 if (!error) {
 
-                    that.connectionManager_.request(
+                    that._connectionManager.request(
                         "DELETE",
-                        trash["_href"],
+                        trash._href,
                         "",
                         {},
                         callback
                     );
 
                 } else {
-                    callback(error, false)
+                    callback(error, false);
                 }
             }
         );
@@ -1203,7 +1204,7 @@ var ContentService = (function() {
      * @param callback {function} function, which will be executed on request success
      */
     ContentService.prototype.loadObjectStateGroups = function loadObjectStateGroups(objectStateGroups, callback) {
-        this.connectionManager_.request(
+        this._connectionManager.request(
             "GET",
             objectStateGroups,
             {},
@@ -1220,7 +1221,7 @@ var ContentService = (function() {
      * @param callback {function} function, which will be executed on request success
      */
     ContentService.prototype.loadObjectStateGroup = function loadObjectStateGroup(objectStateGroupId, callback) {
-        this.connectionManager_.request(
+        this._connectionManager.request(
             "GET",
             objectStateGroupId,
             {},
@@ -1239,7 +1240,7 @@ var ContentService = (function() {
      * @param callback {function} function, which will be executed on request success
      */
     ContentService.prototype.createObjectStateGroup = function createObjectStateGroup(objectStateGroups, objectStateGroupCreateStruct, callback) {
-        this.connectionManager_.request(
+        this._connectionManager.request(
             "POST",
             objectStateGroups,
             JSON.stringify(objectStateGroupCreateStruct.body),
@@ -1257,7 +1258,7 @@ var ContentService = (function() {
      * @param callback {function} function, which will be executed on request success
      */
     ContentService.prototype.updateObjectStateGroup = function updateObjectStateGroup(objectStateGroupId, objectStateGroupUpdateStruct, callback) {
-        this.connectionManager_.request(
+        this._connectionManager.request(
             "PATCH",
             objectStateGroupId,
             JSON.stringify(objectStateGroupUpdateStruct.body),
@@ -1274,7 +1275,7 @@ var ContentService = (function() {
      * @param callback {function} function, which will be executed on request success
      */
     ContentService.prototype.deleteObjectStateGroup = function deleteObjectStateGroup(objectStateGroupId, callback) {
-        this.connectionManager_.delete(
+        this._connectionManager.delete(
             objectStateGroupId,
             callback
         );
@@ -1290,7 +1291,7 @@ var ContentService = (function() {
      */
     ContentService.prototype.createObjectState = function createObjectState(objectStateGroupId, objectStateCreateStruct, callback) {
 
-        this.connectionManager_.request(
+        this._connectionManager.request(
             "POST",
             objectStateGroupId + "/objectstates",
             JSON.stringify(objectStateCreateStruct.body),
@@ -1308,7 +1309,7 @@ var ContentService = (function() {
      * @param callback {function} function, which will be executed on request success
      */
     ContentService.prototype.loadObjectState = function loadObjectState(objectStateId, callback) {
-        this.connectionManager_.request(
+        this._connectionManager.request(
             "GET",
             objectStateId,
             {},
@@ -1326,7 +1327,7 @@ var ContentService = (function() {
      * @param callback {function} function, which will be executed on request success
      */
     ContentService.prototype.updateObjectState = function updateObjectState(objectStateId, objectStateUpdateStruct, callback) {
-        this.connectionManager_.request(
+        this._connectionManager.request(
             "PATCH",
             objectStateId,
             JSON.stringify(objectStateUpdateStruct.body),
@@ -1343,7 +1344,7 @@ var ContentService = (function() {
      * @param callback {function} function, which will be executed on request success
      */
     ContentService.prototype.deleteObjectState = function deleteObjectState(objectStateId, callback) {
-        this.connectionManager_.delete(
+        this._connectionManager.delete(
             objectStateId,
             callback
         );
@@ -1357,7 +1358,7 @@ var ContentService = (function() {
      * @param callback {function} function, which will be executed on request success
      */
     ContentService.prototype.getContentState = function getContentState(contentStatesId, callback) {
-        this.connectionManager_.request(
+        this._connectionManager.request(
             "GET",
             contentStatesId,
             {},
@@ -1375,7 +1376,7 @@ var ContentService = (function() {
      * @param callback {function} function, which will be executed on request success
      */
     ContentService.prototype.setContentState = function setContentState(contentStatesId, objectStates, callback) {
-        this.connectionManager_.request(
+        this._connectionManager.request(
             "PATCH",
             contentStatesId,
             JSON.stringify(objectStates),
@@ -1400,7 +1401,7 @@ var ContentService = (function() {
      * @param callback {function} function, which will be executed on request success
      */
     ContentService.prototype.createUrlAlias = function createUrlAlias(urlAliases, urlAliasCreateStruct, callback) {
-        this.connectionManager_.request(
+        this._connectionManager.request(
             "POST",
             urlAliases,
             JSON.stringify(urlAliasCreateStruct.body),
@@ -1417,7 +1418,7 @@ var ContentService = (function() {
      * @param callback {function} function, which will be executed on request success
      */
     ContentService.prototype.listGlobalAliases = function listGlobalAliases(urlAliases, callback) {
-        this.connectionManager_.request(
+        this._connectionManager.request(
             "GET",
             urlAliases,
             {},
@@ -1439,7 +1440,7 @@ var ContentService = (function() {
         custom = (typeof custom === "undefined") ? true : custom;
         var parameters = (custom === true) ? "" : "?custom=false";
 
-        this.connectionManager_.request(
+        this._connectionManager.request(
             "GET",
             locationUrlAliases + '/urlaliases' + parameters,
             {},
@@ -1456,7 +1457,7 @@ var ContentService = (function() {
      * @param callback {function} function, which will be executed on request success
      */
     ContentService.prototype.loadUrlAlias = function loadUrlAlias(urlAliasId, callback) {
-        this.connectionManager_.request(
+        this._connectionManager.request(
             "GET",
             urlAliasId,
             {},
@@ -1473,7 +1474,7 @@ var ContentService = (function() {
      * @param callback {function} function, which will be executed on request success
      */
     ContentService.prototype.deleteUrlAlias = function deleteUrlAlias(urlAliasId, callback) {
-        this.connectionManager_.delete(
+        this._connectionManager.delete(
             urlAliasId,
             callback
         );
@@ -1492,7 +1493,7 @@ var ContentService = (function() {
      * @param callback {function} function, which will be executed on request success
      */
     ContentService.prototype.createUrlWildcard = function createUrlWildcard(urlWildcards, urlWildcardCreateStruct, callback) {
-        this.connectionManager_.request(
+        this._connectionManager.request(
             "POST",
             urlWildcards,
             JSON.stringify(urlWildcardCreateStruct.body),
@@ -1509,7 +1510,7 @@ var ContentService = (function() {
      * @param callback {function} function, which will be executed on request success
      */
     ContentService.prototype.loadUrlWildcards = function loadUrlWildcards(urlWildcards, callback) {
-        this.connectionManager_.request(
+        this._connectionManager.request(
             "GET",
             urlWildcards,
             "",
@@ -1526,7 +1527,7 @@ var ContentService = (function() {
      * @param callback {function} function, which will be executed on request success
      */
     ContentService.prototype.loadUrlWildcard = function loadUrlWildcard(urlWildcardId, callback) {
-        this.connectionManager_.request(
+        this._connectionManager.request(
             "GET",
             urlWildcardId,
             "",
@@ -1543,7 +1544,7 @@ var ContentService = (function() {
      * @param callback {function} function, which will be executed on request success
      */
     ContentService.prototype.deleteUrlWildcard = function deleteUrlWildcard(urlWildcardId, callback) {
-        this.connectionManager_.delete(
+        this._connectionManager.delete(
             urlWildcardId,
             callback
         );

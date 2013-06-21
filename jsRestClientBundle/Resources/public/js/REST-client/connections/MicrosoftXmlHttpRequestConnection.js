@@ -8,12 +8,7 @@ var MicrosoftXmlHttpRequestConnection = (function() {
      */
     var MicrosoftXmlHttpRequestConnection = function () {
 
-        // Private area
-        var user = "admin";
-        var password = "admin";
-        var authMethod = "HTTPBasicAuth";
-
-        this.xhr_ = new ActiveXObject("Microsoft.XMLHTTP");
+        this._xhr = new ActiveXObject("Microsoft.XMLHTTP");
 
         /**
          * Basic request implemented via XHR technique
@@ -24,11 +19,12 @@ var MicrosoftXmlHttpRequestConnection = (function() {
          */
         this.execute = function(request, callback) {
 
-            var XHR = this.xhr_;
+            var XHR = this._xhr,
+                headerType;
 
             // Create the state change handler:
             XHR.onreadystatechange = function() {
-                if (XHR.readyState != 4) return; // Not ready yet
+                if (XHR.readyState != 4) {return;} // Not ready yet
                 if (XHR.status >= 400) {
                     callback(
                         new Error({
@@ -61,11 +57,13 @@ var MicrosoftXmlHttpRequestConnection = (function() {
             }
 
 
-            for (var headerType in request.headers) {
-                XHR.setRequestHeader(
-                    headerType,
-                    request.headers[headerType]
-                );
+            for (headerType in request.headers) {
+                if (request.headers.hasOwnProperty(headerType)) {
+                    XHR.setRequestHeader(
+                        headerType,
+                        request.headers[headerType]
+                    );
+                }
             }
             XHR.send(request.body);
         };
@@ -74,7 +72,7 @@ var MicrosoftXmlHttpRequestConnection = (function() {
     // static method
     MicrosoftXmlHttpRequestConnection.isCompatible = function(){
         return !!window.ActiveXObject;
-    }
+    };
 
     return MicrosoftXmlHttpRequestConnection;
 
