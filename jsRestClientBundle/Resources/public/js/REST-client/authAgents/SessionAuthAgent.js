@@ -36,14 +36,12 @@ var SessionAuthAgent = (function() {
     SessionAuthAgent.prototype.ensureAuthentication = function(done) {
         if (this.sessionId === null) {
 
-            var that = this;
-
-            var userService = this.CAPI.getUserService();
-
-            var sessionCreateStruct = userService.newSessionCreateStruct(
-                this._login,
-                this._password
-            )
+            var that = this,
+                userService = this.CAPI.getUserService(),
+                sessionCreateStruct = userService.newSessionCreateStruct(
+                    this._login,
+                    this._password
+                );
 
             // TODO: change hardcoded "sessions" path to discovered
             userService.createSession(
@@ -67,7 +65,7 @@ var SessionAuthAgent = (function() {
                         done(false, true);
 
                     } else {
-                        console.log(error, session);
+                        console.log(error, sessionResponse);
                     }
                 }
             );
@@ -75,7 +73,7 @@ var SessionAuthAgent = (function() {
         } else {
             done(false, true);
         }
-    }
+    };
 
     /**
      * Hook to allow the modification of any request, for authentication purposes, before
@@ -91,7 +89,7 @@ var SessionAuthAgent = (function() {
 
         done(false, request);
 
-    }
+    };
 
     /**
      * Log out workflow
@@ -102,8 +100,8 @@ var SessionAuthAgent = (function() {
      */
     SessionAuthAgent.prototype.logOut = function(done) {
 
-        var userService = this.CAPI.getUserService();
-        var that = this;
+        var userService = this.CAPI.getUserService(),
+            that = this;
 
         userService.deleteSession(
             this.sessionId,
@@ -125,7 +123,7 @@ var SessionAuthAgent = (function() {
                 }
             }
         );
-    }
+    };
 
 
 

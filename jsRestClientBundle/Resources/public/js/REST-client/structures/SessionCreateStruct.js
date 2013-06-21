@@ -16,7 +16,7 @@ var SessionCreateStruct = (function() {
 
         return this;
 
-    }
+    };
 
     return SessionCreateStruct;
 

@@ -993,7 +993,7 @@ var ContentService = (function() {
                         "GET",
                         currentVersion.Relations._href + '?offset=' + offset + '&limit=' + limit,
                         {},
-                        { "Accept" : version.Relations["_media-type"] },
+                        { "Accept" : currentVersion.Relations["_media-type"] },
                         callback
                     );
 

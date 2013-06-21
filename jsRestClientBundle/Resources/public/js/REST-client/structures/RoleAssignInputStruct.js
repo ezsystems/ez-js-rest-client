@@ -11,11 +11,11 @@ var RoleAssignInputStruct = (function() {
         this.body.RoleAssignInput.limitation = limitation;
 
         this.headers = {};
-        this.headers["Accept"] = "application/vnd.ez.api.RoleAssignmentList+json";
+        this.headers.Accept = "application/vnd.ez.api.RoleAssignmentList+json";
         this.headers["Content-Type"] = "application/vnd.ez.api.RoleAssignInput+json";
 
         return this;
-    }
+    };
 
     return RoleAssignInputStruct;
 

@@ -10,11 +10,11 @@ var RelationCreateStruct = (function() {
         };
 
         this.headers = {};
-        this.headers["Accept"] = "application/vnd.ez.api.Relation+json";
+        this.headers.Accept = "application/vnd.ez.api.Relation+json";
         this.headers["Content-Type"] = "application/vnd.ez.api.RelationCreate+json";
 
         return this;
-    }
+    };
 
     return RelationCreateStruct;
 

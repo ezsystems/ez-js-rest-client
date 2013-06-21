@@ -1,7 +1,7 @@
-var Error = (function() {
+var CAPIError = (function() {
     "use strict";
 
-    var Error = function(valuesContainer){
+    var CAPIError = function(valuesContainer){
 
         for (var property in valuesContainer) {
             if (valuesContainer.hasOwnProperty(property)) {
@@ -10,9 +10,9 @@ var Error = (function() {
         }
 
         return this;
-    }
+    };
 
 
-    return Error;
+    return CAPIError;
 
 }());

@@ -16,7 +16,7 @@ var LocationUpdateStruct = (function() {
 
         return this;
 
-    }
+    };
 
     return LocationUpdateStruct;
 

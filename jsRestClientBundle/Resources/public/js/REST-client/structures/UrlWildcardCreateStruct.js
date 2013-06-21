@@ -11,11 +11,11 @@ var UrlWildcardCreateStruct = (function() {
         this.body.UrlWildcardCreate.forward = forward;
 
         this.headers = {};
-        this.headers["Accept"] = "application/vnd.ez.api.UrlWildcard+json";
+        this.headers.Accept = "application/vnd.ez.api.UrlWildcard+json";
         this.headers["Content-Type"] = "application/vnd.ez.api.UrlWildcardCreate+json";
 
         return this;
-    }
+    };
 
     return UrlWildcardCreateStruct;
 

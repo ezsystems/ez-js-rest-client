@@ -27,7 +27,7 @@ var MicrosoftXmlHttpRequestConnection = (function() {
                 if (XHR.readyState != 4) {return;} // Not ready yet
                 if (XHR.status >= 400) {
                     callback(
-                        new Error({
+                        new CAPIError({
                             errorText : "Connection error : " + XHR.status,
                             errorCode : XHR.status
                         }),

@@ -22,15 +22,15 @@ var FieldDefinitionCreateStruct = (function() {
         this.body.FieldDefinitionCreate.names = {};
         this.body.FieldDefinitionCreate.names.value = names;
 
-        this.body.FieldDefinitionCreate.descriptions = {}
+        this.body.FieldDefinitionCreate.descriptions = {};
         this.body.FieldDefinitionCreate.descriptions.value = [];
 
         this.headers = {};
-        this.headers["Accept"] = "application/vnd.ez.api.FieldDefinition+json";
+        this.headers.Accept = "application/vnd.ez.api.FieldDefinition+json";
         this.headers["Content-Type"] = "application/vnd.ez.api.FieldDefinitionCreate+json";
 
         return this;
-    }
+    };
 
     return FieldDefinitionCreateStruct;
 

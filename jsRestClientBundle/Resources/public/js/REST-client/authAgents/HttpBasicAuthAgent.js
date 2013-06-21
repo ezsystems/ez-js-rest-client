@@ -29,7 +29,7 @@ var HttpBasicAuthAgent = (function() {
      */
     HttpBasicAuthAgent.prototype.ensureAuthentication = function(done) {
         // ... empty for basic auth?
-    }
+    };
 
     /**
      * Hook to allow the modification of any request, for authentication purposes, before
@@ -47,7 +47,7 @@ var HttpBasicAuthAgent = (function() {
 
         done(false, request);
 
-    }
+    };
 
     /**
      * Log out workflow
@@ -58,10 +58,8 @@ var HttpBasicAuthAgent = (function() {
      */
     HttpBasicAuthAgent.prototype.logOut = function(done) {
         done(false, true);
-    }
-
+    };
 
     return HttpBasicAuthAgent;
-
 
 }());

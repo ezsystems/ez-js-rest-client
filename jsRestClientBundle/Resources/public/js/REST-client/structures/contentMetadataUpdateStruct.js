@@ -19,11 +19,11 @@ var ContentMetadataUpdateStruct = (function() {
         this.headers = {
             "Accept" : "application/vnd.ez.api.ContentInfo+json",
             "Content-Type" : "application/vnd.ez.api.ContentUpdate+json"
-        }
+        };
 
         return this;
 
-    }
+    };
 
     return ContentMetadataUpdateStruct;
 

@@ -9,11 +9,11 @@ var RoleInputStruct = (function() {
         this.body.RoleInput.identifier = identifier;
 
         this.headers = {};
-        this.headers["Accept"] = "application/vnd.ez.api.Role+json";
+        this.headers.Accept = "application/vnd.ez.api.Role+json";
         this.headers["Content-Type"] = "application/vnd.ez.api.RoleInput+json";
 
         return this;
-    }
+    };
 
     return RoleInputStruct;
 

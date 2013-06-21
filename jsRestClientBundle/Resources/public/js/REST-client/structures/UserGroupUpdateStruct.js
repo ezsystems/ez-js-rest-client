@@ -18,12 +18,12 @@ var UserGroupUpdateStruct = (function() {
         this.body.UserGroupUpdate.fields.field = [];
 
         this.headers = {};
-        this.headers["Accept"] = "application/vnd.ez.api.UserGroup+json";
+        this.headers.Accept = "application/vnd.ez.api.UserGroup+json";
         this.headers["Content-Type"] = "application/vnd.ez.api.UserGroupUpdate+json";
 
         return this;
 
-    }
+    };
 
     return UserGroupUpdateStruct;
 

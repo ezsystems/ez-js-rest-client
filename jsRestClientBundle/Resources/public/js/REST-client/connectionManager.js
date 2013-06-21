@@ -64,7 +64,7 @@ var ConnectionManager = (function() {
                             that._activeConnection.execute(authenticatedRequest, callback);
                         } else {
                             callback(
-                                new Error({
+                                new CAPIError({
                                     errorText : "An error occured during request authentication!"
                                 }),
                                 new Response({

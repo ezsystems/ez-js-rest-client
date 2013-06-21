@@ -25,12 +25,12 @@ var ObjectStateGroupCreateStruct = (function() {
 
 
         this.headers = {};
-        this.headers["Accept"] = "application/vnd.ez.api.ObjectStateGroup+json";
+        this.headers.Accept = "application/vnd.ez.api.ObjectStateGroup+json";
         this.headers["Content-Type"] = "application/vnd.ez.api.ObjectStateGroupCreate+json";
 
         return this;
 
-    }
+    };
 
     return ObjectStateGroupCreateStruct;
 

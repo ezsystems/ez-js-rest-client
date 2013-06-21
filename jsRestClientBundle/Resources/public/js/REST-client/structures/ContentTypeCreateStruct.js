@@ -29,11 +29,11 @@ var ContentTypeCreateStruct = (function() {
         this.body.ContentTypeCreate.FieldDefinitions.FieldDefinition = [];
 
         this.headers = {};
-        this.headers["Accept"] = "application/vnd.ez.api.ContentType+json";
+        this.headers.Accept = "application/vnd.ez.api.ContentType+json";
         this.headers["Content-Type"] = "application/vnd.ez.api.ContentTypeCreate+json";
 
         return this;
-    }
+    };
 
     return ContentTypeCreateStruct;
 

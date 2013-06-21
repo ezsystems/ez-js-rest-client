@@ -3,7 +3,7 @@ module.exports = function(grunt) {
     grunt.initConfig({
         concat: {
             options: {
-                separator: ';'
+                separator: '\r\n'
             },
             dist: {
                 src: [
@@ -37,7 +37,7 @@ module.exports = function(grunt) {
 
                     'jsRestClientBundle/Resources/public/js/REST-client/structures/Request.js',
                     'jsRestClientBundle/Resources/public/js/REST-client/structures/Response.js',
-                    'jsRestClientBundle/Resources/public/js/REST-client/structures/Error.js',
+                    'jsRestClientBundle/Resources/public/js/REST-client/structures/CAPIError.js',
 
                     'jsRestClientBundle/Resources/public/js/REST-client/services/DiscoveryService.js',
                     'jsRestClientBundle/Resources/public/js/REST-client/services/ContentService.js',

@@ -10,7 +10,7 @@ var Response = (function() {
         }
 
         return this;
-    }
+    };
 
 
     return Response;

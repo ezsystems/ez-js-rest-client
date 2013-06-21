@@ -23,7 +23,7 @@ var ViewCreateStruct = (function() {
 
         return this;
 
-    }
+    };
 
     return ViewCreateStruct;
 

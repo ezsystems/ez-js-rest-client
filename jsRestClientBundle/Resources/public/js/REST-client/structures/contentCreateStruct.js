@@ -26,10 +26,10 @@ var ContentCreateStruct = (function() {
         this.headers = {
             "Accept" : "application/vnd.ez.api.Content+json",
             "Content-Type" : "application/vnd.ez.api.ContentCreate+json"
-        }
+        };
 
         return this;
-    }
+    };
 
     return ContentCreateStruct;
 

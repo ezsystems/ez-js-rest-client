@@ -38,7 +38,7 @@ var DiscoveryService = (function() {
 
                         } else {
                             callback(
-                                new Error({
+                                new CAPIError({
                                     errorText : "Discover service failed to retrieve root object."
                                 }),
                                 false
@@ -98,7 +98,7 @@ var DiscoveryService = (function() {
                 );
             } else {
                 callback(
-                    new Error({
+                    new CAPIError({
                         errorText : "Discover service failed to find cached object with name '" + name + "'"
                     }),
                     false

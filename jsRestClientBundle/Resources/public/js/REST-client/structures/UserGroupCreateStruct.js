@@ -20,12 +20,12 @@ var UserGroupCreateStruct = (function() {
         this.body.UserGroupCreate.fields.field = fields;
 
         this.headers = {};
-        this.headers["Accept"] = "application/vnd.ez.api.UserGroup+json";
+        this.headers.Accept = "application/vnd.ez.api.UserGroup+json";
         this.headers["Content-Type"] = "application/vnd.ez.api.UserGroupCreate+json";
 
         return this;
 
-    }
+    };
 
     return UserGroupCreateStruct;
 

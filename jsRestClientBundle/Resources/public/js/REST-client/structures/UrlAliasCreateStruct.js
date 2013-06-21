@@ -16,11 +16,11 @@ var UrlAliasCreateStruct = (function() {
         this.body.UrlAliasCreate.languageCode = languageCode;
 
         this.headers = {};
-        this.headers["Accept"] = "application/vnd.ez.api.UrlAlias+json";
+        this.headers.Accept = "application/vnd.ez.api.UrlAlias+json";
         this.headers["Content-Type"] = "application/vnd.ez.api.UrlAliasCreate+json";
 
         return this;
-    }
+    };
 
     return UrlAliasCreateStruct;
 
