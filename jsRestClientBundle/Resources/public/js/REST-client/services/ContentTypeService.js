@@ -152,6 +152,7 @@ var ContentTypeService = (function() {
      * @param contentTypeGroupUpdateStruct {Object}
      * @param callback {function} function, which will be executed on request success
      */
+    /*jshint -W101 */
     ContentTypeService.prototype.updateContentTypeGroup = function updateContentTypeGroup(contentTypeGroupId, contentTypeGroupUpdateStruct, callback) {
         this._connectionManager.request(
             "PATCH",
@@ -161,6 +162,7 @@ var ContentTypeService = (function() {
             callback
         );
     };
+    /*jshint +W101 */
 
     /**
      * Delete content type group
@@ -215,6 +217,7 @@ var ContentTypeService = (function() {
      * @param identifier {string}
      * @param callback {Function}
      */
+    /*jshint -W101 */
     ContentTypeService.prototype.loadContentTypeGroupByIdentifier = function loadContentTypeGroupByIdentifier(contentTypeGroups, identifier, callback) {
         this._connectionManager.request(
             "GET",
@@ -224,6 +227,7 @@ var ContentTypeService = (function() {
             callback
         );
     };
+    /*jshint +W101 */
 
 // ******************************
 // Content Types management
@@ -440,6 +444,7 @@ var ContentTypeService = (function() {
      * @param contentTypeUpdateStruct {Object}
      * @param callback {function} function, which will be executed on request success
      */
+    /*jshint -W101 */
     ContentTypeService.prototype.updateContentTypeDraftMetadata = function updateContentTypeDraftMetadata(contentTypeDraftId, contentTypeUpdateStruct, callback) {
         this._connectionManager.request(
             "PATCH",
@@ -449,6 +454,7 @@ var ContentTypeService = (function() {
             callback
         );
     };
+    /*jshint +W101 */
 
     /**
      * Publish content type draft
