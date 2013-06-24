@@ -109,9 +109,9 @@ UpdateContentTypeGroupAnchor.onclick = function(e){
 
     var contentTypeGroupUpdateStruct = contentTypeService.newContentTypeGroupInputStruct(
         "some-group-id" + Math.random(100)
-    );
+        ),
+        updateContentTypeGroupInput = document.getElementById('update-contenttype-group-input');
 
-    var updateContentTypeGroupInput = document.getElementById('update-contenttype-group-input');
     contentTypeService.updateContentTypeGroup(
         updateContentTypeGroupInput.value,
         contentTypeGroupUpdateStruct,
@@ -180,7 +180,10 @@ CreateContentTypeAnchor.onclick = function(e){
     CreateContentTypeLoader.style.display = 'block';
     e.preventDefault();
 
-    var contentTypeCreateStruct = contentTypeService.newContentTypeCreateStruct(
+    var contentTypeCreateStruct,
+        fieldDefinition;
+
+    contentTypeCreateStruct = contentTypeService.newContentTypeCreateStruct(
         "content-type-id-" + Math.random(100),
         "eng-US",
         [
@@ -191,7 +194,7 @@ CreateContentTypeAnchor.onclick = function(e){
         ]
     );
 
-    var fieldDefinition = contentTypeService.newFieldDefinitionCreateStruct(
+    fieldDefinition = contentTypeService.newFieldDefinitionCreateStruct(
         "fd-id-" + Math.random(100),
         "ezstring",
         "content",
@@ -298,7 +301,8 @@ CreateContentTypeDraftAnchor.onclick = function(e){
     CreateContentTypeDraftLoader.style.display = 'block';
     e.preventDefault();
 
-    var contentTypeUpdateStruct = contentTypeService.newContentTypeUpdateStruct();
+    var contentTypeUpdateStruct = contentTypeService.newContentTypeUpdateStruct(),
+        CreateContentTypeDraftInput = document.getElementById('create-content-type-draft-input');
 
     contentTypeUpdateStruct.names = {};
     contentTypeUpdateStruct.names.value = [
@@ -308,8 +312,6 @@ CreateContentTypeDraftAnchor.onclick = function(e){
         }
     ];
 
-
-    var CreateContentTypeDraftInput = document.getElementById('create-content-type-draft-input');
     if (CreateContentTypeDraftInput.value.length){
         contentTypeService.createContentTypeDraft(
             CreateContentTypeDraftInput.value,
@@ -358,7 +360,8 @@ UpdateContentTypeDraftAnchor.onclick = function(e){
     UpdateContentTypeDraftLoader.style.display = 'block';
     e.preventDefault();
 
-    var contentTypeUpdateStruct = contentTypeService.newContentTypeUpdateStruct();
+    var contentTypeUpdateStruct = contentTypeService.newContentTypeUpdateStruct(),
+        UpdateContentTypeDraftInput = document.getElementById('update-content-type-draft-input');
 
     contentTypeUpdateStruct.names = {};
     contentTypeUpdateStruct.names.value = [
@@ -368,8 +371,6 @@ UpdateContentTypeDraftAnchor.onclick = function(e){
         }
     ];
 
-
-    var UpdateContentTypeDraftInput = document.getElementById('update-content-type-draft-input');
     if (UpdateContentTypeDraftInput.value.length){
         contentTypeService.updateContentTypeDraftMetadata(
             UpdateContentTypeDraftInput.value,
@@ -395,7 +396,10 @@ AddFieldDefinitionAnchor.onclick = function(e){
     e.preventDefault();
 
 
-    var fieldDefinitionCreateStruct = contentTypeService.newFieldDefinitionCreateStruct(
+    var fieldDefinitionCreateStruct,
+        AddFieldDefinitionInput = document.getElementById('add-field-definition-input');
+
+    fieldDefinitionCreateStruct = contentTypeService.newFieldDefinitionCreateStruct(
         "fd-id-" + Math.random(100),
         "ezstring",
         "content",
@@ -407,7 +411,6 @@ AddFieldDefinitionAnchor.onclick = function(e){
         ]
     );
 
-    var AddFieldDefinitionInput = document.getElementById('add-field-definition-input');
     contentTypeService.addFieldDefinition(
         AddFieldDefinitionInput.value,
         fieldDefinitionCreateStruct,
@@ -453,9 +456,9 @@ UpdateFieldDefinitionAnchor.onclick = function(e){
         "dummy",
         "dummy",
         "dummy"
-    );
+        ),
+        UpdateFieldDefinitionInput = document.getElementById('update-field-definition-input');
 
-    var UpdateFieldDefinitionInput = document.getElementById('update-field-definition-input');
     contentTypeService.updateFieldDefinition(
         UpdateFieldDefinitionInput.value,
         fieldDefinitionUpdateStruct,

@@ -110,7 +110,8 @@ CreateUserGroupAnchor.onclick = function(e){
     CreateUserGroupLoader.style.display = 'block';
     e.preventDefault();
 
-    var userGroupCreateStruct = userService.newUserGroupCreateStruct(
+    var CreateUserGroupInput = document.getElementById('create-user-group-input'),
+        userGroupCreateStruct = userService.newUserGroupCreateStruct(
         "eng-US",
         [
             {
@@ -126,7 +127,6 @@ CreateUserGroupAnchor.onclick = function(e){
         ]
     );
 
-    var CreateUserGroupInput = document.getElementById('create-user-group-input');
     userService.createUserGroup(
         CreateUserGroupInput.value,
         userGroupCreateStruct,
@@ -147,7 +147,8 @@ UpdateUserGroupAnchor.onclick = function(e){
     UpdateUserGroupLoader.style.display = 'block';
     e.preventDefault();
 
-    var userGroupUpdateStruct = userService.newUserGroupUpdateStruct();
+    var userGroupUpdateStruct = userService.newUserGroupUpdateStruct(),
+        UpdateUserGroupInput = document.getElementById('update-user-group-input');
 
     userGroupUpdateStruct.body.UserGroupUpdate.fields.field = [
         {
@@ -162,7 +163,6 @@ UpdateUserGroupAnchor.onclick = function(e){
         }
     ];
 
-    var UpdateUserGroupInput = document.getElementById('update-user-group-input');
     userService.updateUserGroup(
         UpdateUserGroupInput.value,
         userGroupUpdateStruct,
@@ -240,7 +240,8 @@ CreateUserAnchor.onclick = function(e){
     CreateUserLoader.style.display = 'block';
     e.preventDefault();
 
-    var userCreateStruct = userService.newUserCreateStruct(
+    var CreateUserInput = document.getElementById('create-user-input'),
+        userCreateStruct = userService.newUserCreateStruct(
         "eng-US",
         "johndoe4",
         "johndoe4@nowhere.no",
@@ -259,7 +260,6 @@ CreateUserAnchor.onclick = function(e){
         ]
     );
 
-    var CreateUserInput = document.getElementById('create-user-input');
     userService.createUser(
         CreateUserInput.value,
         userCreateStruct,
@@ -320,11 +320,11 @@ UpdateUserAnchor.onclick = function(e){
     UpdateUserLoader.style.display = 'block';
     e.preventDefault();
 
-    var userUpdateStruct = userService.newUserUpdateStruct();
+    var userUpdateStruct = userService.newUserUpdateStruct(),
+        UpdateUserInput = document.getElementById('update-user-input');
 
     userUpdateStruct.body.UserUpdate.email = "somenewemail@nowhere.no";
 
-    var UpdateUserInput = document.getElementById('update-user-input');
     userService.updateUser(
         UpdateUserInput.value,
         userUpdateStruct,
@@ -467,9 +467,9 @@ UpdateRoleAnchor.onclick = function(e){
 
     var roleUpdateStruct = userService.newRoleInputStruct(
         "random-role-id-" + Math.random()
-    );
+        ),
+        UpdateRoleInput = document.getElementById('update-role-input');
 
-    var UpdateRoleInput = document.getElementById('update-role-input');
     userService.updateRole(
         UpdateRoleInput.value,
         roleUpdateStruct,
@@ -587,7 +587,8 @@ AssignRoleToUserAnchor.onclick = function(e){
     AssignRoleToUserLoader.style.display = 'block';
     e.preventDefault();
 
-    var roleAssignCreateStruct = userService.newRoleAssignInputStruct(
+    var AssignRoleToUserInput = document.getElementById('assign-role-to-user-input'),
+        roleAssignCreateStruct = userService.newRoleAssignInputStruct(
         {
             "_href" : "/api/ezp/v2/user/roles/7",
             "_media-type" : "application/vnd.ez.api.RoleAssignInput+json"
@@ -607,10 +608,8 @@ AssignRoleToUserAnchor.onclick = function(e){
                 ]
             }
         }
-
     );
 
-    var AssignRoleToUserInput = document.getElementById('assign-role-to-user-input');
     userService.assignRoleToUser(
         AssignRoleToUserInput.value,
         roleAssignCreateStruct,
@@ -631,7 +630,8 @@ AssignRoleToUserGroupAnchor.onclick = function(e){
     AssignRoleToUserGroupLoader.style.display = 'block';
     e.preventDefault();
 
-    var roleAssignCreateStruct = userService.newRoleAssignInputStruct(
+    var AssignRoleToUserGroupInput = document.getElementById('assign-role-to-user-group-input'),
+        roleAssignCreateStruct = userService.newRoleAssignInputStruct(
         {
             "_href" : "/api/ezp/v2/user/roles/7",
             "_media-type" : "application/vnd.ez.api.RoleAssignInput+json"
@@ -651,10 +651,8 @@ AssignRoleToUserGroupAnchor.onclick = function(e){
                 ]
             }
         }
-
     );
 
-    var AssignRoleToUserGroupInput = document.getElementById('assign-role-to-user-group-input');
     userService.assignRoleToUserGroup(
         AssignRoleToUserGroupInput.value,
         roleAssignCreateStruct,
@@ -714,27 +712,17 @@ AddPolicyAnchor.onclick = function(e){
     AddPolicyLoader.style.display = 'block';
     e.preventDefault();
 
-    var policyCreateStruct = userService.newPolicyCreateStruct(
+    var AddPolicyInput = document.getElementById('create-policy-input'),
+        policyCreateStruct = userService.newPolicyCreateStruct(
         "content",
         "publish",
-        [
-//            {
-//                "_identifier" : "Class",
-//                "values" : {
-//                    "ref" : [
-//                        {
-//                            "_href" : "/api/ezp/v2/content/types/18"
-//                        }
-//                    ]
-//                }
-//            }
-        ]
-    );
+        []
+        );
 
-// TODO: what's up with limitations?
-// REST returns:    "limitations":{"limitation":[{"_identifier":"Class","values":{"ref":[{"_media-type":"application\/vnd.ez.api.ref+json","_href":"18"}]}}]}}}
+    // TODO: what's up with limitations?
+    // REST returns:
+    // "limitations":{"limitation":[{"_identifier":"Class","values":{"ref":[{"_media-type":"application\/vnd.ez.api.ref+json","_href":"18"}..
 
-    var AddPolicyInput = document.getElementById('create-policy-input');
     userService.addPolicy(
         AddPolicyInput.value,
         policyCreateStruct,
@@ -756,7 +744,8 @@ UpdatePolicyAnchor.onclick = function(e){
     UpdatePolicyLoader.style.display = 'block';
     e.preventDefault();
 
-    var policyCreateStruct = userService.newPolicyUpdateStruct(
+    var UpdatePolicyInput = document.getElementById('update-policy-input'),
+        policyCreateStruct = userService.newPolicyUpdateStruct(
         [
             {
                 "_identifier" : "Section",
@@ -776,7 +765,6 @@ UpdatePolicyAnchor.onclick = function(e){
         ]
     );
 
-    var UpdatePolicyInput = document.getElementById('update-policy-input');
     userService.updatePolicy(
         UpdatePolicyInput.value,
         policyCreateStruct,

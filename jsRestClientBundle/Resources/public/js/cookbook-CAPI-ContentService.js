@@ -1,11 +1,12 @@
 // Some simple js REST CAPI usage scenario
 
-var jsCAPI = new CAPI(
+var authAgent = new SessionAuthAgent({
+        login : "admin",
+        password : "admin"
+    }),
+    jsCAPI = new CAPI(
         'http://ez.git.local',
-        new SessionAuthAgent({
-            login : "admin",
-            password : "admin"
-        })
+        authAgent
     );
 
 var contentService = jsCAPI.getContentService();
@@ -23,7 +24,7 @@ rootAnchor.onclick = function(e){
     contentService.loadRoot(
         '/api/ezp/v2/',
         function(error, response){
-            clientOutput.innerHTML =    "Errors : " + JSON.stringify(error) + "</br>" + 
+            clientOutput.innerHTML =    "Errors : " + JSON.stringify(error) + "</br>" +
                                         "Status : " + response.status + "</br>" +
                                         "Body : " + response.body;
             rootLoader.style.display = 'none';
@@ -111,13 +112,15 @@ var updateSectionAnchor = document.getElementById('update-section');
 var updateSectionLoader = document.getElementById('update-section-loader');
 updateSectionAnchor.onclick = function(e){
 
-    var updateSectionInput = document.getElementById('update-section-input');
+    var updateSectionInput = document.getElementById('update-section-input'),
+        sectionInput;
+
     if (updateSectionInput.value.length){
 
         updateSectionLoader.style.display = 'block';
         e.preventDefault();
 
-        var sectionInput = {
+        sectionInput = {
             SectionInput : {
                 identifier : "testSection" + Math.random()*1000000,
                 name : "Test Section " + Math.round(Math.random()*1000)
@@ -180,21 +183,18 @@ createContentAnchor.onclick = function(e){
     createContentLoader.style.display = 'block';
     e.preventDefault();
 
-    var locationCreateStruct = contentService.newLocationCreateStruct("/api/ezp/v2/content/locations/1/2/118");
-
-    var contentCreateStruct = contentService.newContentCreateStruct(
-        "/api/ezp/v2/content/types/18",
-        locationCreateStruct,
-        "eng-US",
-        "DummyUser"
-    );
-
-
-    var fieldInfo = {
-        "fieldDefinitionIdentifier": "title",
-        "languageCode": "eng-US",
-        "fieldValue": "This is a title"
-    };
+    var locationCreateStruct = contentService.newLocationCreateStruct("/api/ezp/v2/content/locations/1/2/118"),
+        contentCreateStruct = contentService.newContentCreateStruct(
+            "/api/ezp/v2/content/types/18",
+            locationCreateStruct,
+            "eng-US",
+            "DummyUser"
+        ),
+        fieldInfo = {
+            "fieldDefinitionIdentifier": "title",
+            "languageCode": "eng-US",
+            "fieldValue": "This is a title"
+        };
 
     contentCreateStruct.body.ContentCreate.fields.field.push(fieldInfo);
 
@@ -218,12 +218,14 @@ var updateContentMetaAnchor = document.getElementById('update-content-meta');
 var updateContentMetaLoader = document.getElementById('update-content-meta-loader');
 updateContentMetaAnchor.onclick = function(e){
 
+    var updateContentMetaInput = document.getElementById('update-content-meta-input'),
+        updateStruct;
+
     updateContentMetaLoader.style.display = 'block';
     e.preventDefault();
 
-    var updateContentMetaInput = document.getElementById('update-content-meta-input');
     if (updateContentMetaInput.value.length){
-        var updateStruct = contentService.newContentMetadataUpdateStruct(
+        updateStruct = contentService.newContentMetadataUpdateStruct(
             "eng-US",
             "DummyUser"
         );
@@ -460,18 +462,21 @@ var updateContentAnchor = document.getElementById('update-content');
 var updateContentLoader = document.getElementById('update-content-loader');
 updateContentAnchor.onclick = function(e){
 
+    var updateContentInput = document.getElementById('update-content-input'),
+        contentUpdateStruct,
+        fieldInfo;
+
     updateContentLoader.style.display = 'block';
     e.preventDefault();
 
-    var updateContentInput = document.getElementById('update-content-input');
     if (updateContentInput.value.length){
 
-        var contentUpdateStruct = contentService.newContentUpdateStruct(
+        contentUpdateStruct = contentService.newContentUpdateStruct(
             "eng-US",
             "DummyUser"
         );
 
-        var fieldInfo = {
+        fieldInfo = {
             "fieldDefinitionIdentifier": "title",
             "languageCode": "eng-US",
             "fieldValue": "This is a new title" + Math.random()*1000000
@@ -578,29 +583,24 @@ newContentUpdateStructAnchor.onclick = function(e){
     e.preventDefault();
 
     var contentUpdateStruct = contentService.newContentUpdateStruct(
-        "eng-US",
-        "DummyUser"
-    );
-
-    var fieldInfo = {
-        "fieldDefinitionIdentifier": "title",
-        "languageCode": "eng-US",
-        "fieldValue": "This is a new title" + Math.random()*1000000
-    };
+            "eng-US",
+            "DummyUser"
+        ),
+        fieldInfo = {
+            "fieldDefinitionIdentifier": "title",
+            "languageCode": "eng-US",
+            "fieldValue": "This is a new title" + Math.random()*1000000
+        },
+        anotherFieldInfo = {
+            "fieldDefinitionIdentifier": "text",
+            "languageCode": "eng-US",
+            "fieldValue": "This is a new text" + Math.random()*1000000
+        };
 
     contentUpdateStruct.VersionUpdate.fields.field.push(fieldInfo);
-
-    var anotherFieldInfo = {
-        "fieldDefinitionIdentifier": "text",
-        "languageCode": "eng-US",
-        "fieldValue": "This is a new text" + Math.random()*1000000
-    };
-
-
     contentUpdateStruct.VersionUpdate.fields.field.push(anotherFieldInfo);
 
     clientOutput.innerHTML = JSON.stringify(contentUpdateStruct);
-
 
 };
 
@@ -630,15 +630,14 @@ newContentCreateStructAnchor.onclick = function(e){
     e.preventDefault();
 
     var locationCreateStruct = contentService.newLocationCreateStruct(
-        "/api/ezp/v2/content/locations/1/2/102"
-    );
-
-    var contentCreateStruct = contentService.newContentCreateStruct(
-        "/api/ezp/v2/content/types/18",
-        locationCreateStruct,
-        "eng-US",
-        "DummyUser"
-    );
+            "/api/ezp/v2/content/locations/1/2/102"
+        ),
+        contentCreateStruct = contentService.newContentCreateStruct(
+            "/api/ezp/v2/content/types/18",
+            locationCreateStruct,
+            "eng-US",
+            "DummyUser"
+        );
 
     clientOutput.innerHTML = JSON.stringify(contentCreateStruct);
 
@@ -699,11 +698,11 @@ UpdateLocationAnchor.onclick = function(e){
     UpdateLocationLoader.style.display = 'block';
     e.preventDefault();
 
-    var locationUpdateStruct = contentService.newLocationUpdateStruct();
+    var locationUpdateStruct = contentService.newLocationUpdateStruct(),
+        UpdateLocationInput = document.getElementById('update-location-input');
 
     locationUpdateStruct.remoteId = "random-remote-id-" + Math.random()*100000;
 
-    var UpdateLocationInput = document.getElementById('update-location-input');
     contentService.updateLocation(
         UpdateLocationInput.value,
         locationUpdateStruct,
@@ -983,11 +982,11 @@ CreateRelationAnchor.onclick = function(e){
     CreateRelationLoader.style.display = 'block';
     e.preventDefault();
 
-    var relationCreateStruct = contentService.newRelationCreateStruct("/api/ezp/v2/content/objects/132");
+    var relationCreateStruct = contentService.newRelationCreateStruct("/api/ezp/v2/content/objects/132"),
+        CreateRelationInput = document.getElementById('create-relation-input');
 
     console.log(relationCreateStruct);
 
-    var CreateRelationInput = document.getElementById('create-relation-input');
     contentService.addRelation(
         CreateRelationInput.value,
         relationCreateStruct,
@@ -1125,8 +1124,8 @@ CreateObjectStateGroupAnchor.onclick = function(e){
         "eng-US",
         [
             {
-            "_languageCode":"eng-US",
-            "#text":"Some Name " + Math.random(10000)
+                "_languageCode":"eng-US",
+                "#text":"Some Name " + Math.random(10000)
             }
         ]
     );
@@ -1150,10 +1149,11 @@ UpdateObjectStateGroupAnchor.onclick = function(e){
     UpdateObjectStateGroupLoader.style.display = 'block';
     e.preventDefault();
 
-    var objectStateGroupUpdateStruct = contentService.newObjectStateGroupUpdateStruct();
+    var objectStateGroupUpdateStruct = contentService.newObjectStateGroupUpdateStruct(),
+        UpdateObjectStateGroupInput = document.getElementById('update-object-state-group-input');
+
     objectStateGroupUpdateStruct.body.ObjectStateGroupUpdate.identifier = "some-id" + Math.random(10000);
 
-    var UpdateObjectStateGroupInput = document.getElementById('update-object-state-group-input');
     contentService.updateObjectStateGroup(
         UpdateObjectStateGroupInput.value,
         objectStateGroupUpdateStruct,
@@ -1223,14 +1223,17 @@ DeleteObjectStateGroupAnchor.onclick = function(e){
 };
 
 // Create an Object State example
-var CreateObjectStateAnchor = document.getElementById('create-object-state');
-var CreateObjectStateLoader = document.getElementById('create-object-state-loader');
+var CreateObjectStateAnchor = document.getElementById('create-object-state'),
+    CreateObjectStateLoader = document.getElementById('create-object-state-loader');
 CreateObjectStateAnchor.onclick = function(e){
 
     CreateObjectStateLoader.style.display = 'block';
     e.preventDefault();
 
-    var createObjectStateStruct = contentService.newObjectStateCreateStruct(
+    var createObjectStateStruct,
+        CreateObjectStateInput = document.getElementById('create-object-state-input');
+
+    createObjectStateStruct = contentService.newObjectStateCreateStruct(
         "some-id" + Math.random(10000),
         "eng-US",
         0,
@@ -1243,7 +1246,7 @@ CreateObjectStateAnchor.onclick = function(e){
         []
     );
 
-    var CreateObjectStateInput = document.getElementById('create-object-state-input');
+
     contentService.createObjectState(
         CreateObjectStateInput.value,
         createObjectStateStruct,
@@ -1286,10 +1289,11 @@ UpdateObjectStateAnchor.onclick = function(e){
     UpdateObjectStateLoader.style.display = 'block';
     e.preventDefault();
 
-    var objectStateUpdateStruct = contentService.newObjectStateUpdateStruct();
+    var objectStateUpdateStruct = contentService.newObjectStateUpdateStruct(),
+        UpdateObjectStateInput = document.getElementById('update-object-state-input');
+
     objectStateUpdateStruct.body.ObjectStateUpdate.identifier = "some-id" + Math.random(10000);
 
-    var UpdateObjectStateInput = document.getElementById('update-object-state-input');
     contentService.updateObjectState(
         UpdateObjectStateInput.value,
         objectStateUpdateStruct,
@@ -1353,15 +1357,15 @@ SetContentStateAnchor.onclick = function(e){
         function(error, objectStateResponse){
 
 
+
+            var objectStates = {},
+                SetContentStateInput = document.getElementById('set-content-state-input');
+
             // Extra odd structure, but it works!
-            var objectStates = {};
             objectStates.ObjectState = {};
-            objectStates.ObjectState.ObjectState = {}
+            objectStates.ObjectState.ObjectState = {};
             objectStates.ObjectState.ObjectState = JSON.parse(objectStateResponse.body);
 
-//            console.log(JSON.parse(objectStateResponse.body));
-
-            var SetContentStateInput = document.getElementById('set-content-state-input');
             contentService.setContentState(
                 SetContentStateInput.value,
                 objectStates,
@@ -1487,12 +1491,12 @@ CreateUrlWildcardAnchor.onclick = function(e){
     CreateUrlWildcardLoader.style.display = 'block';
     e.preventDefault();
 
-    var CreateUrlWildCardInput = document.getElementById('create-url-wildcard-input');
-    var urlWildcardCreateStruct = contentService.newUrlWildcardCreateStruct(
-        "some-new-wildcard-" + Math.random(100) * 1000,
-        CreateUrlWildCardInput.value,
-        "false"
-    );
+    var CreateUrlWildCardInput = document.getElementById('create-url-wildcard-input'),
+        urlWildcardCreateStruct = contentService.newUrlWildcardCreateStruct(
+            "some-new-wildcard-" + Math.random(100) * 1000,
+            CreateUrlWildCardInput.value,
+            "false"
+        );
     contentService.createUrlWildcard(
         "/api/ezp/v2/content/urlwildcards",
         urlWildcardCreateStruct,
