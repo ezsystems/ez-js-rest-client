@@ -1,19 +1,26 @@
-require(
-    '../dist/CAPI.js',
-    function(requiredCAPI){
+var window = {}, sessionStorage = {};
+
+//var fs = require('fs');
+//eval(fs.readFileSync('dist/CAPI.js'));
+
+var requirejs = require('requirejs');
+
+requirejs.config({
+    dist: 'dist/CAPI'
+});
+
+requirejs(["dist"],
+    function (requiredCAPI) {
 
         describe("CAPI", function () {
 
-            beforeEach(function (){
+            var authAgent = {},
+                jsCAPI = new CAPI(
+                    'http://ez.git.local',
+                    authAgent
+                );
 
-                var authAgent = new SessionAuthAgent({
-                        login : "admin",
-                        password : "admin"
-                    }),
-                    jsCAPI = new CAPI(
-                        'http://ez.git.local',
-                        authAgent
-                    );
+            beforeEach(function (){
 
             });
 
@@ -27,6 +34,8 @@ require(
             });
         });
 
-    }
-);
+    });
+
+
+
 
