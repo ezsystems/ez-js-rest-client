@@ -6,6 +6,7 @@ var MicrosoftXmlHttpRequestConnection = (function() {
      *
      * @constructor
      */
+    /* jshint -W117 */
     var MicrosoftXmlHttpRequestConnection = function () {
 
         this._xhr = new ActiveXObject("Microsoft.XMLHTTP");
@@ -68,6 +69,7 @@ var MicrosoftXmlHttpRequestConnection = (function() {
             XHR.send(request.body);
         };
     };
+    /* jshint +W117 */
 
     // static method
     MicrosoftXmlHttpRequestConnection.isCompatible = function(){
