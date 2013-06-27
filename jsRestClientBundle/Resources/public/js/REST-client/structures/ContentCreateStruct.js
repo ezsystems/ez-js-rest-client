@@ -1,7 +1,7 @@
 var ContentCreateStruct = (function() {
     "use strict";
 
-    var ContentCreateStruct = function(contentTypeId, locationCreateStruct, languageCode, user){
+    var ContentCreateStruct = function(contentTypeId, locationCreateStruct, languageCode){
 
         var now = JSON.parse(JSON.stringify(new Date()));
 
@@ -16,7 +16,6 @@ var ContentCreateStruct = (function() {
         this.body.ContentCreate.LocationCreate = locationCreateStruct.body.LocationCreate;
 
         this.body.ContentCreate.Section = null;
-        this.body.ContentCreate.User = user;
         this.body.ContentCreate.alwaysAvailable = "true";
         this.body.ContentCreate.remoteId = null;
         this.body.ContentCreate.modificationDate = now;

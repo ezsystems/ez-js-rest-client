@@ -1,7 +1,7 @@
 var ContentMetadataUpdateStruct = (function() {
     "use strict";
 
-    var ContentMetadataUpdateStruct = function(languageCode, user){
+    var ContentMetadataUpdateStruct = function(languageCode){
 
         var now = JSON.parse(JSON.stringify(new Date()));
 
@@ -10,7 +10,6 @@ var ContentMetadataUpdateStruct = (function() {
 
         this.body.ContentUpdate.MainLanguageCode = languageCode;
         this.body.ContentUpdate.Section = null;
-        this.body.ContentUpdate.Owner = user;
         this.body.ContentUpdate.alwaysAvailable = "true";
         this.body.ContentUpdate.remoteId = null;
         this.body.ContentUpdate.modificationDate = now;

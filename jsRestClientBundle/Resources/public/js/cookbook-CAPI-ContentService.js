@@ -187,8 +187,7 @@ createContentAnchor.onclick = function(e){
         contentCreateStruct = contentService.newContentCreateStruct(
             "/api/ezp/v2/content/types/18",
             locationCreateStruct,
-            "eng-US",
-            "DummyUser"
+            "eng-US"
         ),
         fieldInfo = {
             "fieldDefinitionIdentifier": "title",
@@ -226,8 +225,7 @@ updateContentMetaAnchor.onclick = function(e){
 
     if (updateContentMetaInput.value.length){
         updateStruct = contentService.newContentMetadataUpdateStruct(
-            "eng-US",
-            "DummyUser"
+            "eng-US"
         );
 
         updateStruct.body.ContentUpdate.Section = "/api/ezp/v2/content/sections/2";
@@ -331,10 +329,6 @@ copyContentAnchor.onclick = function(e){
     copyContentLoader.style.display = 'block';
     e.preventDefault();
 
-    //create location
-
-
-
     var copyContentInput = document.getElementById('copy-content-input');
     if (copyContentInput.value.length){
         contentService.copyContent(
@@ -432,7 +426,7 @@ loadContentVersionsAnchor.onclick = function(e){
 };
 
 
-// Load content versions example
+// Load content example
 var loadContentAnchor = document.getElementById('load-content');
 var loadContentLoader = document.getElementById('load-content-loader');
 loadContentAnchor.onclick = function(e){
@@ -635,8 +629,7 @@ newContentCreateStructAnchor.onclick = function(e){
         contentCreateStruct = contentService.newContentCreateStruct(
             "/api/ezp/v2/content/types/18",
             locationCreateStruct,
-            "eng-US",
-            "DummyUser"
+            "eng-US"
         );
 
     clientOutput.innerHTML = JSON.stringify(contentCreateStruct);
@@ -656,6 +649,8 @@ newLocationCreateStructAnchor.onclick = function(e){
     clientOutput.innerHTML = JSON.stringify(locationCreateStruct);
 };
 
+// ******************************
+// ******************************
 
 // Create location example
 var CreateLocationAnchor = document.getElementById('create-location');
@@ -732,7 +727,8 @@ LoadLocationsAnchor.onclick = function(e){
                 "Status : " + response.status + "</br>" +
                 "Body : " + response.body;
             LoadLocationsLoader.style.display = 'none';
-        });
+        }
+    );
 };
 
 
@@ -775,7 +771,8 @@ LoadLocationChildrenAnchor.onclick = function(e){
                 "Status : " + response.status + "</br>" +
                 "Body : " + response.body;
             LoadLocationChildrenLoader.style.display = 'none';
-        });
+        }
+    );
 };
 
 
@@ -796,7 +793,8 @@ LoadLocationByRemoteAnchor.onclick = function(e){
                 "Status : " + response.status + "</br>" +
                 "Body : " + response.body;
             LoadLocationByRemoteLoader.style.display = 'none';
-        });
+        }
+    );
 };
 
 
@@ -818,7 +816,8 @@ CopySubtreeAnchor.onclick = function(e){
                 "Status : " + response.status + "</br>" +
                 "Body : " + response.body;
             CopySubtreeLoader.style.display = 'none';
-        });
+        }
+    );
 };
 
 // Move subtree example
@@ -839,7 +838,8 @@ MoveSubtreeAnchor.onclick = function(e){
                 "Status : " + response.status + "</br>" +
                 "Body : " + response.body;
             MoveSubtreeLoader.style.display = 'none';
-        });
+        }
+    );
 };
 
 // Swap location example
@@ -860,7 +860,8 @@ SwapLocationAnchor.onclick = function(e){
                 "Status : " + response.status + "</br>" +
                 "Body : " + response.body;
             SwapLocationLoader.style.display = 'none';
-        });
+        }
+    );
 };
 
 // Delete location example
@@ -879,9 +880,12 @@ DeleteLocationAnchor.onclick = function(e){
                 "Status : " + response.status + "</br>" +
                 "Body : " + response.body;
             DeleteLocationLoader.style.display = 'none';
-        });
+        }
+    );
 };
 
+// ******************************
+// ******************************
 
 // Create view example
 var CreateViewAnchor = document.getElementById('create-view');

@@ -29,6 +29,7 @@ var HttpBasicAuthAgent = (function() {
      */
     HttpBasicAuthAgent.prototype.ensureAuthentication = function(done) {
         // ... empty for basic auth?
+        done(false, true);
     };
 
     /**

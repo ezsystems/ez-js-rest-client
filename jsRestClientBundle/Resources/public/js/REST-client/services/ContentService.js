@@ -55,9 +55,9 @@ var ContentService = (function() {
      * @param language {string}
      * @param user {string}
      */
-    ContentService.prototype.newContentMetadataUpdateStruct = function newContentMetadataUpdateStruct(language, user) {
+    ContentService.prototype.newContentMetadataUpdateStruct = function newContentMetadataUpdateStruct(language) {
 
-        return new ContentMetadataUpdateStruct(language, user);
+        return new ContentMetadataUpdateStruct(language);
 
     };
 
@@ -70,9 +70,9 @@ var ContentService = (function() {
      * @param language {string}
      * @param user {string}
      */
-    ContentService.prototype.newContentCreateStruct = function newContentCreateStruct(contentTypeId, locationCreateStruct, language, user) {
+    ContentService.prototype.newContentCreateStruct = function newContentCreateStruct(contentTypeId, locationCreateStruct, language) {
 
-        return new ContentCreateStruct(contentTypeId, locationCreateStruct, language, user);
+        return new ContentCreateStruct(contentTypeId, locationCreateStruct, language);
 
     };
 
