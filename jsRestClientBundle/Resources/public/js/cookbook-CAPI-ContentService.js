@@ -933,7 +933,8 @@ LoadCurrentRelationsAnchor.onclick = function(e){
                 "Status : " + response.status + "</br>" +
                 "Body : " + response.body;
             LoadCurrentRelationsLoader.style.display = 'none';
-        });
+        }
+    );
 };
 
 
@@ -956,7 +957,8 @@ LoadRelationsAnchor.onclick = function(e){
                 "Status : " + response.status + "</br>" +
                 "Body : " + response.body;
             LoadRelationsLoader.style.display = 'none';
-        });
+        }
+    );
 };
 
 // Load relation example
@@ -975,7 +977,8 @@ LoadRelationAnchor.onclick = function(e){
                 "Status : " + response.status + "</br>" +
                 "Body : " + response.body;
             LoadRelationLoader.style.display = 'none';
-        });
+        }
+    );
 };
 
 // Create relation example
@@ -989,8 +992,6 @@ CreateRelationAnchor.onclick = function(e){
     var relationCreateStruct = contentService.newRelationCreateStruct("/api/ezp/v2/content/objects/132"),
         CreateRelationInput = document.getElementById('create-relation-input');
 
-    console.log(relationCreateStruct);
-
     contentService.addRelation(
         CreateRelationInput.value,
         relationCreateStruct,
@@ -999,7 +1000,8 @@ CreateRelationAnchor.onclick = function(e){
                 "Status : " + response.status + "</br>" +
                 "Body : " + response.body;
             CreateRelationLoader.style.display = 'none';
-        });
+        }
+    );
 };
 
 // Delete relation example
@@ -1018,8 +1020,12 @@ DeleteRelationAnchor.onclick = function(e){
                 "Status : " + response.status + "</br>" +
                 "Body : " + response.body;
             DeleteRelationLoader.style.display = 'none';
-        });
+        }
+    );
 };
+
+//******************************************
+//******************************************
 
 // Load trash items example
 var LoadTrashItemsAnchor = document.getElementById('load-trash-items');
@@ -1037,7 +1043,8 @@ LoadTrashItemsAnchor.onclick = function(e){
                 "Status : " + response.status + "</br>" +
                 "Body : " + response.body;
             LoadTrashItemsLoader.style.display = 'none';
-        });
+        }
+    );
 };
 
 // Load single trash item example
@@ -1056,7 +1063,8 @@ LoadTrashItemAnchor.onclick = function(e){
                 "Status : " + response.status + "</br>" +
                 "Body : " + response.body;
             LoadTrashItemLoader.style.display = 'none';
-        });
+        }
+    );
 };
 
 // Recover trash item example
@@ -1076,7 +1084,8 @@ RecoverAnchor.onclick = function(e){
                 "Status : " + response.status + "</br>" +
                 "Body : " + response.body;
             RecoverLoader.style.display = 'none';
-        });
+        }
+    );
 };
 
 // Delete trash item example
@@ -1095,7 +1104,8 @@ DeleteTrashItemAnchor.onclick = function(e){
                 "Status : " + response.status + "</br>" +
                 "Body : " + response.body;
             DeleteTrashItemLoader.style.display = 'none';
-        });
+        }
+    );
 };
 
 // Empty trash can example
@@ -1112,8 +1122,13 @@ EmptyTrashAnchor.onclick = function(e){
                 "Status : " + response.status + "</br>" +
                 "Body : " + response.body;
             EmptyTrashLoader.style.display = 'none';
-        });
+        }
+    );
 };
+
+
+//******************************************
+//******************************************
 
 // Create object state group example
 var CreateObjectStateGroupAnchor = document.getElementById('create-object-state-group');
@@ -1142,7 +1157,8 @@ CreateObjectStateGroupAnchor.onclick = function(e){
                 "Status : " + response.status + "</br>" +
                 "Body : " + response.body;
             CreateObjectStateGroupLoader.style.display = 'none';
-        });
+        }
+    );
 };
 
 // Update object state group example
@@ -1166,7 +1182,8 @@ UpdateObjectStateGroupAnchor.onclick = function(e){
                 "Status : " + response.status + "</br>" +
                 "Body : " + response.body;
             UpdateObjectStateGroupLoader.style.display = 'none';
-        });
+        }
+    );
 };
 
 
@@ -1185,7 +1202,8 @@ LoadObjectStateGroupsAnchor.onclick = function(e){
                 "Status : " + response.status + "</br>" +
                 "Body : " + response.body;
             LoadObjectStateGroupsLoader.style.display = 'none';
-        });
+        }
+    );
 };
 
 // Load an Object State group example
@@ -1259,7 +1277,8 @@ CreateObjectStateAnchor.onclick = function(e){
                 "Status : " + response.status + "</br>" +
                 "Body : " + response.body;
             CreateObjectStateLoader.style.display = 'none';
-        });
+        }
+    );
 };
 
 
@@ -1281,7 +1300,8 @@ LoadObjectStateAnchor.onclick = function(e){
                 "Status : " + response.status + "</br>" +
                 "Body : " + response.body;
             LoadObjectStateLoader.style.display = 'none';
-        });
+        }
+    );
 };
 
 
@@ -1306,7 +1326,8 @@ UpdateObjectStateAnchor.onclick = function(e){
                 "Status : " + response.status + "</br>" +
                 "Body : " + response.body;
             UpdateObjectStateLoader.style.display = 'none';
-        });
+        }
+    );
 };
 
 // Delete an Object State example
@@ -1326,7 +1347,8 @@ DeleteObjectStateAnchor.onclick = function(e){
                 "Status : " + response.status + "</br>" +
                 "Body : " + response.body;
             DeleteObjectStateLoader.style.display = 'none';
-        });
+        }
+    );
 };
 
 // Get Object State of a content example
@@ -1345,7 +1367,8 @@ GetContentStateAnchor.onclick = function(e){
                 "Status : " + response.status + "</br>" +
                 "Body : " + response.body;
             GetContentStateLoader.style.display = 'none';
-        });
+        }
+    );
 };
 
 // Set Object State of a content example
@@ -1359,7 +1382,6 @@ SetContentStateAnchor.onclick = function(e){
     contentService.loadObjectState(
         "/api/ezp/v2/content/objectstategroups/4/objectstates/3",
         function(error, objectStateResponse){
-
 
 
             var objectStates = {},
@@ -1378,11 +1400,14 @@ SetContentStateAnchor.onclick = function(e){
                         "Status : " + response.status + "</br>" +
                         "Body : " + response.body;
                     SetContentStateLoader.style.display = 'none';
-                });
+                }
+            );
         }
     );
 };
 
+//******************************************
+//******************************************
 
 
 // Create an alias example
@@ -1407,7 +1432,8 @@ CreateUrlAliasAnchor.onclick = function(e){
                 "Status : " + response.status + "</br>" +
                 "Body : " + response.body;
             CreateUrlAliasLoader.style.display = 'none';
-        });
+        }
+    );
 };
 
 
@@ -1426,7 +1452,8 @@ ListGlobalAliasesAnchor.onclick = function(e){
                 "Status : " + response.status + "</br>" +
                 "Body : " + response.body;
             ListGlobalAliasesLoader.style.display = 'none';
-        });
+        }
+    );
 };
 
 // List location aliases example
@@ -1446,7 +1473,8 @@ ListLocationAliasesAnchor.onclick = function(e){
                 "Status : " + response.status + "</br>" +
                 "Body : " + response.body;
             ListLocationAliasesLoader.style.display = 'none';
-        });
+        }
+    );
 };
 
 // Load the URL alias example
@@ -1465,7 +1493,8 @@ LoadUrlAliasAnchor.onclick = function(e){
                 "Status : " + response.status + "</br>" +
                 "Body : " + response.body;
             LoadUrlAliasLoader.style.display = 'none';
-        });
+        }
+    );
 };
 
 // Delete the URL alias example
@@ -1484,8 +1513,12 @@ DeleteUrlAliasAnchor.onclick = function(e){
                 "Status : " + response.status + "</br>" +
                 "Body : " + response.body;
             DeleteUrlAliasLoader.style.display = 'none';
-        });
+        }
+    );
 };
+
+//******************************************
+//******************************************
 
 // Create a URL wildcard example
 var CreateUrlWildcardAnchor = document.getElementById('create-url-wildcard');
@@ -1528,7 +1561,8 @@ LoadUrlWildcardsAnchor.onclick = function(e){
                 "Status : " + response.status + "</br>" +
                 "Body : " + response.body;
             LoadUrlWildcardsLoader.style.display = 'none';
-        });
+        }
+    );
 };
 
 // Load URL wildcard example
@@ -1547,7 +1581,8 @@ LoadUrlWildcardAnchor.onclick = function(e){
                 "Status : " + response.status + "</br>" +
                 "Body : " + response.body;
             LoadUrlWildcardLoader.style.display = 'none';
-        });
+        }
+    );
 };
 
 // Delete URL wildcard example

@@ -12,7 +12,14 @@ describe("CAPI", function () {
     
     var testContentId = '/api/ezp/v2/content/objects/173',
         testVersionedContentId = '/api/ezp/v2/content/objects/173/version/1',
-        testLocation = '/api/ezp/v2/content/locations/1/2/102';
+        testLocation = '/api/ezp/v2/content/locations/1/2/102',
+        testRelation = '/api/ezp/v2/content/objects/102/versions/5/relations/1',
+        testUrlAlias = '/api/ezp/v2/content/urlaliases/0-a903c03b86eb2987889afa5fe17004eb',
+        testUrlWildcard = '/api/ezp/v2/content/urlwildcards/1',
+        testObjectStateGroup = '/api/ezp/v2/content/objectstategroups/1',
+        testObjectState = '/api/ezp/v2/content/objectstategroups/7/objectstates/5',
+        testTrashItem = '/api/ezp/v2/content/trash/1',
+        testSection = '/api/ezp/v2/content/sections/1';
 
 
     describe("Content Service", function () {
@@ -212,6 +219,59 @@ describe("CAPI", function () {
                 });
             });
 
+            // Relations
+            describe("Relations management request:", function () {
+
+                it("loadCurrentRelations", function () {
+                    contentService.loadCurrentRelations(
+                        testContentId,
+                        0,
+                        -1,
+                        function(){}
+                    );
+                    expect(fakeConnection.execute).toHaveBeenCalled();
+                });
+
+                it("loadRelations", function () {
+                    contentService.loadRelations(
+                        testVersionedContentId,
+                        0,
+                        -1,
+                        function(){}
+                    );
+                    expect(fakeConnection.execute).toHaveBeenCalled();
+                });
+
+                it("loadRelation", function () {
+                    contentService.loadRelation(
+                        testRelation,
+                        function(){}
+                    );
+                    expect(fakeConnection.execute).toHaveBeenCalled();
+                });
+
+                it("createRelation", function () {
+                    var relationCreateStruct = contentService.newRelationCreateStruct("/api/ezp/v2/content/objects/132");
+
+                    contentService.addRelation(
+                        testVersionedContentId,
+                        relationCreateStruct,
+                        function(){}
+                    );
+                    expect(fakeConnection.execute).toHaveBeenCalled();
+                });
+
+                //TODO: In real life, take as an argument relation which was created during createRelation test
+                it("deleteRelation", function () {
+                    contentService.deleteRelation(
+                        testRelation,
+                        function(){}
+                    );
+                    expect(fakeConnection.execute).toHaveBeenCalled();
+                });
+
+            });
+
             // Locations
             describe("Locations management request:", function () {
 
@@ -308,21 +368,6 @@ describe("CAPI", function () {
             // Sections
             describe("Sections management request:", function () {
 
-                it("loadSection", function () {
-                    contentService.loadSection(
-                        1,
-                        function(){}
-                    );
-                    expect(fakeConnection.execute).toHaveBeenCalled();
-                });
-
-                it("loadSections", function () {
-                    contentService.loadSections(
-                        function(){}
-                    );
-                    expect(fakeConnection.execute).toHaveBeenCalled();
-                });
-
                 it("createSection", function () {
                     var sectionInput = {
                         SectionInput : {
@@ -338,7 +383,333 @@ describe("CAPI", function () {
                     expect(fakeConnection.execute).toHaveBeenCalled();
                 });
 
+                it("updateSection", function () {
+                    sectionInput = {
+                        SectionInput : {
+                            identifier : "testSection" + Math.random()*1000000,
+                            name : "Test Section " + Math.round(Math.random()*1000)
+                        }
+                    };
+                    contentService.updateSection(
+                        testSection,
+                        JSON.stringify(sectionInput),
+                        function(){}
+                    );
+                    expect(fakeConnection.execute).toHaveBeenCalled();
+                });
+
+
+                it("loadSection", function () {
+                    contentService.loadSection(
+                        testSection,
+                        function(){}
+                    );
+                    expect(fakeConnection.execute).toHaveBeenCalled();
+                });
+
+                it("loadSections", function () {
+                    contentService.loadSections(
+                        function(){}
+                    );
+                    expect(fakeConnection.execute).toHaveBeenCalled();
+                });
+
+                //TODO: Take value created during previous tests
+                it("deleteSection", function () {
+                    contentService.deleteSection(
+                        testSection,
+                        function(){}
+                    );
+                    expect(fakeConnection.execute).toHaveBeenCalled();
+                });
+
             });
+
+            // Trash
+            describe("Trash management request:", function () {
+
+                it("loadTrashItems", function () {
+                    contentService.loadThrashItems(
+                        0,
+                        -1,
+                        function(){}
+                    );
+                    expect(fakeConnection.execute).toHaveBeenCalled();
+                });
+
+                it("loadTrashItem", function () {
+                    contentService.loadThrashItem(
+                        testTrashItem,
+                        function(){}
+                    );
+                    expect(fakeConnection.execute).toHaveBeenCalled();
+                });
+
+                it("recoverTrashItem", function () {
+                    contentService.recover(
+                        testTrashItem,
+                        "/api/ezp/v2/content/locations/1/2/118",
+                        function(){}
+                    );
+                    expect(fakeConnection.execute).toHaveBeenCalled();
+                });
+
+                it("deleteTrashItem", function () {
+                    contentService.deleteTrashItem(
+                        testTrashItem,
+                        function(){}
+                    );
+                    expect(fakeConnection.execute).toHaveBeenCalled();
+                });
+
+                it("emptyTrash", function () {
+                    contentService.emptyThrash(
+                        function(){}
+                    );
+                    expect(fakeConnection.execute).toHaveBeenCalled();
+                });
+
+            });
+
+            // Content State Groups
+            describe("Content State groups management request:", function () {
+
+                it("createObjectStateGroup", function () {
+                    var objectStateGroupCreateStruct = contentService.newObjectStateGroupCreateStruct(
+                        "some-id" + Math.random(10000),
+                        "eng-US",
+                        [
+                            {
+                                "_languageCode":"eng-US",
+                                "#text":"Some Name " + Math.random(10000)
+                            }
+                        ]
+                    );
+
+                    contentService.createObjectStateGroup(
+                        "/api/ezp/v2/content/objectstategroups",
+                        objectStateGroupCreateStruct,
+                        function(){}
+                    );
+                    expect(fakeConnection.execute).toHaveBeenCalled();
+                });
+
+
+                it("updateObjectStateGroup", function () {
+                    var objectStateGroupUpdateStruct = contentService.newObjectStateGroupUpdateStruct();
+
+                    objectStateGroupUpdateStruct.body.ObjectStateGroupUpdate.identifier = "some-id" + Math.random(10000);
+
+                    contentService.updateObjectStateGroup(
+                        testObjectStateGroup,
+                        objectStateGroupUpdateStruct,
+                        function(){}
+                    );
+                    expect(fakeConnection.execute).toHaveBeenCalled();
+                });
+
+                it("loadObjectStateGroups", function () {
+                    contentService.loadObjectStateGroups(
+                        "/api/ezp/v2/content/objectstategroups",
+                        function(){}
+                    );
+                    expect(fakeConnection.execute).toHaveBeenCalled();
+                });
+
+                it("loadObjectStateGroup", function () {
+                    contentService.loadObjectStateGroup(
+                        testObjectStateGroup,
+                        function(){}
+                    );
+                    expect(fakeConnection.execute).toHaveBeenCalled();
+                });
+
+                //TODO: Take value created during previous tests
+                it("deleteObjectStateGroup", function () {
+                    contentService.deleteObjectStateGroup(
+                        testObjectStateGroup,
+                        function(){}
+                    );
+                    expect(fakeConnection.execute).toHaveBeenCalled();
+                });
+
+            });
+
+            // Content States
+            describe("Content States management request:", function () {
+
+                it("createObjectState", function () {
+                    createObjectStateStruct = contentService.newObjectStateCreateStruct(
+                        "some-id" + Math.random(10000),
+                        "eng-US",
+                        0,
+                        [
+                            {
+                                "_languageCode":"eng-US",
+                                "#text":"Some Name " + Math.random(10000)
+                            }
+                        ],
+                        []
+                    );
+
+                    contentService.createObjectState(
+                        testObjectStateGroup,
+                        createObjectStateStruct,
+                        function(){}
+                    );
+                    expect(fakeConnection.execute).toHaveBeenCalled();
+                });
+
+                it("updateObjectState", function () {
+                    var objectStateUpdateStruct = contentService.newObjectStateUpdateStruct();
+
+                    objectStateUpdateStruct.body.ObjectStateUpdate.identifier = "some-id" + Math.random(10000);
+
+                    contentService.updateObjectState(
+                        testObjectState,
+                        objectStateUpdateStruct,
+                        function(){}
+                    );
+                    expect(fakeConnection.execute).toHaveBeenCalled();
+                });
+
+                it("loadObjectState", function () {
+                    contentService.loadObjectState(
+                        testObjectState,
+                        function(){}
+                    );
+                    expect(fakeConnection.execute).toHaveBeenCalled();
+                });
+
+                //TODO: Take value created during previous tests
+                it("deleteObjectState", function () {
+                    contentService.deleteObjectState(
+                        testObjectState,
+                        function(){}
+                    );
+                    expect(fakeConnection.execute).toHaveBeenCalled();
+                });
+
+                it("getContentState", function () {
+                    contentService.getContentState(
+                        testContentId + '/objectstates',
+                        function(){}
+                    );
+                    expect(fakeConnection.execute).toHaveBeenCalled();
+                });
+
+                it("setContentState", function () {
+                    var objectStates = {};
+
+                    contentService.setContentState(
+                        testContentId + '/objectstates',
+                        objectStates,
+                        function(){}
+                    );
+                    expect(fakeConnection.execute).toHaveBeenCalled();
+                });
+
+            });
+
+            // URL Alias
+            describe("URL Aliases management request:", function () {
+
+                it("createUrlAlias", function () {
+                    var urlAliasCreateStruct = contentService.newUrlAliasCreateStruct(
+                        "eng-US",
+                        "content/search",
+                        "findme-alias"
+                    );
+
+                    contentService.createUrlAlias(
+                        "/api/ezp/v2/content/urlaliases",
+                        urlAliasCreateStruct,
+                        function(){}
+                    );
+                    expect(fakeConnection.execute).toHaveBeenCalled();
+                });
+
+                it("listGlobalAliases", function () {
+                    contentService.listGlobalAliases(
+                        "/api/ezp/v2/content/urlaliases",
+                        function(){}
+                    );
+                    expect(fakeConnection.execute).toHaveBeenCalled();
+                });
+
+                it("listLocatonAliases", function () {
+                    contentService.listLocationAliases(
+                        testLocation,
+                        false,
+                        function(){}
+                    );
+                    expect(fakeConnection.execute).toHaveBeenCalled();
+                });
+
+                it("loadUrlAlias", function () {
+                    contentService.loadUrlAlias(
+                        testUrlAlias,
+                        function(){}
+                    );
+                    expect(fakeConnection.execute).toHaveBeenCalled();
+                });
+
+                it("deleteUrlAlias", function () {
+                    contentService.deleteUrlAlias(
+                        testUrlAlias,
+                        function(){}
+                    );
+                    expect(fakeConnection.execute).toHaveBeenCalled();
+                });
+
+            });
+
+            // URL Wildcards
+            describe("URL Wildcards management request:", function () {
+
+                it("createUrlWildCard", function () {
+                    var urlWildcardCreateStruct = contentService.newUrlWildcardCreateStruct(
+                            "some-new-wildcard-" + Math.random(100) * 1000,
+                            "testLocation",
+                            "false"
+                        );
+                    contentService.createUrlWildcard(
+                        "/api/ezp/v2/content/urlwildcards",
+                        urlWildcardCreateStruct,
+                        function(){}
+                    );
+                    expect(fakeConnection.execute).toHaveBeenCalled();
+                });
+
+                it("loadUrlWildcards", function () {
+                    contentService.loadUrlWildcards(
+                        "/api/ezp/v2/content/urlwildcards",
+                        function(){}
+                    );
+                    expect(fakeConnection.execute).toHaveBeenCalled();
+                });
+
+                it("loadUrlWildcard", function () {
+                    contentService.loadUrlWildcard(
+                        testUrlWildcard,
+                        function(){}
+                    );
+                    expect(fakeConnection.execute).toHaveBeenCalled();
+                });
+
+                //TODO: Take value created during previous tests
+                it("deleteUrlWildcard", function () {
+                    contentService.deleteUrlWildcard(
+                        testUrlWildcard,
+                        function(){}
+                    );
+                    expect(fakeConnection.execute).toHaveBeenCalled();
+                });
+
+            });
+
+
+
 
 
 
