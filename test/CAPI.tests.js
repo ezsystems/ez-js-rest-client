@@ -45,6 +45,7 @@ describe("CAPI", function () {
                     function(){}
                 );
                 expect(fakeConnection.execute).toHaveBeenCalled();
+                expect(fakeConnection.execute.mostRecentCall.args[0].method).toEqual("GET");
             });
 
             // Content

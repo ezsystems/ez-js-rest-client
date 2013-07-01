@@ -76,26 +76,26 @@ module.exports = function(grunt) {
             all: ['dist/*.js']
         },
         jasmine_node: {
+            coverage: {
+            },
             options: {
                 forceExit: true,
                 match: '.',
-                matchall: true,
-                requirejs: true,
+                matchall: false,
                 extensions: 'js',
-                specNameMatcher: "./spec", // load only specs containing specNameMatcher
-                jUnit: {
+                specNameMatcher: 'spec',
+                junitreport: {
                     report: false,
                     useDotNotation: true,
                     consolidate: true
                 }
             }
-//            all: ['dist/CAPI.js', 'spec/']
         }
     });
 
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-contrib-jshint');
-    grunt.loadNpmTasks('grunt-jasmine-node');
+    grunt.loadNpmTasks('grunt-jasmine-node-coverage');
 
     grunt.registerTask('default', ['concat', 'jshint']);
     grunt.registerTask('test', ['concat', 'jasmine_node'] );
