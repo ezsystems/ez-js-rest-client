@@ -25,7 +25,7 @@ var ContentService = (function() {
         this._connectionManager.request(
             "GET",
             root,
-            {},
+            "",
             { "Accept" : "application/vnd.ez.api.Root+json" },
             callback
         );
