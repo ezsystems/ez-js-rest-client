@@ -198,7 +198,6 @@ createContentAnchor.onclick = function(e){
     contentCreateStruct.body.ContentCreate.fields.field.push(fieldInfo);
 
     contentService.createContent(
-        '/api/ezp/v2/content/objects',
         contentCreateStruct,
         function(error, response){
             clientOutput.innerHTML =    "Errors : " + JSON.stringify(error) + "</br>" +

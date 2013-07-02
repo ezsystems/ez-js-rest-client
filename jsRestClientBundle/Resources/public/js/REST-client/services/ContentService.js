@@ -336,13 +336,25 @@ var ContentService = (function() {
      * @param contentCreate {JSON} json string describing content to be created
      * @param callback {function} function, which will be executed on request success
      */
-    ContentService.prototype.createContent = function createContent(contentObjects, contentCreateStruct, callback) {
-        this._connectionManager.request(
-            "POST",
-            contentObjects,
-            JSON.stringify(contentCreateStruct.body),
-            contentCreateStruct.headers,
-            callback
+    ContentService.prototype.createContent = function createContent(contentCreateStruct, callback) {
+        var that = this;
+
+        this._discoveryService.getInfoObject(
+            "content",
+            function(error, contentObjects){
+                if (!error) {
+                    that._connectionManager.request(
+                        "POST",
+                        contentObjects._href,
+                        JSON.stringify(contentCreateStruct.body),
+                        contentCreateStruct.headers,
+                        callback
+                    );
+
+                } else {
+                    callback(error, false);
+                }
+            }
         );
     };
 
@@ -382,7 +394,7 @@ var ContentService = (function() {
                     that._connectionManager.request(
                         "GET",
                         contentObjects._href + '?remoteId=' + remoteId,
-                        { "remoteId" : remoteId },
+                        "",
                         { "Accept" : contentObjects["_media-type"] },
                         callback
                     );
@@ -406,7 +418,7 @@ var ContentService = (function() {
         this._connectionManager.request(
             "GET",
             contentId,
-            {},
+            "",
             { "Accept" : "application/vnd.ez.api.ContentInfo+json" },
             callback
         );
@@ -423,7 +435,7 @@ var ContentService = (function() {
         this._connectionManager.request(
             "GET",
             contentId,
-            {},
+            "",
             { "Accept" : "application/vnd.ez.api.Content+json" },
             callback
         );

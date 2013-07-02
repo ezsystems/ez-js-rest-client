@@ -3,10 +3,13 @@ describe("ContentService", function () {
 
     var mockDiscoveryService,
         mockConnectionManager,
+        mockCallback,
         contentService,
 
         rootId = '/api/ezp/v2/',
+        testContentObjects = '/api/ezp/v2/content/objects',
         testContentId = '/api/ezp/v2/content/objects/173',
+        testRemoteId = '30847bec12a8a398777493a4bdb10398',
         testVersionedContentId = '/api/ezp/v2/content/objects/173/version/1',
         testLocation = '/api/ezp/v2/content/locations/1/2/102',
         testRelation = '/api/ezp/v2/content/objects/102/versions/5/relations/1',
@@ -20,8 +23,26 @@ describe("ContentService", function () {
     describe("is calling injected objects with right arguments while performing:", function () {
 
         beforeEach(function (){
-            mockDiscoveryService = jasmine.createSpyObj('mockDiscoveryService', ['getInfoObject']);
             mockConnectionManager = jasmine.createSpyObj('mockConnectionManager', ['request', 'delete']);
+            mockCallback = jasmine.createSpy('mockCallback');
+
+            mockDiscoveryService = {
+                getInfoObject : function(name, callback){
+
+                    if (name === "content"){
+                        callback(
+                            false,
+                            {
+                                "_href" : testContentObjects,
+                                "_media-type" : ""
+                            }
+                        )
+                    }
+
+                }
+            }
+
+            spyOn(mockDiscoveryService, 'getInfoObject').andCallThrough();
 
             contentService = new ContentService(mockConnectionManager, mockDiscoveryService);
         });
@@ -30,7 +51,7 @@ describe("ContentService", function () {
 
             contentService.loadRoot(
                 rootId,
-                function(){}
+                mockCallback
             );
 
             expect(mockConnectionManager.request).toHaveBeenCalled();
@@ -42,94 +63,144 @@ describe("ContentService", function () {
 
         });
 
-//        // Content
-//        describe("Content management request:", function () {
-//
-//            it("createContent", function () {
-//
-//                var locationCreateStruct = contentService.newLocationCreateStruct("/api/ezp/v2/content/locations/1/2/118"),
-//                    contentCreateStruct = contentService.newContentCreateStruct(
-//                        "/api/ezp/v2/content/types/18",
-//                        locationCreateStruct,
-//                        "eng-US",
-//                        "DummyUser"
-//                    ),
-//                    fieldInfo = {
-//                        "fieldDefinitionIdentifier": "title",
-//                        "languageCode": "eng-US",
-//                        "fieldValue": "This is a title"
-//                    };
-//
-//                contentCreateStruct.body.ContentCreate.fields.field.push(fieldInfo);
-//
-//                contentService.createContent(
-//                    '/api/ezp/v2/content/objects',
-//                    contentCreateStruct,
-//                    function(){}
-//                );
-//
-//                expect(fakeConnection.execute).toHaveBeenCalled();
-//            });
-//
-//            it("updateContentMetadata", function () {
-//
-//                var updateStruct = contentService.newContentMetadataUpdateStruct(
-//                    "eng-US"
-//                );
-//
-//                updateStruct.body.ContentUpdate.Section = "/api/ezp/v2/content/sections/2";
-//                updateStruct.body.ContentUpdate.remoteId = "random-id-" + Math.random()*1000000;
-//
-//                contentService.updateContentMetadata(
-//                    testContentId,
-//                    updateStruct,
-//                    function(){}
-//                );
-//                expect(fakeConnection.execute).toHaveBeenCalled();
-//            });
-//
-//            it("loadContentInfo", function () {
-//                contentService.loadContentInfo(
-//                    testContentId,
-//                    function(){}
-//                );
-//                expect(fakeConnection.execute).toHaveBeenCalled();
-//            });
-//
-//            it("loadContentInfoAndCurrentVersion", function () {
-//                contentService.loadContentInfoAndCurrentVersion(
-//                    testContentId,
-//                    function(){}
-//                );
-//                expect(fakeConnection.execute).toHaveBeenCalled();
-//            });
-//
-//            it("deleteContent", function () {
-//                contentService.deleteContent(
-//                    testContentId,
-//                    function(){}
-//                );
-//                expect(fakeConnection.execute).toHaveBeenCalled();
-//            });
-//
-//            it("copyContent", function () {
-//                contentService.copyContent(
-//                    testContentId,
-//                    "/api/ezp/v2/content/locations/1/2/102",
-//                    function(){}
-//                );
-//                expect(fakeConnection.execute).toHaveBeenCalled();
-//            });
-//
-//            it("loadContentByRemoteId", function () {
-//                contentService.loadContentByRemoteId(
-//                    "random-id-336055.11436237476",
-//                    function(){}
-//                );
-//                expect(fakeConnection.execute).toHaveBeenCalled();
-//            });
-//
-//        });
+        // Content
+        describe("Content management request:", function () {
+
+            it("createContent", function () {
+
+                var locationCreateStruct = contentService.newLocationCreateStruct("/api/ezp/v2/content/locations/1/2/118"),
+                    contentCreateStruct = contentService.newContentCreateStruct(
+                        "/api/ezp/v2/content/types/18",
+                        locationCreateStruct,
+                        "eng-US",
+                        "DummyUser"
+                    ),
+                    fieldInfo = {
+                        "fieldDefinitionIdentifier": "title",
+                        "languageCode": "eng-US",
+                        "fieldValue": "This is a title"
+                    };
+
+                contentCreateStruct.body.ContentCreate.fields.field.push(fieldInfo);
+
+                mockDiscoveryService.getInfoObject("content",function(){});
+
+                contentService.createContent(
+                    contentCreateStruct,
+                    function(){}
+                );
+
+                expect(mockDiscoveryService.getInfoObject).toHaveBeenCalledWith("content", jasmine.any(Function));
+
+                expect(mockConnectionManager.request).toHaveBeenCalled();
+                expect(mockConnectionManager.request.mostRecentCall.args[0]).toEqual("POST"); //method
+                expect(mockConnectionManager.request.mostRecentCall.args[1]).toEqual(testContentObjects); //url
+                expect(mockConnectionManager.request.mostRecentCall.args[2]).toEqual(JSON.stringify(contentCreateStruct.body)); // body
+                expect(mockConnectionManager.request.mostRecentCall.args[3]).toEqual(contentCreateStruct.headers); // headers
+                expect(mockConnectionManager.request.mostRecentCall.args[4] instanceof Function).toBeTruthy(); // callback
+
+            });
+
+            it("updateContentMetadata", function () {
+
+                var updateStruct = contentService.newContentMetadataUpdateStruct(
+                    "eng-US"
+                );
+
+                updateStruct.body.ContentUpdate.Section = "/api/ezp/v2/content/sections/2";
+                updateStruct.body.ContentUpdate.remoteId = "random-id-" + Math.random()*1000000;
+
+                contentService.updateContentMetadata(
+                    testContentId,
+                    updateStruct,
+                    mockCallback
+                );
+
+                expect(mockConnectionManager.request).toHaveBeenCalled();
+                expect(mockConnectionManager.request.mostRecentCall.args[0]).toEqual("PATCH"); //method
+                expect(mockConnectionManager.request.mostRecentCall.args[1]).toEqual(testContentId); //url
+                expect(mockConnectionManager.request.mostRecentCall.args[2]).toEqual(JSON.stringify(updateStruct.body)); // body
+                expect(mockConnectionManager.request.mostRecentCall.args[3]).toEqual(updateStruct.headers); // headers
+                expect(mockConnectionManager.request.mostRecentCall.args[4] instanceof Function).toBeTruthy(); // callback
+
+            });
+
+            it("loadContentInfo", function () {
+                contentService.loadContentInfo(
+                    testContentId,
+                    mockCallback
+                );
+
+                expect(mockConnectionManager.request).toHaveBeenCalled();
+                expect(mockConnectionManager.request.mostRecentCall.args[0]).toEqual("GET"); //method
+                expect(mockConnectionManager.request.mostRecentCall.args[1]).toEqual(testContentId); //url
+                expect(mockConnectionManager.request.mostRecentCall.args[2]).toEqual(""); // body
+                expect(mockConnectionManager.request.mostRecentCall.args[3].Accept).toEqual("application/vnd.ez.api.ContentInfo+json"); // headers
+                expect(mockConnectionManager.request.mostRecentCall.args[4] instanceof Function).toBeTruthy(); // callback
+
+            });
+
+            it("loadContentInfoAndCurrentVersion", function () {
+                contentService.loadContentInfoAndCurrentVersion(
+                    testContentId,
+                    mockCallback
+                );
+
+                expect(mockConnectionManager.request).toHaveBeenCalled();
+                expect(mockConnectionManager.request.mostRecentCall.args[0]).toEqual("GET"); //method
+                expect(mockConnectionManager.request.mostRecentCall.args[1]).toEqual(testContentId); //url
+                expect(mockConnectionManager.request.mostRecentCall.args[2]).toEqual(""); // body
+                expect(mockConnectionManager.request.mostRecentCall.args[3].Accept).toEqual("application/vnd.ez.api.Content+json"); // headers
+                expect(mockConnectionManager.request.mostRecentCall.args[4] instanceof Function).toBeTruthy(); // callback
+
+            });
+
+            it("deleteContent", function () {
+                contentService.deleteContent(
+                    testContentId,
+                    mockCallback
+                );
+
+                expect(mockConnectionManager.delete).toHaveBeenCalled();
+                expect(mockConnectionManager.delete.mostRecentCall.args[0]).toEqual(testContentId); //url
+                expect(mockConnectionManager.delete.mostRecentCall.args[1] instanceof Function).toBeTruthy(); // callback
+
+            });
+
+            it("copyContent", function () {
+                contentService.copyContent(
+                    testContentId,
+                    testLocation,
+                    mockCallback
+                );
+
+                expect(mockConnectionManager.request).toHaveBeenCalled();
+                expect(mockConnectionManager.request.mostRecentCall.args[0]).toEqual("COPY"); //method
+                expect(mockConnectionManager.request.mostRecentCall.args[1]).toEqual(testContentId); //url
+                expect(mockConnectionManager.request.mostRecentCall.args[2]).toEqual(""); // body
+                expect(mockConnectionManager.request.mostRecentCall.args[3].Destination).toEqual(testLocation); // headers
+                expect(mockConnectionManager.request.mostRecentCall.args[4] instanceof Function).toBeTruthy(); // callback
+
+            });
+
+            it("loadContentByRemoteId", function () {
+                contentService.loadContentByRemoteId(
+                    testRemoteId,
+                    mockCallback
+                );
+
+                expect(mockDiscoveryService.getInfoObject).toHaveBeenCalledWith("content", jasmine.any(Function));
+
+                expect(mockConnectionManager.request.mostRecentCall.args[0]).toEqual("GET"); //method
+                expect(mockConnectionManager.request.mostRecentCall.args[1]).toEqual(testContentObjects + "?remoteId=" + testRemoteId); //url
+                expect(mockConnectionManager.request.mostRecentCall.args[2]).toEqual(""); // body
+                expect(mockConnectionManager.request.mostRecentCall.args[3].Accept).toEqual(""); // headers
+                expect(mockConnectionManager.request.mostRecentCall.args[4] instanceof Function).toBeTruthy(); // callback
+
+            });
+
+        });
+
 //
 //        // Versions
 //        describe("Versions management request:", function () {
