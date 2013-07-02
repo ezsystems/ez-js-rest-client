@@ -497,7 +497,7 @@ var ContentService = (function() {
                     that._connectionManager.request(
                         "GET",
                         currentVersion._href,
-                        {},
+                        "",
                         { "Accept" : currentVersion["_media-type"] },
                         callback
                     );
@@ -550,7 +550,7 @@ var ContentService = (function() {
                     that._connectionManager.request(
                         "GET",
                         contentVersions._href,
-                        {},
+                        "",
                         { "Accept" : contentVersions["_media-type"] },
                         callback
                     );
@@ -601,7 +601,7 @@ var ContentService = (function() {
             function(error, contentResponse){
                 if (!error) {
 
-                    if (versionId !== null) {
+                    if (versionId != null) {
                         // Version id is declared
 
                         console.log(versionId);
