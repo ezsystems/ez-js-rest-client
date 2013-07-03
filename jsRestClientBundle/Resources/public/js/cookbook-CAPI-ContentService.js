@@ -85,17 +85,15 @@ createSectionAnchor.onclick = function(e){
 
     createSectionLoader.style.display = 'block';
     e.preventDefault();
-    var sectionInput = {
-        SectionInput : {
-            identifier : "testSection" + Math.random()*1000000,
-            name : "Test Section"
-        }
-    };
+
+    var sectionInputStruct = new SectionInputStruct(
+        "testSection" + Math.random()*1000000,
+        "Test Section"
+    );
 
     // compatibility remark: JSON API is supported in all modern browsers (IE-wise since IE8)
     contentService.createSection(
-        '/api/ezp/v2/content/sections',
-        JSON.stringify(sectionInput),
+        sectionInputStruct,
         function(error, response){
             clientOutput.innerHTML =    "Errors : " + JSON.stringify(error) + "</br>" +
                 "Status : " + response.status + "</br>" +
@@ -120,17 +118,15 @@ updateSectionAnchor.onclick = function(e){
         updateSectionLoader.style.display = 'block';
         e.preventDefault();
 
-        sectionInput = {
-            SectionInput : {
-                identifier : "testSection" + Math.random()*1000000,
-                name : "Test Section " + Math.round(Math.random()*1000)
-            }
-        };
+        sectionInputStruct = new SectionInputStruct(
+            "testSection" + Math.random()*1000000,
+            "Test Section " + Math.round(Math.random()*1000)
+        );
 
         // compatibility remark: JSON API is supported in all modern browsers (IE-wise since IE8)
         contentService.updateSection(
             updateSectionInput.value,
-            JSON.stringify(sectionInput),
+            sectionInputStruct,
             function(error, response){
                 clientOutput.innerHTML =    "Errors : " + JSON.stringify(error) + "</br>" +
                     "Status : " + response.status + "</br>" +

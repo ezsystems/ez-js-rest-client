@@ -216,6 +216,55 @@ var ContentService = (function() {
 // ******************************
 
     /**
+     * Create new section
+     *
+     * @method createSection
+     * @param sectionInput {JSON} json string describing section to be created
+     * @param callback {function} function, which will be executed on request success
+     */
+    ContentService.prototype.createSection = function createSection(sectionInput, callback) {
+
+        var that = this;
+
+        this._discoveryService.getInfoObject(
+            "sections",
+            function(error, sections) {
+                if (!error) {
+
+                    that._connectionManager.request(
+                        "POST",
+                        sections._href,
+                        JSON.stringify(sectionInput.body),
+                        sectionInput.headers,
+                        callback
+                    );
+
+                } else {
+                    callback(error, false);
+                }
+            }
+        );
+    };
+
+    /**
+     * Update section
+     *
+     * @method updateSection
+     * @param sectionId {href}
+     * @param sectionInput {JSON} json string describing section to be created
+     * @param callback {function} function, which will be executed on request success
+     */
+    ContentService.prototype.updateSection = function updateSection(sectionId, sectionInput, callback) {
+        this._connectionManager.request(
+            "PATCH",
+            sectionId,
+            JSON.stringify(sectionInput.body),
+            sectionInput.headers,
+            callback
+        );
+    };
+
+    /**
      * List all sections
      *
      * @method loadSections
@@ -233,7 +282,7 @@ var ContentService = (function() {
                     that._connectionManager.request(
                         "GET",
                         sections._href,
-                        {},
+                        "",
                         { "Accept" : sections["_media-type"] },
                         callback
                     );
@@ -257,50 +306,8 @@ var ContentService = (function() {
         this._connectionManager.request(
             "GET",
             sectionId,
-            {},
+            "",
             { "Accept" : "application/vnd.ez.api.Section+json" },
-            callback
-        );
-    };
-
-    /**
-     * Create new section
-     *
-     * @method createSection
-     * @param sections {href}
-     * @param sectionInput {JSON} json string describing section to be created
-     * @param callback {function} function, which will be executed on request success
-     */
-    ContentService.prototype.createSection = function createSection(sections, sectionInput, callback) {
-        this._connectionManager.request(
-            "POST",
-            sections,
-            sectionInput,
-            {
-                "Accept" : "application/vnd.ez.api.Section+json",
-                "Content-Type" : "application/vnd.ez.api.SectionInput+json"
-            },
-            callback
-        );
-    };
-
-    /**
-     * Update section
-     *
-     * @method updateSection
-     * @param sectionId {href}
-     * @param sectionInput {JSON} json string describing section to be created
-     * @param callback {function} function, which will be executed on request success
-     */
-    ContentService.prototype.updateSection = function updateSection(sectionId, sectionInput, callback) {
-        this._connectionManager.request(
-            "PATCH",
-            sectionId,
-            sectionInput,
-            {
-                "Accept" : "application/vnd.ez.api.Section+json",
-                "Content-Type" : "application/vnd.ez.api.SectionInput+json"
-            },
             callback
         );
     };
@@ -318,11 +325,6 @@ var ContentService = (function() {
             callback
         );
     };
-
-// ******************************
-// Content Type groups management
-// ******************************
-
 
 // ******************************
 // Content management
@@ -704,7 +706,7 @@ var ContentService = (function() {
         this._connectionManager.request(
             "GET",
             objectLocations,
-            {},
+            "",
             { "Accept" : "application/vnd.ez.api.LocationList+json" },
             callback
         );
@@ -721,7 +723,7 @@ var ContentService = (function() {
         this._connectionManager.request(
             "GET",
             locationId,
-            {},
+            "",
             { "Accept" : "application/vnd.ez.api.Location+json" },
             callback
         );
@@ -790,7 +792,7 @@ var ContentService = (function() {
                     that._connectionManager.request(
                         "GET",
                         location.Children._href + '?offset=' + offset + '&limit=' + limit,
-                        {},
+                        "",
                         { "Accept" : location.Children["_media-type"] },
                         callback
                     );
@@ -969,7 +971,7 @@ var ContentService = (function() {
                     that._connectionManager.request(
                         "GET",
                         version.Relations._href + '?offset=' + offset + '&limit=' + limit,
-                        {},
+                        "",
                         { "Accept" : version.Relations["_media-type"] },
                         callback
                     );
@@ -995,7 +997,6 @@ var ContentService = (function() {
 
         this.loadCurrentVersion(
             contentId,
-            {},
             function(error, currentVersionResponse){
                 if (!error) {
 
@@ -1004,7 +1005,7 @@ var ContentService = (function() {
                     that._connectionManager.request(
                         "GET",
                         currentVersion.Relations._href + '?offset=' + offset + '&limit=' + limit,
-                        {},
+                        "",
                         { "Accept" : currentVersion.Relations["_media-type"] },
                         callback
                     );
@@ -1028,7 +1029,7 @@ var ContentService = (function() {
         this._connectionManager.request(
             "GET",
             relationId,
-            {},
+            "",
             { "Accept" : "application/vnd.ez.api.Relation+json" },
             callback
         );
@@ -1106,7 +1107,7 @@ var ContentService = (function() {
                     that._connectionManager.request(
                         "GET",
                         trash._href + '?offset=' + offset + '&limit=' + limit,
-                        {},
+                        "",
                         { "Accept" : trash["_media-type"] },
                         callback
                     );
@@ -1129,7 +1130,7 @@ var ContentService = (function() {
         this._connectionManager.request(
             "GET",
             trashItemId,
-            {},
+            "",
             { "Accept" : "application/vnd.ez.api.TrashItem+json" },
             callback
         );
@@ -1219,7 +1220,7 @@ var ContentService = (function() {
         this._connectionManager.request(
             "GET",
             objectStateGroups,
-            {},
+            "",
             { "Accept" : "application/vnd.ez.api.ObjectStateGroupList+json" },
             callback
         );
@@ -1236,7 +1237,7 @@ var ContentService = (function() {
         this._connectionManager.request(
             "GET",
             objectStateGroupId,
-            {},
+            "",
             { "Accept" : "application/vnd.ez.api.ObjectStateGroup+json" },
             callback
         );
@@ -1324,7 +1325,7 @@ var ContentService = (function() {
         this._connectionManager.request(
             "GET",
             objectStateId,
-            {},
+            "",
             { "Accept" : "application/vnd.ez.api.ObjectState+json" },
             callback
         );
@@ -1373,7 +1374,7 @@ var ContentService = (function() {
         this._connectionManager.request(
             "GET",
             contentStatesId,
-            {},
+            "",
             { "Accept" : "application/vnd.ez.api.ContentObjectStates+json" },
             callback
         );
@@ -1433,7 +1434,7 @@ var ContentService = (function() {
         this._connectionManager.request(
             "GET",
             urlAliases,
-            {},
+            "",
             { "Accept" : "application/vnd.ez.api.UrlAliasRefList+json" },
             callback
         );
@@ -1455,7 +1456,7 @@ var ContentService = (function() {
         this._connectionManager.request(
             "GET",
             locationUrlAliases + '/urlaliases' + parameters,
-            {},
+            "",
             { "Accept" : "application/vnd.ez.api.UrlAliasRefList+json" },
             callback
         );
@@ -1472,7 +1473,7 @@ var ContentService = (function() {
         this._connectionManager.request(
             "GET",
             urlAliasId,
-            {},
+            "",
             { "Accept" : "application/vnd.ez.api.UrlAlias+json" },
             callback
         );

@@ -6,6 +6,7 @@ module.exports = function(grunt) {
         'jsRestClientBundle/Resources/public/js/REST-client/structures/ContentMetadataUpdateStruct.js',
         'jsRestClientBundle/Resources/public/js/REST-client/structures/LocationCreateStruct.js',
         'jsRestClientBundle/Resources/public/js/REST-client/structures/LocationUpdateStruct.js',
+        'jsRestClientBundle/Resources/public/js/REST-client/structures/SectionInputStruct.js',
         'jsRestClientBundle/Resources/public/js/REST-client/structures/SessionCreateStruct.js',
         'jsRestClientBundle/Resources/public/js/REST-client/structures/ViewCreateStruct.js',
         'jsRestClientBundle/Resources/public/js/REST-client/structures/RelationCreateStruct.js',
