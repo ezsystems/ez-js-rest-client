@@ -181,8 +181,6 @@ describe("ContentService", function () {
 
                 contentCreateStruct.body.ContentCreate.fields.field.push(fieldInfo);
 
-                mockDiscoveryService.getInfoObject("content",function(){});
-
                 contentService.createContent(
                     contentCreateStruct,
                     mockCallback
@@ -307,8 +305,6 @@ describe("ContentService", function () {
                     mockCallback
                 );
 
-                expect(contentService.loadContentInfo).toHaveBeenCalledWith(testContentId, jasmine.any(Function));
-
                 expect(mockConnectionManager.request).toHaveBeenCalled();
                 expect(mockConnectionManager.request.mostRecentCall.args[0]).toEqual("GET"); //method
                 expect(mockConnectionManager.request.mostRecentCall.args[1]).toEqual(testVersionedContentId); //url
@@ -325,8 +321,6 @@ describe("ContentService", function () {
                     testContentId,
                     mockCallback
                 );
-
-                expect(contentService.loadContentInfo).toHaveBeenCalledWith(testContentId, jasmine.any(Function));
 
                 expect(mockConnectionManager.request).toHaveBeenCalled();
                 expect(mockConnectionManager.request.mostRecentCall.args[0]).toEqual("GET"); //method
@@ -392,8 +386,6 @@ describe("ContentService", function () {
                     mockCallback
                 );
 
-                expect(contentService.loadContentInfo).toHaveBeenCalledWith(testContentId, jasmine.any(Function));
-
                 expect(mockConnectionManager.request).toHaveBeenCalled();
                 expect(mockConnectionManager.request.mostRecentCall.args[0]).toEqual("COPY"); //method
                 expect(mockConnectionManager.request.mostRecentCall.args[1]).toEqual(testVersionedContentId); //url
@@ -411,8 +403,6 @@ describe("ContentService", function () {
                     1,
                     mockCallback
                 );
-
-                expect(contentService.loadContentInfo).toHaveBeenCalledWith(testContentId, jasmine.any(Function));
 
                 expect(mockConnectionManager.request).toHaveBeenCalled();
                 expect(mockConnectionManager.request.mostRecentCall.args[0]).toEqual("COPY"); //method
