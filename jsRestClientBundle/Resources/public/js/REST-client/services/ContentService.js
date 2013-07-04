@@ -911,38 +911,6 @@ var ContentService = (function() {
     };
 
 
-    /**
-     * Returns a list of view uris. The list includes public view and private view of the authenticated user.
-     *
-     * @method loadViews
-     * @param callback {function} function, which will be executed on request success
-     */
-    ContentService.prototype.loadViews = function loadViews(callback) {
-
-        var that = this;
-
-        this._discoveryService.getInfoObject(
-            "views",
-            function(error, views) {
-                if (!error) {
-
-                    that._connectionManager.request(
-                        "GET",
-                        views._href,
-                        "",
-                        {
-                            "Accept" : views["_media-type"]
-                        },
-                        callback
-                    );
-
-                } else {
-                    callback(error, false);
-                }
-            }
-        );
-    };
-
 // ******************************
 // Relations management
 // ******************************
@@ -1090,12 +1058,12 @@ var ContentService = (function() {
     /**
      *  Loads all the thrash can items
      *
-     * @method loadThrashItems
+     * @method loadTrashItems
      * @param offset {int}
      * @param limit {int}
      * @param callback {function} function, which will be executed on request success
      */
-    ContentService.prototype.loadThrashItems = function loadThrashItems(offset, limit, callback) {
+    ContentService.prototype.loadTrashItems = function loadTrashItems(offset, limit, callback) {
 
         var that = this;
 
@@ -1122,11 +1090,11 @@ var ContentService = (function() {
     /**
      *  Loads one thrash can item
      *
-     * @method loadThrashItem
+     * @method loadTrashItem
      * @param trashItemId {href}
      * @param callback {function} function, which will be executed on request success
      */
-    ContentService.prototype.loadThrashItem = function loadThrashItem(trashItemId, callback) {
+    ContentService.prototype.loadTrashItem = function loadTrashItem(trashItemId, callback) {
         this._connectionManager.request(
             "GET",
             trashItemId,

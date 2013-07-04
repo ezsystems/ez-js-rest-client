@@ -1030,7 +1030,7 @@ LoadTrashItemsAnchor.onclick = function(e){
     LoadTrashItemsLoader.style.display = 'block';
     e.preventDefault();
 
-    contentService.loadThrashItems(
+    contentService.loadTrashItems(
         0,
         -1,
         function(error, response){
@@ -1051,7 +1051,7 @@ LoadTrashItemAnchor.onclick = function(e){
     e.preventDefault();
 
     var LoadTrashItemInput = document.getElementById('load-trash-item-input');
-    contentService.loadThrashItem(
+    contentService.loadTrashItem(
         LoadTrashItemInput.value,
         function(error, response){
             clientOutput.innerHTML =    "Errors : " + JSON.stringify(error) + "</br>" +
