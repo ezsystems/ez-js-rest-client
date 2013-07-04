@@ -17,6 +17,7 @@ describe("ContentService", function () {
         testLocationChildren = '/api/ezp/v2/content/locations/1/2/102/children',
         testVersionRelations = '/api/ezp/v2/content/objects/173/version/1/relations',
         testRelationId = '/api/ezp/v2/content/objects/102/versions/5/relations/1',
+        testViews = '/api/ezp/v2/content/views',
         testUrlAliases = '/api/ezp/v2/content/urlaliases',
         testUrlAlias = '/api/ezp/v2/content/urlaliases/0-a903c03b86eb2987889afa5fe17004eb',
         testUrlWildcards = '/api/ezp/v2/content/urlwildcards',
@@ -29,75 +30,82 @@ describe("ContentService", function () {
         testSection = '/api/ezp/v2/content/sections/1',
         trash = '/api/ezp/v2/content/trash',
         testOffset = 0,
-        testLimit = -1,
+        testLimit = -1;
 
-        fakedLoadContentInfo = function(contentId, callback){
-            var mockContentResponse = {};
-            mockContentResponse.body = JSON.stringify({
-                "Content" : {
-                    "Versions" : {
-                        "_href" : testVersionsList,
-                        "_media-type" : "application/vnd.ez.api.VersionList+json"
-                    },
-                    "CurrentVersion" : {
-                        "_href" : testVersionedContentId,
-                        "_media-type" : "application/vnd.ez.api.Version+json"
-                    }
-                }
-            });
-            callback(false, mockContentResponse);
-        },
 
-        fakedLoadCurrentVersion = function(contentId, callback){
-            var mockVersionResponse = {};
-            mockVersionResponse.body = JSON.stringify({
-                "Version" : {
-                    "_href" : testVersionedContentId,
-                    "_media-type" : "application/vnd.ez.api.Version+json",
-                    Relations : {
-                        "_href" : testVersionRelations,
-                        "_media-type" : "application/vnd.ez.api.RelationList+json"
-                    }
-                }
-            });
-            callback(false, mockVersionResponse);
-        },
-
-        fakedLoadContent = function(versionedContentId, params, callback){
-            var mockVersionResponse = {};
-            mockVersionResponse.body = JSON.stringify({
-                "Version" : {
-                    "_href" : testVersionedContentId,
-                    "_media-type" : "application/vnd.ez.api.Version+json",
-                    Relations : {
-                        "_href" : testVersionRelations,
-                        "_media-type" : "application/vnd.ez.api.RelationList+json"
-                    }
-                }
-            });
-            callback(false, mockVersionResponse);
-        },
-
-        fakedLoadLocation = function(locationId, callback){
-            var mockLocationResponse = {};
-            mockLocationResponse.body = JSON.stringify({
-                "Location" : {
-                    "_href" : testLocation,
-                    "_media-type" : "application/vnd.ez.api.Location+json",
-                    Children : {
-                        "_href" : testLocationChildren ,
-                        "_media-type" : "application/vnd.ez.api.LocationList+json"
-                    }
-                }
-            });
-            callback(false, mockLocationResponse);
-        };
-
+// ******************************
+// Cases without errors
+// ******************************
     describe("is calling injected objects with right arguments while performing:", function () {
 
-// ******************************
-// beforeEach
-// ******************************
+        // ******************************
+        // Faked internal service calls
+        // ******************************
+        var fakedLoadContentInfo = function(contentId, callback){
+                var mockContentResponse = {};
+                mockContentResponse.body = JSON.stringify({
+                    "Content" : {
+                        "Versions" : {
+                            "_href" : testVersionsList,
+                            "_media-type" : "application/vnd.ez.api.VersionList+json"
+                        },
+                        "CurrentVersion" : {
+                            "_href" : testVersionedContentId,
+                            "_media-type" : "application/vnd.ez.api.Version+json"
+                        }
+                    }
+                });
+                callback(false, mockContentResponse);
+            },
+
+            fakedLoadCurrentVersion = function(contentId, callback){
+                var mockVersionResponse = {};
+                mockVersionResponse.body = JSON.stringify({
+                    "Version" : {
+                        "_href" : testVersionedContentId,
+                        "_media-type" : "application/vnd.ez.api.Version+json",
+                        Relations : {
+                            "_href" : testVersionRelations,
+                            "_media-type" : "application/vnd.ez.api.RelationList+json"
+                        }
+                    }
+                });
+                callback(false, mockVersionResponse);
+            },
+
+            fakedLoadContent = function(versionedContentId, params, callback){
+                var mockVersionResponse = {};
+                mockVersionResponse.body = JSON.stringify({
+                    "Version" : {
+                        "_href" : testVersionedContentId,
+                        "_media-type" : "application/vnd.ez.api.Version+json",
+                        Relations : {
+                            "_href" : testVersionRelations,
+                            "_media-type" : "application/vnd.ez.api.RelationList+json"
+                        }
+                    }
+                });
+                callback(false, mockVersionResponse);
+            },
+
+            fakedLoadLocation = function(locationId, callback){
+                var mockLocationResponse = {};
+                mockLocationResponse.body = JSON.stringify({
+                    "Location" : {
+                        "_href" : testLocation,
+                        "_media-type" : "application/vnd.ez.api.Location+json",
+                        Children : {
+                            "_href" : testLocationChildren ,
+                            "_media-type" : "application/vnd.ez.api.LocationList+json"
+                        }
+                    }
+                });
+                callback(false, mockLocationResponse);
+            };
+
+        // ******************************
+        // beforeEach for positive cases
+        // ******************************
         beforeEach(function (){
             mockConnectionManager = jasmine.createSpyObj('mockConnectionManager', ['request', 'delete']);
             mockCallback = jasmine.createSpy('mockCallback');
@@ -121,6 +129,16 @@ describe("ContentService", function () {
                             {
                                 "_href" : testSections,
                                 "_media-type" : "application/vnd.ez.api.SectionList+json"
+                            }
+                        );
+                    }
+
+                    if (name === "views"){
+                        callback(
+                            false,
+                            {
+                                "_href" : testViews,
+                                "_media-type" : "application/vnd.ez.api.RefList+json"
                             }
                         );
                     }
@@ -159,9 +177,34 @@ describe("ContentService", function () {
 
         });
 
-// ******************************
-// Content management
-// ******************************
+        it("createView", function () {
+
+            var viewCreateStruct = contentService.newViewCreateStruct('some-test-id');
+
+            viewCreateStruct.body.ViewInput.Query.Criteria = {
+                FullTextCriterion : "title"
+            };
+
+            contentService.createView(
+                viewCreateStruct,
+                mockCallback
+            );
+
+            expect(mockDiscoveryService.getInfoObject).toHaveBeenCalledWith("views", jasmine.any(Function));
+
+            expect(mockConnectionManager.request).toHaveBeenCalled();
+            expect(mockConnectionManager.request.mostRecentCall.args[0]).toEqual("POST"); //method
+            expect(mockConnectionManager.request.mostRecentCall.args[1]).toEqual(testViews); //url
+            expect(mockConnectionManager.request.mostRecentCall.args[2]).toEqual(JSON.stringify(viewCreateStruct.body)); // body
+            expect(mockConnectionManager.request.mostRecentCall.args[3]).toEqual(viewCreateStruct.headers); // headers
+            expect(mockConnectionManager.request.mostRecentCall.args[4]).toBe(mockCallback); // callback
+
+        });
+
+
+        // ******************************
+        // Content management
+        // ******************************
         describe("Content management request:", function () {
 
             it("createContent", function () {
@@ -291,9 +334,9 @@ describe("ContentService", function () {
 
         });
 
-// ******************************
-// Versions management
-// ******************************
+        // ******************************
+        // Versions management
+        // ******************************
         describe("Versions management request:", function () {
 
             it("loadCurrentVersion", function () {
@@ -441,9 +484,9 @@ describe("ContentService", function () {
 
         });
 
-// ******************************
-// Relations management
-// ******************************
+        // ******************************
+        // Relations management
+        // ******************************
         describe("Relations management request:", function () {
 
             it("loadCurrentRelations", function () {
@@ -471,8 +514,8 @@ describe("ContentService", function () {
 
                 contentService.loadRelations(
                     testVersionedContentId,
-                    0,
-                    -1,
+                    testOffset,
+                    testLimit,
                     mockCallback
                 );
 
@@ -530,9 +573,9 @@ describe("ContentService", function () {
 
         });
 
-// ******************************
-// Locations management
-// ******************************
+        // ******************************
+        // Locations management
+        // ******************************
         describe("Locations management request:", function () {
 
             it("createLocation", function () {
@@ -687,10 +730,9 @@ describe("ContentService", function () {
 
         });
 
-// ******************************
-// Sections management
-// ******************************
-
+        // ******************************
+        // Sections management
+        // ******************************
         describe("Sections management request:", function () {
 
             it("createSection", function () {
@@ -781,13 +823,13 @@ describe("ContentService", function () {
 
         });
 
-// ******************************
-// Thrash management
-// ******************************
+        // ******************************
+        // Thrash management
+        // ******************************
         describe("Trash management request:", function () {
 
             it("loadTrashItems", function () {
-                contentService.loadThrashItems(
+                contentService.loadTrashItems(
                     testOffset,
                     testLimit,
                     mockCallback
@@ -805,7 +847,7 @@ describe("ContentService", function () {
             });
 
             it("loadTrashItem", function () {
-                contentService.loadThrashItem(
+                contentService.loadTrashItem(
                     testTrashItem,
                     mockCallback
                 );
@@ -884,7 +926,9 @@ describe("ContentService", function () {
 
         });
 
-        // Content State Groups
+        // ******************************
+        // Content State groups management
+        // ******************************
         describe("Content State groups management request:", function () {
 
             it("createObjectStateGroup", function () {
@@ -977,7 +1021,9 @@ describe("ContentService", function () {
 
         });
 
-        // Content States
+        // ******************************
+        // Content States management
+        // ******************************
         describe("Content States management request:", function () {
 
             it("createObjectState", function () {
@@ -1089,7 +1135,9 @@ describe("ContentService", function () {
 
         });
 
-        // URL Alias
+        // ******************************
+        // URL Aliases management
+        // ******************************
         describe("URL Aliases management request:", function () {
 
             it("createUrlAlias", function () {
@@ -1191,7 +1239,9 @@ describe("ContentService", function () {
 
         });
 
-        // URL Wildcards
+        // ******************************
+        // URL Wildcards management
+        // ******************************
         describe("URL Wildcards management request:", function () {
 
             it("createUrlWildCard", function () {
@@ -1261,6 +1311,292 @@ describe("ContentService", function () {
         });
 
     });
+
+
+// ******************************
+// Errors handling
+// ******************************
+
+    // ******************************
+    // Discovery service errors
+    // ******************************
+    describe("is returning errors correctly, when discovery service fails, while performing:", function () {
+
+        // ******************************
+        // beforeEach for discovery service errors
+        // ******************************
+        beforeEach(function (){
+            mockConnectionManager = jasmine.createSpyObj('mockConnectionManager', ['request', 'delete']);
+            mockCallback = jasmine.createSpy('mockCallback');
+
+            mockFaultyDiscoveryService = {
+                getInfoObject : function(name, callback){
+
+                    // Very faulty indeed
+                    callback(
+                        new CAPIError({
+                            errorText : "Discover service failed to find object with name '" + name + "'"
+                        }),
+                        false
+                    );
+
+                }
+            };
+
+            spyOn(mockFaultyDiscoveryService, 'getInfoObject').andCallThrough();
+
+            contentService = new ContentService(mockConnectionManager, mockFaultyDiscoveryService);
+        });
+
+        it("createSection", function () {
+            var sectionInputStruct = new SectionInputStruct(
+                "testSection" + Math.random()*1000000,
+                "Test Section " + Math.round(Math.random()*1000)
+            );
+
+            contentService.createSection(
+                sectionInputStruct,
+                mockCallback
+            );
+
+            expect(mockFaultyDiscoveryService.getInfoObject).toHaveBeenCalledWith("sections", jasmine.any(Function));
+            expect(mockCallback).toHaveBeenCalledWith(jasmine.any(CAPIError), false);
+        });
+
+        it("loadSections", function () {
+            contentService.loadSections(
+                mockCallback
+            );
+
+            expect(mockFaultyDiscoveryService.getInfoObject).toHaveBeenCalledWith("sections", jasmine.any(Function));
+            expect(mockCallback).toHaveBeenCalledWith(jasmine.any(CAPIError), false);
+        });
+
+        it("createContent", function () {
+
+            var locationCreateStruct = contentService.newLocationCreateStruct("/api/ezp/v2/content/locations/1/2/118"),
+                contentCreateStruct = contentService.newContentCreateStruct(
+                    "/api/ezp/v2/content/types/18",
+                    locationCreateStruct,
+                    "eng-US",
+                    "DummyUser"
+                ),
+                fieldInfo = {
+                    "fieldDefinitionIdentifier": "title",
+                    "languageCode": "eng-US",
+                    "fieldValue": "This is a title"
+                };
+
+            contentCreateStruct.body.ContentCreate.fields.field.push(fieldInfo);
+
+            contentService.createContent(
+                contentCreateStruct,
+                mockCallback
+            );
+
+            expect(mockFaultyDiscoveryService.getInfoObject).toHaveBeenCalledWith("content", jasmine.any(Function));
+            expect(mockCallback).toHaveBeenCalledWith(jasmine.any(CAPIError), false);
+        });
+
+        it("loadContentByRemoteId", function () {
+            contentService.loadContentByRemoteId(
+                testRemoteId,
+                mockCallback
+            );
+
+            expect(mockFaultyDiscoveryService.getInfoObject).toHaveBeenCalledWith("content", jasmine.any(Function));
+            expect(mockCallback).toHaveBeenCalledWith(jasmine.any(CAPIError), false);
+        });
+
+        it("createView", function () {
+
+            var viewCreateStruct = contentService.newViewCreateStruct('some-test-id');
+
+            viewCreateStruct.body.ViewInput.Query.Criteria = {
+                FullTextCriterion : "title"
+            };
+
+            contentService.createView(
+                viewCreateStruct,
+                mockCallback
+            );
+
+            expect(mockFaultyDiscoveryService.getInfoObject).toHaveBeenCalledWith("views", jasmine.any(Function));
+            expect(mockCallback).toHaveBeenCalledWith(jasmine.any(CAPIError), false);
+        });
+
+        it("loadTrashItems", function () {
+            contentService.loadTrashItems(
+                testOffset,
+                testLimit,
+                mockCallback
+            );
+
+            expect(mockFaultyDiscoveryService.getInfoObject).toHaveBeenCalledWith("trash", jasmine.any(Function));
+            expect(mockCallback).toHaveBeenCalledWith(jasmine.any(CAPIError), false);
+        });
+
+        it("emptyTrash", function () {
+            contentService.emptyThrash(
+                mockCallback
+            );
+
+            expect(mockFaultyDiscoveryService.getInfoObject).toHaveBeenCalledWith("trash", jasmine.any(Function));
+            expect(mockCallback).toHaveBeenCalledWith(jasmine.any(CAPIError), false);
+        });
+    });
+
+    // ******************************
+    // Service internal calls errors
+    // ******************************
+    describe("is returning errors correctly, when internal service calls fail, while performing:", function () {
+
+        // ******************************
+        // Faked faulty internal calls
+        // ******************************
+        var fakedFaultyLoadContentInfo = function(contentId, callback){
+                callback(
+                    new CAPIError({
+                        errorText : "Content service failed for some reason"
+                    }),
+                    false
+                );
+            },
+
+            fakedFaultyLoadCurrentVersion = function(contentId, callback){
+                callback(
+                    new CAPIError({
+                        errorText : "Content service failed for some reason"
+                    }),
+                    false
+                );
+            },
+
+            fakedFaultyLoadContent = function(versionedContentId, params, callback){
+                callback(
+                    new CAPIError({
+                        errorText : "Content service failed for some reason"
+                    }),
+                    false
+                );
+            },
+
+            fakedFaultyLoadLocation = function(locationId, callback){
+                callback(
+                    new CAPIError({
+                        errorText : "Content service failed for some reason"
+                    }),
+                    false
+                );
+            };
+
+        // ******************************
+        // beforeEach for discovery service errors
+        // ******************************
+        beforeEach(function (){
+            mockConnectionManager = jasmine.createSpyObj('mockConnectionManager', ['request', 'delete']);
+            mockDiscoveryService = jasmine.createSpy('mockDiscoveryService');
+            mockCallback = jasmine.createSpy('mockCallback');
+
+            contentService = new ContentService(mockConnectionManager, mockDiscoveryService);
+        });
+
+        it("loadCurrentVersion", function () {
+
+            spyOn(contentService, 'loadContentInfo').andCallFake(fakedFaultyLoadContentInfo);
+
+            contentService.loadCurrentVersion(
+                testContentId,
+                mockCallback
+            );
+
+            expect(mockCallback).toHaveBeenCalledWith(jasmine.any(CAPIError), false);
+        });
+
+        it("loadVersions", function () {
+
+            spyOn(contentService, 'loadContentInfo').andCallFake(fakedFaultyLoadContentInfo);
+
+            contentService.loadVersions(
+                testContentId,
+                mockCallback
+            );
+
+            expect(mockCallback).toHaveBeenCalledWith(jasmine.any(CAPIError), false);
+        });
+
+        it("createContentDraft from current version", function () {
+
+            spyOn(contentService, 'loadContentInfo').andCallFake(fakedFaultyLoadContentInfo);
+
+            contentService.createContentDraft(
+                testContentId,
+                null,
+                mockCallback
+            );
+
+            expect(mockCallback).toHaveBeenCalledWith(jasmine.any(CAPIError), false);
+        });
+
+        it("loadLocationChildren", function () {
+
+            spyOn(contentService, 'loadLocation').andCallFake(fakedFaultyLoadLocation);
+
+            contentService.loadLocationChildren(
+                testContentId,
+                testOffset,
+                testLimit,
+                mockCallback
+            );
+
+            expect(mockCallback).toHaveBeenCalledWith(jasmine.any(CAPIError), false);
+        });
+
+        it("loadRelations", function () {
+
+            spyOn(contentService, 'loadContent').andCallFake(fakedFaultyLoadContent);
+
+            contentService.loadRelations(
+                testVersionedContentId,
+                testOffset,
+                testLimit,
+                mockCallback
+            );
+
+            expect(mockCallback).toHaveBeenCalledWith(jasmine.any(CAPIError), false);
+        });
+
+        it("loadCurrentRelations", function () {
+
+            spyOn(contentService, 'loadCurrentVersion').andCallFake(fakedFaultyLoadCurrentVersion);
+
+            contentService.loadCurrentRelations(
+                testContentId,
+                testOffset,
+                testLimit,
+                mockCallback
+            );
+
+            expect(mockCallback).toHaveBeenCalledWith(jasmine.any(CAPIError), false);
+        });
+
+        it("createRelation", function () {
+            var relationCreateStruct = contentService.newRelationCreateStruct("/api/ezp/v2/content/objects/132");
+
+            spyOn(contentService, 'loadContent').andCallFake(fakedFaultyLoadContent);
+
+            contentService.addRelation(
+                testVersionedContentId,
+                relationCreateStruct,
+                mockCallback
+            );
+
+            expect(mockCallback).toHaveBeenCalledWith(jasmine.any(CAPIError), false);
+        });
+
+
+    });
+
 
 });
 
