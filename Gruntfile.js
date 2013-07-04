@@ -54,6 +54,7 @@ module.exports = function(grunt) {
     var testCombo = sourceFiles.slice(0);
     testCombo.unshift('test/CAPI.testing.header.js');
     testCombo.push('test/ContentService.tests.js');
+    testCombo.push('test/ConnectionManager.tests.js');
 
 
     grunt.initConfig({
