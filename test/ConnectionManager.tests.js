@@ -213,7 +213,3 @@ describe("Connection Manager", function () {
 
     });
 });
-
-
-
-

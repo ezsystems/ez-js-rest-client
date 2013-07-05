@@ -90,7 +90,3 @@ describe("Connection Feature Factory", function () {
 
 
 });
-
-
-
-
