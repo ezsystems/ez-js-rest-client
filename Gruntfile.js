@@ -57,6 +57,7 @@ module.exports = function(grunt) {
     testCombo.push('test/ContentService.tests.js');
     testCombo.push('test/ConnectionManager.tests.js');
     testCombo.push('test/ConnectionFeatureFactory.tests.js');
+    testCombo.push('test/SessionAuthAgent.tests.js');
 
 
     grunt.initConfig({
