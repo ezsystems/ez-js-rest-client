@@ -34,7 +34,7 @@ var SessionAuthAgent = (function() {
      * to signal the authentication has been completed.
      */
     SessionAuthAgent.prototype.ensureAuthentication = function(done) {
-        if (this.sessionId === null) {
+        if ((typeof this.sessionId === 'undefined') || (this.sessionId === null)) {
 
             var that = this,
                 userService = this.CAPI.getUserService(),
@@ -49,8 +49,6 @@ var SessionAuthAgent = (function() {
                 sessionCreateStruct,
                 function(error, sessionResponse){
                     if (!error){
-
-                        console.log(sessionResponse);
 
                         var session = JSON.parse(sessionResponse.body).Session;
 
