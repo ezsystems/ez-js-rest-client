@@ -46,36 +46,47 @@ var ConnectionManager = (function() {
                 headers : headers
             });
 
+        // TODO: Suspend Requests during initial authentication
         // Check if we are already authenticated, make it happen if not
         this._authenticationAgent.ensureAuthentication(
             function(error, success){
-                // TODO: Suspend Requests during initial authentication
-                // TODO: errors handling
+                if (!error) {
 
-                that._authenticationAgent.authenticateRequest(
-                    request,
-                    function(error, authenticatedRequest) {
-                        if (!error) {
+                    that._authenticationAgent.authenticateRequest(
+                        request,
+                        function(error, authenticatedRequest) {
+                            if (!error) {
 
-                            if (that.logRequests) {
-                                console.log(request);
+                                if (that.logRequests) {
+                                    console.log(request);
+                                }
+                                // Main goal
+                                that._activeConnection.execute(authenticatedRequest, callback);
+                            } else {
+                                callback(
+                                    new CAPIError({
+                                        errorText : "An error occured during request authentication!"
+                                    }),
+                                    new Response({
+                                        status : "error",
+                                        body : ""
+                                    })
+                                );
                             }
-                            // Main goal
-                            that._activeConnection.execute(authenticatedRequest, callback);
-                        } else {
-                            callback(
-                                new CAPIError({
-                                    errorText : "An error occured during request authentication!"
-                                }),
-                                new Response({
-                                    status : "error",
-                                    body : ""
-                                })
-                            );
                         }
-                    }
-                );
+                    );
 
+                } else {
+                    callback(
+                        new CAPIError({
+                            errorText : "An error occured during ensureAuthentication call!"
+                        }),
+                        new Response({
+                            status : "error",
+                            body : ""
+                        })
+                    );
+                }
             }
         );
     };
