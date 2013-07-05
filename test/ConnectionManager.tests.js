@@ -2,6 +2,7 @@
 describe("Connection Manager", function () {
 
     var mockAuthenticationAgent,
+        mockFaultyAuthenticationAgent,
         mockConnectionFactory,
         mockConnection,
         mockCallback,
@@ -131,7 +132,86 @@ describe("Connection Manager", function () {
         });
     });
 
+// ******************************
+// Cases with errors
+// ******************************
+    describe("is returning errors correctly, when authentication fails, while performing request and", function () {
 
+        it("ensuring authentication", function(){
+
+            mockFaultyAuthenticationAgent = {
+                ensureAuthentication : function(done){
+                    done(
+                        new CAPIError({
+                            errorText : "Error while ensuring authentication!"
+                        }),
+                        false
+                    );
+                }
+            };
+            spyOn(mockFaultyAuthenticationAgent, 'ensureAuthentication').andCallThrough();
+
+            connectionManager = new ConnectionManager(
+                endPointUrl,
+                mockFaultyAuthenticationAgent,
+                mockConnectionFactory
+            );
+
+            connectionManager.request(
+                "GET",
+                rootId,
+                "",
+                {},
+                mockCallback
+            );
+
+            expect(mockFaultyAuthenticationAgent.ensureAuthentication).toHaveBeenCalled();
+            expect(mockCallback).toHaveBeenCalledWith(
+                jasmine.any(CAPIError),
+                jasmine.any(Response)
+            );
+        });
+
+        it("authenticating request", function(){
+
+            mockFaultyAuthenticationAgent = {
+                ensureAuthentication : function(done){
+                    done(false, true);
+                },
+                authenticateRequest : function(request, done){
+                    done(
+                        new CAPIError({
+                            errorText : "Error while authenticating request!"
+                        }),
+                        false);
+                }
+            };
+            spyOn(mockFaultyAuthenticationAgent, 'ensureAuthentication').andCallThrough();
+            spyOn(mockFaultyAuthenticationAgent, 'authenticateRequest').andCallThrough();
+
+            connectionManager = new ConnectionManager(
+                endPointUrl,
+                mockFaultyAuthenticationAgent,
+                mockConnectionFactory
+            );
+
+            connectionManager.request(
+                "GET",
+                rootId,
+                "",
+                {},
+                mockCallback
+            );
+
+            expect(mockFaultyAuthenticationAgent.ensureAuthentication).toHaveBeenCalled();
+            expect(mockFaultyAuthenticationAgent.authenticateRequest).toHaveBeenCalled();
+            expect(mockCallback).toHaveBeenCalledWith(
+                jasmine.any(CAPIError),
+                jasmine.any(Response)
+            );
+        });
+
+    });
 });
 
 
