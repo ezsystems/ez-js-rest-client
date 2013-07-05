@@ -7,7 +7,9 @@ describe("Session Authorization Agent", function () {
         testSessionName = "EZSESSID",
         testCsrfToken = "o7i8r1sapfc9r84ae53bgq8gp4",
         mockCAPI,
+        mockFaultyCAPI,
         mockUserService,
+        mockFaultyUserService,
         mockCallback,
         mockSessionResponse,
         mockRequest,
@@ -59,6 +61,7 @@ describe("Session Authorization Agent", function () {
             }
         };
 
+        mockCallback = jasmine.createSpy('mockCallback');
     });
 
     it("is running constructor correctly", function(){
@@ -83,7 +86,6 @@ describe("Session Authorization Agent", function () {
             });
             sessionAuthAgent.CAPI = mockCAPI;
 
-            mockCallback = jasmine.createSpy('mockCallback');
         });
 
         it("ensureAuthentication", function(){
@@ -120,12 +122,57 @@ describe("Session Authorization Agent", function () {
 
         it("logOut", function(){
 
+            sessionAuthAgent.sessionId = testSessionId;
             sessionAuthAgent.logOut(mockCallback);
+
+            expect(mockUserService.deleteSession).toHaveBeenCalledWith(
+                testSessionId,
+                jasmine.any(Function)
+            );
 
             expect(mockCallback).toHaveBeenCalledWith(false, true);
         });
-
     });
 
+    describe("is returning errors correctly, when user service fails, while performing:", function(){
 
+        beforeEach(function (){
+            mockFaultyUserService = {
+                deleteSession: function(sessionId, callback){
+                    callback(
+                        true,
+                        false
+                    )
+                }
+            };
+            spyOn(mockFaultyUserService, 'deleteSession').andCallThrough();
+
+            mockFaultyCAPI = {
+                getUserService: function(){
+                    return mockFaultyUserService;
+                }
+            };
+
+            sessionAuthAgent = new SessionAuthAgent({
+                login : testLogin,
+                password : testPassword
+            });
+            sessionAuthAgent.CAPI = mockFaultyCAPI;
+
+        });
+
+        it("logOut", function(){
+
+            sessionAuthAgent.sessionId = testSessionId;
+            sessionAuthAgent.logOut(mockCallback);
+
+            expect(mockFaultyUserService.deleteSession).toHaveBeenCalledWith(
+                testSessionId,
+                jasmine.any(Function)
+            );
+
+            expect(mockCallback).toHaveBeenCalledWith(true, false);
+        });
+
+    });
 });
