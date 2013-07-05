@@ -2,6 +2,7 @@
 describe("ContentService", function () {
 
     var mockDiscoveryService,
+        mockFaultyDiscoveryService,
         mockConnectionManager,
         mockCallback,
         contentService,
