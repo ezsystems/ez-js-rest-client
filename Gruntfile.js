@@ -53,6 +53,7 @@ module.exports = function(grunt) {
 
     var testCombo = sourceFiles.slice(0);
     testCombo.unshift('test/CAPI.testing.header.js');
+    testCombo.push('test/CAPI.tests.js');
     testCombo.push('test/ContentService.tests.js');
     testCombo.push('test/ConnectionManager.tests.js');
     testCombo.push('test/ConnectionFeatureFactory.tests.js');
