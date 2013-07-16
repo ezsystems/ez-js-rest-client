@@ -31,7 +31,23 @@ describe("ContentService", function () {
         testSection = '/api/ezp/v2/content/sections/1',
         trash = '/api/ezp/v2/content/trash',
         testOffset = 0,
-        testLimit = -1;
+        testLimit = -1,
+        testStructure,
+        testLanguage = "eng-US",
+        testUser = {testUser : {}},
+        testContentTypeId = "/api/ezp/v2/content/types/18",
+        testLocationCreateStruct = {
+            body : {
+                LocationCreate : {
+                    sortField : "PATH"
+                }
+            }
+        },
+        testIdentifier = "some-test-id",
+        testArray = ["one", "two", "three"],
+        testUrl = "/something-or-other/",
+        testTrue = true,
+        testSectionName = "Some Section";
 
 
 // ******************************
@@ -617,6 +633,21 @@ describe("ContentService", function () {
 
             });
 
+            it("loadLocation", function () {
+                contentService.loadLocation(
+                    testLocation,
+                    mockCallback
+                );
+
+                expect(mockConnectionManager.request).toHaveBeenCalled();
+                expect(mockConnectionManager.request.mostRecentCall.args[0]).toEqual("GET"); //method
+                expect(mockConnectionManager.request.mostRecentCall.args[1]).toEqual(testLocation); //url
+                expect(mockConnectionManager.request.mostRecentCall.args[2]).toEqual(""); // body
+                expect(mockConnectionManager.request.mostRecentCall.args[3].Accept).toEqual("application/vnd.ez.api.Location+json"); // headers
+                expect(mockConnectionManager.request.mostRecentCall.args[4]).toBe(mockCallback); // callback
+
+            });
+
             it("loadLocations", function () {
                 contentService.loadLocations(
                     testContentLocations,
@@ -640,6 +671,26 @@ describe("ContentService", function () {
                     testContentId,
                     testOffset,
                     testLimit,
+                    mockCallback
+                );
+
+                expect(mockConnectionManager.request).toHaveBeenCalled();
+                expect(mockConnectionManager.request.mostRecentCall.args[0]).toEqual("GET"); //method
+                expect(mockConnectionManager.request.mostRecentCall.args[1]).toEqual(testLocationChildren + '?offset=' + testOffset + '&limit=' + testLimit); //url
+                expect(mockConnectionManager.request.mostRecentCall.args[2]).toEqual(""); // body
+                expect(mockConnectionManager.request.mostRecentCall.args[3].Accept).toEqual("application/vnd.ez.api.LocationList+json"); // headers
+                expect(mockConnectionManager.request.mostRecentCall.args[4]).toBe(mockCallback); // callback
+
+            });
+
+            it("loadLocationChildren with undefined arguments", function () {
+
+                spyOn(contentService, 'loadLocation').andCallFake(fakedLoadLocation);
+
+                contentService.loadLocationChildren(
+                    testContentId,
+                    undefined,
+                    undefined,
                     mockCallback
                 );
 
@@ -737,7 +788,7 @@ describe("ContentService", function () {
         describe("Sections management request:", function () {
 
             it("createSection", function () {
-                var sectionInputStruct = new SectionInputStruct(
+                var sectionInputStruct = contentService.newSectionInputStruct(
                     "testSection" + Math.random()*1000000,
                     "Test Section " + Math.round(Math.random()*1000)
                 );
@@ -1210,6 +1261,21 @@ describe("ContentService", function () {
 
             });
 
+            it("listLocatonAliases (undefined)", function () {
+                contentService.listLocationAliases(
+                    testLocation,
+                    undefined,
+                    mockCallback
+                );
+
+                expect(mockConnectionManager.request).toHaveBeenCalled();
+                expect(mockConnectionManager.request.mostRecentCall.args[0]).toEqual("GET"); //method
+                expect(mockConnectionManager.request.mostRecentCall.args[1]).toEqual(testLocation + '/urlaliases'); //url
+                expect(mockConnectionManager.request.mostRecentCall.args[2]).toEqual(""); // body
+                expect(mockConnectionManager.request.mostRecentCall.args[3].Accept).toEqual("application/vnd.ez.api.UrlAliasRefList+json"); // headers
+                expect(mockConnectionManager.request.mostRecentCall.args[4]).toBe(mockCallback); // callback
+
+            });
 
             it("loadUrlAlias", function () {
                 contentService.loadUrlAlias(
@@ -1307,6 +1373,152 @@ describe("ContentService", function () {
                 expect(mockConnectionManager.delete.mostRecentCall.args[0]).toEqual(testUrlWildcard); //url
                 expect(mockConnectionManager.delete.mostRecentCall.args[1]).toBe(mockCallback); // callback
 
+            });
+
+        });
+
+        // ******************************
+        // Structures
+        // ******************************
+        describe("structures creation", function () {
+
+            it("newContentUpdateStruct", function(){
+
+                testStructure = contentService.newContentUpdateStruct(
+                    testLanguage,
+                    testUser
+                );
+
+                expect(testStructure).toEqual(jasmine.any(ContentUpdateStruct));
+                expect(testStructure.body.VersionUpdate.user).toEqual(testUser);
+                expect(testStructure.body.VersionUpdate.initialLanguageCode).toEqual(testLanguage);
+            });
+
+            it("newContentMetadataUpdateStruct", function(){
+
+                testStructure = contentService.newContentMetadataUpdateStruct(
+                    testLanguage
+                );
+
+                expect(testStructure).toEqual(jasmine.any(ContentMetadataUpdateStruct));
+                expect(testStructure.body.ContentUpdate.MainLanguageCode).toEqual(testLanguage);
+            });
+
+            it("newContentCreateStruct", function(){
+
+                testStructure = contentService.newContentCreateStruct(
+                    testContentTypeId,
+                    testLocationCreateStruct,
+                    testLanguage
+                );
+
+                expect(testStructure).toEqual(jasmine.any(ContentCreateStruct));
+                expect(testStructure.body.ContentCreate.LocationCreate).toEqual(testLocationCreateStruct.body.LocationCreate);
+                expect(testStructure.body.ContentCreate.ContentType._href).toEqual(testContentTypeId);
+                expect(testStructure.body.ContentCreate.mainLanguageCode).toEqual(testLanguage);
+            });
+
+            it("newSectionInputStruct", function(){
+
+                testStructure = contentService.newSectionInputStruct(
+                    testIdentifier,
+                    testSectionName
+                );
+
+                expect(testStructure).toEqual(jasmine.any(SectionInputStruct));
+                expect(testStructure.body.SectionInput.identifier).toEqual(testIdentifier);
+                expect(testStructure.body.SectionInput.name).toEqual(testSectionName);
+            });
+
+
+            it("newLocationCreateStruct", function(){
+
+                testStructure = contentService.newLocationCreateStruct(
+                    testLocation
+                );
+
+                expect(testStructure).toEqual(jasmine.any(LocationCreateStruct));
+                expect(testStructure.body.LocationCreate.ParentLocation._href).toEqual(testLocation);
+            });
+
+            it("newLocationUpdateStruct", function(){
+
+                testStructure = contentService.newLocationUpdateStruct();
+
+                expect(testStructure).toEqual(jasmine.any(LocationUpdateStruct));
+            });
+
+            it("newViewCreateStruct", function(){
+
+                testStructure = contentService.newViewCreateStruct(
+                    testIdentifier
+                );
+
+                expect(testStructure).toEqual(jasmine.any(ViewCreateStruct));
+                expect(testStructure.body.ViewInput.identifier).toEqual(testIdentifier);
+            });
+
+            it("newRelationCreateStruct", function(){
+
+                testStructure = contentService.newRelationCreateStruct(
+                    testVersionedContentId
+                );
+
+                expect(testStructure).toEqual(jasmine.any(RelationCreateStruct));
+                expect(testStructure.body.RelationCreate.Destination._href).toEqual(testVersionedContentId);
+            });
+
+            it("newObjectStateGroupCreateStruct", function(){
+
+                testStructure = contentService.newObjectStateGroupCreateStruct(
+                    testIdentifier,
+                    testLanguage,
+                    testArray
+                );
+
+                expect(testStructure).toEqual(jasmine.any(ObjectStateGroupCreateStruct));
+                expect(testStructure.body.ObjectStateGroupCreate.identifier).toEqual(testIdentifier);
+                expect(testStructure.body.ObjectStateGroupCreate.defaultLanguageCode).toEqual(testLanguage);
+                expect(testStructure.body.ObjectStateGroupCreate.names.value).toEqual(testArray);
+            });
+
+            it("newObjectStateGroupUpdateStruct", function(){
+
+                testStructure = contentService.newObjectStateGroupUpdateStruct(
+                    testLanguage,
+                    testUser
+                );
+
+                expect(testStructure).toEqual(jasmine.any(ObjectStateGroupUpdateStruct));
+            });
+
+            it("newUrlAliasCreateStruct", function(){
+
+                testStructure = contentService.newUrlAliasCreateStruct(
+                    testLanguage,
+                    testLocation,
+                    testIdentifier
+                );
+
+                expect(testStructure).toEqual(jasmine.any(UrlAliasCreateStruct));
+                expect(testStructure.body.UrlAliasCreate.languageCode).toEqual(testLanguage);
+                expect(testStructure.body.UrlAliasCreate.resource).toEqual(testLocation);
+                expect(testStructure.body.UrlAliasCreate.path).toEqual(testIdentifier);
+
+            });
+
+            it("newUrlWildcardCreateStruct", function(){
+
+                testStructure = contentService.newUrlWildcardCreateStruct(
+                    testUrl,
+                    testLocation,
+                    testTrue
+                );
+
+                expect(testStructure).toEqual(jasmine.any(UrlWildcardCreateStruct));
+                expect(testStructure.body.UrlWildcardCreate.sourceUrl).toEqual(testUrl);
+                expect(testStructure.body.UrlWildcardCreate.destinationUrl).toEqual(testLocation);
+                expect(testStructure.body.UrlWildcardCreate.forward).toEqual(testTrue);
             });
 
         });
@@ -1595,8 +1807,5 @@ describe("ContentService", function () {
             expect(mockCallback).toHaveBeenCalledWith(jasmine.any(CAPIError), false);
         });
 
-
     });
-
-
 });

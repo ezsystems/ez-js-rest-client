@@ -1,7 +1,7 @@
 var FieldDefinitionUpdateStruct = (function() {
     "use strict";
 
-    var FieldDefinitionUpdateStruct = function(identifier, fieldType, fieldGroup, names){
+    var FieldDefinitionUpdateStruct = function(){
 
         this.body = {};
         this.body.FieldDefinitionUpdate = {};

@@ -384,7 +384,7 @@ unAssignUserAnchor.onclick = function(e){
     e.preventDefault();
 
     var unAssignUserInput = document.getElementById('unassign-user-input');
-    userService.unAssignUserFromUserGroup(
+    userService.unassignUserFromUserGroup(
         unAssignUserInput.value,
         function(error, response){
             clientOutput.innerHTML =    "Errors : " + JSON.stringify(error) + "</br>" +

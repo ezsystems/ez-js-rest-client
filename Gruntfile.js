@@ -54,10 +54,17 @@ module.exports = function(grunt) {
     var testCombo = sourceFiles.slice(0);
     testCombo.unshift('test/CAPI.testing.header.js');
     testCombo.push('test/CAPI.tests.js');
-    testCombo.push('test/ContentService.tests.js');
-    testCombo.push('test/ConnectionManager.tests.js');
-    testCombo.push('test/ConnectionFeatureFactory.tests.js');
+    testCombo.push('test/XmlHttpRequestConnection.tests.js');
+    testCombo.push('test/MicrosoftXmlHttpRequestConnection.tests.js');
     testCombo.push('test/SessionAuthAgent.tests.js');
+    testCombo.push('test/HttpBasicAuthAgent.tests.js');
+    testCombo.push('test/ConnectionFeatureFactory.tests.js');
+    testCombo.push('test/ConnectionManager.tests.js');
+    testCombo.push('test/DiscoveryService.tests.js');
+    testCombo.push('test/ContentService.tests.js');
+    testCombo.push('test/ContentTypeService.tests.js');
+    testCombo.push('test/UserService.tests.js');
+
 
     grunt.initConfig({
         concat: {

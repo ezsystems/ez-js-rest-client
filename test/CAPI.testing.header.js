@@ -1,1 +1,1 @@
-var window = {}, sessionStorage = {};
+var window = {}, sessionStorage = {}, XMLHttpRequest, ActiveXObject;

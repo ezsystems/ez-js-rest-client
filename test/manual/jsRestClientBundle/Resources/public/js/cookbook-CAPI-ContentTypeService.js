@@ -38,7 +38,7 @@ loadContentTypeGroupsAnchor.onclick = function(e){
     loadContentTypeGroupsLoader.style.display = 'block';
     e.preventDefault();
 
-    contentTypeService.loadContentTypeGroups(
+    contentTypeService.loadContentTypeGroupsList(
         '/api/ezp/v2/content/typegroups',
         function(error, response){
             clientOutput.innerHTML =    "Errors : " + JSON.stringify(error) + "</br>" +

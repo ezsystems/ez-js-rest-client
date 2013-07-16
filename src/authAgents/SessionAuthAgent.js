@@ -63,7 +63,12 @@ var SessionAuthAgent = (function() {
                         done(false, true);
 
                     } else {
-                        console.log(error, sessionResponse);
+                        done(
+                            new CAPIError({
+                                errorText : "Failed to create new session."
+                            }),
+                            false
+                        );
                     }
                 }
             );

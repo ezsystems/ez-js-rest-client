@@ -28,7 +28,7 @@ var DiscoveryService = (function() {
                 this.connectionManager.request(
                     "GET",
                     rootPath,
-                    {},
+                    "",
                     { "Accept" : "application/vnd.ez.api.Root+json" },
                     function(error, rootJSON) {
                         if (!error) {
@@ -38,14 +38,19 @@ var DiscoveryService = (function() {
 
                         } else {
                             callback(
-                                new CAPIError({
+                                new CAPIError( {
                                     errorText : "Discover service failed to retrieve root object."
                                 }),
-                                false
+                                new Response({
+                                    status : "error",
+                                    body : ""
+                                })
                             );
                         }
                     }
                 );
+            } else {
+                callback(false, true);
             }
         };
 
@@ -101,7 +106,10 @@ var DiscoveryService = (function() {
                     new CAPIError({
                         errorText : "Discover service failed to find cached object with name '" + name + "'"
                     }),
-                    false
+                    new Response({
+                        status : "error",
+                        body : ""
+                    })
                 );
             }
         };
@@ -119,10 +127,22 @@ var DiscoveryService = (function() {
             name,
             function(error, cachedObject){
                 if (!error) {
-                    callback(
-                        false,
-                        cachedObject._href
-                    );
+                    if (cachedObject) {
+                        callback(
+                            false,
+                            cachedObject._href
+                        );
+                    } else {
+                        callback(
+                            new CAPIError({
+                                errorText : "Broken cached object returned when searching for '" + name + "'"
+                            }),
+                            new Response({
+                                status : "error",
+                                body : ""
+                            })
+                        );
+                    }
                 } else {
                     callback(
                         error,
@@ -155,7 +175,9 @@ var DiscoveryService = (function() {
                         );
                     } else {
                         callback(
-                            error,
+                            new CAPIError({
+                                errorText : "Broken cached object returned when searching for '" + name + "'"
+                            }),
                             new Response({
                                 status : "error",
                                 body : ""
@@ -163,7 +185,13 @@ var DiscoveryService = (function() {
                         );
                     }
                 } else {
-                    callback(error, false);
+                    callback(
+                        error,
+                        new Response({
+                            status : "error",
+                            body : ""
+                        })
+                    );
                 }
             }
         );
@@ -188,7 +216,9 @@ var DiscoveryService = (function() {
                         );
                     } else {
                         callback(
-                            error,
+                            new CAPIError({
+                                errorText : "Broken cached object returned when searching for '" + name + "'"
+                            }),
                             new Response({
                                 status : "error",
                                 body : ""
@@ -196,7 +226,13 @@ var DiscoveryService = (function() {
                         );
                     }
                 } else {
-                    callback(error, false);
+                    callback(
+                        error,
+                        new Response({
+                            status : "error",
+                            body : ""
+                        })
+                    );
                 }
             }
         );

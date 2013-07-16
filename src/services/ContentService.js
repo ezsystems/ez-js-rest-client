@@ -53,7 +53,6 @@ var ContentService = (function() {
      *
      * @method newContentMetadataUpdateStruct
      * @param language {string}
-     * @param user {string}
      */
     ContentService.prototype.newContentMetadataUpdateStruct = function newContentMetadataUpdateStruct(language) {
 
@@ -68,11 +67,23 @@ var ContentService = (function() {
      * @param contentTypeId {href}
      * @param locationCreateStruct {object}
      * @param language {string}
-     * @param user {string}
      */
     ContentService.prototype.newContentCreateStruct = function newContentCreateStruct(contentTypeId, locationCreateStruct, language) {
 
         return new ContentCreateStruct(contentTypeId, locationCreateStruct, language);
+
+    };
+
+    /**
+     * Returns input structure for Section
+     *
+     * @method newSectionInputStruct
+     * @param identifier {string}
+     * @param name {string}
+     */
+    ContentService.prototype.newSectionInputStruct = function newSectionInputStruct(identifier, name) {
+
+        return new SectionInputStruct(identifier, name);
 
     };
 
@@ -93,10 +104,8 @@ var ContentService = (function() {
      * Returns update structure for Location
      *
      * @method newLocationUpdateStruct
-     * @param parentLocationId {href}
-
      */
-    ContentService.prototype.newLocationUpdateStruct = function newLocationUpdateStruct(parentLocationId) {
+    ContentService.prototype.newLocationUpdateStruct = function newLocationUpdateStruct() {
 
         return new LocationUpdateStruct();
 
@@ -603,7 +612,7 @@ var ContentService = (function() {
             function(error, contentResponse){
                 if (!error) {
 
-                    if (versionId != null) {
+                    if (versionId !== null) {
                         // Version id is declared
 
                         console.log(versionId);

@@ -542,15 +542,9 @@ var UserService = (function() {
      * @param userAssignedGroupId {href}
      * @param callback {function} function, which will be executed on request success
      */
-    UserService.prototype.unAssignUserFromUserGroup = function unAssignUserFromUserGroup(userAssignedGroupId, callback) {
-
-        this._connectionManager.request(
-            "DELETE",
+    UserService.prototype.unassignUserFromUserGroup = function unassignUserFromUserGroup(userAssignedGroupId, callback) {
+        this._connectionManager.delete(
             userAssignedGroupId,
-            "",
-            {
-                "Accept" : "application/vnd.ez.api.UserGroupRefList+json"
-            },
             callback
         );
 
@@ -1063,13 +1057,8 @@ var UserService = (function() {
      * @param callback {function} function, which will be executed on request success
      */
     UserService.prototype.deleteSession = function deleteSession(sessionId, callback) {
-        this._connectionManager.request(
-            "DELETE",
+        this._connectionManager.delete(
             sessionId,
-            "",
-            {
-                "X-CSRF-Token" : "6245d05aa911d064c3f68fcf6b01aaaf65fca8ca"
-            },
             callback
         );
     };

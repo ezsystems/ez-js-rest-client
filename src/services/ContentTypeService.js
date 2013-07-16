@@ -79,9 +79,9 @@ var ContentTypeService = (function() {
      * @param names
      * @return {FieldDefinitionCreateStruct}
      */
-    ContentTypeService.prototype.newFieldDefinitionUpdateStruct = function newFieldDefinitionUpdateStruct(identifier, fieldType, fieldGroup, names) {
+    ContentTypeService.prototype.newFieldDefinitionUpdateStruct = function newFieldDefinitionUpdateStruct() {
 
-        return new FieldDefinitionUpdateStruct(identifier, fieldType, fieldGroup, names);
+        return new FieldDefinitionUpdateStruct();
 
     };
 
@@ -116,11 +116,11 @@ var ContentTypeService = (function() {
      * @param contentTypeGroups {href} reference to type groups resource
      * @param callback {function} function, which will be executed on request success
      */
-    ContentTypeService.prototype.loadContentTypeGroups = function loadContentTypeGroups(contentTypeGroups, callback) {
+    ContentTypeService.prototype.loadContentTypeGroupsList = function loadContentTypeGroupsList(contentTypeGroups, callback) {
         this._connectionManager.request(
             "GET",
             contentTypeGroups,
-            {},
+            "",
             { "Accept" : "application/vnd.ez.api.ContentTypeGroupList+json" },
             callback
         );
@@ -137,7 +137,7 @@ var ContentTypeService = (function() {
         this._connectionManager.request(
             "GET",
             contentTypeGroupId,
-            {},
+            "",
             { "Accept" : "application/vnd.ez.api.ContentTypeGroup+json" },
             callback
         );
@@ -321,7 +321,7 @@ var ContentTypeService = (function() {
                     that._connectionManager.request(
                         "GET",
                         contentTypes._href + "?identifier=" + identifier,
-                        {},
+                        "",
                         { "Accept" : contentTypes["_media-type"] },
                         callback
                     );

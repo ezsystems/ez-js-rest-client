@@ -21,9 +21,7 @@ describe("Connection Feature Factory", function () {
         spyOn(mockCompatibleConnection, 'isCompatible').andCallThrough();
 
         mockIncompatibleConnection = (function(){
-            var connection = function(){
-
-            }
+            var connection = function(){};
             connection.isCompatible = function(){
                 return false;
             }

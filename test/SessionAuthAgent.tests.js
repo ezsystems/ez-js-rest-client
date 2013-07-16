@@ -64,18 +64,6 @@ describe("Session Authorization Agent", function () {
         mockCallback = jasmine.createSpy('mockCallback');
     });
 
-    it("is running constructor correctly", function(){
-
-        sessionAuthAgent = new SessionAuthAgent({
-            login : testLogin,
-            password : testPassword
-        });
-
-        expect(sessionAuthAgent).toBeDefined();
-        expect(sessionAuthAgent._login).toEqual(testLogin);
-        expect(sessionAuthAgent._password).toEqual(testPassword);
-    });
-
     describe("is correctly performing calls:", function(){
 
         beforeEach(function (){
@@ -104,6 +92,17 @@ describe("Session Authorization Agent", function () {
             expect(sessionAuthAgent.sessionId).toEqual(testSessionId);
 
             expect(mockCallback).toHaveBeenCalledWith(false, true);
+        });
+
+        it("ensureAuthentication when session is already created", function(){
+
+            sessionAuthAgent.sessionId = testSessionId;
+
+            sessionAuthAgent.ensureAuthentication(mockCallback);
+
+            expect(mockUserService.createSession).not.toHaveBeenCalled();
+            expect(mockCallback).toHaveBeenCalledWith(false, true);
+
         });
 
         it("authenticateRequest", function(){
@@ -143,9 +142,27 @@ describe("Session Authorization Agent", function () {
                         true,
                         false
                     )
+                },
+                createSession: function(sessions, sessionCreateStruct, callback){
+                    callback(
+                        true,
+                        false
+                    )
+                },
+                newSessionCreateStruct: function(login, password){
+                    return {
+                        body: {
+                            SessionInput: {
+                                login: login,
+                                password: password
+                            }
+                        }
+                    };
                 }
             };
             spyOn(mockFaultyUserService, 'deleteSession').andCallThrough();
+            spyOn(mockFaultyUserService, 'createSession').andCallThrough();
+            spyOn(mockFaultyUserService, 'newSessionCreateStruct').andCallThrough();
 
             mockFaultyCAPI = {
                 getUserService: function(){
@@ -159,6 +176,15 @@ describe("Session Authorization Agent", function () {
             });
             sessionAuthAgent.CAPI = mockFaultyCAPI;
 
+        });
+
+        it("ensureAuthentication", function(){
+
+            sessionAuthAgent.ensureAuthentication(mockCallback);
+
+            expect(mockCallback).toHaveBeenCalled();
+            expect(mockCallback.mostRecentCall.args[0]).toEqual(jasmine.any(CAPIError)); //error
+            expect(mockCallback.mostRecentCall.args[1]).toEqual(false); //response
         });
 
         it("logOut", function(){

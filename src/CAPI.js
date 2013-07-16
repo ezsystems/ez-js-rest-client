@@ -32,8 +32,8 @@ var CAPI = (function() {
             //TODO: move hardcoded rootPath to the same config file as above...
             discoveryService = new DiscoveryService('/api/ezp/v2/', connectionManager);
 
-            //TODO: move logRequests to the same config file as above...
-            connectionManager.logRequests = true;
+        //TODO: move logRequests to the same config file as above...
+        connectionManager.logRequests = true;
 
         /**
          * Get instance of Content Service
