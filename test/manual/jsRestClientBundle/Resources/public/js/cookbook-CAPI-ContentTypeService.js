@@ -38,7 +38,7 @@ loadContentTypeGroupsAnchor.onclick = function(e){
     loadContentTypeGroupsLoader.style.display = 'block';
     e.preventDefault();
 
-    contentTypeService.loadContentTypeGroupsList(
+    contentTypeService.loadContentTypeGroups(
         '/api/ezp/v2/content/typegroups',
         function(error, response){
             clientOutput.innerHTML =    "Errors : " + JSON.stringify(error) + "</br>" +
@@ -511,7 +511,7 @@ DeleteContentTypeAnchor.onclick = function(e){
     );
 };
 
-// Load content type groups example
+// Load groups of content type example
 var LoadContentTypeGroupsAnchor = document.getElementById('load-content-type-groups');
 var LoadContentTypeGroupsLoader = document.getElementById('load-content-type-groups-loader');
 LoadContentTypeGroupsAnchor.onclick = function(e){
@@ -520,7 +520,7 @@ LoadContentTypeGroupsAnchor.onclick = function(e){
     e.preventDefault();
 
     var LoadContentTypeGroupsInput = document.getElementById('load-content-type-groups-input');
-    contentTypeService.loadContentTypeGroups(
+    contentTypeService.loadGroupsOfContentType(
         LoadContentTypeGroupsInput.value,
         function(error, response){
             clientOutput.innerHTML =    "Errors : " + JSON.stringify(error) + "</br>" +

@@ -116,7 +116,7 @@ var ContentTypeService = (function() {
      * @param contentTypeGroups {href} reference to type groups resource
      * @param callback {function} function, which will be executed on request success
      */
-    ContentTypeService.prototype.loadContentTypeGroupsList = function loadContentTypeGroupsList(contentTypeGroups, callback) {
+    ContentTypeService.prototype.loadContentTypeGroups = function loadContentTypeGroups(contentTypeGroups, callback) {
         this._connectionManager.request(
             "GET",
             contentTypeGroups,
@@ -129,7 +129,7 @@ var ContentTypeService = (function() {
     /**
      * Load single content type group
      *
-     * @method loadContentTypeGroups
+     * @method loadContentTypeGroup
      * @param contentTypeGroupId {href}
      * @param callback {function} function, which will be executed on request success
      */
@@ -350,11 +350,11 @@ var ContentTypeService = (function() {
     /**
      * Load content type groups
      *
-     * @method loadContentTypeGroups
+     * @method loadGroupsOfContentType
      * @param contentTypeId {href}
      * @param callback {function} function, which will be executed on request success
      */
-    ContentTypeService.prototype.loadContentTypeGroups = function loadContentTypeGroups(contentTypeId, callback) {
+    ContentTypeService.prototype.loadGroupsOfContentType = function loadGroupsOfContentType(contentTypeId, callback) {
         this._connectionManager.request(
             "GET",
             contentTypeId + '/groups',

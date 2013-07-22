@@ -122,8 +122,8 @@ describe("ContentType Service", function () {
 
         });
 
-        it("loadContentTypeGroupsList", function () {
-            contentTypeService.loadContentTypeGroupsList(
+        it("loadContentTypeGroups", function () {
+            contentTypeService.loadContentTypeGroups(
                 testContentTypeGroups,
                 mockCallback
             );
@@ -370,8 +370,8 @@ describe("ContentType Service", function () {
             expect(mockConnectionManager.delete.mostRecentCall.args[1]).toBe(mockCallback); // callback
         });
 
-        it("loadContentTypeGroups", function () {
-            contentTypeService.loadContentTypeGroups(
+        it("loadGroupsOfContentType", function () {
+            contentTypeService.loadGroupsOfContentType(
                 testContentTypeId,
                 mockCallback
             );
