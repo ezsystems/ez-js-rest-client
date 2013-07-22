@@ -1,6 +1,12 @@
 var FieldDefinitionUpdateStruct = (function() {
     "use strict";
 
+    /**
+     * Returns a structure used to update a Field Definition. See ContentTypeService.updateFieldDefinition() call
+     *
+     * @class FieldDefinitionUpdateStruct
+     * @constructor
+     */
     var FieldDefinitionUpdateStruct = function(){
 
         this.body = {};

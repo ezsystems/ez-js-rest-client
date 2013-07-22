@@ -1,6 +1,13 @@
 var PolicyUpdateStruct = (function() {
     "use strict";
 
+    /**
+     * Returns a structure used to update a Policy. See UserService.updatePolicy() call
+     *
+     * @class PolicyUpdateStruct
+     * @constructor
+     * @param limitations {Object} object describing limitations change for the policy
+     */
     var PolicyUpdateStruct = function(limitations){
 
         this.body = {};

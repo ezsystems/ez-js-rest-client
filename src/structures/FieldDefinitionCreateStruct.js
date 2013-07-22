@@ -1,6 +1,16 @@
 var FieldDefinitionCreateStruct = (function() {
     "use strict";
 
+    /**
+     * Returns a structure used to create a new Field Definition. See ContentTypeService.addFieldDefinition() call
+     *
+     * @class FieldDefinitionCreateStruct
+     * @constructor
+     * @param identifier {String} unique field definiton identifer (e.g. "my-field")
+     * @param fieldType {String} identifier of existing field type (e.g. "ezstring", "ezdate")
+     * @param fieldGroup {String} identifier of existing field group (e.g. "content", "meta")
+     * @param names {Array} Multi language value (see example in ContentTypeService.newFieldDefintionCreateStruct() doc)
+     */
     var FieldDefinitionCreateStruct = function(identifier, fieldType, fieldGroup, names){
 
         this.body = {};

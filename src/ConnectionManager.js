@@ -4,8 +4,9 @@ var ConnectionManager = (function() {
     /**
      * Creates an instance of connection manager object
      *
+     * @class ConnectionManager
      * @constructor
-     * @param endPointUrl {string} url to REST root
+     * @param endPointUrl {String} url to REST root
      * @param authenticationAgent {object} literal object used to maintain authentication to REST server
      */
     var ConnectionManager = function(endPointUrl, authenticationAgent, connectionFactory) {
@@ -25,8 +26,8 @@ var ConnectionManager = (function() {
      * Basic request function
      *
      * @method request
-     * @param method {string} request method ("POST", "GET" etc)
-     * @param url {string} requested REST resource
+     * @param method {String} request method ("POST", "GET" etc)
+     * @param url {String} requested REST resource
      * @param body {JSON}
      * @param headers {object}
      * @param callback {function} function, which will be executed on request success
@@ -119,8 +120,8 @@ var ConnectionManager = (function() {
      * Used mainly for initial requests (e.g. createSession)
      *
      * @method notAuthorizedRequest
-     * @param method {string} request method ("POST", "GET" etc)
-     * @param url {string} requested REST resource
+     * @param method {String} request method ("POST", "GET" etc)
+     * @param url {String} requested REST resource
      * @param body {JSON}
      * @param headers {object}
      * @param callback {function} function, which will be executed on request success

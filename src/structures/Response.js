@@ -1,6 +1,11 @@
 var Response = (function() {
     "use strict";
 
+    /**
+     * @class Response
+     * @constructor
+     * @param valuesContainer
+     */
     var Response = function(valuesContainer){
 
         /**

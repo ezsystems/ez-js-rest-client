@@ -2,13 +2,10 @@ var ObjectStateGroupUpdateStruct = (function() {
     "use strict";
 
     /**
-     *  Creates an update structure for ObjectStateGroup
+     * Returns a structure used to update an Object State group. See ContentService.updateObjectStateGroup() call
      *
+     * @class ObjectStateGroupUpdateStruct
      * @constructor
-     * @param identifier {string}
-     * @param languageCode {string}
-     * @param names {Array} multiLanguageValuesType in JSON format
-     * @param descriptions {Array} multiLanguageValuesType in JSON format
      */
     var ObjectStateGroupUpdateStruct = function(){
 

@@ -4,10 +4,9 @@ var PromiseCAPI = (function() {
     /**
      * Creates an instance of PromiseCAPI object based on existing CAPI object
      *
+     * @class PromiseCAPI
      * @constructor
-     * @param endPointUrl {string} url to REST root
-     * @param authenticationAgent {object} literal object used to maintain authentication to REST server
-     * @param connectionType {string} string related to one of the special connection objects used to implement exact technique ("XHR", "JSONP" etc.)
+     * @param CAPI {CAPI} main REST client object
      */
     var PromiseCAPI = function (CAPI) {
 
@@ -23,7 +22,8 @@ var PromiseCAPI = (function() {
          * Convert any CAPI service into Promise-based service.
          *
          * @method generatePromiseService
-         * @param serviceFactory {function} CAPI function which returns one of the services
+         * @param serviceFactory {function} function which returns one of the CAPI services
+         * @return {function} function which returns instance of the PromiseService - promise-based wrapper around any of the CAPI services
          */
         this.generatePromiseService = function(serviceFactory){
             return function() {

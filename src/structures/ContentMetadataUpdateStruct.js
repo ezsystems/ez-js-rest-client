@@ -1,6 +1,13 @@
 var ContentMetadataUpdateStruct = (function() {
     "use strict";
 
+    /**
+     * Returns a structure used to update a Content's metadata. See ContentService.updateContentMetadata() call
+     *
+     * @class ContentMetadataUpdateStruct
+     * @constructor
+     * @param languageCode {String} The language code (eng-GB, fre-FR, ...)
+     */
     var ContentMetadataUpdateStruct = function(languageCode){
 
         var now = JSON.parse(JSON.stringify(new Date()));

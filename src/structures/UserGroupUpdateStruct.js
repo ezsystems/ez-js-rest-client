@@ -2,12 +2,12 @@ var UserGroupUpdateStruct = (function() {
     "use strict";
 
     /**
-     *  Creates an update structure for UserGroup
+     * Returns a structure used to update a User group. See UserService.updateUserGroup() call
      *
+     * @class UserGroupUpdateStruct
      * @constructor
-     * @param identifier {string}
-     * @param languageCode {string}
-     * @param names {Array} multiLanguageValuesType in JSON format
+     * @param languageCode {String} The language code (eng-GB, fre-FR, ...)
+     * @param fields {Array} fields array (see example in UserService.newUserGroupCreateStruct() doc)
      */
     var UserGroupUpdateStruct = function(languageCode, fields){
 

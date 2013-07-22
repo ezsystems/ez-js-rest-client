@@ -106,14 +106,42 @@ module.exports = function(grunt) {
                     consolidate: true
                 }
             }
+        },
+        pkg: grunt.file.readJSON('package.json'),
+        yuidoc: {
+            compile: {
+                name: '<%= pkg.name %>',
+                description: '<%= pkg.description %>',
+                version: '<%= pkg.version %>',
+                url: '<%= pkg.repository %>',
+                logo: "http://ez.no/extension/ez_ezno/design/ezno_2011/images/ez-logo.png",
+                options: {
+                    paths: 'src/',
+                    outdir: 'api/'
+                }
+            }
+        },
+        shell: {
+            livedoc: {
+                command: 'yuidoc --server',
+                options: {
+                    stdout: true,
+                    stderr: true
+                }
+            }
         }
     });
 
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-jasmine-node-coverage');
+    grunt.loadNpmTasks('grunt-contrib-yuidoc');
+    grunt.loadNpmTasks('grunt-shell');
 
     grunt.registerTask('default', ['concat']);
     grunt.registerTask('hint', ['concat', 'jshint']);
     grunt.registerTask('test', ['concat', 'jasmine_node'] );
+    grunt.registerTask('doc', ['yuidoc'] );
+    grunt.registerTask('livedoc', ['shell:livedoc'] );
+
 };

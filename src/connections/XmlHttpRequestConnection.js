@@ -3,7 +3,9 @@ var XmlHttpRequestConnection = (function() {
 
     /**
      * Creates an instance of XmlHttpRequestConnection object
+     * This connection class handles low-level implementation of XHR connection for generic (non-Microsoft) browsers
      *
+     * @class XmlHttpRequestConnection
      * @constructor
      */
     var XmlHttpRequestConnection = function () {
@@ -69,7 +71,13 @@ var XmlHttpRequestConnection = (function() {
         };
     };
 
-    // static method
+    /**
+     * Connection checks itself for compatibility with running environment
+     *
+     * @method isCompatible
+     * @static
+     * @returns {boolean} true, if connection is compatible with current environment, false otherwise
+     */
     XmlHttpRequestConnection.isCompatible = function(){
         return !!window.XMLHttpRequest;
     };

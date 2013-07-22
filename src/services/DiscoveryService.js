@@ -2,9 +2,12 @@ var DiscoveryService = (function() {
     "use strict";
 
     /**
-     * Creates an instance of discovery service
+     * Creates an instance of discovery service.
+     * Discovery service is used internally to auto-discover and cache misc useful REST objects.
      *
+     * @class DiscoveryService
      * @constructor
+     * @param rootPath {String} path to Root resource
      * @param connectionManager {ConnectionManager}
      */
     var DiscoveryService = function(rootPath, connectionManager){
@@ -18,8 +21,10 @@ var DiscoveryService = (function() {
          * discover Root object
          *
          * @method discoverRoot
-         * @param rootPath {href}
-         * @param callback {Function}
+         * @param rootPath {String} path to Root resource
+         * @param callback {Function} callback executed after performing the request
+         * @param callback.error {mixed} false or CAPIError object if an error occured
+         * @param callback.response {boolean} true if the root was discovered successfully, false otherwise.
          */
         this.discoverRoot = function(rootPath, callback) {
 
@@ -41,10 +46,7 @@ var DiscoveryService = (function() {
                                 new CAPIError( {
                                     errorText : "Discover service failed to retrieve root object."
                                 }),
-                                new Response({
-                                    status : "error",
-                                    body : ""
-                                })
+                                false
                             );
                         }
                     }
@@ -69,11 +71,13 @@ var DiscoveryService = (function() {
         };
 
         /**
-         * Try to get object from cacheObject by given 'name'
+         * Get target object from cacheObject by given 'name' and run the discovery process if it is not available.
          *
          * @method getObjectFromCache
-         * @param name {String}
-         * @param callback {Function}
+         * @param name {String} name of the target object to be retrived (e.g. "Trash")
+         * @param callback {Function} callback executed after performing the request
+         * @param callback.error {mixed} false or CAPIError object if an error occured
+         * @param callback.response {mixed} the target object if it was found, false otherwise.
          */
         this.getObjectFromCache = function(name, callback) {
             var object = null,
@@ -106,21 +110,20 @@ var DiscoveryService = (function() {
                     new CAPIError({
                         errorText : "Discover service failed to find cached object with name '" + name + "'"
                     }),
-                    new Response({
-                        status : "error",
-                        body : ""
-                    })
+                    false
                 );
             }
         };
     };
 
     /**
-     * Get url for given 'name'
+     * Try to get url of the target object by given 'name'
      *
      * @method getUrl
-     * @param name {String}
-     * @param callback {Function}
+     * @param name {String} name of the target object (e.g. "Trash")
+     * @param callback {Function} callback executed after performing the request (see "discoverRoot" call for more info)
+     * @param callback.error {mixed} false or CAPIError object if an error occured
+     * @param callback.response {mixed} the url of the target object if it was found, false otherwise.
      */
     DiscoveryService.prototype.getUrl = function(name, callback) {
         this.getObjectFromCache(
@@ -137,19 +140,13 @@ var DiscoveryService = (function() {
                             new CAPIError({
                                 errorText : "Broken cached object returned when searching for '" + name + "'"
                             }),
-                            new Response({
-                                status : "error",
-                                body : ""
-                            })
+                            false
                         );
                     }
                 } else {
                     callback(
                         error,
-                        new Response({
-                            status : "error",
-                            body : ""
-                        })
+                        false
                     );
                 }
             }
@@ -157,11 +154,13 @@ var DiscoveryService = (function() {
     };
 
     /**
-     * Get media type for given 'name'
+     * Try to get media-type of the target object by given 'name'
      *
      * @method getMediaType
-     * @param name {String}
-     * @param callback {Function}
+     * @param name {String} name of the target object (e.g. "Trash")
+     * @param callback {Function} callback executed after performing the request (see "discoverRoot" call for more info)
+     * @param callback.error {mixed} false or CAPIError object if an error occured
+     * @param callback.response {mixed} the media-type of the target object if it was found, false otherwise.
      */
     DiscoveryService.prototype.getMediaType = function(name, callback) {
         this.getObjectFromCache(
@@ -178,19 +177,13 @@ var DiscoveryService = (function() {
                             new CAPIError({
                                 errorText : "Broken cached object returned when searching for '" + name + "'"
                             }),
-                            new Response({
-                                status : "error",
-                                body : ""
-                            })
+                            false
                         );
                     }
                 } else {
                     callback(
                         error,
-                        new Response({
-                            status : "error",
-                            body : ""
-                        })
+                        false
                     );
                 }
             }
@@ -198,11 +191,13 @@ var DiscoveryService = (function() {
     };
 
     /**
-     * Get the whole information object for given 'name'
+     * Try to get the whole target object by given 'name'
      *
      * @method getInfoObject
-     * @param name {String}
-     * @param callback {Function}
+     * @param name {String} name of the target object (e.g. "Trash")
+     * @param callback {Function} callback executed after performing the request (see "discoverRoot" call for more info)
+     * @param callback.error {mixed} false or CAPIError object if an error occured
+     * @param callback.response {mixed} the target object if it was found, false otherwise.
      */
     DiscoveryService.prototype.getInfoObject = function(name, callback) {
         this.getObjectFromCache(
@@ -219,19 +214,13 @@ var DiscoveryService = (function() {
                             new CAPIError({
                                 errorText : "Broken cached object returned when searching for '" + name + "'"
                             }),
-                            new Response({
-                                status : "error",
-                                body : ""
-                            })
+                            false
                         );
                     }
                 } else {
                     callback(
                         error,
-                        new Response({
-                            status : "error",
-                            body : ""
-                        })
+                        false
                     );
                 }
             }

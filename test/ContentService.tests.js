@@ -69,6 +69,10 @@ describe("ContentService", function () {
                         "CurrentVersion" : {
                             "_href" : testVersionedContentId,
                             "_media-type" : "application/vnd.ez.api.Version+json"
+                        },
+                        "Locations" : {
+                            "_href" : testContentLocations,
+                            "_media-type" : "application/vnd.ez.api.LocationList+json"
                         }
                     }
                 };
@@ -394,13 +398,15 @@ describe("ContentService", function () {
 
                 contentService.loadContent(
                     testVersionedContentId,
-                    "",
+                    null,
+                    null,
+                    null,
                     mockCallback
                 );
 
                 expect(mockConnectionManager.request).toHaveBeenCalled();
                 expect(mockConnectionManager.request.mostRecentCall.args[0]).toEqual("GET"); //method
-                expect(mockConnectionManager.request.mostRecentCall.args[1]).toEqual(testVersionedContentId); //url
+                expect(mockConnectionManager.request.mostRecentCall.args[1]).toEqual(testVersionedContentId + "?fields="); //url
                 expect(mockConnectionManager.request.mostRecentCall.args[2]).toEqual(""); // body
                 expect(mockConnectionManager.request.mostRecentCall.args[3].Accept).toEqual("application/vnd.ez.api.Version+json"); // headers
                 expect(mockConnectionManager.request.mostRecentCall.args[4]).toBe(mockCallback); // callback
@@ -409,8 +415,7 @@ describe("ContentService", function () {
             it("updateContent", function () {
 
                 var contentUpdateStruct = contentService.newContentUpdateStruct(
-                    "eng-US",
-                    "DummyUser"
+                    "eng-US"
                 );
 
                 var fieldInfo = {
@@ -600,8 +605,10 @@ describe("ContentService", function () {
                     "/api/ezp/v2/content/locations/1/2/113"
                 );
 
+                spyOn(contentService, 'loadContentInfo').andCallFake(fakedLoadContentInfo);
+
                 contentService.createLocation(
-                    testContentLocations,
+                    testContentId,
                     locationCreateStruct,
                     mockCallback
                 );
@@ -649,8 +656,10 @@ describe("ContentService", function () {
             });
 
             it("loadLocations", function () {
+                spyOn(contentService, 'loadContentInfo').andCallFake(fakedLoadContentInfo);
+
                 contentService.loadLocations(
-                    testContentLocations,
+                    testContentId,
                     mockCallback
                 );
 
@@ -1385,12 +1394,10 @@ describe("ContentService", function () {
             it("newContentUpdateStruct", function(){
 
                 testStructure = contentService.newContentUpdateStruct(
-                    testLanguage,
-                    testUser
+                    testLanguage
                 );
 
                 expect(testStructure).toEqual(jasmine.any(ContentUpdateStruct));
-                expect(testStructure.body.VersionUpdate.user).toEqual(testUser);
                 expect(testStructure.body.VersionUpdate.initialLanguageCode).toEqual(testLanguage);
             });
 
@@ -1745,6 +1752,34 @@ describe("ContentService", function () {
             contentService.createContentDraft(
                 testContentId,
                 null,
+                mockCallback
+            );
+
+            expect(mockCallback).toHaveBeenCalledWith(jasmine.any(CAPIError), false);
+        });
+
+        it("createLocation", function () {
+            var locationCreateStruct = contentService.newLocationCreateStruct(
+                "/api/ezp/v2/content/locations/1/2/113"
+            );
+
+            spyOn(contentService, 'loadContentInfo').andCallFake(fakedFaultyLoadContentInfo);
+
+            contentService.createLocation(
+                testContentId,
+                locationCreateStruct,
+                mockCallback
+            );
+
+            expect(mockCallback).toHaveBeenCalledWith(jasmine.any(CAPIError), false);
+        });
+
+        it("loadLocations", function () {
+
+            spyOn(contentService, 'loadContentInfo').andCallFake(fakedFaultyLoadContentInfo);
+
+            contentService.loadLocations(
+                testContentId,
                 mockCallback
             );
 

@@ -3,9 +3,13 @@ var HttpBasicAuthAgent = (function() {
 
     /**
      * Creates an instance of HttpBasicAuthAgent object
+     * Auth agent handles low level implementation of authorization workflow
      *
+     * @class HttpBasicAuthAgent
      * @constructor
-     * @param credentials {object}
+     * @param credentials {Object} object literal containg credentials for the REST service access
+     * @param credentials.login {String} user login
+     * @param credentials.password {String} user password
      */
     var HttpBasicAuthAgent = function (credentials) {
 

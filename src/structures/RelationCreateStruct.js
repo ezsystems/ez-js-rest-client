@@ -1,6 +1,13 @@
 var RelationCreateStruct = (function() {
     "use strict";
 
+    /**
+     * Returns a structure used to create a new Content object. See ContentService.createRelation() call
+     *
+     * @class RelationCreateStruct
+     * @constructor
+     * @param destination {String} reference to the resource we want to make related
+     */
     var RelationCreateStruct = function(destination){
 
         this.body = {};

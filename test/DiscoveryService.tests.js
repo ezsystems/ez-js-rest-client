@@ -201,7 +201,7 @@ describe("Discovery Service", function () {
 
             expect(mockCallback).toHaveBeenCalled();
             expect(mockCallback.mostRecentCall.args[0]).toEqual(jasmine.any(CAPIError)); //errors
-            expect(mockCallback.mostRecentCall.args[1]).toEqual(jasmine.any(Response)); //response
+            expect(mockCallback.mostRecentCall.args[1]).toEqual(false); //response
 
         });
 
@@ -226,7 +226,7 @@ describe("Discovery Service", function () {
                 expect(discoveryService.discoverRoot).toHaveBeenCalled();
                 expect(mockCallback).toHaveBeenCalled();
                 expect(mockCallback.mostRecentCall.args[0]).toEqual(jasmine.any(CAPIError)); //error
-                expect(mockCallback.mostRecentCall.args[1]).toEqual(jasmine.any(Response)); //response
+                expect(mockCallback.mostRecentCall.args[1]).toEqual(false); //response
             });
 
             it("getUrl", function(){
@@ -241,7 +241,7 @@ describe("Discovery Service", function () {
                 expect(discoveryService.getObjectFromCache).toHaveBeenCalled();
                 expect(mockCallback).toHaveBeenCalled();
                 expect(mockCallback.mostRecentCall.args[0]).toEqual(jasmine.any(CAPIError)); //error
-                expect(mockCallback.mostRecentCall.args[1]).toEqual(jasmine.any(Response)); //response
+                expect(mockCallback.mostRecentCall.args[1]).toEqual(false); //response
             });
 
             it("getMediaType", function(){
@@ -256,7 +256,7 @@ describe("Discovery Service", function () {
                 expect(discoveryService.getObjectFromCache).toHaveBeenCalled();
                 expect(mockCallback).toHaveBeenCalled();
                 expect(mockCallback.mostRecentCall.args[0]).toEqual(jasmine.any(CAPIError)); //error
-                expect(mockCallback.mostRecentCall.args[1]).toEqual(jasmine.any(Response)); //response
+                expect(mockCallback.mostRecentCall.args[1]).toEqual(false); //response
             });
 
             it("getInfoObject", function(){
@@ -271,7 +271,7 @@ describe("Discovery Service", function () {
                 expect(discoveryService.getObjectFromCache).toHaveBeenCalled();
                 expect(mockCallback).toHaveBeenCalled();
                 expect(mockCallback.mostRecentCall.args[0]).toEqual(jasmine.any(CAPIError)); //error
-                expect(mockCallback.mostRecentCall.args[1]).toEqual(jasmine.any(Response)); //response
+                expect(mockCallback.mostRecentCall.args[1]).toEqual(false); //response
             });
         });
 
@@ -296,7 +296,7 @@ describe("Discovery Service", function () {
                 expect(discoveryService.getObjectFromCache).toHaveBeenCalled();
                 expect(mockCallback).toHaveBeenCalled();
                 expect(mockCallback.mostRecentCall.args[0]).toEqual(jasmine.any(CAPIError)); //error
-                expect(mockCallback.mostRecentCall.args[1]).toEqual(jasmine.any(Response)); //response
+                expect(mockCallback.mostRecentCall.args[1]).toEqual(false); //response
             });
 
             it("getMediaType", function(){
@@ -309,7 +309,7 @@ describe("Discovery Service", function () {
                 expect(discoveryService.getObjectFromCache).toHaveBeenCalled();
                 expect(mockCallback).toHaveBeenCalled();
                 expect(mockCallback.mostRecentCall.args[0]).toEqual(jasmine.any(CAPIError)); //error
-                expect(mockCallback.mostRecentCall.args[1]).toEqual(jasmine.any(Response)); //response
+                expect(mockCallback.mostRecentCall.args[1]).toEqual(false); //response
             });
 
             it("getInfoObject", function(){
@@ -322,7 +322,7 @@ describe("Discovery Service", function () {
                 expect(discoveryService.getObjectFromCache).toHaveBeenCalled();
                 expect(mockCallback).toHaveBeenCalled();
                 expect(mockCallback.mostRecentCall.args[0]).toEqual(jasmine.any(CAPIError)); //error
-                expect(mockCallback.mostRecentCall.args[1]).toEqual(jasmine.any(Response)); //response
+                expect(mockCallback.mostRecentCall.args[1]).toEqual(false); //response
             });
         });
 

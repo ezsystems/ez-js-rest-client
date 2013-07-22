@@ -4,6 +4,7 @@ var ConnectionFeatureFactory = (function() {
     /**
      * Creates an instance of connection feature factory
      *
+     * @class ConnectionFeatureFactory
      * @constructor
      * @param connectionList {array} Array of connections, should be filled-in in preferred order
      */

@@ -522,8 +522,8 @@ describe("User Service", function () {
 
             userService.loadRoles(
                 testRoleIdentifier,
-                testLimit,
                 testOffset,
+                testLimit,
                 mockCallback
             );
 

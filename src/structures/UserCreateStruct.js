@@ -2,14 +2,15 @@ var UserCreateStruct = (function() {
     "use strict";
 
     /**
-     *  Returns a create structure for User
+     * Returns a structure used to create a new User. See UserService.createUser() call
      *
+     * @class UserCreateStruct
      * @constructor
-     * @param languageCode {string}
-     * @param login {string}
-     * @param email {string}
-     * @param password {string}
-     * @param fields {Array}
+     * @param languageCode {String} The language code (eng-GB, fre-FR, ...)
+     * @param login {String} login for a new user
+     * @param email {String} email for a new user
+     * @param password {String} password for a new user
+     * @param fields {Array} fields array (see example for "newUserGroupCreateStruct")
      */
     var UserCreateStruct = function(languageCode, login, email, password, fields){
 

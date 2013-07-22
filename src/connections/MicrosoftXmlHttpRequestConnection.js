@@ -3,7 +3,9 @@ var MicrosoftXmlHttpRequestConnection = (function() {
 
     /**
      * Creates an instance of MicrosoftXmlHttpRequestConnection object
+     * This connection class handles low-level implementation of XHR connection for Microsoft browsers
      *
+     * @class MicrosoftXmlHttpRequestConnection
      * @constructor
      */
     /* jshint -W117 */
@@ -71,7 +73,13 @@ var MicrosoftXmlHttpRequestConnection = (function() {
     };
     /* jshint +W117 */
 
-    // static method
+    /**
+     * Connection checks itself for compatibility with running environment
+     *
+     * @method isCompatible
+     * @static
+     * @returns {boolean} true, if connection is compatible with current environment, false otherwise
+     */
     MicrosoftXmlHttpRequestConnection.isCompatible = function(){
         return !!window.ActiveXObject;
     };

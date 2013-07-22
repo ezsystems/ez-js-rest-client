@@ -1,6 +1,14 @@
 var SessionCreateStruct = (function() {
     "use strict";
 
+    /**
+     * Returns a structure used to create a new Session. See UserService.createSession() call
+     *
+     * @class SessionCreateStruct
+     * @constructor
+     * @param login {String} login for a user, which wants to start a session
+     * @param password {String} password for a user, which wants to start a session
+     */
     var SessionCreateStruct = function(login, password){
 
         this.body = {};

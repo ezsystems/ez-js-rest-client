@@ -12,10 +12,19 @@ It will install Grunt task runner and make ```grunt``` command available anywher
 Depending on the user setup, this action might require to be root.
 After that run ```npm install``` command . That should make other commands available.
 
+To be able to compile documentation or edit it on live yuidoc server you should also install yuidocjs module by running ```npm install -g yuidocjs```.
+
 Building
 --------
 Building project files into single file dist/CAPI.js is achieved by running ```grunt``` command.
 Building with consequent jshint spell check is achieved by running ```grunt hint``` command.
+
+Documentation
+-------------
+Project is self-documented by using yuidoc. More info on http://yui.github.io/yuidoc/.
+Building static version of current project documentation into api/ folder is achieved by running ```grunt doc``` command.
+By running ```grunt livedoc``` command you can run documentation server which gives you ability to see documentation changes in real time.
+By default yuidoc documentation server can be accessed on: http://127.0.0.1:3000
 
 Testing - Unit tests
 --------------------

@@ -1,0 +1,7 @@
+{
+    "logo" : "http://ez.no/extension/ez_ezno/design/ezno_2011/images/ez-logo.png",
+    "options": {
+        "paths": "src/",
+        "outdir": "apiLive/"
+    }
+}

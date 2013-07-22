@@ -1,6 +1,13 @@
 var RoleInputStruct = (function() {
     "use strict";
 
+    /**
+     * Returns a structure used to create and update a Role. See UserService.createRole() call
+     *
+     * @class RoleInputStruct
+     * @constructor
+     * @param identifier {String} unique Role identifier
+     */
     var RoleInputStruct = function(identifier){
 
         this.body = {};

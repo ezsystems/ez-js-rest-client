@@ -2,14 +2,33 @@ var ObjectStateCreateStruct = (function() {
     "use strict";
 
     /**
-     *  Creates a create structure for ObjectState
+     * Returns a structure used to create a new Object State. See ContentService.createObjectState() call
      *
+     * @class ObjectStateCreateStruct
      * @constructor
-     * @param identifier {string}
-     * @param languageCode {string}
+     * @param identifier {String} unique ObjectState identifier (e.g. "some-new-state")
+     * @param languageCode {String} The language code (eng-GB, fre-FR, ...)
      * @param priority {int}
-     * @param names {Array} multiLanguageValuesType in JSON format
-     * @param descriptions {Array} multiLanguageValuesType in JSON format
+     * @param names {Array} Multi language value (see example)
+     * @param descriptions {Array} Multi language value (see example)
+     * @example
+     *      var objectStateCreateStruct = contentService.newObjectStateCreateStruct(
+     *          "some-id",
+     *          "eng-US",
+     *          0,
+     *          [
+     *              {
+     *                  "_languageCode":"eng-US",
+     *                  "#text":"Some Name"
+     *              }
+     *          ],
+     *          [
+     *              {
+     *                  "_languageCode":"eng-US",
+     *                  "#text":"Some Description"
+     *              }
+     *          ]
+     *      );
      */
     var ObjectStateCreateStruct = function(identifier, languageCode, priority, names, descriptions){
 

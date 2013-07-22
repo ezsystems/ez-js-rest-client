@@ -2,8 +2,9 @@ var UserUpdateStruct = (function() {
     "use strict";
 
     /**
-     *  Returns an update structure for User
+     * Returns a structure used to update a User. See UserService.updateUser() call
      *
+     * @class UserUpdateStruct
      * @constructor
      */
     var UserUpdateStruct = function(){

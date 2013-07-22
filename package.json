@@ -1,17 +1,19 @@
 {
-    "name": "CAPI",
-    "repository": "https://github.com/ezsystems/ez-js-rest-client",
-    "description": "JS REST Client for eZ Publish Platform",
-    "version": "0.1.0",
-    "devDependencies": {
-        "grunt": "~0.4.1",
-        "grunt-contrib-jshint": "~0.6.0",
-        "grunt-contrib-uglify": "~0.2.2",
-        "grunt-contrib-concat": "~0.3.0",
-        "grunt-jasmine-node-coverage": "~0.1.4",
-        "glob": "~3.2.1"
-    },
-    "scripts": {
-        "test": "grunt test --verbose"
-    }
+  "name": "CAPI",
+  "repository": "https://github.com/ezsystems/ez-js-rest-client",
+  "description": "JS REST Client for eZ Publish Platform",
+  "version": "0.1.0",
+  "devDependencies": {
+    "grunt": "~0.4.1",
+    "grunt-contrib-jshint": "~0.6.0",
+    "grunt-contrib-uglify": "~0.2.2",
+    "grunt-contrib-concat": "~0.3.0",
+    "grunt-jasmine-node-coverage": "~0.1.4",
+    "glob": "~3.2.1",
+    "grunt-shell": "~0.3.1",
+    "grunt-contrib-yuidoc": "~0.4.0"
+  },
+  "scripts": {
+    "test": "grunt test --verbose"
+  }
 }

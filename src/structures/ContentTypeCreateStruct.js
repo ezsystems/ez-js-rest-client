@@ -1,6 +1,15 @@
 var ContentTypeCreateStruct = (function() {
     "use strict";
 
+    /**
+     * Returns a structure used to create a new Content Type object. See ContentTypeService.createContentType() call
+     *
+     * @class ContentTypeCreateStruct
+     * @constructor
+     * @param identifier {String} Unique identifier for the target Content Type (e.g. "my_new_content_type")
+     * @param languageCode {String} The language code (e.g. "eng-GB")
+     * @param names {Array} Multi language value (see example in ContentTypeService.newContentTypeCreateStruct() doc)
+     */
     var ContentTypeCreateStruct = function(identifier, languageCode, names){
 
         var now = JSON.parse(JSON.stringify(new Date()));

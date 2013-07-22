@@ -447,8 +447,8 @@ LoadRolesAnchor.onclick = function(e){
     var LoadRolesInput = document.getElementById('load-roles-input');
     userService.loadRoles(
         LoadRolesInput.value,
-        "-1",
         "0",
+        "-1",
         function(error, response){
             clientOutput.innerHTML =    "Errors : " + JSON.stringify(error) + "</br>" +
                 "Status : " + response.status + "</br>" +
@@ -715,8 +715,14 @@ AddPolicyAnchor.onclick = function(e){
     var AddPolicyInput = document.getElementById('create-policy-input'),
         policyCreateStruct = userService.newPolicyCreateStruct(
         "content",
-        "publish",
-        []
+        "create",
+        [{  _identifier : "Class",
+            values : {
+                ref : [{
+                    _href : "18"
+                }]
+            }
+        }]
         );
 
     // TODO: what's up with limitations?
@@ -752,12 +758,10 @@ UpdatePolicyAnchor.onclick = function(e){
                 "values" : {
                     "ref" : [
                         {
-                            "_href" : "/api/ezp/v2/content/sections/1",
-                            "_media-type" : "application/vnd.ez.api.Section+json"
+                            "_href" : "1"
                         },
                         {
-                            "_href" : "/api/ezp/v2/content/sections/4",
-                            "_media-type" : "application/vnd.ez.api.Section+json"
+                            "_href" : "4"
                         }
                     ]
                 }

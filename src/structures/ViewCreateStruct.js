@@ -1,6 +1,13 @@
 var ViewCreateStruct = (function() {
     "use strict";
 
+    /**
+     * Returns a structure used to create a new View. See ContentService.createView() call
+     *
+     * @class ViewCreateStruct
+     * @constructor
+     * @param identifier {String} unique view identifier
+     */
     var ViewCreateStruct = function(identifier){
 
         this.body = {};

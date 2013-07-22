@@ -2,8 +2,9 @@ var ObjectStateUpdateStruct = (function() {
     "use strict";
 
     /**
-     *  Creates an update structure for ObjectState
+     * Returns a structure used to update an Object State. See ContentService.updateObjectState() call
      *
+     * @class ObjectStateUpdateStruct
      * @constructor
      */
     var ObjectStateUpdateStruct = function(){

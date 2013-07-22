@@ -1,6 +1,15 @@
 var UrlWildcardCreateStruct = (function() {
     "use strict";
 
+    /**
+     * Returns a structure used to create a new Url Wildcard object. See ContentService.createUrlWildcard() call
+     *
+     * @class UrlWildcardCreateStruct
+     * @constructor
+     * @param sourceUrl {String} new url wildcard
+     * @param destinationUrl {String} existing resource where wildcard should point
+     * @param forward {boolean} weather or not the wildcard should redirect to the resource
+     */
     var UrlWildcardCreateStruct = function(sourceUrl, destinationUrl, forward){
 
         this.body = {};

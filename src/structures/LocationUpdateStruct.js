@@ -1,6 +1,12 @@
 var LocationUpdateStruct = (function() {
     "use strict";
 
+    /**
+     * Returns a structure used to update a Location. See ContentService.updateLocation() call
+     *
+     * @class LocationUpdateStruct
+     * @constructor
+     */
     var LocationUpdateStruct = function(){
 
         this.body = {};

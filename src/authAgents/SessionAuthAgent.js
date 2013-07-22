@@ -3,9 +3,13 @@ var SessionAuthAgent = (function() {
 
     /**
      * Creates an instance of SessionAuthAgent object
+     * * Auth agent handles low level implementation of authorization workflow
      *
+     * @class SessionAuthAgent
      * @constructor
-     * @param credentials {object}
+     * @param credentials {Object} object literal containg credentials for the REST service access
+     * @param credentials.login {String} user login
+     * @param credentials.password {String} user password
      */
     var SessionAuthAgent = function (credentials) {
 
@@ -128,8 +132,6 @@ var SessionAuthAgent = (function() {
             }
         );
     };
-
-
 
     return SessionAuthAgent;
 

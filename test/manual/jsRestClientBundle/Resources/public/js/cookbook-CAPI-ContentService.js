@@ -2,7 +2,7 @@
 
 var authAgent = new SessionAuthAgent({
         login : "admin",
-        password : "admin"
+        password : "ezpublish"
     }),
     jsCAPI = new CAPI(
         'http://ez.git.local',
@@ -433,7 +433,9 @@ loadContentAnchor.onclick = function(e){
     if (loadContentInput.value.length){
         contentService.loadContent(
             loadContentInput.value,
-            "",
+            null,
+            null,
+            "eng-US",
             function(error, response){
                 clientOutput.innerHTML =    "Errors : " + JSON.stringify(error) + "</br>" +
                     "Status : " + response.status + "</br>" +
@@ -461,8 +463,7 @@ updateContentAnchor.onclick = function(e){
     if (updateContentInput.value.length){
 
         contentUpdateStruct = contentService.newContentUpdateStruct(
-            "eng-US",
-            "DummyUser"
+            "eng-US"
         );
 
         fieldInfo = {
@@ -657,7 +658,7 @@ CreateLocationAnchor.onclick = function(e){
 
 
     locationCreateStruct = contentService.newLocationCreateStruct(
-        "/api/ezp/v2/content/locations/1/2/113"
+        "/api/ezp/v2/content/locations/1/2/118"
     );
 
     var CreateLocationInput = document.getElementById('create-location-input');

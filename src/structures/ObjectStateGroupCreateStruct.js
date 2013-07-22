@@ -2,12 +2,24 @@ var ObjectStateGroupCreateStruct = (function() {
     "use strict";
 
     /**
-     *  Creates a create structure for ObjectStateGroup
+     * Returns a structure used to create a new Object State group. See ContentService.createObjectStateGroup() call
      *
+     * @class ObjectStateGroupCreateStruct
      * @constructor
-     * @param identifier {string}
-     * @param languageCode {string}
+     * @param identifier {String} unique ObjectStateGroup identifier
+     * @param languageCode {String} The language code (eng-GB, fre-FR, ...)
      * @param names {Array} multiLanguageValuesType in JSON format
+     * @example
+     *      var objectStateGroupCreateStruct = contentService.newObjectStateGroupCreateStruct(
+     *          "some-id",
+     *          "eng-US",
+     *          [
+     *              {
+     *                  "_languageCode":"eng-US",
+     *                  "#text":"Some Name"
+     *              }
+     *          ]
+     *      );
      */
     var ObjectStateGroupCreateStruct = function(identifier, languageCode, names){
 

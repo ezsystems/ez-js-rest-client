@@ -2,10 +2,11 @@ var PromiseService = (function() {
     "use strict";
 
     /**
-     * Creates an instance of promise-based service object
+     * Creates an instance of promise-based service object based on original service
      *
+     * @class PromiseService
      * @constructor
-     * @param originalService {object} the service which should be converted into promise-based version
+     * @param originalService {object} the service which should be converted into promise-based version (e.g. ContentService)
      */
     var PromiseService = function(originalService) {
 
@@ -54,13 +55,7 @@ var PromiseService = (function() {
 
             }
         }
-
-
-
     };
-
-
-
 
     return PromiseService;
 

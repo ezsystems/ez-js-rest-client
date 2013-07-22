@@ -1,6 +1,15 @@
 var SectionInputStruct = (function() {
     "use strict";
 
+    /**
+     * Returns a structure used to create and update a Section. See for ex. ContentService.createSection() call
+     *
+     * @class SectionInputStruct
+     * @constructor
+     * @param identifier {String} unique section identifier
+     * @param name {String} section name
+
+     */
     var SectionInputStruct = function(identifier, name){
 
         this.body = {};

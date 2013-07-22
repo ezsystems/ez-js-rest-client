@@ -1,6 +1,12 @@
 var ContentTypeUpdateStruct = (function() {
     "use strict";
 
+    /**
+     * Returns a structure used to update a Content Type object. See ContentTypeService.updateContentType() call
+     *
+     * @class ContentTypeUpdateStruct
+     * @constructor
+     */
     var ContentTypeUpdateStruct = function(){
 
         this.body = {};

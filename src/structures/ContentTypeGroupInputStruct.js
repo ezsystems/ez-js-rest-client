@@ -1,6 +1,13 @@
 var ContentTypeGroupInputStruct = (function() {
     "use strict";
 
+    /**
+     * Returns a structure used to create and update a Content Type group. See ContentTypeService.createContentTypeGroup() call
+     *
+     * @class ContentTypeGroupInputStruct
+     * @constructor
+     * @param identifier {String} Unique identifier for the target Content Type group (e.g. "my_new_content_type_group")
+     */
     var ContentTypeGroupInputStruct = function(identifier){
 
         this.body = {};

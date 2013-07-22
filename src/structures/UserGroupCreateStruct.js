@@ -2,12 +2,12 @@ var UserGroupCreateStruct = (function() {
     "use strict";
 
     /**
-     *  Creates a create structure for UserGroup
+     * Returns a structure used to create a new User group. See UserService.createUserGroup() call
      *
+     * @class UserGroupCreateStruct
      * @constructor
-     * @param identifier {string}
-     * @param languageCode {string}
-     * @param names {Array} multiLanguageValuesType in JSON format
+     * @param languageCode {String} The language code (eng-GB, fre-FR, ...)
+     * @param fields {Array} fields array (see example in UserService.newUserGroupCreateStruct() doc)
      */
     var UserGroupCreateStruct = function(languageCode, fields){
 

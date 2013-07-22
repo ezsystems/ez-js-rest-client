@@ -451,12 +451,7 @@ UpdateFieldDefinitionAnchor.onclick = function(e){
     UpdateFieldDefinitionLoader.style.display = 'block';
     e.preventDefault();
 
-    var fieldDefinitionUpdateStruct = contentTypeService.newFieldDefinitionUpdateStruct(
-        "dummy",
-        "dummy",
-        "dummy",
-        "dummy"
-        ),
+    var fieldDefinitionUpdateStruct = contentTypeService.newFieldDefinitionUpdateStruct(),
         UpdateFieldDefinitionInput = document.getElementById('update-field-definition-input');
 
     contentTypeService.updateFieldDefinition(

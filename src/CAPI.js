@@ -2,11 +2,22 @@ var CAPI = (function() {
     "use strict";
 
     /**
-     * Creates an instance of CAPI object
+     * Creates an instance of CAPI - main object which handles the API initialization and gives ability to retrieve various services.
+     * Could be created only in one instance. Handles connections, authorization and REST paths discovery automatically.
      *
+     * @class CAPI
      * @constructor
-     * @param endPointUrl {string} url to REST root
-     * @param authenticationAgent {object} literal object used to maintain authentication to REST server
+     * @param endPointUrl {String} url pointing to REST root
+     * @param authenticationAgent {Object} Instance of one of the AuthAgents (e.g. SessionAuthAgent, HttpBasicAuthAgent)
+     * @example
+     *     var   authAgent = new SessionAuthAgent({
+               login : "admin",
+               password : "admin"
+           }),
+           jsCAPI = new CAPI(
+               'http://ez.git.local',
+               authAgent
+           );
      */
     var CAPI = function (endPointUrl, authenticationAgent) {
 
@@ -36,10 +47,16 @@ var CAPI = (function() {
         connectionManager.logRequests = true;
 
         /**
-         * Get instance of Content Service
+         * Get instance of Content Service. Use ContentService to retrieve information and execute operations related to Content.
          *
          * @method getContentService
          * @return {ContentService}
+         * @example
+         *      var contentService = jsCAPI.getContentService();
+         *      contentService.loadRoot(
+         *          '/api/ezp/v2/',
+         *          callback
+         *      );
          */
         this.getContentService = function getContentService(){
             if  (!this._contentService)  {
@@ -52,10 +69,16 @@ var CAPI = (function() {
         };
 
         /**
-         * Get instance of Content Type Service
+         * Get instance of Content Type Service. Use ContentTypeService to retrieve information and execute operations related to ContentTypes.
          *
          * @method getContentTypeService
          * @return {ContentTypeService}
+         * @example
+         *      var contentTypeService = jsCAPI.getContentTypeService();
+         *      contentTypeService.loadContentType(
+         *          '/api/ezp/v2/content/types/18',
+         *          callback
+         *      );
          */
         this.getContentTypeService = function getContentTypeService(){
             if  (!this._contentTypeService)  {
@@ -68,10 +91,15 @@ var CAPI = (function() {
         };
 
         /**
-         * Get instance of User Service
+         * Get instance of User Service. Use UserService to retrieve information and execute operations related to Users.
          *
          * @method getUserService
          * @return {UserService}
+         * @example
+         *      var userService = jsCAPI.getUserService();
+         *      userService.loadRootUserGroup(
+         *          callback
+         *      );
          */
         this.getUserService = function getUserService(){
             if  (!this._userService)  {

@@ -1,6 +1,21 @@
 var UrlAliasCreateStruct = (function() {
     "use strict";
 
+    /**
+     * Returns a structure used to create a new UrlAlias object. See ContentService.createUrlAlias() call
+     *
+     * @class UrlAliasCreateStruct
+     * @constructor
+     * @param languageCode {String} The language code (eng-GB, fre-FR, ...)
+     * @param resource {String} eZ Publish resource you want to create alias for
+     * @param path {String} the new alias itself
+     * @example
+     *     var urlAliasCreateStruct = contentService.newUrlAliasCreateStruct(
+     *         "eng-US",
+     *         "content/search",
+     *         "findme-alias"
+     *     );
+     */
     var UrlAliasCreateStruct = function(languageCode, resource, path){
 
         this.body = {};

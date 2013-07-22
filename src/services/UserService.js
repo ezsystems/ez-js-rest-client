@@ -2,10 +2,32 @@ var UserService = (function() {
     "use strict";
 
     /**
-     * Creates an instance of user service object
+     * Creates an instance of user service object. Should be retrieved from CAPI instance (see example).
      *
+     * ## Note on the *callbacks* usage
+     *
+     * The **callback** argument of the service methods always take 2 arguments:
+     *
+     *    *     **error** either `false` or {{#crossLink "CAPIError"}}CAPIError{{/crossLink}} object when an error occurred
+     *
+     *    *     **response** the {{#crossLink "Response"}}Response{{/crossLink}} object
+     *
+     * Example:
+     *
+     *     userService.loadRootUserGroup(function (error, response) {
+     *            if (error) {
+     *                console.log('An error occurred', error);
+     *            } else {
+     *                console.log('Success!', response);
+     *            }
+     *     });
+     *
+     * @class UserService
      * @constructor
-     * @param connectionManager {object} connection manager that will be used to send requests to REST service
+     * @param connectionManager {ConnectionManager} connection manager that will be used to send requests to REST service
+     * @param discoveryService {DiscoveryService} discovery service is used for urls auto-discovery automation
+     * @example
+     *     var userService = jsCAPI.getUserService();
      */
     var UserService = function(connectionManager, discoveryService) {
 
@@ -22,8 +44,9 @@ var UserService = (function() {
      * Returns session create structure
      *
      * @method newSessionCreateStruct
-     * @param login {string}
-     * @param password {string}
+     * @param login {String} login for a user, which wants to start a session
+     * @param password {String} password for a user, which wants to start a session
+     * @return {SessionCreateStruct}
      */
     UserService.prototype.newSessionCreateStruct = function newSessionCreateStruct(login, password) {
 
@@ -32,11 +55,24 @@ var UserService = (function() {
     };
 
     /**
-     * User group create structure
+     * Returns user group create structure
      *
      * @method newUserGroupCreateStruct
-     * @param language {string}
-     * @param fields {Array}
+     * @param language {String} The language code (eng-GB, fre-FR, ...)
+     * @param fields {Array} fields array (see example)
+     * @return {UserGroupCreateStruct}
+     * @example
+     *     var userGroupCreateStruct = userService.newUserGroupCreateStruct(
+     *         "eng-US",[{
+     *             fieldDefinitionIdentifier : "name",
+     *             languageCode : "eng-US",
+     *             fieldValue : "UserGroup"
+     *         }, {
+     *             fieldDefinitionIdentifier : "description",
+     *             languageCode : "eng-US",
+     *             fieldValue : "This is the description of the user group"
+     *         }]
+     *     );
      */
     UserService.prototype.newUserGroupCreateStruct = function newUserGroupCreateStruct(language, fields) {
 
@@ -48,6 +84,7 @@ var UserService = (function() {
      * User group update structure
      *
      * @method newUserGroupUpdateStruct
+     * @return {UserGroupCreateStruct}
      */
     UserService.prototype.newUserGroupUpdateStruct = function newUserGroupUpdateStruct() {
 
@@ -59,11 +96,12 @@ var UserService = (function() {
      * User create structure
      *
      * @method newUserCreateStruct
-     * @param languageCode {string}
-     * @param login {string}
-     * @param email {string}
-     * @param password {string}
-     * @param fields {Array}
+     * @param languageCode {String} The language code (eng-GB, fre-FR, ...)
+     * @param login {String} login for a new user
+     * @param email {String} email for a new user
+     * @param password {String} password for a new user
+     * @param fields {Array} fields array (see example for "newUserGroupCreateStruct")
+     * @return {UserCreateStruct}
      */
     UserService.prototype.newUserCreateStruct = function newUserCreateStruct(languageCode, login, email, password, fields) {
 
@@ -72,9 +110,10 @@ var UserService = (function() {
     };
 
     /**
-     * User update structure
+     * Returns user update structure
      *
      * @method newUserUpdateStruct
+     * @return {UserUpdateStruct}
      */
     UserService.prototype.newUserUpdateStruct = function newUserUpdateStruct() {
 
@@ -83,10 +122,11 @@ var UserService = (function() {
     };
 
     /**
-     * Role input structure
+     * Returns role input structure
      *
      * @method newRoleInputStruct
-     * @param identifier {string}
+     * @param identifier {String} unique identifier for the new role (e.g. "editor")
+     * @return {RoleInputStruct}
      */
     UserService.prototype.newRoleInputStruct = function newRoleInputStruct(identifier) {
 
@@ -95,11 +135,30 @@ var UserService = (function() {
     };
 
     /**
-     * Role assignment input structure
+     * Returns target role assignment input structure
      *
-     * @method newRoleAssignmentInputStruct
-     * @param role {Object}
-     * @param limitation {Object}
+     * @method newRoleAssignInputStruct
+     * @param role {Object} object representing the target role (see example)
+     * @param limitation {Object} object representing limitations for assignment (see example)
+     * @return {RoleAssignInputStruct}
+     * @example
+     *     var roleAssignCreateStruct = userService.newRoleAssignInputStruct(
+     *         {
+     *             "_href" : "/api/ezp/v2/user/roles/7",
+     *             "_media-type" : "application/vnd.ez.api.RoleAssignInput+json"
+     *         }, {
+     *             "_identifier" : "Section",
+     *             "values" : {
+     *                 "ref" : [{
+     *                     "_href" : "/api/ezp/v2/content/sections/1",
+     *                     "_media-type" : "application/vnd.ez.api.Section+json"
+     *                 }, {
+     *                     "_href" : "/api/ezp/v2/content/sections/4",
+     *                     "_media-type" : "application/vnd.ez.api.Section+json"
+     *                 }]
+     *             }
+     *         });
+     *
      */
     UserService.prototype.newRoleAssignInputStruct = function newRoleAssignInputStruct(role, limitation) {
 
@@ -108,12 +167,28 @@ var UserService = (function() {
     };
 
     /**
-     * Policy create structure
+     * Returns policy create structure
      *
      * @method newPolicyCreateStruct
-     * @param module {string}
-     * @param theFunction {string}
-     * @param limitations {Object}
+     * @param module {String} name of the module for which new policy should be active
+     * @param theFunction {String} name of the function for which the new policy should be active
+     * @param limitations {Object} object describing limitations for new policy
+     * @return {PolicyCreateStruct}
+     * @example
+     *     var policyCreateStruct = userService.newPolicyCreateStruct(
+     *         "content", "publish", [{
+     *             limitation: [{
+     *                 "_identifier" : "Section",
+     *                 "values" : {
+     *                     "ref" : [{
+     *                         "_href" : "5"
+     *                     }, {
+     *                         "_href" : "4"
+     *                     }]
+     *                 }
+     *             }]
+     *         }]
+     *     );
      */
     UserService.prototype.newPolicyCreateStruct = function newPolicyCreateStruct(module, theFunction, limitations) {
 
@@ -125,7 +200,8 @@ var UserService = (function() {
      * Policy update structure
      *
      * @method newPolicyUpdateStruct
-     * @param limitations {Object}
+     * @param limitations {Object} object describing limitations change for the policy (see "newPolicyCreateStruct" example)
+     * @return {PolicyUpdateStruct}
      */
     UserService.prototype.newPolicyUpdateStruct = function newPolicyUpdateStruct(limitations) {
 
@@ -138,10 +214,10 @@ var UserService = (function() {
 // ******************************
 
     /**
-     * Load root user group
+     * Load the root user group
      *
      * @method loadRootUserGroup
-     * @param callback {function} function, which will be executed on request success
+     * @param callback {Function} callback executed after performing the request (see {{#crossLink "UserService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     UserService.prototype.loadRootUserGroup = function loadRootUserGroup(callback) {
 
@@ -169,11 +245,11 @@ var UserService = (function() {
     };
 
     /**
-     * Load user group
+     * Load the target user group
      *
      * @method loadUserGroup
-     * @param userGroupId {href}
-     * @param callback {function} function, which will be executed on request success
+     * @param userGroupId {String} target user group identifier (e.g. "/api/ezp/v2/user/groups/1/5")
+     * @param callback {Function} callback executed after performing the request (see {{#crossLink "UserService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     UserService.prototype.loadUserGroup = function loadUserGroup(userGroupId, callback) {
         this._connectionManager.request(
@@ -188,12 +264,12 @@ var UserService = (function() {
     };
 
     /**
-     * Load user group by remoteId
+     * Load the target user group by remoteId
      *
      * @method loadUserGroupByRemoteId
-     * @param userGroups {href}
-     * @param remoteId {string}
-     * @param callback {function} function, which will be executed on request success
+     * @param userGroups {String} link to root UserGroups resource (should be auto-discovered)
+     * @param remoteId {String} target user group remote identifier (e.g. "f5c88a2209584891056f987fd965b0ba")
+     * @param callback {Function} callback executed after performing the request (see {{#crossLink "UserService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     UserService.prototype.loadUserGroupByRemoteId = function loadUserGroupByRemoteId(userGroups, remoteId, callback) {
         this._connectionManager.request(
@@ -208,11 +284,11 @@ var UserService = (function() {
     };
 
     /**
-     * Delete user group
+     * Delete the target user group
      *
      * @method deleteUserGroup
-     * @param userGroupId {href}
-     * @param callback {function} function, which will be executed on request success
+     * @param userGroupId {String} target user group identifier (e.g. "/api/ezp/v2/user/groups/1/5")
+     * @param callback {Function} callback executed after performing the request (see {{#crossLink "UserService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     UserService.prototype.deleteUserGroup = function deleteUserGroup(userGroupId, callback) {
         this._connectionManager.delete(
@@ -222,12 +298,12 @@ var UserService = (function() {
     };
 
     /**
-     * Move user group
+     * Move the target user group to the destination
      *
      * @method moveUserGroup
-     * @param userGroupId {href}
-     * @param destination {href}
-     * @param callback {function} function, which will be executed on request success
+     * @param userGroupId {String} target user group identifier (e.g. "/api/ezp/v2/user/groups/1/5")
+     * @param destination {String} destination identifier (e.g. "/api/ezp/v2/user/groups/1/5/110")
+     * @param callback {Function} callback executed after performing the request (see {{#crossLink "UserService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     UserService.prototype.moveUserGroup = function moveUserGroup(userGroupId, destination, callback) {
         this._connectionManager.request(
@@ -243,12 +319,12 @@ var UserService = (function() {
 
 
     /**
-     * Create user group
+     * Create a new user group in the provided parent user group
      *
      * @method createUserGroup
-     * @param parentGroupId {href}
-     * @param userGroupCreateStruct {Object}
-     * @param callback {function} function, which will be executed on request success
+     * @param parentGroupId {String} target parent user group identifier (e.g. "/api/ezp/v2/user/groups/1/5")
+     * @param userGroupCreateStruct {UserGroupCreateStruct} object describing new user group to be created
+     * @param callback {Function} callback executed after performing the request (see {{#crossLink "UserService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     UserService.prototype.createUserGroup = function createUserGroup(parentGroupId, userGroupCreateStruct, callback) {
 
@@ -277,12 +353,12 @@ var UserService = (function() {
     };
 
     /**
-     * Update user group
+     * Update the target user group
      *
      * @method updateUserGroup
-     * @param userGroupId {href}
-     * @param userGroupUpdateStruct {Object}
-     * @param callback {function} function, which will be executed on request success
+     * @param userGroupId {String} target user group identifier (e.g. "/api/ezp/v2/user/groups/1/5")
+     * @param userGroupUpdateStruct {UserGroupUpdateStruct} object describing changes to the target user group
+     * @param callback {Function} callback executed after performing the request (see {{#crossLink "UserService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     UserService.prototype.updateUserGroup = function updateUserGroup(userGroupId, userGroupUpdateStruct, callback) {
         this._connectionManager.request(
@@ -296,11 +372,11 @@ var UserService = (function() {
 
 
     /**
-     * Load subgroups for a user group
+     * Load subgroups of the target user group
      *
      * @method loadSubUserGroups
-     * @param userGroupId {href}
-     * @param callback {function} function, which will be executed on request success
+     * @param userGroupId {String} target user group identifier (e.g. "/api/ezp/v2/user/groups/1/5")
+     * @param callback {Function} callback executed after performing the request (see {{#crossLink "UserService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     UserService.prototype.loadSubUserGroups = function loadSubUserGroups(userGroupId, callback) {
 
@@ -331,11 +407,11 @@ var UserService = (function() {
     };
 
     /**
-     * Load users for a user group
+     * Load users of the target user group
      *
      * @method loadUsersOfUserGroup
-     * @param userGroupId {href}
-     * @param callback {function} function, which will be executed on request success
+     * @param userGroupId {String} target user group identifier (e.g. "/api/ezp/v2/user/groups/1/5")
+     * @param callback {Function} callback executed after performing the request (see {{#crossLink "UserService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     UserService.prototype.loadUsersOfUserGroup = function loadUsersOfUserGroup(userGroupId, callback) {
 
@@ -367,11 +443,11 @@ var UserService = (function() {
     };
 
     /**
-     * Load user groups for a user
+     * Load user groups for the target user
      *
      * @method loadUserGroupsOfUser
-     * @param userId {href}
-     * @param callback {function} function, which will be executed on request success
+     * @param userId {String} target user identifier (e.g. "/api/ezp/v2/user/users/14")
+     * @param callback {Function} callback executed after performing the request (see {{#crossLink "UserService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     UserService.prototype.loadUserGroupsOfUser = function loadUserGroupsOfUser(userId, callback) {
         this._connectionManager.request(
@@ -390,12 +466,12 @@ var UserService = (function() {
 // ******************************
 
     /**
-     * Create user
+     * Create a new user
      *
      * @method createUser
-     * @param userGroupId {href}
-     * @param userCreateStruct {Object}
-     * @param callback {function} function, which will be executed on request success
+     * @param userGroupId {String} target user group identifier (e.g. "/api/ezp/v2/user/groups/1/5")
+     * @param userCreateStruct {UserCreateStruct} object describing new user to be created
+     * @param callback {Function} callback executed after performing the request (see {{#crossLink "UserService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     UserService.prototype.createUser = function createUser(userGroupId, userCreateStruct, callback) {
 
@@ -424,12 +500,12 @@ var UserService = (function() {
     };
 
     /**
-     * Load users and usergroups according to roleId
+     * Load users and usergroups for the target roleId
      *
      * @method getRoleAssignments
-     * @param userList
-     * @param roleId {href}
-     * @param callback {function} function, which will be executed on request success
+     * @param userList {String} link to root UserList resource (should be auto-discovered)
+     * @param roleId {String} target role identifier (e.g. "/api/ezp/v2/user/roles/5")
+     * @param callback {Function} callback executed after performing the request (see {{#crossLink "UserService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     UserService.prototype.getRoleAssignments = function getRoleAssignments(userList, roleId, callback) {
         this._connectionManager.request(
@@ -444,11 +520,11 @@ var UserService = (function() {
     };
 
     /**
-     * Load user
+     * Load the target user
      *
      * @method loadUser
-     * @param userId {href}
-     * @param callback {function} function, which will be executed on request success
+     * @param userId {String} target user identifier (e.g. "/api/ezp/v2/user/users/144")
+     * @param callback {Function} callback executed after performing the request (see {{#crossLink "UserService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     UserService.prototype.loadUser = function loadUser(userId, callback) {
         this._connectionManager.request(
@@ -463,12 +539,20 @@ var UserService = (function() {
     };
 
     /**
-     * Update user
+     * Update the target user
      *
      * @method updateUser
-     * @param userId {href}
-     * @param userUpdateStruct {Object}
-     * @param callback {function} function, which will be executed on request success
+     * @param userId {String} target user identifier (e.g. "/api/ezp/v2/user/users/144")
+     * @param userUpdateStruct {UserUpdateStruct} object describing changes to the user
+     * @param callback {Function} callback executed after performing the request (see {{#crossLink "UserService"}}Note on the callbacks usage{{/crossLink}} for more info)
+     * @example
+     *     var userUpdateStruct = userService.newUserUpdateStruct();
+     *     userUpdateStruct.body.UserUpdate.email = "somenewemail@nowhere.no";
+     *     userService.updateUser(
+     *         "/api/ezp/v2/user/users/144",
+     *         userUpdateStruct,
+     *         callback
+     *     );
      */
     UserService.prototype.updateUser = function updateUser(userId, userUpdateStruct, callback) {
         this._connectionManager.request(
@@ -481,11 +565,11 @@ var UserService = (function() {
     };
 
     /**
-     * Delete user
+     * Delete the target user
      *
      * @method deleteUser
-     * @param userId {href}
-     * @param callback {function} function, which will be executed on request success
+     * @param userId {String} target user identifier (e.g. "/api/ezp/v2/user/users/144")
+     * @param callback {Function} callback executed after performing the request (see {{#crossLink "UserService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     UserService.prototype.deleteUser = function deleteUser(userId, callback) {
         this._connectionManager.delete(
@@ -499,12 +583,12 @@ var UserService = (function() {
 // ******************************
 
     /**
-     * Assign user to a user group
+     * Assign the target user to the target user group
      *
      * @method loadUser
-     * @param userId {href}
-     * @param userGroupId {href}
-     * @param callback {function} function, which will be executed on request success
+     * @param userId {String} target user identifier (e.g. "/api/ezp/v2/user/users/144")
+     * @param userGroupId {String} target user group identifier (e.g. "/api/ezp/v2/user/groups/2")
+     * @param callback {Function} callback executed after performing the request (see {{#crossLink "UserService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     UserService.prototype.assignUserToUserGroup = function assignUserToUserGroup(userId, userGroupId, callback) {
 
@@ -536,11 +620,11 @@ var UserService = (function() {
     };
 
     /**
-     * Unassign user from a user group
+     * Remove target assignment (of a user to a user group)
      *
-     * @method unAssignUserFromUserGroup
-     * @param userAssignedGroupId {href}
-     * @param callback {function} function, which will be executed on request success
+     * @method unassignUserFromUserGroup
+     * @param userAssignedGroupId {String} target assignment identifier (e.g. "/api/ezp/v2/user/users/146/groups/1")
+     * @param callback {Function} callback executed after performing the request (see {{#crossLink "UserService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     UserService.prototype.unassignUserFromUserGroup = function unassignUserFromUserGroup(userAssignedGroupId, callback) {
         this._connectionManager.delete(
@@ -555,11 +639,11 @@ var UserService = (function() {
 // ******************************
 
     /**
-     * Create a role
+     * Create a new role
      *
      * @method createRole
-     * @param roleCreateStruct {Object}
-     * @param callback {function} function, which will be executed on request success
+     * @param roleCreateStruct {RoleCreateStruct} object describing new role to be created
+     * @param callback {Function} callback executed after performing the request (see {{#crossLink "UserService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     UserService.prototype.createRole = function createRole(roleCreateStruct, callback) {
 
@@ -586,11 +670,11 @@ var UserService = (function() {
     };
 
     /**
-     * Load a role
+     * Load the target role
      *
      * @method loadRole
-     * @param roleId {href}
-     * @param callback {function} function, which will be executed on request success
+     * @param roleId {String} target role identifier (e.g. "/api/ezp/v2/user/roles/5")
+     * @param callback {Function} callback executed after performing the request (see {{#crossLink "UserService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     UserService.prototype.loadRole = function loadRole(roleId, callback) {
         this._connectionManager.request(
@@ -605,15 +689,17 @@ var UserService = (function() {
     };
 
     /**
-     * Load roles
+     * Search roles by string identifier and apply certain limit and offset on the result set
      *
      * @method loadRoles
-     * @param identifier {string}
-     * @param limit {int}
-     * @param offset {int}
-     * @param callback {function} function, which will be executed on request success
+     * @param identifier {String} string identifier of the roles to search (e.g. "admin")
+     * @param [offset=0] {int} the offset of the result set
+     * @param [limit=-1] {int} the limit of the result set
+     * @param callback {Function} callback executed after performing the request (see {{#crossLink "UserService"}}Note on the callbacks usage{{/crossLink}} for more info)
+     * @example
+     *     userService.loadRoles("admin", 5, 5, callback);
      */
-    UserService.prototype.loadRoles = function loadRoles(identifier, limit, offset, callback) {
+    UserService.prototype.loadRoles = function loadRoles(identifier, offset, limit, callback) {
 
         var that = this,
             identifierQuery = (identifier === "") ? "" : "&identifier=" + identifier;
@@ -647,12 +733,12 @@ var UserService = (function() {
     };
 
     /**
-     * Update a role
+     * Update the target role
      *
      * @method updateRole
-     * @param roleId {href}
-     * @param roleUpdateStruct
-     * @param callback {function} function, which will be executed on request success
+     * @param roleId {String} target role identifier (e.g. "/api/ezp/v2/user/roles/5")
+     * @param roleUpdateStruct {RoleUpdateStruct} object describing changes to the role
+     * @param callback {Function} callback executed after performing the request (see {{#crossLink "UserService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     UserService.prototype.updateRole = function updateRole(roleId, roleUpdateStruct, callback) {
         this._connectionManager.request(
@@ -666,11 +752,11 @@ var UserService = (function() {
 
 
     /**
-     * Delete a role
+     * Delete the target role
      *
      * @method deleteRole
-     * @param roleId {href}
-     * @param callback {function} function, which will be executed on request success
+     * @param roleId {String} target role identifier (e.g. "/api/ezp/v2/user/roles/5")
+     * @param callback {Function} callback executed after performing the request (see {{#crossLink "UserService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     UserService.prototype.deleteRole = function deleteRole(roleId, callback) {
         this._connectionManager.delete(
@@ -681,11 +767,11 @@ var UserService = (function() {
 
 
     /**
-     * Get role assignments for a user
+     * Get role assignments for the target user
      *
      * @method getRoleAssignmentsForUser
-     * @param userId {href}
-     * @param callback {function} function, which will be executed on request success
+     * @param userId {String} target user identifier (e.g. "/api/ezp/v2/user/users/8")
+     * @param callback {Function} callback executed after performing the request (see {{#crossLink "UserService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     UserService.prototype.getRoleAssignmentsForUser = function getRoleAssignmentsForUser(userId, callback) {
 
@@ -716,11 +802,11 @@ var UserService = (function() {
     };
 
     /**
-     * Get role assignments for a user group
+     * Get role assignments for the target user group
      *
      * @method getRoleAssignmentsForUserGroup
-     * @param userGroupId {href}
-     * @param callback {function} function, which will be executed on request success
+     * @param userGroupId {String} target user group identifier (e.g. "/api/ezp/v2/user/groups/2")
+     * @param callback {Function} callback executed after performing the request (see {{#crossLink "UserService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     UserService.prototype.getRoleAssignmentsForUserGroup = function getRoleAssignmentsForUserGroup(userGroupId, callback) {
 
@@ -752,11 +838,11 @@ var UserService = (function() {
 
 
     /**
-     * Get roleassignment object for a user
+     * Get RoleAssignment object for the target assignment (of a user to a role)
      *
      * @method getUserAssignmentObject
-     * @param userAssignmentId {href}
-     * @param callback {function} function, which will be executed on request success
+     * @param userAssignmentId {String} target role assignment identifier (e.g. "/api/ezp/v2/user/13/roles/7")
+     * @param callback {Function} callback executed after performing the request (see {{#crossLink "UserService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     UserService.prototype.getUserAssignmentObject = function getUserAssignmentObject(userAssignmentId, callback) {
         this._connectionManager.request(
@@ -771,11 +857,11 @@ var UserService = (function() {
     };
 
     /**
-     * Get roleassignment object for a user group
+     * Get RoleAssignment object for the target assignment (of a user group to a role)
      *
      * @method getUserGroupAssignmentObject
-     * @param userGroupAssignmentId {href}
-     * @param callback {function} function, which will be executed on request success
+     * @param userGroupAssignmentId {String} target role assignment identifier (e.g. "/api/ezp/v2/user/groups/1/5/110/roles/7")
+     * @param callback {Function} callback executed after performing the request (see {{#crossLink "UserService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     UserService.prototype.getUserGroupAssignmentObject = function getUserGroupAssignmentObject(userGroupAssignmentId, callback) {
         this._connectionManager.request(
@@ -794,9 +880,10 @@ var UserService = (function() {
      * Assign a role to user
      *
      * @method assignRoleToUser
-     * @param userId {href}
-     * @param roleAssignInputStruct {Object}
-     * @param callback {function} function, which will be executed on request success
+     * @param userId {String}  target user identifier (e.g. "/api/ezp/v2/user/users/8")
+     * @param roleAssignInputStruct {RoleAssignInputStruct} object describing the new role assignment (see "newRoleAssignInputStruct")
+     * @param callback {Function} callback executed after performing the request (see {{#crossLink "UserService"}}Note on the callbacks usage{{/crossLink}} for more info)
+     *
      */
     UserService.prototype.assignRoleToUser = function assignRoleToUser(userId, roleAssignInputStruct, callback) {
 
@@ -828,9 +915,9 @@ var UserService = (function() {
      * Assign a role to user group
      *
      * @method assignRoleToUserGroup
-     * @param userGroupId {href}
-     * @param roleAssignInputStruct {Object}
-     * @param callback {function} function, which will be executed on request success
+     * @param userGroupId {String} target user group identifier (e.g. "/api/ezp/v2/user/groups/2")
+     * @param roleAssignInputStruct {RoleAssignInputStruct} object describing the new role assignment (see "newRoleAssignInputStruct")
+     * @param callback {Function} callback executed after performing the request (see {{#crossLink "UserService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     UserService.prototype.assignRoleToUserGroup = function assignRoleToUserGroup(userGroupId, roleAssignInputStruct, callback) {
 
@@ -858,11 +945,11 @@ var UserService = (function() {
     };
 
     /**
-     * Unassign the role from user
+     * Remove target assignment (of a user to a role)
      *
      * @method unassignRoleFromUser
-     * @param userRoleId {href}
-     * @param callback {function} function, which will be executed on request success
+     * @param userRoleId {String} target role assignment identifier (e.g. "/api/ezp/v2/user/users/110/roles/7")
+     * @param callback {Function} callback executed after performing the request (see {{#crossLink "UserService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     UserService.prototype.unassignRoleFromUser = function unassignRoleFromUser(userRoleId, callback) {
         this._connectionManager.delete(
@@ -872,11 +959,11 @@ var UserService = (function() {
     };
 
     /**
-     * Unassign the role from user group
+     * Remove target assignment (of a user group to a role)
      *
      * @method unassignRoleFromUserGroup
-     * @param userGroupRoleId {href}
-     * @param callback {function} function, which will be executed on request success
+     * @param userGroupRoleId {String} target role assignment identifier (e.g. "/api/ezp/v2/user/groups/2/roles/7")
+     * @param callback {Function} callback executed after performing the request (see {{#crossLink "UserService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     UserService.prototype.unassignRoleFromUserGroup = function unassignRoleFromUserGroup(userGroupRoleId, callback) {
         this._connectionManager.delete(
@@ -890,12 +977,28 @@ var UserService = (function() {
 // ******************************
 
     /**
-     * Add new policy to the role
+     * Add the new policy to the target role
      *
      * @method addPolicy
-     * @param roleId {href}
-     * @param policyCreateStruct {Object}
-     * @param callback {function} function, which will be executed on request success
+     * @param roleId {String} target role identifier (e.g. "/api/ezp/v2/user/roles/7")
+     * @param policyCreateStruct {PolicyCreateStruct} object describing new policy to be created
+     * @param callback {Function} callback executed after performing the request (see {{#crossLink "UserService"}}Note on the callbacks usage{{/crossLink}} for more info)
+     * @example
+     *     var policyCreateStruct = userService.newPolicyCreateStruct(
+     *     "content",
+     *     "create",
+     *     [{  _identifier : "Class",
+     *         values : {
+     *             ref : [{
+     *                 _href : "18"
+     *             }]
+     *         }
+     *     }]);
+     *
+     *     userService.addPolicy(
+     *     "/api/ezp/v2/user/roles/7",
+     *     policyCreateStruct,
+     *     callback);
      */
     UserService.prototype.addPolicy = function addPolicy(roleId, policyCreateStruct, callback) {
 
@@ -923,11 +1026,11 @@ var UserService = (function() {
     };
 
     /**
-     * Load policies of the role
+     * Load policies of the target role
      *
      * @method loadPolicies
-     * @param roleId {href}
-     * @param callback {function} function, which will be executed on request success
+     * @param roleId {String} target role identifier (e.g. "/api/ezp/v2/user/roles/7")
+     * @param callback {Function} callback executed after performing the request (see {{#crossLink "UserService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     UserService.prototype.loadPolicies = function loadPolicies(roleId, callback) {
 
@@ -957,11 +1060,11 @@ var UserService = (function() {
     };
 
     /**
-     * Load a policy
+     * Load the target policy
      *
      * @method loadPolicy
-     * @param policyId {href}
-     * @param callback {function} function, which will be executed on request success
+     * @param policyId {String} target policy identifier (e.g. "/api/ezp/v2/user/roles/7/policies/1")
+     * @param callback {Function} callback executed after performing the request (see {{#crossLink "UserService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     UserService.prototype.loadPolicy = function loadPolicy(policyId, callback) {
         this._connectionManager.request(
@@ -976,12 +1079,12 @@ var UserService = (function() {
     };
 
     /**
-     * Update a policy
+     * Update the target policy
      *
      * @method updatePolicy
-     * @param policyId {href}
-     * @param policyUpdateStruct {Object}
-     * @param callback {function} function, which will be executed on request success
+     * @param policyId {String} target policy identifier (e.g. "/api/ezp/v2/user/roles/7/policies/1")
+     * @param policyUpdateStruct {PolicyUpdateStruct} object describing changes to the policy
+     * @param callback {Function} callback executed after performing the request (see {{#crossLink "UserService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     UserService.prototype.updatePolicy = function updatePolicy(policyId, policyUpdateStruct, callback) {
         this._connectionManager.request(
@@ -994,11 +1097,11 @@ var UserService = (function() {
     };
 
     /**
-     * Delete the policy
+     * Delete the target policy
      *
      * @method deletePolicy
-     * @param policyId {href}
-     * @param callback {function} function, which will be executed on request success
+     * @param policyId {String} target policy identifier (e.g. "/api/ezp/v2/user/roles/7/policies/1")
+     * @param callback {Function} callback executed after performing the request (see {{#crossLink "UserService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     UserService.prototype.deletePolicy = function deletePolicy(policyId, callback) {
         this._connectionManager.delete(
@@ -1008,12 +1111,12 @@ var UserService = (function() {
     };
 
     /**
-     * Load users policies
+     * Load policies for the target user
      *
      * @method loadPoliciesByUserId
-     * @param userPolicies
-     * @param userId {href}
-     * @param callback {function} function, which will be executed on request success
+     * @param userPolicies {String} link to root UserPolicies resource (should be auto-discovered)
+     * @param userId {String} target user numerical identifier (e.g. 110)
+     * @param callback {Function} callback executed after performing the request (see {{#crossLink "UserService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     UserService.prototype.loadPoliciesByUserId = function loadPoliciesByUserId(userPolicies, userId, callback) {
         this._connectionManager.request(
@@ -1035,9 +1138,9 @@ var UserService = (function() {
      * Create a session (login a user)
      *
      * @method createSession
-     * @param sessions {href}
-     * @param sessionCreateStruct {Object}
-     * @param callback {function} function, which will be executed on request success
+     * @param sessions {String} link to root Sessions resource (should be auto-discovered)
+     * @param sessionCreateStruct {SessionCreateStruct} object describing new session to be created (see "newSessionCreateStruct")
+     * @param callback {Function} callback executed after performing the request (see {{#crossLink "UserService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     UserService.prototype.createSession = function createSession(sessions, sessionCreateStruct, callback) {
         this._connectionManager.notAuthorizedRequest(
@@ -1050,11 +1153,11 @@ var UserService = (function() {
     };
 
     /**
-     * Delete the session (without actual client logout)
+     * Delete the target session (without actual client logout)
      *
      * @method deleteSession
-     * @param sessionId {href}
-     * @param callback {function} function, which will be executed on request success
+     * @param sessionId {String} target session identifier (e.g. "/api/ezp/v2/user/sessions/o7i8r1sapfc9r84ae53bgq8gp4")
+     * @param callback {Function} callback executed after performing the request (see {{#crossLink "UserService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     UserService.prototype.deleteSession = function deleteSession(sessionId, callback) {
         this._connectionManager.delete(
@@ -1065,10 +1168,11 @@ var UserService = (function() {
 
     /**
      * Actual client logout (based on deleteSession)
-     * Kills currently active session and resets localStorage params (sessionId, CSRFToken)
+     * Implemented by ConnectionManager. Depends on current system configuration.
+     * Kills currently active session and resets storage (e.g. LocalStorage) params (sessionId, CSRFToken)
      *
      * @method logOut
-     * @param callback {function} function, which will be executed on request success
+     * @param callback {Function} callback executed after performing the request (see {{#crossLink "UserService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     UserService.prototype.logOut = function logOut(callback) {
 
