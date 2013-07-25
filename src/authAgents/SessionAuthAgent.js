@@ -30,11 +30,10 @@ var SessionAuthAgent = (function() {
      * A cycle may contain one or more queued up requests
      *
      * @method ensureAuthentication
-     * @param done {Function} Callback function, which is to be called by the implementation
-     * to signal the authentication has been completed.
+     * @param done {Function} Callback function, which is to be called by the implementation to signal the authentication has been completed.
      */
     SessionAuthAgent.prototype.ensureAuthentication = function(done) {
-        if ((typeof this.sessionId === 'undefined') || (this.sessionId === null)) {
+        if (this.sessionId === null) {
 
             var that = this,
                 userService = this.CAPI.getUserService(),

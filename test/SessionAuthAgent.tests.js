@@ -16,7 +16,21 @@ describe("Session Authorization Agent", function () {
         sessionAuthAgent;
 
     beforeEach(function (){
-        sessionStorage = jasmine.createSpyObj('sessionStorage',['getItem','setItem','removeItem']);
+
+        sessionStorage = {
+            getItem: function(identifier){
+                return null;
+            },
+            setItem: function(identifier){
+                return;
+            },
+            removeItem: function(identifier){
+                return;
+            }
+        };
+        spyOn(sessionStorage, 'getItem').andCallThrough();
+        spyOn(sessionStorage, 'setItem').andCallThrough();
+        spyOn(sessionStorage, 'removeItem').andCallThrough();
 
         mockUserService = {
             newSessionCreateStruct: function(login, password){
@@ -94,9 +108,17 @@ describe("Session Authorization Agent", function () {
             expect(mockCallback).toHaveBeenCalledWith(false, true);
         });
 
-        it("ensureAuthentication when session is already created", function(){
+        it("ensureAuthentication when already authenticated (sessionStorage is storing sessionId)", function(){
 
-            sessionAuthAgent.sessionId = testSessionId;
+            sessionStorage.getItem = function(identifier){
+                return "i-am-a-real-session-id-no-doubt-about-that";
+            };
+
+            sessionAuthAgent = new SessionAuthAgent({
+                login : testLogin,
+                password : testPassword
+            });
+            sessionAuthAgent.CAPI = mockCAPI;
 
             sessionAuthAgent.ensureAuthentication(mockCallback);
 

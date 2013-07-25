@@ -49,156 +49,162 @@ describe("Connection Manager", function () {
 // ******************************
     describe("is calling injected objects with right arguments while running:", function () {
 
-        it("it's own constructor", function(){
-
+        beforeEach(function (){
             connectionManager = new ConnectionManager(
                 endPointUrl,
                 mockAuthenticationAgent,
                 mockConnectionFactory
             );
+        });
 
+        it("request", function(){
+
+            connectionManager.logRequests = testFalse;
+
+            connectionManager.request(
+                "GET",
+                rootId,
+                "",
+                {},
+                mockCallback
+            );
+
+            expect(mockAuthenticationAgent.ensureAuthentication).toHaveBeenCalled();
+            expect(mockAuthenticationAgent.authenticateRequest).toHaveBeenCalledWith(
+                jasmine.any(Request),
+                jasmine.any(Function)
+            );
             expect(mockConnectionFactory.createConnection).toHaveBeenCalled();
+            expect(mockConnection.execute).toHaveBeenCalledWith(
+                jasmine.any(Request),
+                mockCallback
+            );
         });
 
-        describe("regular calls:", function () {
+        it("request (with calls logging and minimum arguments set)", function(){
 
-            beforeEach(function (){
-                connectionManager = new ConnectionManager(
-                    endPointUrl,
-                    mockAuthenticationAgent,
-                    mockConnectionFactory
-                );
-            });
+            connectionManager.logRequests = testTrue;
+            spyOn(console, 'dir').andCallThrough;
 
-            it("request", function(){
+            connectionManager.request(
+                undefined,
+                undefined,
+                undefined,
+                undefined,
+                undefined
+            );
 
-                connectionManager.logRequests = testFalse;
-
-                connectionManager.request(
-                    "GET",
-                    rootId,
-                    "",
-                    {},
-                    mockCallback
-                );
-
-                expect(mockAuthenticationAgent.ensureAuthentication).toHaveBeenCalled();
-                expect(mockAuthenticationAgent.authenticateRequest).toHaveBeenCalledWith(
-                    jasmine.any(Request),
-                    jasmine.any(Function)
-                );
-                expect(mockConnection.execute).toHaveBeenCalledWith(
-                    jasmine.any(Request),
-                    mockCallback
-                );
-            });
-
-            it("request (with calls logging and minimum arguments set)", function(){
-
-                connectionManager.logRequests = testTrue;
-                spyOn(console, 'log').andCallThrough;
-
-                connectionManager.request(
-                    undefined,
-                    undefined,
-                    undefined,
-                    undefined,
-                    undefined
-                );
-
-                expect(mockAuthenticationAgent.ensureAuthentication).toHaveBeenCalled();
-                expect(mockAuthenticationAgent.authenticateRequest).toHaveBeenCalledWith(
-                    jasmine.any(Request),
-                    jasmine.any(Function)
-                );
-                expect(mockConnection.execute).toHaveBeenCalledWith(
-                    jasmine.any(Request),
-                    jasmine.any(Function)
-                );
-                expect(console.log).toHaveBeenCalledWith(jasmine.any(Request));
-            });
-
-
-            it("notAuthorizedRequest", function(){
-
-                connectionManager.logRequests = testFalse;
-
-                connectionManager.notAuthorizedRequest(
-                    "GET",
-                    rootId,
-                    "",
-                    {},
-                    mockCallback
-                );
-
-                expect(mockAuthenticationAgent.ensureAuthentication).not.toHaveBeenCalled();
-                expect(mockAuthenticationAgent.authenticateRequest).not.toHaveBeenCalled();
-                expect(mockConnection.execute).toHaveBeenCalledWith(
-                    jasmine.any(Request),
-                    mockCallback
-                );
-            });
-
-            it("notAuthorizedRequest (with calls logging and minimum arguments set)", function(){
-
-                connectionManager.logRequests = testTrue;
-                spyOn(console, 'log').andCallThrough;
-
-                connectionManager.notAuthorizedRequest(
-                    undefined,
-                    undefined,
-                    undefined,
-                    undefined,
-                    undefined
-                );
-
-                expect(mockAuthenticationAgent.ensureAuthentication).not.toHaveBeenCalled();
-                expect(mockAuthenticationAgent.authenticateRequest).not.toHaveBeenCalled();
-                expect(mockConnection.execute).toHaveBeenCalledWith(
-                    jasmine.any(Request),
-                    jasmine.any(Function)
-                );
-                expect(console.log).toHaveBeenCalledWith(jasmine.any(Request));
-            });
-
-            it("delete", function(){
-
-                connectionManager.delete(
-                    testContentId,
-                    mockCallback
-                );
-
-                expect(mockAuthenticationAgent.ensureAuthentication).toHaveBeenCalled();
-                expect(mockAuthenticationAgent.authenticateRequest).toHaveBeenCalled();
-                expect(mockConnection.execute).toHaveBeenCalledWith(
-                    jasmine.any(Request),
-                    mockCallback
-                );
-            });
-
-            it("delete (with minimum arguments set)", function(){
-
-                connectionManager.delete(
-                    undefined,
-                    undefined
-                );
-
-                expect(mockAuthenticationAgent.ensureAuthentication).toHaveBeenCalled();
-                expect(mockAuthenticationAgent.authenticateRequest).toHaveBeenCalled();
-                expect(mockConnection.execute).toHaveBeenCalledWith(
-                    jasmine.any(Request),
-                    jasmine.any(Function)
-                );
-            });
-
-            it("logOut", function(){
-
-                connectionManager.logOut(mockCallback);
-
-                expect(mockAuthenticationAgent.logOut).toHaveBeenCalledWith(mockCallback);
-            });
-
+            expect(mockAuthenticationAgent.ensureAuthentication).toHaveBeenCalled();
+            expect(mockAuthenticationAgent.authenticateRequest).toHaveBeenCalledWith(
+                jasmine.any(Request),
+                jasmine.any(Function)
+            );
+            expect(mockConnection.execute).toHaveBeenCalledWith(
+                jasmine.any(Request),
+                jasmine.any(Function)
+            );
+            expect(console.dir).toHaveBeenCalledWith(jasmine.any(Request));
         });
+
+        it("request (and stores request in queue while authentication is still in progress)", function(){
+
+            connectionManager._authInProgress = true;
+            connectionManager._requestsQueue.push("dummyRequest");
+
+            connectionManager.request(
+                "GET",
+                rootId,
+                "",
+                {},
+                mockCallback
+            );
+
+            expect(mockAuthenticationAgent.ensureAuthentication).not.toHaveBeenCalled();
+            expect(mockAuthenticationAgent.authenticateRequest).not.toHaveBeenCalled();
+            expect(mockConnectionFactory.createConnection).not.toHaveBeenCalled();
+            expect(connectionManager._requestsQueue.length).toEqual(2);
+        });
+
+        it("notAuthorizedRequest", function(){
+
+            connectionManager.logRequests = testFalse;
+
+            connectionManager.notAuthorizedRequest(
+                "GET",
+                rootId,
+                "",
+                {},
+                mockCallback
+            );
+
+            expect(mockAuthenticationAgent.ensureAuthentication).not.toHaveBeenCalled();
+            expect(mockAuthenticationAgent.authenticateRequest).not.toHaveBeenCalled();
+            expect(mockConnectionFactory.createConnection).toHaveBeenCalled();
+            expect(mockConnection.execute).toHaveBeenCalledWith(
+                jasmine.any(Request),
+                mockCallback
+            );
+        });
+
+        it("notAuthorizedRequest (with calls logging and minimum arguments set)", function(){
+
+            connectionManager.logRequests = testTrue;
+            spyOn(console, 'dir').andCallThrough;
+
+            connectionManager.notAuthorizedRequest(
+                undefined,
+                undefined,
+                undefined,
+                undefined,
+                undefined
+            );
+
+            expect(mockAuthenticationAgent.ensureAuthentication).not.toHaveBeenCalled();
+            expect(mockAuthenticationAgent.authenticateRequest).not.toHaveBeenCalled();
+            expect(mockConnection.execute).toHaveBeenCalledWith(
+                jasmine.any(Request),
+                jasmine.any(Function)
+            );
+            expect(console.dir).toHaveBeenCalledWith(jasmine.any(Request));
+        });
+
+        it("delete", function(){
+
+            connectionManager.delete(
+                testContentId,
+                mockCallback
+            );
+
+            expect(mockAuthenticationAgent.ensureAuthentication).toHaveBeenCalled();
+            expect(mockAuthenticationAgent.authenticateRequest).toHaveBeenCalled();
+            expect(mockConnection.execute).toHaveBeenCalledWith(
+                jasmine.any(Request),
+                mockCallback
+            );
+        });
+
+        it("delete (with minimum arguments set)", function(){
+
+            connectionManager.delete(
+                undefined,
+                undefined
+            );
+
+            expect(mockAuthenticationAgent.ensureAuthentication).toHaveBeenCalled();
+            expect(mockAuthenticationAgent.authenticateRequest).toHaveBeenCalled();
+            expect(mockConnection.execute).toHaveBeenCalledWith(
+                jasmine.any(Request),
+                jasmine.any(Function)
+            );
+        });
+
+        it("logOut", function(){
+
+            connectionManager.logOut(mockCallback);
+
+            expect(mockAuthenticationAgent.logOut).toHaveBeenCalledWith(mockCallback);
+        });
+
     });
 
 // ******************************

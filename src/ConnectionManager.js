@@ -12,8 +12,10 @@ var ConnectionManager = (function() {
 
         this._endPointUrl = endPointUrl;
         this._authenticationAgent = authenticationAgent;
+        this._connectionFactory = connectionFactory;
 
-        this._activeConnection = connectionFactory.createConnection();
+        this._requestsQueue = [];
+        this._authInProgress = false;
 
         this.logRequests = false;
 
@@ -39,6 +41,7 @@ var ConnectionManager = (function() {
         callback = (typeof callback === "undefined") ? function(){} : callback;
 
         var that = this,
+            nextRequest,
             request = new Request({
                 method : method,
                 url : this._endPointUrl + url,
@@ -46,49 +49,68 @@ var ConnectionManager = (function() {
                 headers : headers
             });
 
-        // TODO: Suspend Requests during initial authentication
-        // Check if we are already authenticated, make it happen if not
-        this._authenticationAgent.ensureAuthentication(
-            function(error, success){
-                if (!error) {
+        // Requests suspending workflow
+        // first, put any request in queue anyway (the queue will be emptied after ensuring authentication)
+        this._requestsQueue.push(request);
 
-                    that._authenticationAgent.authenticateRequest(
-                        request,
-                        function(error, authenticatedRequest) {
-                            if (!error) {
+        // if our request is the first one, or authorization is not in progress, go on
+        if (!this._authInProgress || (this._requestsQueue.length === 1)) {
 
-                                if (that.logRequests) {
-                                    console.log(request);
+            // queue all other requests, until this one is authenticated
+            this._authInProgress = true;
+
+            // check if we are already authenticated, make it happen if not
+            this._authenticationAgent.ensureAuthentication(
+                function(error, success){
+                    if (!error) {
+
+                        that._authInProgress = false;
+
+                        // emptying requests Queue
+                        while (nextRequest = that._requestsQueue.shift()) {
+
+                            that._authenticationAgent.authenticateRequest(
+                                nextRequest,
+                                function(error, authenticatedRequest) {
+                                    if (!error) {
+
+                                        if (that.logRequests) {
+                                            console.dir(request);
+                                        }
+                                        // Main goal
+                                        that._connectionFactory.createConnection().execute(authenticatedRequest, callback);
+                                    } else {
+                                        callback(
+                                            new CAPIError({
+                                                errorText : "An error occured during request authentication!"
+                                            }),
+                                            new Response({
+                                                status : "error",
+                                                body : ""
+                                            })
+                                        );
+                                    }
                                 }
-                                // Main goal
-                                that._activeConnection.execute(authenticatedRequest, callback);
-                            } else {
-                                callback(
-                                    new CAPIError({
-                                        errorText : "An error occured during request authentication!"
-                                    }),
-                                    new Response({
-                                        status : "error",
-                                        body : ""
-                                    })
-                                );
-                            }
-                        }
-                    );
+                            );
+                        } // while
 
-                } else {
-                    callback(
-                        new CAPIError({
-                            errorText : "An error occured during ensureAuthentication call!"
-                        }),
-                        new Response({
-                            status : "error",
-                            body : ""
-                        })
-                    );
+                    } else {
+
+                        that._authInProgress = false;
+
+                        callback(
+                            new CAPIError({
+                                errorText : "An error occured during ensureAuthentication call!"
+                            }),
+                            new Response({
+                                status : "error",
+                                body : ""
+                            })
+                        );
+                    }
                 }
-            }
-        );
+            );
+        }
     };
 
 
@@ -120,11 +142,11 @@ var ConnectionManager = (function() {
         });
 
         if (this.logRequests) {
-            console.log(request);
+            console.dir(request);
         }
 
         // Main goal
-        this._activeConnection.execute(request, callback);
+        this._connectionFactory.createConnection().execute(request, callback);
 
     };
 

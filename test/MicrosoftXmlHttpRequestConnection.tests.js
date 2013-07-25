@@ -28,6 +28,22 @@ describe("Microsoft XmlHttpRequest Connection", function () {
         spyOn(mockXMLHttpRequest.prototype, 'getAllResponseHeaders').andCallThrough();
     });
 
+    it("is checking compatibility correctly when window.ActiveXObject is present", function(){
+
+        window.ActiveXObject = {};
+
+        expect(MicrosoftXmlHttpRequestConnection.isCompatible()).toEqual(true);
+
+    });
+
+    it("is checking compatibility correctly when window.ActiveXObject is absent", function(){
+
+        window.ActiveXObject = null;
+
+        expect(MicrosoftXmlHttpRequestConnection.isCompatible()).toEqual(false);
+
+    });
+
     describe("is correctly using XmlHttpRequest while performing:", function(){
 
         beforeEach(function (){
