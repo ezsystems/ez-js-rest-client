@@ -194,7 +194,7 @@ var ContentTypeService = (function() {
             function(error, contentTypeGroupResponse){
                 if (!error) {
 
-                    var contentTypeGroup = JSON.parse(contentTypeGroupResponse.body).ContentTypeGroup;
+                    var contentTypeGroup = contentTypeGroupResponse.document.ContentTypeGroup;
 
                     that._connectionManager.request(
                         "GET",
@@ -252,7 +252,7 @@ var ContentTypeService = (function() {
             function(error, contentTypeGroupResponse){
                 if (!error) {
 
-                    var contentTypeGroup = JSON.parse(contentTypeGroupResponse.body).ContentTypeGroup,
+                    var contentTypeGroup = contentTypeGroupResponse.document.ContentTypeGroup,
                         parameters = (publish === true) ? "?publish=true" : "";
 
                     that._connectionManager.request(
@@ -508,7 +508,7 @@ var ContentTypeService = (function() {
             function(error, contentTypeDraftResponse){
                 if (!error) {
 
-                    var contentTypeDraftFieldDefinitions = JSON.parse(contentTypeDraftResponse.body).ContentType.FieldDefinitions;
+                    var contentTypeDraftFieldDefinitions = contentTypeDraftResponse.document.ContentType.FieldDefinitions;
 
                     that._connectionManager.request(
                         "POST",

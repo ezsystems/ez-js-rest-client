@@ -64,6 +64,7 @@ module.exports = function(grunt) {
     testCombo.push('test/ContentService.tests.js');
     testCombo.push('test/ContentTypeService.tests.js');
     testCombo.push('test/UserService.tests.js');
+    testCombo.push('test/Response.tests.js');
 
 
     grunt.initConfig({

@@ -44,7 +44,7 @@ describe("ContentType Service", function () {
         // ******************************
         var fakedLoadContentTypeGroup = function(ContentTypeGroupId, callback){
                 var mockContentTypeGroupResponse = {};
-                mockContentTypeGroupResponse.body = JSON.stringify({
+                mockContentTypeGroupResponse.document = {
                     "ContentTypeGroup" : {
                         "_href" : testContentTypeGroupId,
                         "_media-type" : "application/vnd.ez.api.ContentTypeGroup+json",
@@ -53,12 +53,12 @@ describe("ContentType Service", function () {
                             "_media-type" : "application/vnd.ez.api.ContentTypeInfoList+json"
                         }
                     }
-                });
+                };
                 callback(false, mockContentTypeGroupResponse);
             },
             fakedLoadContentTypeDraft = function(ContentTypeId, callback){
                 var mockContentTypeDraftResponse = {};
-                mockContentTypeDraftResponse.body = JSON.stringify({
+                mockContentTypeDraftResponse.document = {
                     "ContentType" : {
                         "_href" : testContentTypeId,
                         "_media-type" : "application/vnd.ez.api.ContentType+json",
@@ -67,7 +67,7 @@ describe("ContentType Service", function () {
                             "_media-type" : "application/vnd.ez.api.FieldDefinitionList+json"
                         }
                     }
-                });
+                };
                 callback(false, mockContentTypeDraftResponse);
             };
 

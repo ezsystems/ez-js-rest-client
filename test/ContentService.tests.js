@@ -60,7 +60,7 @@ describe("ContentService", function () {
         // ******************************
         var fakedLoadContentInfo = function(contentId, callback){
                 var mockContentResponse = {};
-                mockContentResponse.body = JSON.stringify({
+                mockContentResponse.document = {
                     "Content" : {
                         "Versions" : {
                             "_href" : testVersionsList,
@@ -71,13 +71,13 @@ describe("ContentService", function () {
                             "_media-type" : "application/vnd.ez.api.Version+json"
                         }
                     }
-                });
+                };
                 callback(false, mockContentResponse);
             },
 
             fakedLoadCurrentVersion = function(contentId, callback){
                 var mockVersionResponse = {};
-                mockVersionResponse.body = JSON.stringify({
+                mockVersionResponse.document = {
                     "Version" : {
                         "_href" : testVersionedContentId,
                         "_media-type" : "application/vnd.ez.api.Version+json",
@@ -86,13 +86,13 @@ describe("ContentService", function () {
                             "_media-type" : "application/vnd.ez.api.RelationList+json"
                         }
                     }
-                });
+                };
                 callback(false, mockVersionResponse);
             },
 
             fakedLoadContent = function(versionedContentId, params, callback){
                 var mockVersionResponse = {};
-                mockVersionResponse.body = JSON.stringify({
+                mockVersionResponse.document = {
                     "Version" : {
                         "_href" : testVersionedContentId,
                         "_media-type" : "application/vnd.ez.api.Version+json",
@@ -101,13 +101,13 @@ describe("ContentService", function () {
                             "_media-type" : "application/vnd.ez.api.RelationList+json"
                         }
                     }
-                });
+                };
                 callback(false, mockVersionResponse);
             },
 
             fakedLoadLocation = function(locationId, callback){
                 var mockLocationResponse = {};
-                mockLocationResponse.body = JSON.stringify({
+                mockLocationResponse.document = {
                     "Location" : {
                         "_href" : testLocation,
                         "_media-type" : "application/vnd.ez.api.Location+json",
@@ -116,7 +116,7 @@ describe("ContentService", function () {
                             "_media-type" : "application/vnd.ez.api.LocationList+json"
                         }
                     }
-                });
+                };
                 callback(false, mockLocationResponse);
             };
 

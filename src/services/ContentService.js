@@ -503,7 +503,7 @@ var ContentService = (function() {
             function(error, contentResponse){
                 if (!error) {
 
-                    var currentVersion = JSON.parse(contentResponse.body).Content.CurrentVersion;
+                    var currentVersion = contentResponse.document.Content.CurrentVersion;
 
                     that._connectionManager.request(
                         "GET",
@@ -556,7 +556,7 @@ var ContentService = (function() {
             function(error, contentResponse){
                 if (!error) {
 
-                    var contentVersions = JSON.parse(contentResponse.body).Content.Versions;
+                    var contentVersions = contentResponse.document.Content.Versions;
 
                     that._connectionManager.request(
                         "GET",
@@ -617,7 +617,7 @@ var ContentService = (function() {
 
                         console.log(versionId);
 
-                        contentVersions = JSON.parse(contentResponse.body).Content.Versions;
+                        contentVersions = contentResponse.document.Content.Versions;
 
                         that._connectionManager.request(
                             "COPY",
@@ -630,7 +630,7 @@ var ContentService = (function() {
                     } else {
                         // Version id is NOT declared
 
-                        currentVersion = JSON.parse(contentResponse.body).Content.CurrentVersion;
+                        currentVersion = contentResponse.document.Content.CurrentVersion;
 
                         that._connectionManager.request(
                             "COPY",
@@ -796,7 +796,7 @@ var ContentService = (function() {
             function(error, locationResponse){
                 if (!error) {
 
-                    var location = JSON.parse(locationResponse.body).Location;
+                    var location = locationResponse.document.Location;
 
                     that._connectionManager.request(
                         "GET",
@@ -943,7 +943,7 @@ var ContentService = (function() {
             function(error, versionResponse){
                 if (!error) {
 
-                    var version = JSON.parse(versionResponse.body).Version;
+                    var version = versionResponse.document.Version;
 
                     that._connectionManager.request(
                         "GET",
@@ -977,7 +977,7 @@ var ContentService = (function() {
             function(error, currentVersionResponse){
                 if (!error) {
 
-                    var currentVersion = JSON.parse(currentVersionResponse.body).Version;
+                    var currentVersion = currentVersionResponse.document.Version;
 
                     that._connectionManager.request(
                         "GET",
@@ -1030,7 +1030,7 @@ var ContentService = (function() {
             function(error, versionResponse){
                 if (!error) {
 
-                    var version = JSON.parse(versionResponse.body).Version;
+                    var version = versionResponse.document.Version;
 
                     that._connectionManager.request(
                         "POST",

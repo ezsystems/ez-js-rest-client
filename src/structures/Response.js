@@ -3,10 +3,32 @@ var Response = (function() {
 
     var Response = function(valuesContainer){
 
+        /**
+         * Body of the response (most times JSON string recieved from REST service via a Connection object)
+         *
+         * @property body
+         * @type {String}
+         * @default ""
+         */
+        this.body = "";
+
+        /**
+         * Document represents "body" property of the response parsed into structured object
+         *
+         * @property document
+         * @type {Object}
+         * @default null
+         */
+        this.document = null;
+
         for (var property in valuesContainer) {
             if (valuesContainer.hasOwnProperty(property)) {
                 this[property] = valuesContainer[property];
             }
+        }
+
+        if ( this.body ) {
+            this.document = JSON.parse(this.body);
         }
 
         return this;

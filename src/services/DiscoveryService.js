@@ -33,7 +33,7 @@ var DiscoveryService = (function() {
                     function(error, rootJSON) {
                         if (!error) {
 
-                            that.copyToCache(JSON.parse(rootJSON.body));
+                            that.copyToCache(rootJSON.document);
                             callback(false, true);
 
                         } else {

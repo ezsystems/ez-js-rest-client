@@ -61,7 +61,7 @@ describe("User Service", function () {
         // ******************************
         var fakedLoadUserGroup = function(userGroupId, callback){
                 var mockUserGroupResponse = {};
-                mockUserGroupResponse.body = JSON.stringify({
+                mockUserGroupResponse.document = {
                     "UserGroup" : {
                         "_href" : testUserGroupId,
                         "_media-type" : "application/vnd.ez.api.UserGroup+json",
@@ -79,12 +79,12 @@ describe("User Service", function () {
                         }
 
                     }
-                });
+                };
                 callback(false, mockUserGroupResponse);
             },
             fakedLoadUser = function(userId, callback){
                 var mockUserResponse = {};
-                mockUserResponse.body = JSON.stringify({
+                mockUserResponse.document = {
                     "User" : {
                         "_href" : testUserId,
                         "_media-type" : "application/vnd.ez.api.User+json",
@@ -97,12 +97,12 @@ describe("User Service", function () {
                             "_media-type" : "application/vnd.ez.api.RoleAssignmentList+json"
                         }
                     }
-                });
+                };
                 callback(false, mockUserResponse);
             },
             fakedLoadRole = function(roleId, callback){
                 var mockRoleResponse = {};
-                mockRoleResponse.body = JSON.stringify({
+                mockRoleResponse.document = {
                     "Role" : {
                         "_href" : testRoleId,
                         "_media-type" : "application/vnd.ez.api.Role+json",
@@ -111,7 +111,7 @@ describe("User Service", function () {
                             "_media-type" : "application/vnd.ez.api.PolicyList+json"
                         }
                     }
-                });
+                };
                 callback(false, mockRoleResponse);
             };
 

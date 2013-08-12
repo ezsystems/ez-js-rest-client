@@ -259,7 +259,7 @@ var UserService = (function() {
             function(error, userGroupResponse){
                 if (!error) {
 
-                    var subGroups = JSON.parse(userGroupResponse.body).UserGroup.Subgroups;
+                    var subGroups = userGroupResponse.document.UserGroup.Subgroups;
 
                     that._connectionManager.request(
                         "POST",
@@ -311,7 +311,7 @@ var UserService = (function() {
             function(error, userGroupResponse){
                 if (!error) {
 
-                    var subGroups = JSON.parse(userGroupResponse.body).UserGroup.Subgroups;
+                    var subGroups = userGroupResponse.document.UserGroup.Subgroups;
 
                     that._connectionManager.request(
                         "GET",
@@ -346,7 +346,7 @@ var UserService = (function() {
             function(error, userGroupResponse){
                 if (!error) {
 
-                    var users = JSON.parse(userGroupResponse.body).UserGroup.Users;
+                    var users = userGroupResponse.document.UserGroup.Users;
 
                     that._connectionManager.request(
                         "GET",
@@ -406,7 +406,7 @@ var UserService = (function() {
             function(error, userGroupResponse){
                 if (!error) {
 
-                    var users = JSON.parse(userGroupResponse.body).UserGroup.Users;
+                    var users = userGroupResponse.document.UserGroup.Users;
 
                     that._connectionManager.request(
                         "POST",
@@ -515,7 +515,7 @@ var UserService = (function() {
             function(error, userResponse){
                 if (!error) {
 
-                    var userGroups = JSON.parse(userResponse.body).User.UserGroups;
+                    var userGroups = userResponse.document.User.UserGroups;
 
                     that._connectionManager.request(
                         "POST",
@@ -696,7 +696,7 @@ var UserService = (function() {
             function(error, userResponse){
                 if (!error) {
 
-                    var userRoles = JSON.parse(userResponse.body).User.Roles;
+                    var userRoles = userResponse.document.User.Roles;
 
                     that._connectionManager.request(
                         "GET",
@@ -731,7 +731,7 @@ var UserService = (function() {
             function(error, userGroupResponse){
                 if (!error) {
 
-                    var userGroupRoles = JSON.parse(userGroupResponse.body).UserGroup.Roles;
+                    var userGroupRoles = userGroupResponse.document.UserGroup.Roles;
 
                     that._connectionManager.request(
                         "GET",
@@ -807,7 +807,7 @@ var UserService = (function() {
             function(error, userResponse){
                 if (!error) {
 
-                    var userRoles = JSON.parse(userResponse.body).User.Roles;
+                    var userRoles = userResponse.document.User.Roles;
 
                     that._connectionManager.request(
                         "POST",
@@ -841,7 +841,7 @@ var UserService = (function() {
             function(error, userGroupResponse){
                 if (!error) {
 
-                    var userGroupRoles = JSON.parse(userGroupResponse.body).UserGroup.Roles;
+                    var userGroupRoles = userGroupResponse.document.UserGroup.Roles;
 
                     that._connectionManager.request(
                         "POST",
@@ -906,7 +906,7 @@ var UserService = (function() {
             function(error, roleResponse){
                 if (!error) {
 
-                    var rolePolicies = JSON.parse(roleResponse.body).Role.Policies;
+                    var rolePolicies = roleResponse.document.Role.Policies;
 
                     that._connectionManager.request(
                         "POST",
@@ -938,7 +938,7 @@ var UserService = (function() {
             function(error, roleResponse){
                 if (!error) {
 
-                    var rolePolicies = JSON.parse(roleResponse.body).Role.Policies;
+                    var rolePolicies = roleResponse.document.Role.Policies;
 
                     that._connectionManager.request(
                         "GET",

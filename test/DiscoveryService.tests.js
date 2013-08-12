@@ -26,7 +26,7 @@ describe("Discovery Service", function () {
         mockConnectionManager = {
             request : function(method, url, body, headers, callback){
                 mockRootResponse = {};
-                mockRootResponse.body = JSON.stringify(testRootObject);
+                mockRootResponse.document = testRootObject;
                 callback(false, mockRootResponse);
             }
         };
