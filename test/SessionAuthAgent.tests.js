@@ -78,7 +78,7 @@ describe("Session Authorization Agent", function () {
         mockCallback = jasmine.createSpy('mockCallback');
     });
 
-    describe("is correctly performing calls:", function(){
+    describe("is correctly performing", function(){
 
         beforeEach(function (){
 
@@ -127,10 +127,63 @@ describe("Session Authorization Agent", function () {
 
         });
 
-        it("authenticateRequest", function(){
+        it("authenticateRequest for a request using safe ('GET') method", function(){
 
             mockRequest = {
-                headers : {}
+                headers : {},
+                method : "GET"
+            };
+
+            sessionAuthAgent.authenticateRequest(mockRequest, mockCallback);
+
+            expect(mockCallback).toHaveBeenCalledWith(false, mockRequest);
+            expect(mockRequest.headers["X-CSRF-Token"]).not.toBeDefined();
+        });
+
+        it("authenticateRequest for a request using safe ('HEAD') method", function(){
+
+            mockRequest = {
+                headers : {},
+                method : "HEAD"
+            };
+
+            sessionAuthAgent.authenticateRequest(mockRequest, mockCallback);
+
+            expect(mockCallback).toHaveBeenCalledWith(false, mockRequest);
+            expect(mockRequest.headers["X-CSRF-Token"]).not.toBeDefined();
+        });
+
+        it("authenticateRequest for a request using safe ('OPTIONS') method", function(){
+
+            mockRequest = {
+                headers : {},
+                method : "OPTIONS"
+            };
+
+            sessionAuthAgent.authenticateRequest(mockRequest, mockCallback);
+
+            expect(mockCallback).toHaveBeenCalledWith(false, mockRequest);
+            expect(mockRequest.headers["X-CSRF-Token"]).not.toBeDefined();
+        });
+
+        it("authenticateRequest for a request using safe ('TRACE') method", function(){
+
+            mockRequest = {
+                headers : {},
+                method : "TRACE"
+            };
+
+            sessionAuthAgent.authenticateRequest(mockRequest, mockCallback);
+
+            expect(mockCallback).toHaveBeenCalledWith(false, mockRequest);
+            expect(mockRequest.headers["X-CSRF-Token"]).not.toBeDefined();
+        });
+
+        it("authenticateRequest for a request using non-safe ('POST') method", function(){
+
+            mockRequest = {
+                headers : {},
+                method : "POST"
             };
 
             sessionAuthAgent.csrfToken = testCsrfToken;

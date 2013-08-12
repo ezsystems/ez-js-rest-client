@@ -87,7 +87,9 @@ var SessionAuthAgent = (function() {
      */
     SessionAuthAgent.prototype.authenticateRequest = function(request, done) {
 
-        request.headers["X-CSRF-Token"] = this.csrfToken;
+        if (request.method !== "GET" && request.method !== "HEAD" && request.method !== "OPTIONS" && request.method !== "TRACE" ) {
+            request.headers["X-CSRF-Token"] = this.csrfToken;
+        }
 
         done(false, request);
 
