@@ -1,4 +1,5 @@
-var Response = (function() {
+/* global define */
+define(function () {
     "use strict";
 
     /**
@@ -42,4 +43,4 @@ var Response = (function() {
 
     return Response;
 
-}());
+});

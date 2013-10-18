@@ -7,43 +7,43 @@ Installation
 Project maintenance is handled in nodejs environment with a help of Grunt task runner.
 To install everything properly you should install nodejs first (http://nodejs.org/).
 
-Next, from project's root directory run ```npm install -g grunt-cli``` command.
-It will install Grunt task runner and make ```grunt``` command available anywhere on your system.
+Next, from project's root directory run `npm install -g grunt-cli` command.
+It will install Grunt task runner and make `grunt` command available anywhere on your system.
 Depending on the user setup, this action might require to be root.
-After that run ```npm install``` command . That should make other commands available.
+After that run `npm install` command . That should make other commands available.
 
-To be able to compile documentation or edit it on live yuidoc server you should also install yuidocjs module by running ```npm install -g yuidocjs```.
+To be able to compile documentation or edit it on live yuidoc server you should also install yuidocjs module by running `npm install -g yuidocjs`.
+
+Maintenance
+-----------
+Jshint spell check on all the source files is achieved by running `grunt hint` command.
 
 Building
 --------
-Building project files into single file dist/CAPI.js is achieved by running ```grunt``` command.
-Building with consequent jshint spell check is achieved by running ```grunt hint``` command.
+Building project files into single distribution file `dist/CAPI.js` is achieved by running `grunt build` command.
+Jshint spell check is run before the build.
 
 Documentation
 -------------
 Project is self-documented by using yuidoc. More info on http://yui.github.io/yuidoc/.
-Building static version of current project documentation into api/ folder is achieved by running ```grunt doc``` command.
-By running ```grunt livedoc``` command you can run documentation server which gives you ability to see documentation changes in real time.
+Building static version of current project documentation into api/ folder is achieved by running `grunt doc` command.
+By running `grunt livedoc` command you can run documentation server which gives you ability to see documentation changes in real time.
 By default yuidoc documentation server can be accessed on: http://127.0.0.1:3000
 
 Testing - Unit tests
 --------------------
-Unit Tests are executed by running ```grunt test``` command.
-"CAPI.spec.js" file is auto-generated and then executed in "spec" folder.
-It is composed of project files in following order:
+Unit Tests are executed by running `grunt test` command.
+To run unit tests and gather coverage information run `grunt coverage` command. After successfull run coverage report should be available in `test/coverage` folder.
 
-* test/CAPI.testing.header.js
-* All the CAPI files ("sourceFiles" array in Gruntfile.js)
-* test/*.tests.js ("testCombo" array in Gruntfile.js)
 
 Testing - Manual tests
 ----------------------
 Manual testing functional can be achieved by installing Symfony2 bundle "jsRestClientBundle", which is situated in the test/manual/ folder.
 
-Before bundle installation run ```grunt``` command once. It will concatenate all the source files into Resources/public/js/CAPI.js file.
+Before bundle installation run `grunt build` command once. It will build all the source files into Resources/public/js/CAPI.js file.
 
 Then the bundle could be installed into your current ezPublish 5.x instance using following instruction:
-* Create ```path/to/ezpublish5/src/EzSystems``` if it does not exist.
+* Create `path/to/ezpublish5/src/EzSystems` if it does not exist.
 * Symlink the bundle into /src/EzSystems/ (keep folder name).
 * Edit /ezpublish/EzPublishKernel.php and add the following line before in the return statement of the method registerBundles:
 
@@ -51,7 +51,7 @@ Then the bundle could be installed into your current ezPublish 5.x instance usin
     $bundles[] = new EzSystems\jsRestClientBundle\jsRectClientBundle();
     ```
 
-* Import routing.yml file of the bundle into main routing file by adding the following lines at the very bottom of ```ezpublish/config/routing.yml```:
+* Import routing.yml file of the bundle into main routing file by adding the following lines at the very bottom of `ezpublish/config/routing.yml`:
 
     ```
     jsRestClientBundle:

@@ -1,4 +1,5 @@
-var ObjectStateGroupUpdateStruct = (function() {
+/* global define */
+define(function () {
     "use strict";
 
     /**
@@ -22,4 +23,4 @@ var ObjectStateGroupUpdateStruct = (function() {
 
     return ObjectStateGroupUpdateStruct;
 
-}());
+});

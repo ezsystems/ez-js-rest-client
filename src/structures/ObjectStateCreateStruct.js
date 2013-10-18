@@ -1,4 +1,5 @@
-var ObjectStateCreateStruct = (function() {
+/* global define */
+define(function () {
     "use strict";
 
     /**
@@ -53,4 +54,4 @@ var ObjectStateCreateStruct = (function() {
 
     return ObjectStateCreateStruct;
 
-}());
+});

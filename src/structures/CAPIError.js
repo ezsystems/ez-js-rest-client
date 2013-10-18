@@ -1,4 +1,5 @@
-var CAPIError = (function() {
+/* global define */
+define(function () {
     "use strict";
 
     /**
@@ -22,4 +23,4 @@ var CAPIError = (function() {
 
     return CAPIError;
 
-}());
+});

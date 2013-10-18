@@ -1,4 +1,5 @@
-var LocationUpdateStruct = (function() {
+/* global define */
+define(function () {
     "use strict";
 
     /**
@@ -26,4 +27,4 @@ var LocationUpdateStruct = (function() {
 
     return LocationUpdateStruct;
 
-}());
+});

@@ -1,4 +1,5 @@
-var Request = (function() {
+/* global define */
+define(function () {
     "use strict";
 
     /**
@@ -22,4 +23,4 @@ var Request = (function() {
 
     return Request;
 
-}());
+});

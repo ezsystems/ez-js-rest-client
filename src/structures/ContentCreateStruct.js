@@ -1,4 +1,5 @@
-var ContentCreateStruct = (function() {
+/* global define */
+define(function () {
     "use strict";
 
     /**
@@ -41,4 +42,4 @@ var ContentCreateStruct = (function() {
 
     return ContentCreateStruct;
 
-}());
+});

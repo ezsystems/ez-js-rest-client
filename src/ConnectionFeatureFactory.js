@@ -1,8 +1,9 @@
-var ConnectionFeatureFactory = (function() {
+/* global define */
+define(function () {
     "use strict";
 
     /**
-     * Creates an instance of connection feature factory
+     * Creates an instance of connection feature factory. This factory is choosing compatible connection from list of available connections.
      *
      * @class ConnectionFeatureFactory
      * @constructor
@@ -49,4 +50,4 @@ var ConnectionFeatureFactory = (function() {
 
     return ConnectionFeatureFactory;
 
-}());
+});

@@ -1,4 +1,6 @@
-var ConnectionManager = (function() {
+/* global define */
+define(["structures/Response", "structures/Request", "structures/CAPIError"],
+    function (Response, Request, CAPIError) {
     "use strict";
 
     /**
@@ -7,7 +9,8 @@ var ConnectionManager = (function() {
      * @class ConnectionManager
      * @constructor
      * @param endPointUrl {String} url to REST root
-     * @param authenticationAgent {object} literal object used to maintain authentication to REST server
+     * @param authenticationAgent {object} Instance of one of the AuthAgents (e.g. SessionAuthAgent, HttpBasicAuthAgent)
+     * @param connectionFactory {ConnectionFeatureFactory}  the factory which is choosing compatible connection from connections list
      */
     var ConnectionManager = function(endPointUrl, authenticationAgent, connectionFactory) {
 
@@ -68,6 +71,8 @@ var ConnectionManager = (function() {
                         that._authInProgress = false;
 
                         // emptying requests Queue
+                        /*jshint boss:true */
+                        /*jshint -W083 */
                         while (nextRequest = that._requestsQueue.shift()) {
 
                             that._authenticationAgent.authenticateRequest(
@@ -94,6 +99,8 @@ var ConnectionManager = (function() {
                                 }
                             );
                         } // while
+                        /*jshint +W083 */
+                        /*jshint boss:false */
 
                     } else {
 
@@ -193,4 +200,4 @@ var ConnectionManager = (function() {
 
     return ConnectionManager;
 
-}());
+});

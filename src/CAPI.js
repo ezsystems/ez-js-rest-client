@@ -1,4 +1,13 @@
-var CAPI = (function() {
+/* global define */
+define(['authAgents/SessionAuthAgent', 'authAgents/HttpBasicAuthAgent', 'ConnectionManager',
+        'ConnectionFeatureFactory', 'connections/XmlHttpRequestConnection', 'connections/MicrosoftXmlHttpRequestConnection',
+        'services/DiscoveryService', 'services/ContentService', 'services/ContentTypeService',
+        'services/UserService'],
+    function (SessionAuthAgent, HttpBasicAuthAgent, ConnectionManager,
+              ConnectionFeatureFactory, XmlHttpRequestConnection, MicrosoftXmlHttpRequestConnection,
+              DiscoveryService, ContentService, ContentTypeService,
+              UserService) {
+
     "use strict";
 
     /**
@@ -115,4 +124,4 @@ var CAPI = (function() {
 
     return CAPI;
 
-}());
+});

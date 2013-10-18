@@ -1,4 +1,5 @@
-var ContentTypeGroupInputStruct = (function() {
+/* global define */
+define(function () {
     "use strict";
 
     /**
@@ -24,4 +25,4 @@ var ContentTypeGroupInputStruct = (function() {
 
     return ContentTypeGroupInputStruct;
 
-}());
+});

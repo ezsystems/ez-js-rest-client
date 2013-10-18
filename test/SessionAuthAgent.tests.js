@@ -1,229 +1,44 @@
-describe("Session Authorization Agent", function () {
+define(function (require) {
 
-    var sessions = "/api/ezp/v2/user/sessions",
-        testLogin = "login",
-        testPassword = "password",
-        testSessionId = "/api/ezp/v2/user/sessions/o7i8r1sapfc9r84ae53bgq8gp4",
-        testSessionName = "EZSESSID",
-        testCsrfToken = "o7i8r1sapfc9r84ae53bgq8gp4",
-        mockCAPI,
-        mockFaultyCAPI,
-        mockUserService,
-        mockFaultyUserService,
-        mockCallback,
-        mockSessionResponse,
-        mockRequest,
-        sessionAuthAgent;
+    // Declaring dependencies
+    var SessionAuthAgent = require("authAgents/SessionAuthAgent"),
+        CAPIError = require("structures/CAPIError");
 
-    beforeEach(function (){
+    describe("Session Authorization Agent", function () {
 
-        sessionStorage = {
-            getItem: function(identifier){
-                return null;
-            },
-            setItem: function(identifier){
-                return;
-            },
-            removeItem: function(identifier){
-                return;
-            }
-        };
-        spyOn(sessionStorage, 'getItem').andCallThrough();
-        spyOn(sessionStorage, 'setItem').andCallThrough();
-        spyOn(sessionStorage, 'removeItem').andCallThrough();
-
-        mockUserService = {
-            newSessionCreateStruct: function(login, password){
-                return {
-                    body: {
-                        SessionInput: {
-                            login: login,
-                            password: password
-                        }
-                    }
-                };
-            },
-            createSession: function(sessions, sessionCreateStruct, callback){
-                mockSessionResponse = {};
-                mockSessionResponse.body = JSON.stringify({
-                    "Session" : {
-                        "_href" : testSessionId,
-                        "name" : testSessionName,
-                        "csrfToken" : "o7i8r1sapfc9r84ae53bgq8gp4"
-                    }
-                });
-
-                callback(
-                    false,
-                    mockSessionResponse
-                )
-            },
-            deleteSession: function(sessionId, callback){
-                callback(
-                    false,
-                    true
-                )
-            }
-        };
-        spyOn(mockUserService, 'newSessionCreateStruct').andCallThrough();
-        spyOn(mockUserService, 'createSession').andCallThrough();
-        spyOn(mockUserService, 'deleteSession').andCallThrough();
-
-        mockCAPI = {
-            getUserService: function(){
-                return mockUserService;
-            }
-        };
-
-        mockCallback = jasmine.createSpy('mockCallback');
-    });
-
-    describe("is correctly performing", function(){
+        var sessions = "/api/ezp/v2/user/sessions",
+            testLogin = "login",
+            testPassword = "password",
+            testSessionId = "/api/ezp/v2/user/sessions/o7i8r1sapfc9r84ae53bgq8gp4",
+            testSessionName = "EZSESSID",
+            testCsrfToken = "o7i8r1sapfc9r84ae53bgq8gp4",
+            mockCAPI,
+            mockFaultyCAPI,
+            mockUserService,
+            mockFaultyUserService,
+            mockCallback,
+            mockSessionResponse,
+            mockRequest,
+            sessionAuthAgent;
 
         beforeEach(function (){
 
-            sessionAuthAgent = new SessionAuthAgent({
-                login : testLogin,
-                password : testPassword
-            });
-            sessionAuthAgent.CAPI = mockCAPI;
-
-        });
-
-        it("ensureAuthentication", function(){
-
-            sessionAuthAgent.ensureAuthentication(mockCallback);
-
-            expect(mockUserService.newSessionCreateStruct).toHaveBeenCalled();
-            expect(mockUserService.createSession).toHaveBeenCalledWith(
-                sessions,
-                jasmine.any(Object),
-                jasmine.any(Function)
-            );
-
-            expect(sessionAuthAgent.sessionName).toEqual(testSessionName);
-            expect(sessionAuthAgent.csrfToken).toEqual(testCsrfToken);
-            expect(sessionAuthAgent.sessionId).toEqual(testSessionId);
-
-            expect(mockCallback).toHaveBeenCalledWith(false, true);
-        });
-
-        it("ensureAuthentication when already authenticated (sessionStorage is storing sessionId)", function(){
-
-            sessionStorage.getItem = function(identifier){
-                return "i-am-a-real-session-id-no-doubt-about-that";
-            };
-
-            sessionAuthAgent = new SessionAuthAgent({
-                login : testLogin,
-                password : testPassword
-            });
-            sessionAuthAgent.CAPI = mockCAPI;
-
-            sessionAuthAgent.ensureAuthentication(mockCallback);
-
-            expect(mockUserService.createSession).not.toHaveBeenCalled();
-            expect(mockCallback).toHaveBeenCalledWith(false, true);
-
-        });
-
-        it("authenticateRequest for a request using safe ('GET') method", function(){
-
-            mockRequest = {
-                headers : {},
-                method : "GET"
-            };
-
-            sessionAuthAgent.authenticateRequest(mockRequest, mockCallback);
-
-            expect(mockCallback).toHaveBeenCalledWith(false, mockRequest);
-            expect(mockRequest.headers["X-CSRF-Token"]).not.toBeDefined();
-        });
-
-        it("authenticateRequest for a request using safe ('HEAD') method", function(){
-
-            mockRequest = {
-                headers : {},
-                method : "HEAD"
-            };
-
-            sessionAuthAgent.authenticateRequest(mockRequest, mockCallback);
-
-            expect(mockCallback).toHaveBeenCalledWith(false, mockRequest);
-            expect(mockRequest.headers["X-CSRF-Token"]).not.toBeDefined();
-        });
-
-        it("authenticateRequest for a request using safe ('OPTIONS') method", function(){
-
-            mockRequest = {
-                headers : {},
-                method : "OPTIONS"
-            };
-
-            sessionAuthAgent.authenticateRequest(mockRequest, mockCallback);
-
-            expect(mockCallback).toHaveBeenCalledWith(false, mockRequest);
-            expect(mockRequest.headers["X-CSRF-Token"]).not.toBeDefined();
-        });
-
-        it("authenticateRequest for a request using safe ('TRACE') method", function(){
-
-            mockRequest = {
-                headers : {},
-                method : "TRACE"
-            };
-
-            sessionAuthAgent.authenticateRequest(mockRequest, mockCallback);
-
-            expect(mockCallback).toHaveBeenCalledWith(false, mockRequest);
-            expect(mockRequest.headers["X-CSRF-Token"]).not.toBeDefined();
-        });
-
-        it("authenticateRequest for a request using non-safe ('POST') method", function(){
-
-            mockRequest = {
-                headers : {},
-                method : "POST"
-            };
-
-            sessionAuthAgent.csrfToken = testCsrfToken;
-
-            sessionAuthAgent.authenticateRequest(mockRequest, mockCallback);
-
-            expect(mockCallback).toHaveBeenCalledWith(false, mockRequest);
-            expect(mockRequest.headers["X-CSRF-Token"]).toEqual(testCsrfToken);
-        });
-
-        it("logOut", function(){
-
-            sessionAuthAgent.sessionId = testSessionId;
-            sessionAuthAgent.logOut(mockCallback);
-
-            expect(mockUserService.deleteSession).toHaveBeenCalledWith(
-                testSessionId,
-                jasmine.any(Function)
-            );
-
-            expect(mockCallback).toHaveBeenCalledWith(false, true);
-        });
-    });
-
-    describe("is returning errors correctly, when user service fails, while performing:", function(){
-
-        beforeEach(function (){
-            mockFaultyUserService = {
-                deleteSession: function(sessionId, callback){
-                    callback(
-                        true,
-                        false
-                    )
+            sessionStorage = {
+                getItem: function(identifier){
+                    return null;
                 },
-                createSession: function(sessions, sessionCreateStruct, callback){
-                    callback(
-                        true,
-                        false
-                    )
+                setItem: function(identifier){
+                    return;
                 },
+                removeItem: function(identifier){
+                    return;
+                }
+            };
+            spyOn(sessionStorage, 'getItem').andCallThrough();
+            spyOn(sessionStorage, 'setItem').andCallThrough();
+            spyOn(sessionStorage, 'removeItem').andCallThrough();
+
+            mockUserService = {
                 newSessionCreateStruct: function(login, password){
                     return {
                         body: {
@@ -233,47 +48,240 @@ describe("Session Authorization Agent", function () {
                             }
                         }
                     };
+                },
+                createSession: function(sessions, sessionCreateStruct, callback){
+                    mockSessionResponse = {};
+                    mockSessionResponse.body = JSON.stringify({
+                        "Session" : {
+                            "_href" : testSessionId,
+                            "name" : testSessionName,
+                            "csrfToken" : "o7i8r1sapfc9r84ae53bgq8gp4"
+                        }
+                    });
+
+                    callback(
+                        false,
+                        mockSessionResponse
+                    )
+                },
+                deleteSession: function(sessionId, callback){
+                    callback(
+                        false,
+                        true
+                    )
                 }
             };
-            spyOn(mockFaultyUserService, 'deleteSession').andCallThrough();
-            spyOn(mockFaultyUserService, 'createSession').andCallThrough();
-            spyOn(mockFaultyUserService, 'newSessionCreateStruct').andCallThrough();
+            spyOn(mockUserService, 'newSessionCreateStruct').andCallThrough();
+            spyOn(mockUserService, 'createSession').andCallThrough();
+            spyOn(mockUserService, 'deleteSession').andCallThrough();
 
-            mockFaultyCAPI = {
+            mockCAPI = {
                 getUserService: function(){
-                    return mockFaultyUserService;
+                    return mockUserService;
                 }
             };
 
-            sessionAuthAgent = new SessionAuthAgent({
-                login : testLogin,
-                password : testPassword
+            mockCallback = jasmine.createSpy('mockCallback');
+        });
+
+        describe("is correctly performing", function(){
+
+            beforeEach(function (){
+
+                sessionAuthAgent = new SessionAuthAgent({
+                    login : testLogin,
+                    password : testPassword
+                });
+                sessionAuthAgent.CAPI = mockCAPI;
+
             });
-            sessionAuthAgent.CAPI = mockFaultyCAPI;
 
+            it("ensureAuthentication", function(){
+
+                sessionAuthAgent.ensureAuthentication(mockCallback);
+
+                expect(mockUserService.newSessionCreateStruct).toHaveBeenCalled();
+                expect(mockUserService.createSession).toHaveBeenCalledWith(
+                    sessions,
+                    jasmine.any(Object),
+                    jasmine.any(Function)
+                );
+
+                expect(sessionAuthAgent.sessionName).toEqual(testSessionName);
+                expect(sessionAuthAgent.csrfToken).toEqual(testCsrfToken);
+                expect(sessionAuthAgent.sessionId).toEqual(testSessionId);
+
+                expect(mockCallback).toHaveBeenCalledWith(false, true);
+            });
+
+            it("ensureAuthentication when already authenticated (sessionStorage is storing sessionId)", function(){
+
+                sessionStorage.getItem = function(identifier){
+                    return "i-am-a-real-session-id-no-doubt-about-that";
+                };
+
+                sessionAuthAgent = new SessionAuthAgent({
+                    login : testLogin,
+                    password : testPassword
+                });
+                sessionAuthAgent.CAPI = mockCAPI;
+
+                sessionAuthAgent.ensureAuthentication(mockCallback);
+
+                expect(mockUserService.createSession).not.toHaveBeenCalled();
+                expect(mockCallback).toHaveBeenCalledWith(false, true);
+
+            });
+
+            it("authenticateRequest for a request using safe ('GET') method", function(){
+
+                mockRequest = {
+                    headers : {},
+                    method : "GET"
+                };
+
+                sessionAuthAgent.authenticateRequest(mockRequest, mockCallback);
+
+                expect(mockCallback).toHaveBeenCalledWith(false, mockRequest);
+                expect(mockRequest.headers["X-CSRF-Token"]).not.toBeDefined();
+            });
+
+            it("authenticateRequest for a request using safe ('HEAD') method", function(){
+
+                mockRequest = {
+                    headers : {},
+                    method : "HEAD"
+                };
+
+                sessionAuthAgent.authenticateRequest(mockRequest, mockCallback);
+
+                expect(mockCallback).toHaveBeenCalledWith(false, mockRequest);
+                expect(mockRequest.headers["X-CSRF-Token"]).not.toBeDefined();
+            });
+
+            it("authenticateRequest for a request using safe ('OPTIONS') method", function(){
+
+                mockRequest = {
+                    headers : {},
+                    method : "OPTIONS"
+                };
+
+                sessionAuthAgent.authenticateRequest(mockRequest, mockCallback);
+
+                expect(mockCallback).toHaveBeenCalledWith(false, mockRequest);
+                expect(mockRequest.headers["X-CSRF-Token"]).not.toBeDefined();
+            });
+
+            it("authenticateRequest for a request using safe ('TRACE') method", function(){
+
+                mockRequest = {
+                    headers : {},
+                    method : "TRACE"
+                };
+
+                sessionAuthAgent.authenticateRequest(mockRequest, mockCallback);
+
+                expect(mockCallback).toHaveBeenCalledWith(false, mockRequest);
+                expect(mockRequest.headers["X-CSRF-Token"]).not.toBeDefined();
+            });
+
+            it("authenticateRequest for a request using non-safe ('POST') method", function(){
+
+                mockRequest = {
+                    headers : {},
+                    method : "POST"
+                };
+
+                sessionAuthAgent.csrfToken = testCsrfToken;
+
+                sessionAuthAgent.authenticateRequest(mockRequest, mockCallback);
+
+                expect(mockCallback).toHaveBeenCalledWith(false, mockRequest);
+                expect(mockRequest.headers["X-CSRF-Token"]).toEqual(testCsrfToken);
+            });
+
+            it("logOut", function(){
+
+                sessionAuthAgent.sessionId = testSessionId;
+                sessionAuthAgent.logOut(mockCallback);
+
+                expect(mockUserService.deleteSession).toHaveBeenCalledWith(
+                    testSessionId,
+                    jasmine.any(Function)
+                );
+
+                expect(mockCallback).toHaveBeenCalledWith(false, true);
+            });
         });
 
-        it("ensureAuthentication", function(){
+        describe("is returning errors correctly, when user service fails, while performing:", function(){
 
-            sessionAuthAgent.ensureAuthentication(mockCallback);
+            beforeEach(function (){
+                mockFaultyUserService = {
+                    deleteSession: function(sessionId, callback){
+                        callback(
+                            true,
+                            false
+                        )
+                    },
+                    createSession: function(sessions, sessionCreateStruct, callback){
+                        callback(
+                            true,
+                            false
+                        )
+                    },
+                    newSessionCreateStruct: function(login, password){
+                        return {
+                            body: {
+                                SessionInput: {
+                                    login: login,
+                                    password: password
+                                }
+                            }
+                        };
+                    }
+                };
+                spyOn(mockFaultyUserService, 'deleteSession').andCallThrough();
+                spyOn(mockFaultyUserService, 'createSession').andCallThrough();
+                spyOn(mockFaultyUserService, 'newSessionCreateStruct').andCallThrough();
 
-            expect(mockCallback).toHaveBeenCalled();
-            expect(mockCallback.mostRecentCall.args[0]).toEqual(jasmine.any(CAPIError)); //error
-            expect(mockCallback.mostRecentCall.args[1]).toEqual(false); //response
+                mockFaultyCAPI = {
+                    getUserService: function(){
+                        return mockFaultyUserService;
+                    }
+                };
+
+                sessionAuthAgent = new SessionAuthAgent({
+                    login : testLogin,
+                    password : testPassword
+                });
+                sessionAuthAgent.CAPI = mockFaultyCAPI;
+
+            });
+
+            it("ensureAuthentication", function(){
+
+                sessionAuthAgent.ensureAuthentication(mockCallback);
+
+                expect(mockCallback).toHaveBeenCalled();
+                expect(mockCallback.mostRecentCall.args[0]).toEqual(jasmine.any(CAPIError)); //error
+                expect(mockCallback.mostRecentCall.args[1]).toEqual(false); //response
+            });
+
+            it("logOut", function(){
+
+                sessionAuthAgent.sessionId = testSessionId;
+                sessionAuthAgent.logOut(mockCallback);
+
+                expect(mockFaultyUserService.deleteSession).toHaveBeenCalledWith(
+                    testSessionId,
+                    jasmine.any(Function)
+                );
+
+                expect(mockCallback).toHaveBeenCalledWith(true, false);
+            });
+
         });
-
-        it("logOut", function(){
-
-            sessionAuthAgent.sessionId = testSessionId;
-            sessionAuthAgent.logOut(mockCallback);
-
-            expect(mockFaultyUserService.deleteSession).toHaveBeenCalledWith(
-                testSessionId,
-                jasmine.any(Function)
-            );
-
-            expect(mockCallback).toHaveBeenCalledWith(true, false);
-        });
-
     });
+
 });

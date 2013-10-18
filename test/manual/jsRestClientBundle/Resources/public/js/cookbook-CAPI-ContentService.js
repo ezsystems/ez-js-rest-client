@@ -1,10 +1,9 @@
 // Some simple js REST CAPI usage scenario
-
-var authAgent = new SessionAuthAgent({
+var authAgent = new eZ.SessionAuthAgent({
         login : "admin",
         password : "ezpublish"
     }),
-    jsCAPI = new CAPI(
+    jsCAPI = new eZ.CAPI(
         'http://ez.git.local',
         authAgent
     );
@@ -86,7 +85,7 @@ createSectionAnchor.onclick = function(e){
     createSectionLoader.style.display = 'block';
     e.preventDefault();
 
-    var sectionInputStruct = new SectionInputStruct(
+    var sectionInputStruct = contentService.newSectionInputStruct(
         "testSection" + Math.random()*1000000,
         "Test Section"
     );
@@ -1599,3 +1598,4 @@ DeleteUrlWildcardAnchor.onclick = function(e){
             DeleteUrlWildcardLoader.style.display = 'none';
         });
 };
+

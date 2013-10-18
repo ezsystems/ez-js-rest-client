@@ -1,4 +1,5 @@
-var DiscoveryService = (function() {
+/* global define */
+define(["structures/CAPIError"], function (CAPIError) {
     "use strict";
 
     /**
@@ -229,4 +230,4 @@ var DiscoveryService = (function() {
 
     return DiscoveryService;
 
-}());
+});

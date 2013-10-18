@@ -1,29 +1,35 @@
+define(function (require) {
 
-describe("Response", function () {
+    // Declaring dependencies
+    var Response = require("structures/Response");
 
-    var testRootInnerObject = {
-            "dummyIndex": "dummyValue"
-        },
-        testRootObject = {
-            "Root": testRootInnerObject
-        },
-        response;
+    describe("Response", function () {
 
-    it("is parsing it's 'body' property (JSON string) into structured 'document' property", function(){
+        var testRootInnerObject = {
+                "dummyIndex": "dummyValue"
+            },
+            testRootObject = {
+                "Root": testRootInnerObject
+            },
+            response;
 
-        response = new Response({
-            body : JSON.stringify(testRootObject)
+        it("is parsing it's 'body' property (JSON string) into structured 'document' property", function(){
+
+            response = new Response({
+                body : JSON.stringify(testRootObject)
+            });
+
+            expect(response.document.Root).toEqual(testRootInnerObject);
         });
 
-        expect(response.document.Root).toEqual(testRootInnerObject);
+        it("has correct default value for 'document' property", function(){
+
+            response = new Response({});
+
+            expect(response.document).toBeNull();
+        });
+
+
     });
-
-    it("has correct default value for 'document' property", function(){
-
-        response = new Response({});
-
-        expect(response.document).toBeNull();
-    });
-
 
 });

@@ -1,4 +1,5 @@
-var RelationCreateStruct = (function() {
+/* global define */
+define(function () {
     "use strict";
 
     /**
@@ -25,4 +26,4 @@ var RelationCreateStruct = (function() {
 
     return RelationCreateStruct;
 
-}());
+});

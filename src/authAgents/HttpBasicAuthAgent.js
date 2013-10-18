@@ -1,4 +1,5 @@
-var HttpBasicAuthAgent = (function() {
+/* global define */
+define(function () {
     "use strict";
 
     /**
@@ -67,4 +68,4 @@ var HttpBasicAuthAgent = (function() {
 
     return HttpBasicAuthAgent;
 
-}());
+});

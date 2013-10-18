@@ -1,4 +1,5 @@
-var LocationCreateStruct = (function() {
+/* global define */
+define(function () {
     "use strict";
 
     /**
@@ -31,4 +32,4 @@ var LocationCreateStruct = (function() {
 
     return LocationCreateStruct;
 
-}());
+});

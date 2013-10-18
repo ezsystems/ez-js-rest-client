@@ -1,4 +1,5 @@
-var ViewCreateStruct = (function() {
+/* global define */
+define(function () {
     "use strict";
 
     /**
@@ -34,4 +35,4 @@ var ViewCreateStruct = (function() {
 
     return ViewCreateStruct;
 
-}());
+});

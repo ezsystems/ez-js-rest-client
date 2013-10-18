@@ -1,4 +1,15 @@
-var ContentService = (function() {
+/* global define */
+define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "structures/SectionInputStruct",
+        "structures/LocationCreateStruct", "structures/LocationUpdateStruct", "structures/ContentMetadataUpdateStruct",
+        "structures/ObjectStateGroupCreateStruct", "structures/ObjectStateGroupUpdateStruct", "structures/ObjectStateCreateStruct",
+        "structures/ObjectStateUpdateStruct", "structures/ViewCreateStruct", "structures/UrlAliasCreateStruct",
+        "structures/UrlWildcardCreateStruct", "structures/RelationCreateStruct"],
+    function (ContentCreateStruct, ContentUpdateStruct, SectionInputStruct,
+              LocationCreateStruct, LocationUpdateStruct, ContentMetadataUpdateStruct,
+              ObjectStateGroupCreateStruct, ObjectStateGroupUpdateStruct, ObjectStateCreateStruct,
+              ObjectStateUpdateStruct, ViewCreateStruct, UrlAliasCreateStruct,
+              UrlWildcardCreateStruct, RelationCreateStruct) {
+
     "use strict";
 
     /**
@@ -42,7 +53,8 @@ var ContentService = (function() {
      *
      * @method loadRoot
      * @param rootPath {String} path to Root resource
-     * @param callback {Function} callback executed after performing the request (see {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
+     * @param callback {Function} callback executed after performing the request (see
+     * {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     ContentService.prototype.loadRoot = function loadRoot(rootPath, callback) {
         this._connectionManager.request(
@@ -289,7 +301,8 @@ var ContentService = (function() {
      *
      * @method createSection
      * @param sectionInputStruct {SectionInputStruct} object describing section to be created
-     * @param callback {Function} callback executed after performing the request (see {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
+     * @param callback {Function} callback executed after performing the request (see
+     * {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     ContentService.prototype.createSection = function createSection(sectionInputStruct, callback) {
 
@@ -321,7 +334,8 @@ var ContentService = (function() {
      * @method updateSection
      * @param sectionId {String} target section identifier (e.g. "/api/ezp/v2/content/sections/2")
      * @param sectionInputStruct {SectionInputStruct} object describing updates to the section
-     * @param callback {Function} callback executed after performing the request (see {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
+     * @param callback {Function} callback executed after performing the request (see
+     * {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     ContentService.prototype.updateSection = function updateSection(sectionId, sectionInputStruct, callback) {
         this._connectionManager.request(
@@ -337,7 +351,8 @@ var ContentService = (function() {
      * List all available sections of eZ Publish instance
      *
      * @method loadSections
-     * @param callback {Function} callback executed after performing the request (see {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
+     * @param callback {Function} callback executed after performing the request (see
+     * {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     ContentService.prototype.loadSections = function loadSections(callback) {
 
@@ -369,7 +384,8 @@ var ContentService = (function() {
      *
      * @method loadSection
      * @param sectionId {String} target section identifier (e.g. "/api/ezp/v2/content/sections/2")
-     * @param callback {Function} callback executed after performing the request (see {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
+     * @param callback {Function} callback executed after performing the request (see
+     *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     ContentService.prototype.loadSection = function loadSection(sectionId, callback) {
         this._connectionManager.request(
@@ -386,7 +402,8 @@ var ContentService = (function() {
      *
      * @method deleteSection
      * @param sectionId {String} target section identifier (e.g. "/api/ezp/v2/content/sections/2")
-     * @param callback {Function} callback executed after performing the request (see {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
+     * @param callback {Function} callback executed after performing the request (see
+     *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     ContentService.prototype.deleteSection = function deleteSection(sectionId, callback) {
         this._connectionManager.delete(
@@ -404,7 +421,8 @@ var ContentService = (function() {
      *
      * @method createContent
      * @param contentCreateStruct {ContentCreateStruct} object describing content to be created
-     * @param callback {Function} callback executed after performing the request (see {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
+     * @param callback {Function} callback executed after performing the request (see
+     *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     ContentService.prototype.createContent = function createContent(contentCreateStruct, callback) {
         var that = this;
@@ -434,7 +452,8 @@ var ContentService = (function() {
      * @method updateContentMetadata
      * @param contentId {String} target content identifier (e.g. "/api/ezp/v2/content/objects/108")
      * @param contentMetadataUpdateStruct {ContentMetadataUpdateStruct} object describing update of the content metadata
-     * @param callback {Function} callback executed after performing the request (see {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
+     * @param callback {Function} callback executed after performing the request (see
+     *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      * @example
      *      var updateStruct = contentService.newContentMetadataUpdateStruct("eng-US");
      *
@@ -462,7 +481,8 @@ var ContentService = (function() {
      *
      * @method loadContentByRemoteId
      * @param remoteId {String} remote id of target content object (e.g. "30847bec12a8a398777493a4bdb10398")
-     * @param callback {Function} callback executed after performing the request (see {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
+     * @param callback {Function} callback executed after performing the request (see
+     *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     ContentService.prototype.loadContentByRemoteId = function loadContentByRemoteId(remoteId, callback) {
 
@@ -493,7 +513,8 @@ var ContentService = (function() {
      *
      * @method loadContentInfo
      * @param contentId {String} target content identifier (e.g. "/api/ezp/v2/content/objects/108")
-     * @param callback {Function} callback executed after performing the request (see {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
+     * @param callback {Function} callback executed after performing the request (see
+     *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     ContentService.prototype.loadContentInfo = function loadContentInfo(contentId, callback) {
         this._connectionManager.request(
@@ -510,7 +531,8 @@ var ContentService = (function() {
      *
      * @method loadContentInfoAndCurrentVersion
      * @param contentId {String} target content identifier (e.g. "/api/ezp/v2/content/objects/108")
-     * @param callback {Function} callback executed after performing the request (see {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
+     * @param callback {Function} callback executed after performing the request (see
+     *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     ContentService.prototype.loadContentInfoAndCurrentVersion = function loadContentInfoAndCurrentVersion(contentId, callback) {
         this._connectionManager.request(
@@ -527,7 +549,8 @@ var ContentService = (function() {
      *
      * @method deleteContent
      * @param contentId {String} target content identifier (e.g. "/api/ezp/v2/content/objects/108")
-     * @param callback {Function} callback executed after performing the request (see {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
+     * @param callback {Function} callback executed after performing the request (see
+     *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      * @example
      *      contentService.deleteContent(
      *          "/api/ezp/v2/content/objects/116",
@@ -547,7 +570,8 @@ var ContentService = (function() {
      * @method copyContent
      * @param contentId {String} target content identifier (e.g. "/api/ezp/v2/content/objects/108")
      * @param destinationId {String} A location resource to which the content object should be copied (e.g. "/api/ezp/v2/content/locations/1/2/119")
-     * @param callback {Function} callback executed after performing the request (see {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
+     * @param callback {Function} callback executed after performing the request (see
+     *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     ContentService.prototype.copyContent = function copyContent(contentId, destinationId, callback) {
         this._connectionManager.request(
@@ -568,7 +592,8 @@ var ContentService = (function() {
      *
      * @method loadCurrentVersion
      * @param contentId {String} target content identifier (e.g. "/api/ezp/v2/content/objects/108")
-     * @param callback {Function} callback executed after performing the request (see {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
+     * @param callback {Function} callback executed after performing the request (see
+     *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     ContentService.prototype.loadCurrentVersion = function loadCurrentVersion(contentId, callback) {
         var that = this;
@@ -604,7 +629,8 @@ var ContentService = (function() {
      * @param [fields] {String} comma separated list of fields which should be returned in the response (see Content)
      * @param [responseGroups] {String}  alternative: comma separated lists of predefined field groups (see REST API Spec v1)
      * @param [languages] {String} (comma separated list) restricts the output of translatable fields to the given languages
-     * @param callback {Function} callback executed after performing the request (see {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
+     * @param callback {Function} callback executed after performing the request (see
+     *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      * @example
      *     contentService.loadContent(
      *          "/api/ezp/v2/content/objects/180/versions/1",
@@ -616,9 +642,9 @@ var ContentService = (function() {
      */
     ContentService.prototype.loadContent = function loadContent(versionedContentId, fields, responseGroups, languages, callback) {
         // default values for all the parameters
-        fields = (fields == null) ? '?fields=' : '?fields=' + fields;
-        responseGroups = (responseGroups == null) ? '' : '&responseGroups="' + responseGroups + '"';
-        languages = (languages == null) ? '' : '&languages=' + languages;
+        fields = (fields === null) ? '?fields=' : '?fields=' + fields;
+        responseGroups = (responseGroups === null) ? '' : '&responseGroups="' + responseGroups + '"';
+        languages = (languages === null) ? '' : '&languages=' + languages;
 
         this._connectionManager.request(
             "GET",
@@ -635,7 +661,8 @@ var ContentService = (function() {
      *
      * @method loadVersions
      * @param contentId {String} target content identifier (e.g. "/api/ezp/v2/content/objects/108")
-     * @param callback {Function} callback executed after performing the request (see {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
+     * @param callback {Function} callback executed after performing the request (see
+     *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     ContentService.prototype.loadVersions = function loadVersions(contentId, callback) {
 
@@ -670,7 +697,8 @@ var ContentService = (function() {
      * @method updateContent
      * @param versionedContentId {String} target version identifier (e.g. "/api/ezp/v2/content/objects/108/versions/2")
      * @param contentUpdateStruct {ContentUpdateStruct} object describing update to the draft
-     * @param callback {Function} callback executed after performing the request (see {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
+     * @param callback {Function} callback executed after performing the request (see
+     *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     ContentService.prototype.updateContent = function updateContent(versionedContentId, contentUpdateStruct, callback) {
         this._connectionManager.request(
@@ -689,7 +717,8 @@ var ContentService = (function() {
      * @method createContentDraft
      * @param contentId {String} target content identifier (e.g. "/api/ezp/v2/content/objects/108")
      * @param [versionId] {int} numerical id of the base version for the new draft. If not provided the current version of the content will be used.
-     * @param callback {Function} callback executed after performing the request (see {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
+     * @param callback {Function} callback executed after performing the request (see
+     *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      * @example
      *      // Create draft from current version
      *      contentService.createContentDraft(
@@ -756,7 +785,8 @@ var ContentService = (function() {
      *
      * @method deleteVersion
      * @param versionedContentId {String} target version identifier (e.g. "/api/ezp/v2/content/objects/108/versions/2")
-     * @param callback {Function} callback executed after performing the request (see {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
+     * @param callback {Function} callback executed after performing the request (see
+     *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     ContentService.prototype.deleteVersion = function deleteVersion(versionedContentId, callback) {
         this._connectionManager.delete(
@@ -771,7 +801,8 @@ var ContentService = (function() {
      *
      * @method publishVersion
      * @param versionedContentId {String} target version identifier (e.g. "/api/ezp/v2/content/objects/108/versions/2")
-     * @param callback {Function} callback executed after performing the request (see {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
+     * @param callback {Function} callback executed after performing the request (see
+     *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     ContentService.prototype.publishVersion = function publishVersion(versionedContentId, callback) {
         this._connectionManager.request(
@@ -794,7 +825,8 @@ var ContentService = (function() {
      * @method createLocation
      * @param contentId {String} target content identifier (e.g. "/api/ezp/v2/content/objects/108")
      * @param locationCreateStruct {LocationCreateStruct} object describing new location to be created
-     * @param callback {Function} callback executed after performing the request (see {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
+     * @param callback {Function} callback executed after performing the request (see
+     *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     ContentService.prototype.createLocation = function createLocation(contentId, locationCreateStruct, callback) {
         var that = this;
@@ -829,7 +861,8 @@ var ContentService = (function() {
      *
      * @method loadLocations
      * @param contentId {String} target content identifier (e.g. "/api/ezp/v2/content/objects/108")
-     * @param callback {Function} callback executed after performing the request (see {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
+     * @param callback {Function} callback executed after performing the request (see
+     *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     ContentService.prototype.loadLocations = function loadLocations(contentId, callback) {
         var that = this;
@@ -862,7 +895,8 @@ var ContentService = (function() {
      *
      * @method loadLocation
      * @param locationId {String} target location identifier (e.g. "/api/ezp/v2/content/locations/1/2/102")
-     * @param callback {Function} callback executed after performing the request (see {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
+     * @param callback {Function} callback executed after performing the request (see
+     *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     ContentService.prototype.loadLocation = function loadLocation(locationId, callback) {
         this._connectionManager.request(
@@ -880,7 +914,8 @@ var ContentService = (function() {
      * @method loadLocationByRemoteId
      * @param locations {String} root locations (will be auto-discovered in near future)
      * @param remoteId {String} remote id of target location (e.g. "0bae96bd419e141ff3200ccbf2822e4f")
-     * @param callback {Function} callback executed after performing the request (see {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
+     * @param callback {Function} callback executed after performing the request (see
+     *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     ContentService.prototype.loadLocationByRemoteId = function loadLocationByRemoteId(locations, remoteId, callback) {
         this._connectionManager.request(
@@ -898,7 +933,8 @@ var ContentService = (function() {
      * @method updateLocation
      * @param locationId {String} target location identifier (e.g. "/api/ezp/v2/content/locations/1/2/102")
      * @param locationUpdateStruct {LocationUpdateStruct} object describing changes to target location
-     * @param callback {Function} callback executed after performing the request (see {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
+     * @param callback {Function} callback executed after performing the request (see
+     *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     ContentService.prototype.updateLocation = function updateLocation(locationId, locationUpdateStruct, callback) {
         this._connectionManager.request(
@@ -917,7 +953,8 @@ var ContentService = (function() {
      * @param locationId {String} target location identifier (e.g. "/api/ezp/v2/content/locations/1/2/102")
      * @param [offset=0] {int} the offset of the result set
      * @param [limit=-1] {int} the number of results returned
-     * @param callback {Function} callback executed after performing the request (see {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
+     * @param callback {Function} callback executed after performing the request (see
+     *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      * @example
      *      contentService.loadLocationChildren(
      *          "/api/ezp/v2/content/locations/1/2/102",
@@ -961,7 +998,8 @@ var ContentService = (function() {
      * @method copySubtree
      * @param subtree {String} source subtree location
      * @param targetLocation {String} location where source subtree should be copied
-     * @param callback {Function} callback executed after performing the request (see {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
+     * @param callback {Function} callback executed after performing the request (see
+     *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     ContentService.prototype.copySubtree = function copySubtree(subtree, targetLocation, callback) {
         this._connectionManager.request(
@@ -980,7 +1018,8 @@ var ContentService = (function() {
      * @method moveSubtree
      * @param subtree {String} source subtree location
      * @param targetLocation {String} location where source subtree should be moved
-     * @param callback {Function} callback executed after performing the request (see {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
+     * @param callback {Function} callback executed after performing the request (see
+     *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     ContentService.prototype.moveSubtree = function moveSubtree(subtree, targetLocation, callback) {
         this._connectionManager.request(
@@ -998,7 +1037,8 @@ var ContentService = (function() {
      * @method swapLocation
      * @param subtree {String} source subtree location
      * @param targetLocation {String} location with which subtree location should be swapped
-     * @param callback {Function} callback executed after performing the request (see {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
+     * @param callback {Function} callback executed after performing the request (see
+     *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     ContentService.prototype.swapLocation = function swapLocation(subtree, targetLocation, callback) {
         this._connectionManager.request(
@@ -1018,7 +1058,8 @@ var ContentService = (function() {
      *
      * @method deleteLocation
      * @param locationId {String} target location identifier (e.g. "/api/ezp/v2/content/locations/1/2/102")
-     * @param callback {Function} callback executed after performing the request (see {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
+     * @param callback {Function} callback executed after performing the request (see
+     *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     ContentService.prototype.deleteLocation = function deleteLocation(locationId, callback) {
         this._connectionManager.delete(
@@ -1036,7 +1077,8 @@ var ContentService = (function() {
      *
      * @method createView
      * @param viewCreateStruct {ViewCreateStruct} object describing new view to be created
-     * @param callback {Function} callback executed after performing the request (see {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
+     * @param callback {Function} callback executed after performing the request (see
+     *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     ContentService.prototype.createView = function createView(viewCreateStruct, callback) {
 
@@ -1074,7 +1116,8 @@ var ContentService = (function() {
      * @param versionedContentId {String} target version identifier (e.g. "/api/ezp/v2/content/objects/108/versions/2")
      * @param [offset=0] {int} the offset of the result set
      * @param [limit=-1] {int} the number of results returned
-     * @param callback {Function} callback executed after performing the request (see {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
+     * @param callback {Function} callback executed after performing the request (see
+     *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      * @example
      *      //See loadLocationChildren for example of "offset" and "limit" arguments usage
      */
@@ -1111,7 +1154,8 @@ var ContentService = (function() {
      * @param contentId {String} target content identifier (e.g. "/api/ezp/v2/content/objects/102")
      * @param [offset=0] {int} the offset of the result set
      * @param [limit=-1] {int} the number of results returned
-     * @param callback {Function} callback executed after performing the request (see {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
+     * @param callback {Function} callback executed after performing the request (see
+     *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      * @example
      *      //See loadLocationChildren for example of "offset" and "limit" arguments usage
      */
@@ -1147,7 +1191,8 @@ var ContentService = (function() {
      *
      * @method loadRelation
      * @param relationId {String} target relation identifier (e.g. "/api/ezp/v2/content/objects/102/versions/5/relations/1")
-     * @param callback {Function} callback executed after performing the request (see {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
+     * @param callback {Function} callback executed after performing the request (see
+     *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     ContentService.prototype.loadRelation = function loadRelation(relationId, callback) {
         this._connectionManager.request(
@@ -1165,7 +1210,8 @@ var ContentService = (function() {
      * @method addRelation
      * @param versionedContentId {String} target version identifier (e.g. "/api/ezp/v2/content/objects/102/versions/5")
      * @param relationCreateStruct {RelationCreateStruct} object describing new relation to be created
-     * @param callback {Function} callback executed after performing the request (see {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
+     * @param callback {Function} callback executed after performing the request (see
+     *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      * @example
      *      var relationCreateStruct = contentService.newRelationCreateStruct("/api/ezp/v2/content/objects/132");
      *      contentService.addRelation(
@@ -1205,7 +1251,8 @@ var ContentService = (function() {
      *
      * @method deleteRelation
      * @param relationId {String} target relation identifier (e.g. "/api/ezp/v2/content/objects/102/versions/5/relations/1")
-     * @param callback {Function} callback executed after performing the request (see {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
+     * @param callback {Function} callback executed after performing the request (see
+     *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     ContentService.prototype.deleteRelation = function deleteRelation(relationId, callback) {
         this._connectionManager.delete(
@@ -1224,7 +1271,8 @@ var ContentService = (function() {
      * @method loadTrashItems
      * @param [offset=0] {int} the offset of the result set
      * @param [limit=-1] {int} the number of results returned
-     * @param callback {Function} callback executed after performing the request (see {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
+     * @param callback {Function} callback executed after performing the request (see
+     *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      * @example
      *      //See loadLocationChildren for example of "offset" and "limit" arguments usage
      */
@@ -1257,7 +1305,8 @@ var ContentService = (function() {
      *
      * @method loadTrashItem
      * @param trashItemId {String} target trash item identifier (e.g. "/api/ezp/v2/content/trash/1")
-     * @param callback {Function} callback executed after performing the request (see {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
+     * @param callback {Function} callback executed after performing the request (see
+     *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     ContentService.prototype.loadTrashItem = function loadTrashItem(trashItemId, callback) {
         this._connectionManager.request(
@@ -1275,7 +1324,8 @@ var ContentService = (function() {
      * @method recover
      * @param trashItemId {String} target trash item identifier (e.g. "/api/ezp/v2/content/trash/1")
      * @param [destination] {String} if given the trash item is restored under this location otherwise under its original parent location
-     * @param callback {Function} callback executed after performing the request (see {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
+     * @param callback {Function} callback executed after performing the request (see
+     *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     ContentService.prototype.recover = function recover(trashItemId, destination, callback) {
 
@@ -1299,7 +1349,8 @@ var ContentService = (function() {
      *
      * @method deleteTrashItem
      * @param trashItemId {String} target trash item identifier (e.g. "/api/ezp/v2/content/trash/1")
-     * @param callback {Function} callback executed after performing the request (see {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
+     * @param callback {Function} callback executed after performing the request (see
+     *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     ContentService.prototype.deleteTrashItem = function deleteTrashItem(trashItemId, callback) {
         this._connectionManager.delete(
@@ -1312,7 +1363,8 @@ var ContentService = (function() {
      *  Empty the trash can
      *
      * @method emptyThrash
-     * @param callback {Function} callback executed after performing the request (see {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
+     * @param callback {Function} callback executed after performing the request (see
+     *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     ContentService.prototype.emptyThrash = function emptyThrash(callback) {
 
@@ -1347,7 +1399,8 @@ var ContentService = (function() {
      *
      * @method loadObjectStateGroups
      * @param objectStateGroups {String} path to root objectStateGroups (will be replaced by auto-discovered soon)
-     * @param callback {Function} callback executed after performing the request (see {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
+     * @param callback {Function} callback executed after performing the request (see
+     *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     ContentService.prototype.loadObjectStateGroups = function loadObjectStateGroups(objectStateGroups, callback) {
         this._connectionManager.request(
@@ -1364,7 +1417,8 @@ var ContentService = (function() {
      *
      * @method loadObjectStateGroup
      * @param objectStateGroupId {String} target object state group identifier (e.g. "/api/ezp/v2/content/objectstategroups/2")
-     * @param callback {Function} callback executed after performing the request (see {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
+     * @param callback {Function} callback executed after performing the request (see
+     *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     ContentService.prototype.loadObjectStateGroup = function loadObjectStateGroup(objectStateGroupId, callback) {
         this._connectionManager.request(
@@ -1383,7 +1437,8 @@ var ContentService = (function() {
      * @method createObjectStateGroup
      * @param objectStateGroups {String} path to root objectStateGroups (will be replaced by auto-discovered soon)
      * @param objectStateGroupCreateStruct {ObjectStateGroupCreateStruct} object describing new ObjectState group to be created
-     * @param callback {Function} callback executed after performing the request (see {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
+     * @param callback {Function} callback executed after performing the request (see
+     *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     ContentService.prototype.createObjectStateGroup = function createObjectStateGroup(objectStateGroups, objectStateGroupCreateStruct, callback) {
         this._connectionManager.request(
@@ -1401,7 +1456,8 @@ var ContentService = (function() {
      * @method updateObjectStateGroup
      * @param objectStateGroupId {String} target object state group identifier (e.g. "/api/ezp/v2/content/objectstategroups/2")
      * @param objectStateGroupUpdateStruct {ObjectStateGroupUpdateStruct} object describing changes to target ObjectState group
-     * @param callback {Function} callback executed after performing the request (see {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
+     * @param callback {Function} callback executed after performing the request (see
+     *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     ContentService.prototype.updateObjectStateGroup = function updateObjectStateGroup(objectStateGroupId, objectStateGroupUpdateStruct, callback) {
         this._connectionManager.request(
@@ -1418,7 +1474,8 @@ var ContentService = (function() {
      *
      * @method deleteObjectStateGroup
      * @param objectStateGroupId {String} target object state group identifier (e.g. "/api/ezp/v2/content/objectstategroups/2")
-     * @param callback {Function} callback executed after performing the request (see {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
+     * @param callback {Function} callback executed after performing the request (see
+     *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     ContentService.prototype.deleteObjectStateGroup = function deleteObjectStateGroup(objectStateGroupId, callback) {
         this._connectionManager.delete(
@@ -1433,7 +1490,8 @@ var ContentService = (function() {
      * @method createObjectState
      * @param objectStateGroupId {String} target group, where new object state should be created (e.g. "/api/ezp/v2/content/objectstategroups/2")
      * @param objectStateCreateStruct {ObjectStateCreateStruct} object describing new ObjectState to be created
-     * @param callback {Function} callback executed after performing the request (see {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
+     * @param callback {Function} callback executed after performing the request (see
+     *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     ContentService.prototype.createObjectState = function createObjectState(objectStateGroupId, objectStateCreateStruct, callback) {
 
@@ -1452,7 +1510,8 @@ var ContentService = (function() {
      *
      * @method loadObjectState
      * @param objectStateId {String} target object state identifier (e.g. "/api/ezp/v2/content/objectstategroups/7/objectstates/5")
-     * @param callback {Function} callback executed after performing the request (see {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
+     * @param callback {Function} callback executed after performing the request (see
+     *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     ContentService.prototype.loadObjectState = function loadObjectState(objectStateId, callback) {
         this._connectionManager.request(
@@ -1470,7 +1529,8 @@ var ContentService = (function() {
      * @method updateObjectState
      * @param objectStateId {String} target object state identifier (e.g. "/api/ezp/v2/content/objectstategroups/7/objectstates/5")
      * @param objectStateUpdateStruct {ObjectStateUpdateStruct} object describing changes to target ObjectState
-     * @param callback {Function} callback executed after performing the request (see {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
+     * @param callback {Function} callback executed after performing the request (see
+     *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     ContentService.prototype.updateObjectState = function updateObjectState(objectStateId, objectStateUpdateStruct, callback) {
         this._connectionManager.request(
@@ -1487,7 +1547,8 @@ var ContentService = (function() {
      *
      * @method deleteObjectState
      * @param objectStateId {String} target object state identifier (e.g. "/api/ezp/v2/content/objectstategroups/7/objectstates/5")
-     * @param callback {Function} callback executed after performing the request (see {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
+     * @param callback {Function} callback executed after performing the request (see
+     *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     ContentService.prototype.deleteObjectState = function deleteObjectState(objectStateId, callback) {
         this._connectionManager.delete(
@@ -1501,7 +1562,8 @@ var ContentService = (function() {
      *
      * @method getContentState
      * @param contentStatesId {String} link to target content's object states (should be auto-discovered from contentId)
-     * @param callback {Function} callback executed after performing the request (see {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
+     * @param callback {Function} callback executed after performing the request (see
+     *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     ContentService.prototype.getContentState = function getContentState(contentStatesId, callback) {
         this._connectionManager.request(
@@ -1519,7 +1581,8 @@ var ContentService = (function() {
      * @method setContentState
      * @param contentStatesId {String} link to target content's object states (should be auto-discovered from contentId)
      * @param objectStates {Array}
-     * @param callback {Function} callback executed after performing the request (see {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
+     * @param callback {Function} callback executed after performing the request (see
+     *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      * @example
      *     contentService.loadObjectState(
      *          "/api/ezp/v2/content/objectstategroups/4/objectstates/3",
@@ -1563,7 +1626,8 @@ var ContentService = (function() {
      * @method createUrlAlias
      * @param urlAliases {String} link to root UrlAliases resource (should be auto-discovered)
      * @param urlAliasCreateStruct {UrlAliasCreateStruct} object describing new UrlAlias to be created
-     * @param callback {Function} callback executed after performing the request (see {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
+     * @param callback {Function} callback executed after performing the request (see
+     *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     ContentService.prototype.createUrlAlias = function createUrlAlias(urlAliases, urlAliasCreateStruct, callback) {
         this._connectionManager.request(
@@ -1580,7 +1644,8 @@ var ContentService = (function() {
      *
      * @method loadUrlAliases
      * @param urlAliases {String} link to root UrlAliases resource (should be auto-discovered)
-     * @param callback {Function} callback executed after performing the request (see {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
+     * @param callback {Function} callback executed after performing the request (see
+     *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     ContentService.prototype.listGlobalAliases = function listGlobalAliases(urlAliases, callback) {
         this._connectionManager.request(
@@ -1598,7 +1663,8 @@ var ContentService = (function() {
      * @method listLocationAliases
      * @param locationUrlAliases {String} link to target location's UrlAliases (should be auto-discovered from locationId)
      * @param [custom=true] {boolean} this flag indicates weather autogenerated (false) or manual url aliases (true) should be returned
-     * @param callback {Function} callback executed after performing the request (see {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
+     * @param callback {Function} callback executed after performing the request (see
+     *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     ContentService.prototype.listLocationAliases = function listLocationAliases(locationUrlAliases, custom, callback) {
 
@@ -1619,7 +1685,8 @@ var ContentService = (function() {
      *
      * @method loadUrlAlias
      * @param urlAliasId {String} target url alias identifier (e.g. "/api/ezp/v2/content/urlaliases/0-a903c03b86eb2987889afa5fe17004eb")
-     * @param callback {Function} callback executed after performing the request (see {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
+     * @param callback {Function} callback executed after performing the request (see
+     *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     ContentService.prototype.loadUrlAlias = function loadUrlAlias(urlAliasId, callback) {
         this._connectionManager.request(
@@ -1636,7 +1703,8 @@ var ContentService = (function() {
      *
      * @method deleteUrlAlias
      * @param urlAliasId {String} target url alias identifier (e.g. "/api/ezp/v2/content/urlaliases/0-a903c03b86eb2987889afa5fe17004eb")
-     * @param callback {Function} callback executed after performing the request (see {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
+     * @param callback {Function} callback executed after performing the request (see
+     *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     ContentService.prototype.deleteUrlAlias = function deleteUrlAlias(urlAliasId, callback) {
         this._connectionManager.delete(
@@ -1655,7 +1723,8 @@ var ContentService = (function() {
      * @method createUrlWildcard
      * @param urlWildcards {String} link to root UrlWildcards resource (should be auto-discovered)
      * @param urlWildcardCreateStruct {UrlWildcardCreateStruct} object describing new UrlWildcard to be created
-     * @param callback {Function} callback executed after performing the request (see {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
+     * @param callback {Function} callback executed after performing the request (see
+     *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     ContentService.prototype.createUrlWildcard = function createUrlWildcard(urlWildcards, urlWildcardCreateStruct, callback) {
         this._connectionManager.request(
@@ -1672,7 +1741,8 @@ var ContentService = (function() {
      *
      * @method loadUrlWildcards
      * @param urlWildcards {String} link to root UrlWildcards resource (should be auto-discovered)
-     * @param callback {Function} callback executed after performing the request (see {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
+     * @param callback {Function} callback executed after performing the request (see
+     *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     ContentService.prototype.loadUrlWildcards = function loadUrlWildcards(urlWildcards, callback) {
         this._connectionManager.request(
@@ -1689,7 +1759,8 @@ var ContentService = (function() {
      *
      * @method loadUrlWildcard
      * @param urlWildcardId {String} target url wildcard identifier (e.g. "/api/ezp/v2/content/urlwildcards/1")
-     * @param callback {Function} callback executed after performing the request (see {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
+     * @param callback {Function} callback executed after performing the request (see
+     *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     ContentService.prototype.loadUrlWildcard = function loadUrlWildcard(urlWildcardId, callback) {
         this._connectionManager.request(
@@ -1706,7 +1777,8 @@ var ContentService = (function() {
      *
      * @method deleteUrlWildcard
      * @param urlWildcardId {String} target url wildcard identifier (e.g. "/api/ezp/v2/content/urlwildcards/1")
-     * @param callback {Function} callback executed after performing the request (see {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
+     * @param callback {Function} callback executed after performing the request (see
+     *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     ContentService.prototype.deleteUrlWildcard = function deleteUrlWildcard(urlWildcardId, callback) {
         this._connectionManager.delete(
@@ -1718,6 +1790,4 @@ var ContentService = (function() {
 
     return ContentService;
 
-}());
-
-
+});

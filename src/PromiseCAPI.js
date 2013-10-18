@@ -1,4 +1,5 @@
-var PromiseCAPI = (function() {
+/* global define */
+define(["CAPI", "services/PromiseService"], function (CAPI, PromiseService) {
     "use strict";
 
     /**
@@ -10,13 +11,10 @@ var PromiseCAPI = (function() {
      */
     var PromiseCAPI = function (CAPI) {
 
-        var key;
-        var that = this;
+        var key,
+            that = this;
 
         this._capi = CAPI;
-
-        console.log('entered PromiseCAPI');
-
 
         /**
          * Convert any CAPI service into Promise-based service.
@@ -29,14 +27,15 @@ var PromiseCAPI = (function() {
             return function() {
                 return new PromiseService(
                     serviceFactory.call(that._capi)
-                )
-            }
+                );
+            };
         };
 
         // Auto-generating promise-based services based on every existing CAPI service
         // taking into account only functions with "get....Service" signature
         for(key in this._capi) {
-            if ((typeof this._capi[key] === "function") && ( Object.prototype.toString.call(this._capi[key].toString().match(/^function\s*(get[^\s(]+Service)/)) === '[object Array]')) {
+            if ((typeof this._capi[key] === "function") &&
+                ( Object.prototype.toString.call(this._capi[key].toString().match(/^function\s*(get[^\s(]+Service)/)) === '[object Array]')) {
 
                 this[key] = this.generatePromiseService(this._capi[key]);
 
@@ -47,4 +46,4 @@ var PromiseCAPI = (function() {
 
     return PromiseCAPI;
 
-}());
+});

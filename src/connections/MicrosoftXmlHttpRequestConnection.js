@@ -1,4 +1,6 @@
-var MicrosoftXmlHttpRequestConnection = (function() {
+/* global define */
+/* global ActiveXObject */
+define(["structures/Response", "structures/CAPIError"], function (Response, CAPIError) {
     "use strict";
 
     /**
@@ -8,7 +10,6 @@ var MicrosoftXmlHttpRequestConnection = (function() {
      * @class MicrosoftXmlHttpRequestConnection
      * @constructor
      */
-    /* jshint -W117 */
     var MicrosoftXmlHttpRequestConnection = function () {
 
         this._xhr = new ActiveXObject("Microsoft.XMLHTTP");
@@ -71,7 +72,6 @@ var MicrosoftXmlHttpRequestConnection = (function() {
             XHR.send(request.body);
         };
     };
-    /* jshint +W117 */
 
     /**
      * Connection checks itself for compatibility with running environment
@@ -86,4 +86,4 @@ var MicrosoftXmlHttpRequestConnection = (function() {
 
     return MicrosoftXmlHttpRequestConnection;
 
-}());
+});

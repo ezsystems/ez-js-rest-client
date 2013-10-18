@@ -1,4 +1,5 @@
-var FieldDefinitionUpdateStruct = (function() {
+/* global define */
+define(function () {
     "use strict";
 
     /**
@@ -21,4 +22,4 @@ var FieldDefinitionUpdateStruct = (function() {
 
     return FieldDefinitionUpdateStruct;
 
-}());
+});

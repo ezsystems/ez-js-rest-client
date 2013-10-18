@@ -1,4 +1,5 @@
-var XmlHttpRequestConnection = (function() {
+/* global define */
+define(["structures/Response", "structures/CAPIError"], function (Response, CAPIError) {
     "use strict";
 
     /**
@@ -85,4 +86,4 @@ var XmlHttpRequestConnection = (function() {
     return XmlHttpRequestConnection;
 
 
-}());
+});

@@ -1,4 +1,5 @@
-var RoleInputStruct = (function() {
+/* global define */
+define(function () {
     "use strict";
 
     /**
@@ -24,4 +25,4 @@ var RoleInputStruct = (function() {
 
     return RoleInputStruct;
 
-}());
+});

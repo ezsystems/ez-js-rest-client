@@ -1,199 +1,208 @@
-describe("Microsoft XmlHttpRequest Connection", function () {
+define(function (require) {
 
-    var connection,
-        mockCallback,
-        mockXMLHttpRequest,
-        mockRequest = {
-            body : { testBody : ""},
-            headers : { testHeader : "testHeaderValue"},
-            httpBasicAuth : false,
-            method : "GET",
-            url : "/"
-        },
-        testLogin = "login",
-        testPassword = "password",
-        testErrorCode = 400;
+    // Declaring dependencies
+    var MicrosoftXmlHttpRequestConnection = require("connections/MicrosoftXmlHttpRequestConnection"),
+        Response = require("structures/Response"),
+        CAPIError = require("structures/CAPIError");
 
-    beforeEach(function (){
+    describe("Microsoft XmlHttpRequest Connection", function () {
 
-        mockCallback = jasmine.createSpy('mockCallback');
-
-        mockXMLHttpRequest = function(){};
-        mockXMLHttpRequest.prototype.open = function(method, url, async, user, password){};
-        mockXMLHttpRequest.prototype.setRequestHeader = function(headerType, header){};
-        mockXMLHttpRequest.prototype.getAllResponseHeaders = function(){};
-
-        spyOn(mockXMLHttpRequest.prototype, 'open').andCallThrough();
-        spyOn(mockXMLHttpRequest.prototype, 'setRequestHeader').andCallThrough();
-        spyOn(mockXMLHttpRequest.prototype, 'getAllResponseHeaders').andCallThrough();
-    });
-
-    it("is checking compatibility correctly when window.ActiveXObject is present", function(){
-
-        window.ActiveXObject = {};
-
-        expect(MicrosoftXmlHttpRequestConnection.isCompatible()).toEqual(true);
-
-    });
-
-    it("is checking compatibility correctly when window.ActiveXObject is absent", function(){
-
-        window.ActiveXObject = null;
-
-        expect(MicrosoftXmlHttpRequestConnection.isCompatible()).toEqual(false);
-
-    });
-
-    describe("is correctly using XmlHttpRequest while performing:", function(){
+        var connection,
+            mockCallback,
+            mockXMLHttpRequest,
+            mockRequest = {
+                body : { testBody : ""},
+                headers : { testHeader : "testHeaderValue"},
+                httpBasicAuth : false,
+                method : "GET",
+                url : "/"
+            },
+            testLogin = "login",
+            testPassword = "password",
+            testErrorCode = 400;
 
         beforeEach(function (){
 
-            mockXMLHttpRequest.prototype.send = function(body){
-                this.readyState = 4;
-                this.status = 200;
-                this.onreadystatechange();
-            };
-            spyOn(mockXMLHttpRequest.prototype, 'send').andCallThrough();
+            mockCallback = jasmine.createSpy('mockCallback');
 
-            ActiveXObject = (function (what) {
-                return mockXMLHttpRequest;
-            }());
+            mockXMLHttpRequest = function(){};
+            mockXMLHttpRequest.prototype.open = function(method, url, async, user, password){};
+            mockXMLHttpRequest.prototype.setRequestHeader = function(headerType, header){};
+            mockXMLHttpRequest.prototype.getAllResponseHeaders = function(){};
 
-            connection = new MicrosoftXmlHttpRequestConnection();
+            spyOn(mockXMLHttpRequest.prototype, 'open').andCallThrough();
+            spyOn(mockXMLHttpRequest.prototype, 'setRequestHeader').andCallThrough();
+            spyOn(mockXMLHttpRequest.prototype, 'getAllResponseHeaders').andCallThrough();
         });
 
-        it("execute call", function(){
+        it("is checking compatibility correctly when window.ActiveXObject is present", function(){
 
-            connection.execute(
-                mockRequest,
-                mockCallback
-            );
+            window.ActiveXObject = {};
 
-            expect(mockXMLHttpRequest.prototype.open).toHaveBeenCalled();
-            expect(mockXMLHttpRequest.prototype.open.mostRecentCall.args[0]).toEqual("GET"); //method
-            expect(mockXMLHttpRequest.prototype.open.mostRecentCall.args[1]).toEqual("/"); //url
-            expect(mockXMLHttpRequest.prototype.open.mostRecentCall.args[2]).toEqual(true); //async
-
-            expect(mockXMLHttpRequest.prototype.setRequestHeader).toHaveBeenCalled();
-            expect(mockXMLHttpRequest.prototype.setRequestHeader.mostRecentCall.args[0]).toEqual("testHeader"); //header type
-            expect(mockXMLHttpRequest.prototype.setRequestHeader.mostRecentCall.args[1]).toEqual("testHeaderValue"); //header value
-
-            expect(mockXMLHttpRequest.prototype.send).toHaveBeenCalled();
-            expect(mockXMLHttpRequest.prototype.send.mostRecentCall.args[0]).toEqual({ testBody : ""}); //body
-
-            expect(mockXMLHttpRequest.prototype.getAllResponseHeaders).toHaveBeenCalled();
-
-            expect(mockCallback).toHaveBeenCalled();
-            expect(mockCallback.mostRecentCall.args[0]).toEqual(false); // errors
-            expect(mockCallback.mostRecentCall.args[1]).toEqual(jasmine.any(Response)); // errors
+            expect(MicrosoftXmlHttpRequestConnection.isCompatible()).toEqual(true);
 
         });
 
-        it("execute call with BasicHttp Authorization", function(){
+        it("is checking compatibility correctly when window.ActiveXObject is absent", function(){
 
-            mockRequest.httpBasicAuth = true;
-            mockRequest.login = testLogin;
-            mockRequest.password = testPassword;
+            window.ActiveXObject = null;
 
-            connection.execute(
-                mockRequest,
-                mockCallback
-            );
+            expect(MicrosoftXmlHttpRequestConnection.isCompatible()).toEqual(false);
 
-            expect(mockXMLHttpRequest.prototype.open).toHaveBeenCalled();
-            expect(mockXMLHttpRequest.prototype.open.mostRecentCall.args[0]).toEqual("GET"); //method
-            expect(mockXMLHttpRequest.prototype.open.mostRecentCall.args[1]).toEqual("/"); //url
-            expect(mockXMLHttpRequest.prototype.open.mostRecentCall.args[2]).toEqual(true); //async
-            expect(mockXMLHttpRequest.prototype.open.mostRecentCall.args[3]).toEqual(testLogin); //login
-            expect(mockXMLHttpRequest.prototype.open.mostRecentCall.args[4]).toEqual(testPassword); //password
-
-            expect(mockXMLHttpRequest.prototype.setRequestHeader).toHaveBeenCalled();
-            expect(mockXMLHttpRequest.prototype.setRequestHeader.mostRecentCall.args[0]).toEqual("testHeader"); //header type
-            expect(mockXMLHttpRequest.prototype.setRequestHeader.mostRecentCall.args[1]).toEqual("testHeaderValue"); //header value
-
-            expect(mockXMLHttpRequest.prototype.send).toHaveBeenCalled();
-            expect(mockXMLHttpRequest.prototype.send.mostRecentCall.args[0]).toEqual({ testBody : ""}); //body
-
-            expect(mockXMLHttpRequest.prototype.getAllResponseHeaders).toHaveBeenCalled();
-
-            expect(mockCallback).toHaveBeenCalled();
-            expect(mockCallback.mostRecentCall.args[0]).toEqual(false); // errors
-            expect(mockCallback.mostRecentCall.args[1]).toEqual(jasmine.any(Response)); // errors
         });
 
+        describe("is correctly using XmlHttpRequest while performing:", function(){
+
+            beforeEach(function (){
+
+                mockXMLHttpRequest.prototype.send = function(body){
+                    this.readyState = 4;
+                    this.status = 200;
+                    this.onreadystatechange();
+                };
+                spyOn(mockXMLHttpRequest.prototype, 'send').andCallThrough();
+
+                ActiveXObject = (function (what) {
+                    return mockXMLHttpRequest;
+                }());
+
+                connection = new MicrosoftXmlHttpRequestConnection();
+            });
+
+            it("execute call", function(){
+
+                connection.execute(
+                    mockRequest,
+                    mockCallback
+                );
+
+                expect(mockXMLHttpRequest.prototype.open).toHaveBeenCalled();
+                expect(mockXMLHttpRequest.prototype.open.mostRecentCall.args[0]).toEqual("GET"); //method
+                expect(mockXMLHttpRequest.prototype.open.mostRecentCall.args[1]).toEqual("/"); //url
+                expect(mockXMLHttpRequest.prototype.open.mostRecentCall.args[2]).toEqual(true); //async
+
+                expect(mockXMLHttpRequest.prototype.setRequestHeader).toHaveBeenCalled();
+                expect(mockXMLHttpRequest.prototype.setRequestHeader.mostRecentCall.args[0]).toEqual("testHeader"); //header type
+                expect(mockXMLHttpRequest.prototype.setRequestHeader.mostRecentCall.args[1]).toEqual("testHeaderValue"); //header value
+
+                expect(mockXMLHttpRequest.prototype.send).toHaveBeenCalled();
+                expect(mockXMLHttpRequest.prototype.send.mostRecentCall.args[0]).toEqual({ testBody : ""}); //body
+
+                expect(mockXMLHttpRequest.prototype.getAllResponseHeaders).toHaveBeenCalled();
+
+                expect(mockCallback).toHaveBeenCalled();
+                expect(mockCallback.mostRecentCall.args[0]).toEqual(false); // errors
+                expect(mockCallback.mostRecentCall.args[1]).toEqual(jasmine.any(Response)); // errors
+
+            });
+
+            it("execute call with BasicHttp Authorization", function(){
+
+                mockRequest.httpBasicAuth = true;
+                mockRequest.login = testLogin;
+                mockRequest.password = testPassword;
+
+                connection.execute(
+                    mockRequest,
+                    mockCallback
+                );
+
+                expect(mockXMLHttpRequest.prototype.open).toHaveBeenCalled();
+                expect(mockXMLHttpRequest.prototype.open.mostRecentCall.args[0]).toEqual("GET"); //method
+                expect(mockXMLHttpRequest.prototype.open.mostRecentCall.args[1]).toEqual("/"); //url
+                expect(mockXMLHttpRequest.prototype.open.mostRecentCall.args[2]).toEqual(true); //async
+                expect(mockXMLHttpRequest.prototype.open.mostRecentCall.args[3]).toEqual(testLogin); //login
+                expect(mockXMLHttpRequest.prototype.open.mostRecentCall.args[4]).toEqual(testPassword); //password
+
+                expect(mockXMLHttpRequest.prototype.setRequestHeader).toHaveBeenCalled();
+                expect(mockXMLHttpRequest.prototype.setRequestHeader.mostRecentCall.args[0]).toEqual("testHeader"); //header type
+                expect(mockXMLHttpRequest.prototype.setRequestHeader.mostRecentCall.args[1]).toEqual("testHeaderValue"); //header value
+
+                expect(mockXMLHttpRequest.prototype.send).toHaveBeenCalled();
+                expect(mockXMLHttpRequest.prototype.send.mostRecentCall.args[0]).toEqual({ testBody : ""}); //body
+
+                expect(mockXMLHttpRequest.prototype.getAllResponseHeaders).toHaveBeenCalled();
+
+                expect(mockCallback).toHaveBeenCalled();
+                expect(mockCallback.mostRecentCall.args[0]).toEqual(false); // errors
+                expect(mockCallback.mostRecentCall.args[1]).toEqual(jasmine.any(Response)); // errors
+            });
+
+        });
+
+        describe("is returning errors and retrying correctly, when ", function(){
+
+            it("request is not finished yet", function(){
+
+                mockXMLHttpRequest.prototype.send = function(body){
+                    this.readyState = 3;
+                    this.status = 0;
+                    this.onreadystatechange();
+                    this.readyState = 4;
+                    this.status = 200;
+                    this.onreadystatechange();
+                };
+                spyOn(mockXMLHttpRequest.prototype, 'send').andCallThrough();
+
+                ActiveXObject = (function () {
+                    return mockXMLHttpRequest;
+                }())
+
+                connection = new MicrosoftXmlHttpRequestConnection();
+
+                connection.execute(
+                    mockRequest,
+                    mockCallback
+                );
+
+                expect(mockXMLHttpRequest.prototype.open).toHaveBeenCalled();
+                expect(mockXMLHttpRequest.prototype.open.mostRecentCall.args[0]).toEqual("GET"); //method
+                expect(mockXMLHttpRequest.prototype.open.mostRecentCall.args[1]).toEqual("/"); //url
+                expect(mockXMLHttpRequest.prototype.open.mostRecentCall.args[2]).toEqual(true); //async
+                expect(mockXMLHttpRequest.prototype.open.mostRecentCall.args[3]).toEqual(testLogin); //login
+                expect(mockXMLHttpRequest.prototype.open.mostRecentCall.args[4]).toEqual(testPassword); //password
+
+                expect(mockXMLHttpRequest.prototype.setRequestHeader).toHaveBeenCalled();
+                expect(mockXMLHttpRequest.prototype.setRequestHeader.mostRecentCall.args[0]).toEqual("testHeader"); //header type
+                expect(mockXMLHttpRequest.prototype.setRequestHeader.mostRecentCall.args[1]).toEqual("testHeaderValue"); //header value
+
+                expect(mockXMLHttpRequest.prototype.send).toHaveBeenCalled();
+                expect(mockXMLHttpRequest.prototype.send.mostRecentCall.args[0]).toEqual({ testBody : ""}); //body
+
+                expect(mockXMLHttpRequest.prototype.getAllResponseHeaders).toHaveBeenCalled();
+
+                expect(mockCallback).toHaveBeenCalled();
+                expect(mockCallback.mostRecentCall.args[0]).toEqual(false); // errors
+                expect(mockCallback.mostRecentCall.args[1]).toEqual(jasmine.any(Response)); // response
+            });
+
+            it("request have failed", function(){
+
+                mockXMLHttpRequest.prototype.send = function(body){
+                    this.readyState = 4;
+                    this.status = testErrorCode;
+                    this.onreadystatechange();
+                };
+                spyOn(mockXMLHttpRequest.prototype, 'send').andCallThrough();
+
+                ActiveXObject = (function () {
+                    return mockXMLHttpRequest;
+                }())
+
+                connection = new MicrosoftXmlHttpRequestConnection();
+
+                connection.execute(
+                    mockRequest,
+                    mockCallback
+                );
+
+                expect(mockCallback).toHaveBeenCalled();
+                expect(mockCallback.mostRecentCall.args[0]).toEqual(jasmine.any(CAPIError)); // errors
+                expect(mockCallback.mostRecentCall.args[1]).toEqual(jasmine.any(Response)); // response
+                expect(mockCallback.mostRecentCall.args[1].status).toEqual(testErrorCode);
+            });
+
+        });
     });
 
-    describe("is returning errors and retrying correctly, when ", function(){
-
-        it("request is not finished yet", function(){
-
-            mockXMLHttpRequest.prototype.send = function(body){
-                this.readyState = 3;
-                this.status = 0;
-                this.onreadystatechange();
-                this.readyState = 4;
-                this.status = 200;
-                this.onreadystatechange();
-            };
-            spyOn(mockXMLHttpRequest.prototype, 'send').andCallThrough();
-
-            ActiveXObject = (function () {
-                return mockXMLHttpRequest;
-            }())
-
-            connection = new MicrosoftXmlHttpRequestConnection();
-
-            connection.execute(
-                mockRequest,
-                mockCallback
-            );
-
-            expect(mockXMLHttpRequest.prototype.open).toHaveBeenCalled();
-            expect(mockXMLHttpRequest.prototype.open.mostRecentCall.args[0]).toEqual("GET"); //method
-            expect(mockXMLHttpRequest.prototype.open.mostRecentCall.args[1]).toEqual("/"); //url
-            expect(mockXMLHttpRequest.prototype.open.mostRecentCall.args[2]).toEqual(true); //async
-            expect(mockXMLHttpRequest.prototype.open.mostRecentCall.args[3]).toEqual(testLogin); //login
-            expect(mockXMLHttpRequest.prototype.open.mostRecentCall.args[4]).toEqual(testPassword); //password
-
-            expect(mockXMLHttpRequest.prototype.setRequestHeader).toHaveBeenCalled();
-            expect(mockXMLHttpRequest.prototype.setRequestHeader.mostRecentCall.args[0]).toEqual("testHeader"); //header type
-            expect(mockXMLHttpRequest.prototype.setRequestHeader.mostRecentCall.args[1]).toEqual("testHeaderValue"); //header value
-
-            expect(mockXMLHttpRequest.prototype.send).toHaveBeenCalled();
-            expect(mockXMLHttpRequest.prototype.send.mostRecentCall.args[0]).toEqual({ testBody : ""}); //body
-
-            expect(mockXMLHttpRequest.prototype.getAllResponseHeaders).toHaveBeenCalled();
-
-            expect(mockCallback).toHaveBeenCalled();
-            expect(mockCallback.mostRecentCall.args[0]).toEqual(false); // errors
-            expect(mockCallback.mostRecentCall.args[1]).toEqual(jasmine.any(Response)); // response
-        });
-
-        it("request have failed", function(){
-
-            mockXMLHttpRequest.prototype.send = function(body){
-                this.readyState = 4;
-                this.status = testErrorCode;
-                this.onreadystatechange();
-            };
-            spyOn(mockXMLHttpRequest.prototype, 'send').andCallThrough();
-
-            ActiveXObject = (function () {
-                return mockXMLHttpRequest;
-            }())
-
-            connection = new MicrosoftXmlHttpRequestConnection();
-
-            connection.execute(
-                mockRequest,
-                mockCallback
-            );
-
-            expect(mockCallback).toHaveBeenCalled();
-            expect(mockCallback.mostRecentCall.args[0]).toEqual(jasmine.any(CAPIError)); // errors
-            expect(mockCallback.mostRecentCall.args[1]).toEqual(jasmine.any(Response)); // response
-            expect(mockCallback.mostRecentCall.args[1].status).toEqual(testErrorCode);
-        });
-
-    });
 });

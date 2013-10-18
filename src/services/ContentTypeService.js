@@ -1,4 +1,9 @@
-var ContentTypeService = (function() {
+/* global define */
+define(["structures/ContentTypeGroupInputStruct", "structures/ContentTypeCreateStruct", "structures/ContentTypeUpdateStruct",
+        "structures/FieldDefinitionCreateStruct", "structures/FieldDefinitionUpdateStruct"],
+    function (ContentTypeGroupInputStruct, ContentTypeCreateStruct, ContentTypeUpdateStruct,
+              FieldDefinitionCreateStruct, FieldDefinitionUpdateStruct){
+
     "use strict";
 
     /**
@@ -133,7 +138,8 @@ var ContentTypeService = (function() {
      * @method createContentTypeGroup
      * @param contentTypeGroups {String} link to root ContentTypeGroups resource (should be auto-discovered)
      * @param contentTypeGroupCreateStruct {ContentTypeGroupInputStruct} object describing the new group to be created
-     * @param callback {Function} callback executed after performing the request (see {{#crossLink "ContentTypeService"}}Note on the callbacks usage{{/crossLink}} for more info)
+     * @param callback {Function} callback executed after performing the request (see
+     *  {{#crossLink "ContentTypeService"}}Note on the callbacks usage{{/crossLink}} for more info)
      * @example
      *
      *
@@ -163,7 +169,8 @@ var ContentTypeService = (function() {
      *
      * @method loadContentTypeGroups
      * @param contentTypeGroups {String} link to root ContentTypeGroups resource (should be auto-discovered)
-     * @param callback {Function} callback executed after performing the request (see {{#crossLink "ContentTypeService"}}Note on the callbacks usage{{/crossLink}} for more info)
+     * @param callback {Function} callback executed after performing the request (see
+     *  {{#crossLink "ContentTypeService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     ContentTypeService.prototype.loadContentTypeGroups = function loadContentTypeGroups(contentTypeGroups, callback) {
         this._connectionManager.request(
@@ -180,7 +187,8 @@ var ContentTypeService = (function() {
      *
      * @method loadContentTypeGroup
      * @param contentTypeGroupId {String} target content type group identifier (e.g. "/api/ezp/v2/content/types/100")
-     * @param callback {Function} callback executed after performing the request (see {{#crossLink "ContentTypeService"}}Note on the callbacks usage{{/crossLink}} for more info)
+     * @param callback {Function} callback executed after performing the request (see
+     *  {{#crossLink "ContentTypeService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     ContentTypeService.prototype.loadContentTypeGroup = function loadContentTypeGroup(contentTypeGroupId, callback) {
         this._connectionManager.request(
@@ -199,10 +207,11 @@ var ContentTypeService = (function() {
      * @method updateContentTypeGroup
      * @param contentTypeGroupId {String} target content type group identifier (e.g. "/api/ezp/v2/content/types/100")
      * @param contentTypeGroupUpdateStruct {ContentTypeGroupInputStruct} object describing changes to the content type group
-     * @param callback {Function} callback executed after performing the request (see {{#crossLink "ContentTypeService"}}Note on the callbacks usage{{/crossLink}} for more info)
+     * @param callback {Function} callback executed after performing the request (see
+     *  {{#crossLink "ContentTypeService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    /*jshint -W101 */
-    ContentTypeService.prototype.updateContentTypeGroup = function updateContentTypeGroup(contentTypeGroupId, contentTypeGroupUpdateStruct, callback) {
+    ContentTypeService.prototype.updateContentTypeGroup = function updateContentTypeGroup(
+        contentTypeGroupId, contentTypeGroupUpdateStruct, callback) {
         this._connectionManager.request(
             "PATCH",
             contentTypeGroupId,
@@ -211,14 +220,14 @@ var ContentTypeService = (function() {
             callback
         );
     };
-    /*jshint +W101 */
 
     /**
      * Delete content type group
      *
      * @method deleteContentTypeGroup
      * @param contentTypeGroupId {String}
-     * @param callback {Function} callback executed after performing the request (see {{#crossLink "ContentTypeService"}}Note on the callbacks usage{{/crossLink}} for more info)
+     * @param callback {Function} callback executed after performing the request (see
+     *  {{#crossLink "ContentTypeService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     ContentTypeService.prototype.deleteContentTypeGroup = function deleteContentTypeGroup(contentTypeGroupId, callback) {
         this._connectionManager.delete(
@@ -232,7 +241,8 @@ var ContentTypeService = (function() {
      *
      * @method loadContentTypes
      * @param contentTypeGroupId {String} target content type group identifier (e.g. "/api/ezp/v2/content/typegroups/1")
-     * @param callback {Function} callback executed after performing the request (see {{#crossLink "ContentTypeService"}}Note on the callbacks usage{{/crossLink}} for more info)
+     * @param callback {Function} callback executed after performing the request (see
+     *  {{#crossLink "ContentTypeService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     ContentTypeService.prototype.loadContentTypes = function loadContentTypes(contentTypeGroupId, callback) {
 
@@ -264,10 +274,11 @@ var ContentTypeService = (function() {
      * @method loadContentTypeGroupByIdentifier
      * @param contentTypeGroups {String} link to root ContentTypeGroups resource (should be auto-discovered)
      * @param identifier {String} target content type group identifier (e.g. "content")
-     * @param callback {Function} callback executed after performing the request (see {{#crossLink "ContentTypeService"}}Note on the callbacks usage{{/crossLink}} for more info)
+     * @param callback {Function} callback executed after performing the request (see
+     *  {{#crossLink "ContentTypeService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    /*jshint -W101 */
-    ContentTypeService.prototype.loadContentTypeGroupByIdentifier = function loadContentTypeGroupByIdentifier(contentTypeGroups, identifier, callback) {
+    ContentTypeService.prototype.loadContentTypeGroupByIdentifier = function loadContentTypeGroupByIdentifier(
+        contentTypeGroups, identifier, callback) {
         this._connectionManager.request(
             "GET",
             contentTypeGroups + "?identifier=" + identifier,
@@ -276,7 +287,6 @@ var ContentTypeService = (function() {
             callback
         );
     };
-    /*jshint +W101 */
 
 // ******************************
 // Content Types management
@@ -290,7 +300,8 @@ var ContentTypeService = (function() {
      * @param contentTypeGroupId {String} target content type group identifier (e.g. "/api/ezp/v2/content/typegroups/1")
      * @param contentTypeCreateStruct {ContentTypeCreateStruct} object describing the new content type to be created
      * @param publish {Boolean} weather the content type should be immediately published or not
-     * @param callback {Function} callback executed after performing the request (see {{#crossLink "ContentTypeService"}}Note on the callbacks usage{{/crossLink}} for more info)
+     * @param callback {Function} callback executed after performing the request (see
+     *  {{#crossLink "ContentTypeService"}}Note on the callbacks usage{{/crossLink}} for more info)
      * @example
      *
      *     var contentTypeCreateStruct, fieldDefinition;
@@ -350,7 +361,8 @@ var ContentTypeService = (function() {
      *
      * @method copyContentType
      * @param contentTypeId {String} target content type identifier (e.g. "/api/ezp/v2/content/types/18")
-     * @param callback {Function} callback executed after performing the request (see {{#crossLink "ContentTypeService"}}Note on the callbacks usage{{/crossLink}} for more info)
+     * @param callback {Function} callback executed after performing the request (see
+     *  {{#crossLink "ContentTypeService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     ContentTypeService.prototype.copyContentType = function copyContentType(contentTypeId, callback) {
         this._connectionManager.request(
@@ -367,7 +379,8 @@ var ContentTypeService = (function() {
      *
      * @method loadContentType
      * @param contentTypeId {String} target content type identifier (e.g. "/api/ezp/v2/content/types/18")
-     * @param callback {Function} callback executed after performing the request (see {{#crossLink "ContentTypeService"}}Note on the callbacks usage{{/crossLink}} for more info)
+     * @param callback {Function} callback executed after performing the request (see
+     *  {{#crossLink "ContentTypeService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     ContentTypeService.prototype.loadContentType = function loadContentType(contentTypeId, callback) {
         this._connectionManager.request(
@@ -384,7 +397,8 @@ var ContentTypeService = (function() {
      *
      * @method loadContentTypeByIdentifier
      * @param identifier {String} target content type string identifier (e.g. "blog")
-     * @param callback {Function} callback executed after performing the request (see {{#crossLink "ContentTypeService"}}Note on the callbacks usage{{/crossLink}} for more info)
+     * @param callback {Function} callback executed after performing the request (see
+     *  {{#crossLink "ContentTypeService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     ContentTypeService.prototype.loadContentTypeByIdentifier = function loadContentTypeByIdentifier(identifier, callback) {
 
@@ -415,7 +429,8 @@ var ContentTypeService = (function() {
      *
      * @method deleteContentType
      * @param contentTypeId {String} target content type identifier (e.g. "/api/ezp/v2/content/types/18")
-     * @param callback {Function} callback executed after performing the request (see {{#crossLink "ContentTypeService"}}Note on the callbacks usage{{/crossLink}} for more info)
+     * @param callback {Function} callback executed after performing the request (see
+     *  {{#crossLink "ContentTypeService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     ContentTypeService.prototype.deleteContentType = function deleteContentType(contentTypeId, callback) {
         this._connectionManager.delete(
@@ -429,7 +444,8 @@ var ContentTypeService = (function() {
      *
      * @method loadGroupsOfContentType
      * @param contentTypeId {String} target content type identifier (e.g. "/api/ezp/v2/content/types/18")
-     * @param callback {Function} callback executed after performing the request (see {{#crossLink "ContentTypeService"}}Note on the callbacks usage{{/crossLink}} for more info)
+     * @param callback {Function} callback executed after performing the request (see
+     *  {{#crossLink "ContentTypeService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     ContentTypeService.prototype.loadGroupsOfContentType = function loadGroupsOfContentType(contentTypeId, callback) {
         this._connectionManager.request(
@@ -448,7 +464,8 @@ var ContentTypeService = (function() {
      * @method assignContentTypeGroup
      * @param contentTypeId {String} target content type identifier (e.g. "/api/ezp/v2/content/types/18")
      * @param groupId{String} target content type group identifier (e.g. "/api/ezp/v2/content/typegroups/2")
-     * @param callback {Function} callback executed after performing the request (see {{#crossLink "ContentTypeService"}}Note on the callbacks usage{{/crossLink}} for more info)
+     * @param callback {Function} callback executed after performing the request (see
+     *  {{#crossLink "ContentTypeService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     ContentTypeService.prototype.assignContentTypeGroup = function assignContentTypeGroup(contentTypeId, groupId, callback) {
         this._connectionManager.request(
@@ -465,7 +482,8 @@ var ContentTypeService = (function() {
      *
      * @method unassignContentTypeGroup
      * @param contentTypeAssignedGroupId {String} target content type group assignment  (e.g. "/api/ezp/v2/content/types/18/groups/1")
-     * @param callback {Function} callback executed after performing the request (see {{#crossLink "ContentTypeService"}}Note on the callbacks usage{{/crossLink}} for more info)
+     * @param callback {Function} callback executed after performing the request (see
+     *  {{#crossLink "ContentTypeService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     ContentTypeService.prototype.unassignContentTypeGroup = function unassignContentTypeGroup(contentTypeAssignedGroupId, callback) {
         this._connectionManager.delete(
@@ -484,7 +502,8 @@ var ContentTypeService = (function() {
      * @method createContentTypeDraft
      * @param contentTypeId {String} target content type identifier (e.g. "/api/ezp/v2/content/types/18")
      * @param contentTypeUpdateStruct {ContentTypeUpdateStruct} object describing changes to the content type
-     * @param callback {Function} callback executed after performing the request (see {{#crossLink "ContentTypeService"}}Note on the callbacks usage{{/crossLink}} for more info)
+     * @param callback {Function} callback executed after performing the request (see
+     *  {{#crossLink "ContentTypeService"}}Note on the callbacks usage{{/crossLink}} for more info)
      * @example
      *     var contentTypeUpdateStruct = contentTypeService.newContentTypeUpdateStruct();
      *     
@@ -515,7 +534,8 @@ var ContentTypeService = (function() {
      *
      * @method loadContentTypeDraft
      * @param contentTypeId {String} target content type identifier (e.g. "/api/ezp/v2/content/types/18")
-     * @param callback {Function} callback executed after performing the request (see {{#crossLink "ContentTypeService"}}Note on the callbacks usage{{/crossLink}} for more info)
+     * @param callback {Function} callback executed after performing the request (see
+     *  {{#crossLink "ContentTypeService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     ContentTypeService.prototype.loadContentTypeDraft = function loadContentTypeDraft(contentTypeId, callback) {
         this._connectionManager.request(
@@ -533,10 +553,11 @@ var ContentTypeService = (function() {
      * @method updateContentTypeDraftMetadata
      * @param contentTypeDraftId {String} target content type draft identifier (e.g. "/api/ezp/v2/content/types/18/draft")
      * @param contentTypeUpdateStruct {ContentTypeUpdateStruct} object describing changes to the draft
-     * @param callback {Function} callback executed after performing the request (see {{#crossLink "ContentTypeService"}}Note on the callbacks usage{{/crossLink}} for more info)
+     * @param callback {Function} callback executed after performing the request (see
+     *  {{#crossLink "ContentTypeService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    /*jshint -W101 */
-    ContentTypeService.prototype.updateContentTypeDraftMetadata = function updateContentTypeDraftMetadata(contentTypeDraftId, contentTypeUpdateStruct, callback) {
+    ContentTypeService.prototype.updateContentTypeDraftMetadata = function updateContentTypeDraftMetadata(
+        contentTypeDraftId, contentTypeUpdateStruct, callback) {
         this._connectionManager.request(
             "PATCH",
             contentTypeDraftId,
@@ -545,14 +566,14 @@ var ContentTypeService = (function() {
             callback
         );
     };
-    /*jshint +W101 */
 
     /**
      * Publish the target content type draft
      *
      * @method publishContentTypeDraft
      * @param contentTypeDraftId {String} target content type draft identifier (e.g. "/api/ezp/v2/content/types/18/draft")
-     * @param callback {Function} callback executed after performing the request (see {{#crossLink "ContentTypeService"}}Note on the callbacks usage{{/crossLink}} for more info)
+     * @param callback {Function} callback executed after performing the request (see
+     *  {{#crossLink "ContentTypeService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     ContentTypeService.prototype.publishContentTypeDraft = function publishContentTypeDraft(contentTypeDraftId, callback) {
         this._connectionManager.request(
@@ -569,7 +590,8 @@ var ContentTypeService = (function() {
      *
      * @method deleteContentTypeDraft
      * @param contentTypeDraftId {String} target content type draft identifier (e.g. "/api/ezp/v2/content/types/18/draft")
-     * @param callback {Function} callback executed after performing the request (see {{#crossLink "ContentTypeService"}}Note on the callbacks usage{{/crossLink}} for more info)
+     * @param callback {Function} callback executed after performing the request (see
+     *  {{#crossLink "ContentTypeService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     ContentTypeService.prototype.deleteContentTypeDraft = function deleteContentTypeDraft(contentTypeDraftId, callback) {
         this._connectionManager.delete(
@@ -588,7 +610,8 @@ var ContentTypeService = (function() {
      * @method addFieldDefinition
      * @param contentTypeId {String} target content type identifier (e.g. "/api/ezp/v2/content/types/18")
      * @param fieldDefinitionCreateStruct {FieldDefinitionCreateStruct} object describing the new field definition to be created
-     * @param callback {Function} callback executed after performing the request (see {{#crossLink "ContentTypeService"}}Note on the callbacks usage{{/crossLink}} for more info)
+     * @param callback {Function} callback executed after performing the request (see
+     *  {{#crossLink "ContentTypeService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     ContentTypeService.prototype.addFieldDefinition = function addFieldDefinition(contentTypeId, fieldDefinitionCreateStruct, callback) {
 
@@ -621,7 +644,8 @@ var ContentTypeService = (function() {
      *
      * @method loadFieldDefinition
      * @param fieldDefinitionId {String} target field definition identifier (e.g. "/api/ezp/v2/content/types/42/fieldDefinitions/311")
-     * @param callback {Function} callback executed after performing the request (see {{#crossLink "ContentTypeService"}}Note on the callbacks usage{{/crossLink}} for more info)
+     * @param callback {Function} callback executed after performing the request (see
+     *  {{#crossLink "ContentTypeService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     ContentTypeService.prototype.loadFieldDefinition = function loadFieldDefinition(fieldDefinitionId, callback) {
         this._connectionManager.request(
@@ -641,7 +665,8 @@ var ContentTypeService = (function() {
      * @method updateFieldDefinition
      * @param fieldDefinitionId {String} target field definition identifier (e.g. "/api/ezp/v2/content/types/42/fieldDefinitions/311")
      * @param fieldDefinitionUpdateStruct {FieldDefinitionUpdateStruct} object describing changes to the target field definition
-     * @param callback {Function} callback executed after performing the request (see {{#crossLink "ContentTypeService"}}Note on the callbacks usage{{/crossLink}} for more info)
+     * @param callback {Function} callback executed after performing the request (see
+     *  {{#crossLink "ContentTypeService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     ContentTypeService.prototype.updateFieldDefinition = function updateFieldDefinition(fieldDefinitionId, fieldDefinitionUpdateStruct, callback) {
         this._connectionManager.request(
@@ -658,7 +683,8 @@ var ContentTypeService = (function() {
      *
      * @method deleteFieldDefinition
      * @param fieldDefinitionId {String} target field definition identifier (e.g. "/api/ezp/v2/content/types/42/fieldDefinitions/311")
-     * @param callback {Function} callback executed after performing the request (see {{#crossLink "ContentTypeService"}}Note on the callbacks usage{{/crossLink}} for more info)
+     * @param callback {Function} callback executed after performing the request (see
+     *  {{#crossLink "ContentTypeService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     ContentTypeService.prototype.deleteFieldDefinition = function deleteFieldDefinition(fieldDefinitionId, callback) {
         this._connectionManager.delete(
@@ -669,5 +695,4 @@ var ContentTypeService = (function() {
 
     return ContentTypeService;
 
-}());
-
+});

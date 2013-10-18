@@ -1,4 +1,5 @@
-var SessionAuthAgent = (function() {
+/* global define */
+define(["structures/CAPIError"], function (CAPIError) {
     "use strict";
 
     /**
@@ -135,4 +136,4 @@ var SessionAuthAgent = (function() {
 
     return SessionAuthAgent;
 
-}());
+});

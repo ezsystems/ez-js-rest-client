@@ -1,4 +1,5 @@
-var UrlAliasCreateStruct = (function() {
+/* global define */
+define(function () {
     "use strict";
 
     /**
@@ -39,4 +40,4 @@ var UrlAliasCreateStruct = (function() {
 
     return UrlAliasCreateStruct;
 
-}());
+});

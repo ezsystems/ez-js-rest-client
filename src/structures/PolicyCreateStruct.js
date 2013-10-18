@@ -1,4 +1,5 @@
-var PolicyCreateStruct = (function() {
+/* global define */
+define(function () {
     "use strict";
 
     /**
@@ -30,4 +31,4 @@ var PolicyCreateStruct = (function() {
 
     return PolicyCreateStruct;
 
-}());
+});

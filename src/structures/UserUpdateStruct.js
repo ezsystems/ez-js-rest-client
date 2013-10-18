@@ -1,4 +1,5 @@
-var UserUpdateStruct = (function() {
+/* global define */
+define(function () {
     "use strict";
 
     /**
@@ -25,4 +26,4 @@ var UserUpdateStruct = (function() {
 
     return UserUpdateStruct;
 
-}());
+});

@@ -1,4 +1,5 @@
-var SessionCreateStruct = (function() {
+/* global define */
+define(function () {
     "use strict";
 
     /**
@@ -28,4 +29,4 @@ var SessionCreateStruct = (function() {
 
     return SessionCreateStruct;
 
-}());
+});

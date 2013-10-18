@@ -1,4 +1,5 @@
-var UrlWildcardCreateStruct = (function() {
+/* global define */
+define(function () {
     "use strict";
 
     /**
@@ -28,4 +29,4 @@ var UrlWildcardCreateStruct = (function() {
 
     return UrlWildcardCreateStruct;
 
-}());
+});

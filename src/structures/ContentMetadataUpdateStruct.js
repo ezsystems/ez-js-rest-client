@@ -1,4 +1,5 @@
-var ContentMetadataUpdateStruct = (function() {
+/* global define */
+define(function () {
     "use strict";
 
     /**
@@ -33,4 +34,4 @@ var ContentMetadataUpdateStruct = (function() {
 
     return ContentMetadataUpdateStruct;
 
-}());
+});

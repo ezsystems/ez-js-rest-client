@@ -1,4 +1,5 @@
-var UserGroupCreateStruct = (function() {
+/* global define */
+define(function () {
     "use strict";
 
     /**
@@ -29,4 +30,4 @@ var UserGroupCreateStruct = (function() {
 
     return UserGroupCreateStruct;
 
-}());
+});

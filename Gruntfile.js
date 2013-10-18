@@ -1,109 +1,78 @@
 module.exports = function(grunt) {
-
-    var sourceFiles = [
-        'src/structures/ContentCreateStruct.js',
-        'src/structures/ContentUpdateStruct.js',
-        'src/structures/ContentMetadataUpdateStruct.js',
-        'src/structures/LocationCreateStruct.js',
-        'src/structures/LocationUpdateStruct.js',
-        'src/structures/SectionInputStruct.js',
-        'src/structures/SessionCreateStruct.js',
-        'src/structures/ViewCreateStruct.js',
-        'src/structures/RelationCreateStruct.js',
-        'src/structures/ObjectStateGroupCreateStruct.js',
-        'src/structures/ObjectStateGroupUpdateStruct.js',
-        'src/structures/ObjectStateUpdateStruct.js',
-        'src/structures/ObjectStateCreateStruct.js',
-        'src/structures/UrlAliasCreateStruct.js',
-        'src/structures/UrlWildcardCreateStruct.js',
-        'src/structures/ContentTypeGroupInputStruct.js',
-        'src/structures/ContentTypeCreateStruct.js',
-        'src/structures/ContentTypeUpdateStruct.js',
-        'src/structures/FieldDefinitionCreateStruct.js',
-        'src/structures/FieldDefinitionUpdateStruct.js',
-        'src/structures/UserGroupCreateStruct.js',
-        'src/structures/UserGroupUpdateStruct.js',
-        'src/structures/UserCreateStruct.js',
-        'src/structures/UserUpdateStruct.js',
-        'src/structures/RoleInputStruct.js',
-        'src/structures/RoleAssignInputStruct.js',
-        'src/structures/PolicyCreateStruct.js',
-        'src/structures/PolicyUpdateStruct.js',
-
-        'src/structures/Request.js',
-        'src/structures/Response.js',
-        'src/structures/CAPIError.js',
-
-        'src/services/DiscoveryService.js',
-        'src/services/ContentService.js',
-        'src/services/ContentTypeService.js',
-        'src/services/UserService.js',
-
-        'src/connections/XmlHttpRequestConnection.js',
-        'src/connections/MicrosoftXmlHttpRequestConnection.js',
-
-        'src/authAgents/HttpBasicAuthAgent.js',
-        'src/authAgents/SessionAuthAgent.js',
-
-        'src/ConnectionFeatureFactory.js',
-        'src/ConnectionManager.js',
-        'src/CAPI.js'
-
-    ];
-
-    var testCombo = sourceFiles.slice(0);
-    testCombo.unshift('test/CAPI.testing.header.js');
-    testCombo.push('test/CAPI.tests.js');
-    testCombo.push('test/XmlHttpRequestConnection.tests.js');
-    testCombo.push('test/MicrosoftXmlHttpRequestConnection.tests.js');
-    testCombo.push('test/SessionAuthAgent.tests.js');
-    testCombo.push('test/HttpBasicAuthAgent.tests.js');
-    testCombo.push('test/ConnectionFeatureFactory.tests.js');
-    testCombo.push('test/ConnectionManager.tests.js');
-    testCombo.push('test/DiscoveryService.tests.js');
-    testCombo.push('test/ContentService.tests.js');
-    testCombo.push('test/ContentTypeService.tests.js');
-    testCombo.push('test/UserService.tests.js');
-    testCombo.push('test/Response.tests.js');
-
-
     grunt.initConfig({
-        concat: {
-            options: {
-                separator: '\r\n'
-            },
+        requirejs: {
             dist: {
-                src: sourceFiles,
-                dest: 'dist/CAPI.js'
+                options: {
+                    almond: true,
+                    name : 'PromiseCAPI',
+                    optimize: "none",
+                    baseUrl: "src/",
+                    out: "dist/CAPI.js",
+                    wrap: {
+                        startFile: 'wrap/wrap.start.js',
+                        endFile: 'wrap/wrap.end.js'
+                    }
+                }
             },
-            bundle: {
-                src: sourceFiles,
-                dest: 'test/manual/jsRestClientBundle/Resources/public/js/CAPI.js'
-            },
-            test: {
-                src: testCombo,
-                dest: 'spec/CAPI.spec.js'
+            testBundle: {
+                options: {
+                    almond: true,
+                    name : 'PromiseCAPI',
+                    optimize: "none",
+                    baseUrl: "src/",
+                    out: "test/manual/jsRestClientBundle/Resources/public/js/CAPI.js",
+                    wrap: {
+                        startFile: 'wrap/wrap.start.js',
+                        endFile: 'wrap/wrap.end.js'
+                    }
+                }
             }
         },
         jshint: {
             options: {
                 jshintrc: 'jshint.json'
             },
-            all: ['dist/*.js']
+            all: ['src/*.js', 'src/*/*.js']
         },
-        jasmine_node: {
-            coverage: {
-            },
+        instrument : {
+            files : ['src/*.js','src/*/*.js'],
+            options : {
+                basePath : 'test/instrument'
+            }
+        },
+        jasmine: {
             options: {
-                forceExit: true,
-                match: '.',
-                matchall: false,
-                extensions: 'js',
-                specNameMatcher: 'spec',
-                junitreport: {
-                    report: false,
-                    useDotNotation: true,
-                    consolidate: true
+                specs: 'test/*.tests.js',
+                template: require('grunt-template-jasmine-requirejs'),
+                templateOptions: {
+                    requireConfig: {
+                        baseUrl: 'src/'
+                    }
+                }
+            },
+            test: {
+                //Default options
+            },
+            coverage: {
+                options: {
+                    template: require('grunt-template-jasmine-istanbul'),
+                    templateOptions: {
+                        coverage: 'test/coverage/coverage.json',
+                        report: [{
+                            type: 'text-summary'
+                        }, {
+                            type: 'lcov',
+                            options: {
+                                dir: 'test/coverage'
+                            }
+                        }],
+                        template: require('grunt-template-jasmine-requirejs'),
+                        templateOptions: {
+                            requireConfig: {
+                                baseUrl: 'test/instrument/src/'
+                            }
+                        }
+                    }
                 }
             }
         },
@@ -123,7 +92,7 @@ module.exports = function(grunt) {
         },
         shell: {
             livedoc: {
-                command: 'yuidoc --server',
+                command: 'yuidoc --server 3000 --config yuidoc.json',
                 options: {
                     stdout: true,
                     stderr: true
@@ -132,15 +101,17 @@ module.exports = function(grunt) {
         }
     });
 
-    grunt.loadNpmTasks('grunt-contrib-concat');
+    grunt.loadNpmTasks('grunt-requirejs');
     grunt.loadNpmTasks('grunt-contrib-jshint');
-    grunt.loadNpmTasks('grunt-jasmine-node-coverage');
+    grunt.loadNpmTasks('grunt-istanbul');
+    grunt.loadNpmTasks('grunt-contrib-jasmine');
     grunt.loadNpmTasks('grunt-contrib-yuidoc');
     grunt.loadNpmTasks('grunt-shell');
 
-    grunt.registerTask('default', ['concat']);
-    grunt.registerTask('hint', ['concat', 'jshint']);
-    grunt.registerTask('test', ['concat', 'jasmine_node'] );
+    grunt.registerTask('hint', ['jshint']);
+    grunt.registerTask('build', ['jshint', 'requirejs']);
+    grunt.registerTask('test', ['jshint', 'jasmine:test'] );
+    grunt.registerTask('coverage', ['jshint', 'instrument', 'jasmine:coverage'] );
     grunt.registerTask('doc', ['yuidoc'] );
     grunt.registerTask('livedoc', ['shell:livedoc'] );
 

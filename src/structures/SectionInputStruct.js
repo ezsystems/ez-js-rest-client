@@ -1,4 +1,5 @@
-var SectionInputStruct = (function() {
+/* global define */
+define(function () {
     "use strict";
 
     /**
@@ -27,4 +28,4 @@ var SectionInputStruct = (function() {
 
     return SectionInputStruct;
 
-}());
+});

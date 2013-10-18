@@ -1,4 +1,5 @@
-var UserCreateStruct = (function() {
+/* global define */
+define(function () {
     "use strict";
 
     /**
@@ -35,4 +36,4 @@ var UserCreateStruct = (function() {
 
     return UserCreateStruct;
 
-}());
+});
