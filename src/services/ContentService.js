@@ -641,10 +641,39 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
      *     );
      */
     ContentService.prototype.loadContent = function loadContent(versionedContentId, fields, responseGroups, languages, callback) {
-        // default values for all the parameters
-        fields = (fields === null) ? '?fields=' : '?fields=' + fields;
-        responseGroups = (responseGroups === null) ? '' : '&responseGroups="' + responseGroups + '"';
-        languages = (languages === null) ? '' : '&languages=' + languages;
+        var defaultFields = '',
+            defaultResponseGroups = '',
+            defaultLanguages = '';
+
+        // default values for ommited parameters (if any)
+        if (arguments.length < 5) {
+            if (typeof fields == "function") {
+                //no optional parameteres are passed
+                callback = fields;
+                fields = defaultFields;
+                responseGroups = defaultResponseGroups;
+                languages = defaultLanguages;
+            } else if (typeof responseGroups == "function") {
+                // only first 1 optional parameter is passed
+                callback = responseGroups;
+                responseGroups = defaultResponseGroups;
+                languages = defaultLanguages;
+            } else {
+                // only first 2 optional parameters are passed
+                callback = languages;
+                languages = defaultLanguages;
+            }
+        }
+
+        if (fields) {
+            fields = '?fields=' + fields;
+        }
+        if (responseGroups) {
+            responseGroups = '&responseGroups="' + responseGroups + '"';
+        }
+        if (languages) {
+            languages = '&languages=' + languages;
+        }
 
         this._connectionManager.request(
             "GET",
@@ -745,9 +774,8 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
             function(error, contentResponse){
                 if (!error) {
 
-                    if (versionId !== null) {
-                        // Version id is declared
-
+                    if (typeof versionId != "function") {
+                        // Version id is not ommited
                         contentVersions = contentResponse.document.Content.Versions;
 
                         that._connectionManager.request(
@@ -759,7 +787,8 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
                         );
 
                     } else {
-                        // Version id is NOT declared
+                        // Version id is ommited
+                        callback = versionId;
 
                         currentVersion = contentResponse.document.Content.CurrentVersion;
 
@@ -951,8 +980,8 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
      *
      * @method loadLocationChildren
      * @param locationId {String} target location identifier (e.g. "/api/ezp/v2/content/locations/1/2/102")
-     * @param [offset=0] {int} the offset of the result set
      * @param [limit=-1] {int} the number of results returned
+     * @param [offset=0] {int} the offset of the result set
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      * @example
@@ -963,13 +992,25 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
      *          callback
      *      );
      */
-    ContentService.prototype.loadLocationChildren = function loadLocationChildren(locationId, offset, limit, callback) {
+    ContentService.prototype.loadLocationChildren = function loadLocationChildren(locationId, limit, offset, callback) {
 
-        // default values for all the parameters
-        offset = (typeof offset === "undefined") ? 0 : offset;
-        limit = (typeof limit === "undefined") ? -1 : limit;
+        var that = this,
+            defaultLimit = -1,
+            defaultOffset = 0;
 
-        var that = this;
+        // default values for ommited parameters (if any)
+        if (arguments.length < 4) {
+            if (typeof limit == "function") {
+                // no optional params are passed
+                callback = limit;
+                limit = defaultLimit;
+                offset = defaultOffset;
+            } else {
+                // only limit is passed
+                callback = offset;
+                offset = defaultOffset;
+            }
+        }
 
         this.loadLocation(
             locationId,
@@ -980,7 +1021,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
 
                     that._connectionManager.request(
                         "GET",
-                        location.Children._href + '?offset=' + offset + '&limit=' + limit,
+                        location.Children._href + '?limit=' + limit + '&offset=' + offset,
                         "",
                         { "Accept" : location.Children["_media-type"] },
                         callback
@@ -1114,16 +1155,32 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
      *
      * @method loadRelations
      * @param versionedContentId {String} target version identifier (e.g. "/api/ezp/v2/content/objects/108/versions/2")
-     * @param [offset=0] {int} the offset of the result set
      * @param [limit=-1] {int} the number of results returned
+     * @param [offset=0] {int} the offset of the result set
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      * @example
      *      //See loadLocationChildren for example of "offset" and "limit" arguments usage
      */
-    ContentService.prototype.loadRelations = function loadRelations(versionedContentId, offset, limit, callback) {
+    ContentService.prototype.loadRelations = function loadRelations(versionedContentId, limit, offset, callback) {
 
-        var that = this;
+        var that = this,
+            defaultLimit = -1,
+            defaultOffset = 0;
+
+        // default values for ommited parameters (if any)
+        if (arguments.length < 4) {
+            if (typeof limit == "function") {
+                // no optional params are passed
+                callback = limit;
+                limit = defaultLimit;
+                offset = defaultOffset;
+            } else {
+                // only limit is passed
+                callback = offset;
+                offset = defaultOffset;
+            }
+        }
 
         this.loadContent(
             versionedContentId,
@@ -1135,7 +1192,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
 
                     that._connectionManager.request(
                         "GET",
-                        version.Relations._href + '?offset=' + offset + '&limit=' + limit,
+                        version.Relations._href + '?limit=' + limit + '&offset=' + offset,
                         "",
                         { "Accept" : version.Relations["_media-type"] },
                         callback
@@ -1152,16 +1209,32 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
      *
      * @method loadCurrentRelations
      * @param contentId {String} target content identifier (e.g. "/api/ezp/v2/content/objects/102")
-     * @param [offset=0] {int} the offset of the result set
      * @param [limit=-1] {int} the number of results returned
+     * @param [offset=0] {int} the offset of the result set
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      * @example
      *      //See loadLocationChildren for example of "offset" and "limit" arguments usage
      */
-    ContentService.prototype.loadCurrentRelations = function loadCurrentRelations(contentId, offset, limit, callback) {
+    ContentService.prototype.loadCurrentRelations = function loadCurrentRelations(contentId, limit, offset, callback) {
 
-        var that = this;
+        var that = this,
+            defaultLimit = -1,
+            defaultOffset = 0;
+
+        // default values for ommited parameters (if any)
+        if (arguments.length < 4) {
+            if (typeof limit == "function") {
+                // no optional params are passed
+                callback = limit;
+                limit = defaultLimit;
+                offset = defaultOffset;
+            } else {
+                // only limit is passed
+                callback = offset;
+                offset = defaultOffset;
+            }
+        }
 
         this.loadCurrentVersion(
             contentId,
@@ -1172,7 +1245,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
 
                     that._connectionManager.request(
                         "GET",
-                        currentVersion.Relations._href + '?offset=' + offset + '&limit=' + limit,
+                        currentVersion.Relations._href + '?limit=' + limit + '&offset=' + offset,
                         "",
                         { "Accept" : currentVersion.Relations["_media-type"] },
                         callback
@@ -1269,16 +1342,32 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
      *  Loads all the thrash can items
      *
      * @method loadTrashItems
-     * @param [offset=0] {int} the offset of the result set
      * @param [limit=-1] {int} the number of results returned
+     * @param [offset=0] {int} the offset of the result set
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      * @example
      *      //See loadLocationChildren for example of "offset" and "limit" arguments usage
      */
-    ContentService.prototype.loadTrashItems = function loadTrashItems(offset, limit, callback) {
+    ContentService.prototype.loadTrashItems = function loadTrashItems(limit, offset, callback) {
 
-        var that = this;
+        var that = this,
+            defaultLimit = -1,
+            defaultOffset = 0;
+
+        // default values for ommited parameters (if any)
+        if (arguments.length < 3) {
+            if (typeof limit == "function") {
+                // no optional params are passed
+                callback = limit;
+                limit = defaultLimit;
+                offset = defaultOffset;
+            } else {
+                // only limit is passed
+                callback = offset;
+                offset = defaultOffset;
+            }
+        }
 
         this._discoveryService.getInfoObject(
             "trash",
@@ -1287,7 +1376,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
 
                     that._connectionManager.request(
                         "GET",
-                        trash._href + '?offset=' + offset + '&limit=' + limit,
+                        trash._href + '?limit=' + limit + '&offset=' + offset,
                         "",
                         { "Accept" : trash["_media-type"] },
                         callback
@@ -1331,8 +1420,12 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
 
         var headers = { "Accept" : "application/vnd.ez.api.TrashItem+json" };
 
-        if ((typeof destination !== "undefined") && (destination !== null)) {
+        if ((typeof destination != "function")) {
+            // destination is not ommited
             headers.Destination = destination;
+        } else {
+            // destination is ommited
+            callback = destination;
         }
 
         this._connectionManager.request(
@@ -1668,8 +1761,15 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
      */
     ContentService.prototype.listLocationAliases = function listLocationAliases(locationUrlAliases, custom, callback) {
 
-        custom = (typeof custom === "undefined") ? true : custom;
-        var parameters = (custom === true) ? "" : "?custom=false";
+        var parameters;
+
+        // default values for ommited parameters (if any)
+        if (arguments.length < 3) {
+            callback = custom;
+            custom = true;
+        }
+
+        parameters = (custom === true) ? "" : "?custom=false";
 
         this._connectionManager.request(
             "GET",
