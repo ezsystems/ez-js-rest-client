@@ -447,8 +447,6 @@ LoadRolesAnchor.onclick = function(e){
     var LoadRolesInput = document.getElementById('load-roles-input');
     userService.loadRoles(
         LoadRolesInput.value,
-        "0",
-        "-1",
         function(error, response){
             clientOutput.innerHTML =    "Errors : " + JSON.stringify(error) + "</br>" +
                 "Status : " + response.status + "</br>" +

@@ -51,8 +51,10 @@ define(function (require) {
             testSections = '/api/ezp/v2/content/sections',
             testSection = '/api/ezp/v2/content/sections/1',
             trash = '/api/ezp/v2/content/trash',
-            testOffset = 0,
-            testLimit = -1,
+            testOffset = 2,
+            testLimit = 5,
+            defaultOffset = 0,
+            defaultLimit = -1,
             testStructure,
             testLanguage = "eng-US",
             testUser = {testUser : {}},
@@ -419,15 +421,63 @@ define(function (require) {
 
                     contentService.loadContent(
                         testVersionedContentId,
-                        null,
-                        null,
-                        null,
+                        'testFields',
+                        'testResponseGroups',
+                        'testLanguages',
                         mockCallback
                     );
 
                     expect(mockConnectionManager.request).toHaveBeenCalled();
                     expect(mockConnectionManager.request.mostRecentCall.args[0]).toEqual("GET"); //method
-                    expect(mockConnectionManager.request.mostRecentCall.args[1]).toEqual(testVersionedContentId + "?fields="); //url
+                    expect(mockConnectionManager.request.mostRecentCall.args[1]).toEqual(testVersionedContentId + '?fields=testFields&responseGroups="testResponseGroups"&languages=testLanguages'); //url
+                    expect(mockConnectionManager.request.mostRecentCall.args[2]).toEqual(""); // body
+                    expect(mockConnectionManager.request.mostRecentCall.args[3].Accept).toEqual("application/vnd.ez.api.Version+json"); // headers
+                    expect(mockConnectionManager.request.mostRecentCall.args[4]).toBe(mockCallback); // callback
+                });
+
+                it("loadContent with omitted params", function () {
+
+                    contentService.loadContent(
+                        testVersionedContentId,
+                        mockCallback
+                    );
+
+                    expect(mockConnectionManager.request).toHaveBeenCalled();
+                    expect(mockConnectionManager.request.mostRecentCall.args[0]).toEqual("GET"); //method
+                    expect(mockConnectionManager.request.mostRecentCall.args[1]).toEqual(testVersionedContentId); //url
+                    expect(mockConnectionManager.request.mostRecentCall.args[2]).toEqual(""); // body
+                    expect(mockConnectionManager.request.mostRecentCall.args[3].Accept).toEqual("application/vnd.ez.api.Version+json"); // headers
+                    expect(mockConnectionManager.request.mostRecentCall.args[4]).toBe(mockCallback); // callback
+                });
+
+                it("loadContent with 1 optional parameter", function () {
+
+                    contentService.loadContent(
+                        testVersionedContentId,
+                        'testFields',
+                        mockCallback
+                    );
+
+                    expect(mockConnectionManager.request).toHaveBeenCalled();
+                    expect(mockConnectionManager.request.mostRecentCall.args[0]).toEqual("GET"); //method
+                    expect(mockConnectionManager.request.mostRecentCall.args[1]).toEqual(testVersionedContentId + '?fields=testFields'); //url
+                    expect(mockConnectionManager.request.mostRecentCall.args[2]).toEqual(""); // body
+                    expect(mockConnectionManager.request.mostRecentCall.args[3].Accept).toEqual("application/vnd.ez.api.Version+json"); // headers
+                    expect(mockConnectionManager.request.mostRecentCall.args[4]).toBe(mockCallback); // callback
+                });
+
+                it("loadContent with 2 optional parameters", function () {
+
+                    contentService.loadContent(
+                        testVersionedContentId,
+                        'testFields',
+                        'testResponseGroups',
+                        mockCallback
+                    );
+
+                    expect(mockConnectionManager.request).toHaveBeenCalled();
+                    expect(mockConnectionManager.request.mostRecentCall.args[0]).toEqual("GET"); //method
+                    expect(mockConnectionManager.request.mostRecentCall.args[1]).toEqual(testVersionedContentId + '?fields=testFields&responseGroups="testResponseGroups"'); //url
                     expect(mockConnectionManager.request.mostRecentCall.args[2]).toEqual(""); // body
                     expect(mockConnectionManager.request.mostRecentCall.args[3].Accept).toEqual("application/vnd.ez.api.Version+json"); // headers
                     expect(mockConnectionManager.request.mostRecentCall.args[4]).toBe(mockCallback); // callback
@@ -468,7 +518,6 @@ define(function (require) {
 
                     contentService.createContentDraft(
                         testContentId,
-                        null,
                         mockCallback
                     );
 
@@ -538,14 +587,49 @@ define(function (require) {
 
                     contentService.loadCurrentRelations(
                         testContentId,
-                        testOffset,
                         testLimit,
+                        testOffset,
                         mockCallback
                     );
 
                     expect(mockConnectionManager.request).toHaveBeenCalled();
                     expect(mockConnectionManager.request.mostRecentCall.args[0]).toEqual("GET"); //method
                     expect(mockConnectionManager.request.mostRecentCall.args[1]).toEqual(testVersionRelations + '?offset=' + testOffset + '&limit=' + testLimit); //url
+                    expect(mockConnectionManager.request.mostRecentCall.args[2]).toEqual(""); // body
+                    expect(mockConnectionManager.request.mostRecentCall.args[3].Accept).toEqual("application/vnd.ez.api.RelationList+json"); // headers
+                    expect(mockConnectionManager.request.mostRecentCall.args[4]).toBe(mockCallback); // callback
+                });
+
+                it("loadCurrentRelations with omitted params", function () {
+
+                    spyOn(contentService, 'loadCurrentVersion').andCallFake(fakedLoadCurrentVersion);
+
+                    contentService.loadCurrentRelations(
+                        testContentId,
+                        mockCallback
+                    );
+
+                    expect(mockConnectionManager.request).toHaveBeenCalled();
+                    expect(mockConnectionManager.request.mostRecentCall.args[0]).toEqual("GET"); //method
+                    expect(mockConnectionManager.request.mostRecentCall.args[1]).toEqual(testVersionRelations + '?offset=' + defaultOffset + '&limit=' + defaultLimit); //url
+                    expect(mockConnectionManager.request.mostRecentCall.args[2]).toEqual(""); // body
+                    expect(mockConnectionManager.request.mostRecentCall.args[3].Accept).toEqual("application/vnd.ez.api.RelationList+json"); // headers
+                    expect(mockConnectionManager.request.mostRecentCall.args[4]).toBe(mockCallback); // callback
+                });
+
+                it("loadCurrentRelations with 1 optional param", function () {
+
+                    spyOn(contentService, 'loadCurrentVersion').andCallFake(fakedLoadCurrentVersion);
+
+                    contentService.loadCurrentRelations(
+                        testContentId,
+                        testLimit,
+                        mockCallback
+                    );
+
+                    expect(mockConnectionManager.request).toHaveBeenCalled();
+                    expect(mockConnectionManager.request.mostRecentCall.args[0]).toEqual("GET"); //method
+                    expect(mockConnectionManager.request.mostRecentCall.args[1]).toEqual(testVersionRelations + '?offset=' + defaultOffset + '&limit=' + testLimit); //url
                     expect(mockConnectionManager.request.mostRecentCall.args[2]).toEqual(""); // body
                     expect(mockConnectionManager.request.mostRecentCall.args[3].Accept).toEqual("application/vnd.ez.api.RelationList+json"); // headers
                     expect(mockConnectionManager.request.mostRecentCall.args[4]).toBe(mockCallback); // callback
@@ -557,8 +641,8 @@ define(function (require) {
 
                     contentService.loadRelations(
                         testVersionedContentId,
-                        testOffset,
                         testLimit,
+                        testOffset,
                         mockCallback
                     );
 
@@ -569,6 +653,42 @@ define(function (require) {
                     expect(mockConnectionManager.request.mostRecentCall.args[3].Accept).toEqual("application/vnd.ez.api.RelationList+json"); // headers
                     expect(mockConnectionManager.request.mostRecentCall.args[4]).toBe(mockCallback); // callback
                 });
+
+                it("loadRelations with omitted params", function () {
+
+                    spyOn(contentService, 'loadContent').andCallFake(fakedLoadContent);
+
+                    contentService.loadRelations(
+                        testVersionedContentId,
+                        mockCallback
+                    );
+
+                    expect(mockConnectionManager.request).toHaveBeenCalled();
+                    expect(mockConnectionManager.request.mostRecentCall.args[0]).toEqual("GET"); //method
+                    expect(mockConnectionManager.request.mostRecentCall.args[1]).toEqual(testVersionRelations + '?offset=' + defaultOffset + '&limit=' + defaultLimit); //url
+                    expect(mockConnectionManager.request.mostRecentCall.args[2]).toEqual(""); // body
+                    expect(mockConnectionManager.request.mostRecentCall.args[3].Accept).toEqual("application/vnd.ez.api.RelationList+json"); // headers
+                    expect(mockConnectionManager.request.mostRecentCall.args[4]).toBe(mockCallback); // callback
+                });
+
+                it("loadRelations with 1 optional param", function () {
+
+                    spyOn(contentService, 'loadContent').andCallFake(fakedLoadContent);
+
+                    contentService.loadRelations(
+                        testVersionedContentId,
+                        testLimit,
+                        mockCallback
+                    );
+
+                    expect(mockConnectionManager.request).toHaveBeenCalled();
+                    expect(mockConnectionManager.request.mostRecentCall.args[0]).toEqual("GET"); //method
+                    expect(mockConnectionManager.request.mostRecentCall.args[1]).toEqual(testVersionRelations + '?offset=' + defaultOffset + '&limit=' + testLimit); //url
+                    expect(mockConnectionManager.request.mostRecentCall.args[2]).toEqual(""); // body
+                    expect(mockConnectionManager.request.mostRecentCall.args[3].Accept).toEqual("application/vnd.ez.api.RelationList+json"); // headers
+                    expect(mockConnectionManager.request.mostRecentCall.args[4]).toBe(mockCallback); // callback
+                });
+
 
                 it("loadRelation", function () {
                     contentService.loadRelation(
@@ -699,8 +819,8 @@ define(function (require) {
 
                     contentService.loadLocationChildren(
                         testContentId,
-                        testOffset,
                         testLimit,
+                        testOffset,
                         mockCallback
                     );
 
@@ -713,20 +833,37 @@ define(function (require) {
 
                 });
 
-                it("loadLocationChildren with undefined arguments", function () {
+                it("loadLocationChildren with omitted params", function () {
 
                     spyOn(contentService, 'loadLocation').andCallFake(fakedLoadLocation);
 
                     contentService.loadLocationChildren(
                         testContentId,
-                        undefined,
-                        undefined,
                         mockCallback
                     );
 
                     expect(mockConnectionManager.request).toHaveBeenCalled();
                     expect(mockConnectionManager.request.mostRecentCall.args[0]).toEqual("GET"); //method
-                    expect(mockConnectionManager.request.mostRecentCall.args[1]).toEqual(testLocationChildren + '?offset=' + testOffset + '&limit=' + testLimit); //url
+                    expect(mockConnectionManager.request.mostRecentCall.args[1]).toEqual(testLocationChildren + '?offset=' + defaultOffset + '&limit=' + defaultLimit); //url
+                    expect(mockConnectionManager.request.mostRecentCall.args[2]).toEqual(""); // body
+                    expect(mockConnectionManager.request.mostRecentCall.args[3].Accept).toEqual("application/vnd.ez.api.LocationList+json"); // headers
+                    expect(mockConnectionManager.request.mostRecentCall.args[4]).toBe(mockCallback); // callback
+
+                });
+
+                it("loadLocationChildren with 1 optional parameter", function () {
+
+                    spyOn(contentService, 'loadLocation').andCallFake(fakedLoadLocation);
+
+                    contentService.loadLocationChildren(
+                        testContentId,
+                        testLimit,
+                        mockCallback
+                    );
+
+                    expect(mockConnectionManager.request).toHaveBeenCalled();
+                    expect(mockConnectionManager.request.mostRecentCall.args[0]).toEqual("GET"); //method
+                    expect(mockConnectionManager.request.mostRecentCall.args[1]).toEqual(testLocationChildren + '?offset=' + defaultOffset + '&limit=' + testLimit); //url
                     expect(mockConnectionManager.request.mostRecentCall.args[2]).toEqual(""); // body
                     expect(mockConnectionManager.request.mostRecentCall.args[3].Accept).toEqual("application/vnd.ez.api.LocationList+json"); // headers
                     expect(mockConnectionManager.request.mostRecentCall.args[4]).toBe(mockCallback); // callback
@@ -912,8 +1049,8 @@ define(function (require) {
 
                 it("loadTrashItems", function () {
                     contentService.loadTrashItems(
-                        testOffset,
                         testLimit,
+                        testOffset,
                         mockCallback
                     );
 
@@ -922,6 +1059,39 @@ define(function (require) {
                     expect(mockConnectionManager.request).toHaveBeenCalled();
                     expect(mockConnectionManager.request.mostRecentCall.args[0]).toEqual("GET"); //method
                     expect(mockConnectionManager.request.mostRecentCall.args[1]).toEqual(trash  + '?offset=' + testOffset + '&limit=' + testLimit); //url
+                    expect(mockConnectionManager.request.mostRecentCall.args[2]).toEqual(""); // body
+                    expect(mockConnectionManager.request.mostRecentCall.args[3].Accept).toEqual("application/vnd.ez.api.Trash+json"); // headers
+                    expect(mockConnectionManager.request.mostRecentCall.args[4]).toBe(mockCallback); // callback
+
+                });
+
+                it("loadTrashItems with omitted params", function () {
+                    contentService.loadTrashItems(
+                        mockCallback
+                    );
+
+                    expect(mockDiscoveryService.getInfoObject).toHaveBeenCalledWith("trash", jasmine.any(Function));
+
+                    expect(mockConnectionManager.request).toHaveBeenCalled();
+                    expect(mockConnectionManager.request.mostRecentCall.args[0]).toEqual("GET"); //method
+                    expect(mockConnectionManager.request.mostRecentCall.args[1]).toEqual(trash  + '?offset=' + defaultOffset + '&limit=' + defaultLimit); //url
+                    expect(mockConnectionManager.request.mostRecentCall.args[2]).toEqual(""); // body
+                    expect(mockConnectionManager.request.mostRecentCall.args[3].Accept).toEqual("application/vnd.ez.api.Trash+json"); // headers
+                    expect(mockConnectionManager.request.mostRecentCall.args[4]).toBe(mockCallback); // callback
+
+                });
+
+                it("loadTrashItems with 1 optional param", function () {
+                    contentService.loadTrashItems(
+                        testLimit,
+                        mockCallback
+                    );
+
+                    expect(mockDiscoveryService.getInfoObject).toHaveBeenCalledWith("trash", jasmine.any(Function));
+
+                    expect(mockConnectionManager.request).toHaveBeenCalled();
+                    expect(mockConnectionManager.request.mostRecentCall.args[0]).toEqual("GET"); //method
+                    expect(mockConnectionManager.request.mostRecentCall.args[1]).toEqual(trash  + '?offset=' + defaultOffset + '&limit=' + testLimit); //url
                     expect(mockConnectionManager.request.mostRecentCall.args[2]).toEqual(""); // body
                     expect(mockConnectionManager.request.mostRecentCall.args[3].Accept).toEqual("application/vnd.ez.api.Trash+json"); // headers
                     expect(mockConnectionManager.request.mostRecentCall.args[4]).toBe(mockCallback); // callback
@@ -963,7 +1133,6 @@ define(function (require) {
                 it("recover TrashItem to it's previous location", function () {
                     contentService.recover(
                         testTrashItem,
-                        null,
                         mockCallback
                     );
 
@@ -1291,10 +1460,9 @@ define(function (require) {
 
                 });
 
-                it("listLocatonAliases (undefined)", function () {
+                it("listLocatonAliases (omitting 'custom' parameter)", function () {
                     contentService.listLocationAliases(
                         testLocation,
-                        undefined,
                         mockCallback
                     );
 
@@ -1666,8 +1834,8 @@ define(function (require) {
 
             it("loadTrashItems", function () {
                 contentService.loadTrashItems(
-                    testOffset,
                     testLimit,
+                    testOffset,
                     mockCallback
                 );
 
@@ -1803,8 +1971,8 @@ define(function (require) {
 
                 contentService.loadLocationChildren(
                     testContentId,
-                    testOffset,
                     testLimit,
+                    testOffset,
                     mockCallback
                 );
 
@@ -1817,8 +1985,8 @@ define(function (require) {
 
                 contentService.loadRelations(
                     testVersionedContentId,
-                    testOffset,
                     testLimit,
+                    testOffset,
                     mockCallback
                 );
 
@@ -1831,8 +1999,8 @@ define(function (require) {
 
                 contentService.loadCurrentRelations(
                     testContentId,
-                    testOffset,
                     testLimit,
+                    testOffset,
                     mockCallback
                 );
 

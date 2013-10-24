@@ -747,28 +747,54 @@ define('ConnectionManager',["structures/Response", "structures/Request", "struct
      * Basic request function
      *
      * @method request
-     * @param method {String} request method ("POST", "GET" etc)
-     * @param url {String} requested REST resource
-     * @param body {JSON}
-     * @param headers {object}
+     * @param [method="GET"] {String} request method ("POST", "GET" etc)
+     * @param [url="/"] {String} requested REST resource
+     * @param [body=""] {JSON}
+     * @param [headers={}] {object}
      * @param callback {function} function, which will be executed on request success
      */
     ConnectionManager.prototype.request = function (method, url, body, headers, callback) {
-        // default values for all the parameters
-        method = (typeof method === "undefined") ? "GET" : method;
-        url = (typeof url === "undefined") ? "/" : url;
-        body = (typeof body === "undefined") ? "" : body;
-        headers = (typeof headers === "undefined") ? {} : headers;
-        callback = (typeof callback === "undefined") ? function () {} : callback;
-
         var that = this,
+            request,
             nextRequest,
-            request = new Request({
-                method: method,
-                url: this._endPointUrl + url,
-                body: body,
-                headers: headers
-            });
+            defaultMethod = "GET",
+            defaultUrl = "/",
+            defaultBody = "",
+            defaultHeaders = {};
+
+        // default values for omitted parameters (if any)
+        if (arguments.length < 5) {
+            if (typeof method == "function") {
+                //no optional parameteres are passed
+                callback = method;
+                method = defaultMethod;
+                url = defaultUrl;
+                body = defaultBody;
+                headers = defaultHeaders;
+            } else if (typeof url == "function") {
+                // only first 1 optional parameter is passed
+                callback = url;
+                url = defaultUrl;
+                body = defaultBody;
+                headers = defaultHeaders;
+            } else if (typeof body == "function") {
+                // only first 2 optional parameters are passed
+                callback = body;
+                body = defaultBody;
+                headers = defaultHeaders;
+            } else {
+                // only first 3 optional parameters are passed
+                callback = headers;
+                headers = defaultHeaders;
+            }
+        }
+
+        request = new Request({
+            method : method,
+            url : this._endPointUrl + url,
+            body : body,
+            headers : headers
+        });
 
         // Requests suspending workflow
         // first, put any request in queue anyway (the queue will be emptied after ensuring authentication)
@@ -828,21 +854,47 @@ define('ConnectionManager',["structures/Response", "structures/Request", "struct
      * Used mainly for initial requests (e.g. createSession)
      *
      * @method notAuthorizedRequest
-     * @param method {String} request method ("POST", "GET" etc)
-     * @param url {String} requested REST resource
-     * @param body {JSON}
-     * @param headers {object}
+     * @param [method="GET"] {String} request method ("POST", "GET" etc)
+     * @param [url="/"] {String} requested REST resource
+     * @param [body=""] {JSON}
+     * @param [headers={}] {object}
      * @param callback {function} function, which will be executed on request success
      */
-    ConnectionManager.prototype.notAuthorizedRequest = function (method, url, body, headers, callback) {
-        // default values for all the parameters
-        method = (typeof method === "undefined") ? "GET" : method;
-        url = (typeof url === "undefined") ? "/" : url;
-        body = (typeof body === "undefined") ? "" : body;
-        headers = (typeof headers === "undefined") ? {} : headers;
-        callback = (typeof callback === "undefined") ? function () {} : callback;
+    ConnectionManager.prototype.notAuthorizedRequest = function(method, url, body, headers, callback) {
+        var request,
+            defaultMethod = "GET",
+            defaultUrl = "/",
+            defaultBody = "",
+            defaultHeaders = {};
 
-        var request = new Request({
+        // default values for omitted parameters (if any)
+        if (arguments.length < 5) {
+            if (typeof method == "function") {
+                //no optional parameteres are passed
+                callback = method;
+                method = defaultMethod;
+                url = defaultUrl;
+                body = defaultBody;
+                headers = defaultHeaders;
+            } else if (typeof url == "function") {
+                // only first 1 optional parameter is passed
+                callback = url;
+                url = defaultUrl;
+                body = defaultBody;
+                headers = defaultHeaders;
+            } else if (typeof body == "function") {
+                // only first 2 optional parameters are passed
+                callback = body;
+                body = defaultBody;
+                headers = defaultHeaders;
+            } else {
+                // only first 3 optional parameters are passed
+                callback = headers;
+                headers = defaultHeaders;
+            }
+        }
+
+        request = new Request({
             method: method,
             url: this._endPointUrl + url,
             body: body,
@@ -2434,10 +2486,39 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
      *     );
      */
     ContentService.prototype.loadContent = function loadContent(versionedContentId, fields, responseGroups, languages, callback) {
-        // default values for all the parameters
-        fields = (fields === null) ? '?fields=' : '?fields=' + fields;
-        responseGroups = (responseGroups === null) ? '' : '&responseGroups="' + responseGroups + '"';
-        languages = (languages === null) ? '' : '&languages=' + languages;
+        var defaultFields = '',
+            defaultResponseGroups = '',
+            defaultLanguages = '';
+
+        // default values for omitted parameters (if any)
+        if (arguments.length < 5) {
+            if (typeof fields == "function") {
+                //no optional parameteres are passed
+                callback = fields;
+                fields = defaultFields;
+                responseGroups = defaultResponseGroups;
+                languages = defaultLanguages;
+            } else if (typeof responseGroups == "function") {
+                // only first 1 optional parameter is passed
+                callback = responseGroups;
+                responseGroups = defaultResponseGroups;
+                languages = defaultLanguages;
+            } else {
+                // only first 2 optional parameters are passed
+                callback = languages;
+                languages = defaultLanguages;
+            }
+        }
+
+        if (fields) {
+            fields = '?fields=' + fields;
+        }
+        if (responseGroups) {
+            responseGroups = '&responseGroups="' + responseGroups + '"';
+        }
+        if (languages) {
+            languages = '&languages=' + languages;
+        }
 
         this._connectionManager.request(
             "GET",
@@ -2523,40 +2604,28 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
      *      );
      */
     ContentService.prototype.createContentDraft = function createContentDraft(contentId, versionId, callback) {
-        var that = this,
-            contentVersions,
-            currentVersion;
+        var that = this;
 
         this.loadContentInfo(
             contentId,
             function (error, contentResponse) {
+                var url = '';
+
                 if (!error) {
-                    if (versionId !== null) {
-                        // Version id is declared
 
-                        contentVersions = contentResponse.document.Content.Versions;
-
-                        that._connectionManager.request(
-                            "COPY",
-                            contentVersions._href + "/" + versionId,
-                            "",
-                            {"Accept": "application/vnd.ez.api.Version+json"},
-                            callback
-                        );
-
+                    if (typeof versionId !== "function") {
+                        url = contentResponse.document.Content.Versions._href + "/" + versionId;
                     } else {
-                        // Version id is NOT declared
-
-                        currentVersion = contentResponse.document.Content.CurrentVersion;
-
-                        that._connectionManager.request(
-                            "COPY",
-                            currentVersion._href,
-                            "",
-                            {"Accept": "application/vnd.ez.api.Version+json"},
-                            callback
-                        );
+                        callback = versionId;
+                        url = contentResponse.document.Content.CurrentVersion._href;
                     }
+
+                    that._connectionManager.request(
+                        "COPY", url, "",
+                        {"Accept": "application/vnd.ez.api.Version+json"},
+                        callback
+                    );
+                    
                 } else {
                     callback(error, false);
                 }
@@ -2727,8 +2796,8 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
      *
      * @method loadLocationChildren
      * @param locationId {String} target location identifier (e.g. "/api/ezp/v2/content/locations/1/2/102")
-     * @param [offset=0] {int} the offset of the result set
      * @param [limit=-1] {int} the number of results returned
+     * @param [offset=0] {int} the offset of the result set
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      * @example
@@ -2739,12 +2808,25 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
      *          callback
      *      );
      */
-    ContentService.prototype.loadLocationChildren = function loadLocationChildren(locationId, offset, limit, callback) {
-        // default values for all the parameters
-        offset = (typeof offset === "undefined") ? 0 : offset;
-        limit = (typeof limit === "undefined") ? -1 : limit;
+    ContentService.prototype.loadLocationChildren = function loadLocationChildren(locationId, limit, offset, callback) {
 
-        var that = this;
+        var that = this,
+            defaultLimit = -1,
+            defaultOffset = 0;
+
+        // default values for omitted parameters (if any)
+        if (arguments.length < 4) {
+            if (typeof limit == "function") {
+                // no optional params are passed
+                callback = limit;
+                limit = defaultLimit;
+                offset = defaultOffset;
+            } else {
+                // only limit is passed
+                callback = offset;
+                offset = defaultOffset;
+            }
+        }
 
         this.loadLocation(
             locationId,
@@ -2885,15 +2967,32 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
      *
      * @method loadRelations
      * @param versionedContentId {String} target version identifier (e.g. "/api/ezp/v2/content/objects/108/versions/2")
-     * @param [offset=0] {int} the offset of the result set
      * @param [limit=-1] {int} the number of results returned
+     * @param [offset=0] {int} the offset of the result set
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      * @example
      *      //See loadLocationChildren for example of "offset" and "limit" arguments usage
      */
-    ContentService.prototype.loadRelations = function loadRelations(versionedContentId, offset, limit, callback) {
-        var that = this;
+    ContentService.prototype.loadRelations = function loadRelations(versionedContentId, limit, offset, callback) {
+
+        var that = this,
+            defaultLimit = -1,
+            defaultOffset = 0;
+
+        // default values for omitted parameters (if any)
+        if (arguments.length < 4) {
+            if (typeof limit == "function") {
+                // no optional params are passed
+                callback = limit;
+                limit = defaultLimit;
+                offset = defaultOffset;
+            } else {
+                // only limit is passed
+                callback = offset;
+                offset = defaultOffset;
+            }
+        }
 
         this.loadContent(
             versionedContentId,
@@ -2921,15 +3020,32 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
      *
      * @method loadCurrentRelations
      * @param contentId {String} target content identifier (e.g. "/api/ezp/v2/content/objects/102")
-     * @param [offset=0] {int} the offset of the result set
      * @param [limit=-1] {int} the number of results returned
+     * @param [offset=0] {int} the offset of the result set
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      * @example
      *      //See loadLocationChildren for example of "offset" and "limit" arguments usage
      */
-    ContentService.prototype.loadCurrentRelations = function loadCurrentRelations(contentId, offset, limit, callback) {
-        var that = this;
+    ContentService.prototype.loadCurrentRelations = function loadCurrentRelations(contentId, limit, offset, callback) {
+
+        var that = this,
+            defaultLimit = -1,
+            defaultOffset = 0;
+
+        // default values for omitted parameters (if any)
+        if (arguments.length < 4) {
+            if (typeof limit == "function") {
+                // no optional params are passed
+                callback = limit;
+                limit = defaultLimit;
+                offset = defaultOffset;
+            } else {
+                // only limit is passed
+                callback = offset;
+                offset = defaultOffset;
+            }
+        }
 
         this.loadCurrentVersion(
             contentId,
@@ -3033,15 +3149,32 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
      *  Loads all the thrash can items
      *
      * @method loadTrashItems
-     * @param [offset=0] {int} the offset of the result set
      * @param [limit=-1] {int} the number of results returned
+     * @param [offset=0] {int} the offset of the result set
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      * @example
      *      //See loadLocationChildren for example of "offset" and "limit" arguments usage
      */
-    ContentService.prototype.loadTrashItems = function loadTrashItems(offset, limit, callback) {
-        var that = this;
+    ContentService.prototype.loadTrashItems = function loadTrashItems(limit, offset, callback) {
+
+        var that = this,
+            defaultLimit = -1,
+            defaultOffset = 0;
+
+        // default values for omitted parameters (if any)
+        if (arguments.length < 3) {
+            if (typeof limit == "function") {
+                // no optional params are passed
+                callback = limit;
+                limit = defaultLimit;
+                offset = defaultOffset;
+            } else {
+                // only limit is passed
+                callback = offset;
+                offset = defaultOffset;
+            }
+        }
 
         this._discoveryService.getInfoObject(
             "trash",
@@ -3090,10 +3223,13 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     ContentService.prototype.recover = function recover(trashItemId, destination, callback) {
+
         var headers = {"Accept": "application/vnd.ez.api.TrashItem+json"};
 
-        if ((typeof destination !== "undefined") && (destination !== null)) {
+        if ((typeof destination != "function")) {
             headers.Destination = destination;
+        } else {
+            callback = destination;
         }
 
         this._connectionManager.request(
@@ -3423,8 +3559,16 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     ContentService.prototype.listLocationAliases = function listLocationAliases(locationUrlAliases, custom, callback) {
-        custom = (typeof custom === "undefined") ? true : custom;
-        var parameters = (custom === true) ? "" : "?custom=false";
+
+        var parameters;
+
+        // default values for omitted parameters (if any)
+        if (arguments.length < 3) {
+            callback = custom;
+            custom = true;
+        }
+
+        parameters = (custom === true) ? "" : "?custom=false";
 
         this._connectionManager.request(
             "GET",
@@ -5317,21 +5461,43 @@ define('services/UserService',['structures/SessionCreateStruct', 'structures/Use
      * Search roles by string identifier and apply certain limit and offset on the result set
      *
      * @method loadRoles
-     * @param identifier {String} string identifier of the roles to search (e.g. "admin")
-     * @param [offset=0] {int} the offset of the result set
+     * @param [identifier] {String} string identifier of the roles to search (e.g. "admin")
      * @param [limit=-1] {int} the limit of the result set
+     * @param [offset=0] {int} the offset of the result set
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "UserService"}}Note on the callbacks usage{{/crossLink}} for more info)
      * @example
      *     userService.loadRoles("admin", 5, 5, callback);
      */
-    UserService.prototype.loadRoles = function loadRoles(identifier, offset, limit, callback) {
-        var that = this,
-            identifierQuery = (identifier === "") ? "" : "&identifier=" + identifier;
+    UserService.prototype.loadRoles = function loadRoles(identifier, limit, offset, callback) {
 
-        // default values for some of the parameters
-        offset = (typeof offset === "undefined") ? 0 : offset;
-        limit = (typeof limit === "undefined") ? -1 : limit;
+        var that = this,
+            identifierQuery,
+            defaultIdentifier = "",
+            defaultLimit = -1,
+            defaultOffset = 0;
+
+        // default values for omitted parameters (if any)
+        if (arguments.length < 4) {
+            if (typeof identifier == "function") {
+                // no optional params are passed
+                callback = identifier;
+                identifier = defaultIdentifier;
+                limit = defaultLimit;
+                offset = defaultOffset;
+            } else if (typeof limit == "function") {
+                // only identifier is passed
+                callback = limit;
+                limit = defaultLimit;
+                offset = defaultOffset;
+            } else {
+                // identifier and limit are passed
+                callback = offset;
+                offset = defaultOffset;
+            }
+        }
+
+        identifierQuery = (identifier === "") ? "" : "&identifier=" + identifier;
 
         this._discoveryService.getInfoObject(
             "roles",

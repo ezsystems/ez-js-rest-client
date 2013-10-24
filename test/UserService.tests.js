@@ -537,8 +537,8 @@ define(function (require) {
 
                 userService.loadRoles(
                     testRoleIdentifier,
-                    testOffset,
                     testLimit,
+                    testOffset,
                     mockCallback
                 );
 
@@ -557,9 +557,6 @@ define(function (require) {
             it("loadRoles with minimum arguments set", function () {
 
                 userService.loadRoles(
-                    "",
-                    undefined,
-                    undefined,
                     mockCallback
                 );
 
@@ -574,6 +571,46 @@ define(function (require) {
                 expect(mockConnectionManager.request.mostRecentCall.args[3].Accept).toEqual("application/vnd.ez.api.RoleList+json"); // headers
                 expect(mockConnectionManager.request.mostRecentCall.args[4]).toBe(mockCallback); // callback
             });
+
+            it("loadRoles with 1 optional argument", function () {
+
+                userService.loadRoles(
+                    testRoleIdentifier,
+                    mockCallback
+                );
+
+                expect(mockDiscoveryService.getInfoObject).toHaveBeenCalled();
+                expect(mockDiscoveryService.getInfoObject.mostRecentCall.args[0]).toEqual("roles"); //name
+                expect(mockDiscoveryService.getInfoObject.mostRecentCall.args[1]).toEqual(jasmine.any(Function)); //callback
+
+                expect(mockConnectionManager.request).toHaveBeenCalled();
+                expect(mockConnectionManager.request.mostRecentCall.args[0]).toEqual("GET"); //method
+                expect(mockConnectionManager.request.mostRecentCall.args[1]).toEqual(testRoles + '?offset=' + testOffset + '&limit=' + testLimit + '&identifier=' + testRoleIdentifier); //url
+                expect(mockConnectionManager.request.mostRecentCall.args[2]).toEqual(""); // body
+                expect(mockConnectionManager.request.mostRecentCall.args[3].Accept).toEqual("application/vnd.ez.api.RoleList+json"); // headers
+                expect(mockConnectionManager.request.mostRecentCall.args[4]).toBe(mockCallback); // callback
+            });
+
+            it("loadRoles with 2 optional arguments", function () {
+
+                userService.loadRoles(
+                    testRoleIdentifier,
+                    testLimit,
+                    mockCallback
+                );
+
+                expect(mockDiscoveryService.getInfoObject).toHaveBeenCalled();
+                expect(mockDiscoveryService.getInfoObject.mostRecentCall.args[0]).toEqual("roles"); //name
+                expect(mockDiscoveryService.getInfoObject.mostRecentCall.args[1]).toEqual(jasmine.any(Function)); //callback
+
+                expect(mockConnectionManager.request).toHaveBeenCalled();
+                expect(mockConnectionManager.request.mostRecentCall.args[0]).toEqual("GET"); //method
+                expect(mockConnectionManager.request.mostRecentCall.args[1]).toEqual(testRoles + '?offset=' + testOffset + '&limit=' + testLimit + '&identifier=' + testRoleIdentifier); //url
+                expect(mockConnectionManager.request.mostRecentCall.args[2]).toEqual(""); // body
+                expect(mockConnectionManager.request.mostRecentCall.args[3].Accept).toEqual("application/vnd.ez.api.RoleList+json"); // headers
+                expect(mockConnectionManager.request.mostRecentCall.args[4]).toBe(mockCallback); // callback
+            });
+
 
             it("updateRole", function () {
 
