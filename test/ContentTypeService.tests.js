@@ -674,17 +674,13 @@ define(function (require) {
             // ******************************
             var fakedFaultyLoadContentTypeGroup = function(ContentTypeGroupId, callback){
                     callback(
-                        new CAPIError({
-                            errorText : "Content type service failed for some reason"
-                        }),
+                        new CAPIError("Content type service failed for some reason"),
                         false
                     );
                 },
                 fakedFaultyLoadContentTypeDraft = function(ContentTypeId, callback){
                     callback(
-                        new CAPIError({
-                            errorText : "Content type service failed for some reason"
-                        }),
+                        new CAPIError("Content type service failed for some reason"),
                         false
                     );
                 };
@@ -694,9 +690,7 @@ define(function (require) {
                 mockFaultyDiscoveryService = {
                     getInfoObject : function(name, callback){
                         callback(
-                            new CAPIError({
-                                errorText : "Discovery service failed for some reason"
-                            }),
+                            new CAPIError("Discovery service failed for some reason"),
                             false
                         );
                     }

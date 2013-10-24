@@ -87,13 +87,8 @@ define(["structures/Response", "structures/Request", "structures/CAPIError"],
                                         that._connectionFactory.createConnection().execute(authenticatedRequest, callback);
                                     } else {
                                         callback(
-                                            new CAPIError({
-                                                errorText : "An error occured during request authentication!"
-                                            }),
-                                            new Response({
-                                                status : "error",
-                                                body : ""
-                                            })
+                                            new CAPIError("An error occured during request authentication!"),
+                                            false
                                         );
                                     }
                                 }
@@ -107,13 +102,8 @@ define(["structures/Response", "structures/Request", "structures/CAPIError"],
                         that._authInProgress = false;
 
                         callback(
-                            new CAPIError({
-                                errorText : "An error occured during ensureAuthentication call!"
-                            }),
-                            new Response({
-                                status : "error",
-                                body : ""
-                            })
+                            new CAPIError("An error occured during ensureAuthentication call!"),
+                            false
                         );
                     }
                 }
@@ -195,8 +185,6 @@ define(["structures/Response", "structures/Request", "structures/CAPIError"],
         this._authenticationAgent.logOut(callback);
 
     };
-
-
 
     return ConnectionManager;
 

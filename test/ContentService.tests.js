@@ -1575,9 +1575,7 @@ define(function (require) {
 
                         // Very faulty indeed
                         callback(
-                            new CAPIError({
-                                errorText : "Discover service failed to find object with name '" + name + "'"
-                            }),
+                            new CAPIError("Discover service failed to find object with name '" + name + "'"),
                             false
                         );
 
@@ -1697,36 +1695,28 @@ define(function (require) {
             // ******************************
             var fakedFaultyLoadContentInfo = function(contentId, callback){
                     callback(
-                        new CAPIError({
-                            errorText : "Content service failed for some reason"
-                        }),
+                        new CAPIError("Content service failed for some reason"),
                         false
                     );
                 },
 
                 fakedFaultyLoadCurrentVersion = function(contentId, callback){
                     callback(
-                        new CAPIError({
-                            errorText : "Content service failed for some reason"
-                        }),
+                        new CAPIError("Content service failed for some reason"),
                         false
                     );
                 },
 
                 fakedFaultyLoadContent = function(versionedContentId, params, callback){
                     callback(
-                        new CAPIError({
-                            errorText : "Content service failed for some reason"
-                        }),
+                        new CAPIError("Content service failed for some reason"),
                         false
                     );
                 },
 
                 fakedFaultyLoadLocation = function(locationId, callback){
                     callback(
-                        new CAPIError({
-                            errorText : "Content service failed for some reason"
-                        }),
+                        new CAPIError("Content service failed for some reason"),
                         false
                     );
                 };

@@ -44,9 +44,7 @@ define(["structures/CAPIError"], function (CAPIError) {
 
                         } else {
                             callback(
-                                new CAPIError( {
-                                    errorText : "Discover service failed to retrieve root object."
-                                }),
+                                new CAPIError("Discover service failed to retrieve root object."),
                                 false
                             );
                         }
@@ -108,9 +106,7 @@ define(["structures/CAPIError"], function (CAPIError) {
                 );
             } else {
                 callback(
-                    new CAPIError({
-                        errorText : "Discover service failed to find cached object with name '" + name + "'"
-                    }),
+                    new CAPIError("Discover service failed to find cached object with name '" + name + "'"),
                     false
                 );
             }
@@ -138,9 +134,7 @@ define(["structures/CAPIError"], function (CAPIError) {
                         );
                     } else {
                         callback(
-                            new CAPIError({
-                                errorText : "Broken cached object returned when searching for '" + name + "'"
-                            }),
+                            new CAPIError("Broken cached object returned when searching for '" + name + "'"),
                             false
                         );
                     }
@@ -175,9 +169,7 @@ define(["structures/CAPIError"], function (CAPIError) {
                         );
                     } else {
                         callback(
-                            new CAPIError({
-                                errorText : "Broken cached object returned when searching for '" + name + "'"
-                            }),
+                            new CAPIError("Broken cached object returned when searching for '" + name + "'"),
                             false
                         );
                     }
@@ -212,9 +204,7 @@ define(["structures/CAPIError"], function (CAPIError) {
                         );
                     } else {
                         callback(
-                            new CAPIError({
-                                errorText : "Broken cached object returned when searching for '" + name + "'"
-                            }),
+                            new CAPIError("Broken cached object returned when searching for '" + name + "'"),
                             false
                         );
                     }

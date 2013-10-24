@@ -68,9 +68,7 @@ define(["structures/CAPIError"], function (CAPIError) {
 
                     } else {
                         done(
-                            new CAPIError({
-                                errorText : "Failed to create new session."
-                            }),
+                            new CAPIError("Failed to create new session."),
                             false
                         );
                     }

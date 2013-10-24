@@ -7,19 +7,20 @@ define(function () {
      *
      * @class CAPIError
      * @constructor
-     * @param valuesContainer {Object} object literal containing any error properties
+     * @param message {String} error message
+     * @param additionalInfo {Object} object literal containing any additional error properties
      */
-    var CAPIError = function(valuesContainer){
-
-        for (var property in valuesContainer) {
-            if (valuesContainer.hasOwnProperty(property)) {
-                this[property] = valuesContainer[property];
-            }
+    var CAPIError = function(message, additionalInfo){
+        this.name = "CAPIError";
+        this.message = message;
+        if (arguments.length > 1) {
+            this.additionalInfo = additionalInfo;
         }
-
-        return this;
     };
 
+    CAPIError.prototype = new Error();
+
+    CAPIError.prototype.constructor = CAPIError;
 
     return CAPIError;
 
