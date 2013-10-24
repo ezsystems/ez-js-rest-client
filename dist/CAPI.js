@@ -435,17 +435,18 @@ define('structures/CAPIError',[],function () {
      *
      * @class CAPIError
      * @constructor
-     * @param valuesContainer {Object} object literal containing any error properties
+     * @param message {String} error message
+     * @param additionalInfo {Object} object literal containing any additional error properties
      */
-    var CAPIError = function (valuesContainer) {
-        for (var property in valuesContainer) {
-            if (valuesContainer.hasOwnProperty(property)) {
-                this[property] = valuesContainer[property];
-            }
-        }
-
-        return this;
+    var CAPIError = function (message, additionalInfo) {
+        this.name = "CAPIError";
+        this.message = message;
+        this.additionalInfo = additionalInfo;
     };
+
+    CAPIError.prototype = new Error();
+
+    CAPIError.prototype.constructor = CAPIError;
 
     return CAPIError;
 
@@ -516,9 +517,10 @@ define('authAgents/SessionAuthAgent',["structures/CAPIError"], function (CAPIErr
 
                     } else {
                         done(
-                            new CAPIError({
-                                errorText: "Failed to create new session."
-                            }),
+                            new CAPIError(
+                                "Failed to create new session.",
+                                {sessionCreateStruct: sessionCreateStruct}
+                            ),
                             false
                         );
                     }
@@ -613,7 +615,7 @@ define('authAgents/HttpBasicAuthAgent',[],function () {
      * @param done {Function} Callback function, which is to be called by the implementation
      * to signal the authentication has been completed.
      */
-    HttpBasicAuthAgent.prototype.ensureAuthentication = function (done) {
+    HttpBasicAuthAgent.prototype.ensureAuthentication = function(done) {
         // ... empty for basic auth?
         done(false, true);
     };
@@ -798,13 +800,11 @@ define('ConnectionManager',["structures/Response", "structures/Request", "struct
                                         that._connectionFactory.createConnection().execute(authenticatedRequest, callback);
                                     } else {
                                         callback(
-                                            new CAPIError({
-                                                errorText: "An error occured during request authentication!"
-                                            }),
-                                            new Response({
-                                                status: "error",
-                                                body: ""
-                                            })
+                                            new CAPIError(
+                                                "An error occurred during request authentication.",
+                                                {request: nextRequest}
+                                            ),
+                                            false
                                         );
                                     }
                                 }
@@ -815,16 +815,8 @@ define('ConnectionManager',["structures/Response", "structures/Request", "struct
 
                     } else {
                         that._authInProgress = false;
+                        callback(error, false);
 
-                        callback(
-                            new CAPIError({
-                                errorText: "An error occured during ensureAuthentication call!"
-                            }),
-                            new Response({
-                                status: "error",
-                                body: ""
-                            })
-                        );
                     }
                 }
             );
@@ -978,15 +970,11 @@ define('connections/XmlHttpRequestConnection',["structures/Response", "structure
                 if (XHR.readyState != 4) {return;} // Not ready yet
                 if (XHR.status >= 400) {
                     callback(
-                        new CAPIError({
-                            errorText: "Connection error: " + XHR.status,
-                            errorCode: XHR.status
+                        new CAPIError("Connection error : " + XHR.status + ".", {
+                            errorCode : XHR.status,
+                            xhr: XHR
                         }),
-                        new Response({
-                            status: XHR.status,
-                            headers: XHR.getAllResponseHeaders(),
-                            body: XHR.responseText
-                        })
+                        false
                     );
                     return;
                 }
@@ -1064,15 +1052,11 @@ define('connections/MicrosoftXmlHttpRequestConnection',["structures/Response", "
                 if (XHR.readyState != 4) {return;} // Not ready yet
                 if (XHR.status >= 400) {
                     callback(
-                        new CAPIError({
-                            errorText: "Connection error: " + XHR.status,
-                            errorCode: XHR.status
+                        new CAPIError("Connection error : " + XHR.status + ".", {
+                            errorCode : XHR.status,
+                            xhr: XHR
                         }),
-                        new Response({
-                            status: XHR.status,
-                            headers: XHR.getAllResponseHeaders(),
-                            body: XHR.responseText
-                        })
+                        false
                     );
                     return;
                 }
@@ -1144,7 +1128,7 @@ define('services/DiscoveryService',["structures/CAPIError"], function (CAPIError
          * @method discoverRoot
          * @param rootPath {String} path to Root resource
          * @param callback {Function} callback executed after performing the request
-         * @param callback.error {mixed} false or CAPIError object if an error occured
+         * @param callback.error {mixed} false or CAPIError object if an error occurred
          * @param callback.response {boolean} true if the root was discovered successfully, false otherwise.
          */
         this.discoverRoot = function (rootPath, callback) {
@@ -1162,9 +1146,10 @@ define('services/DiscoveryService',["structures/CAPIError"], function (CAPIError
 
                         } else {
                             callback(
-                                new CAPIError( {
-                                    errorText: "Discover service failed to retrieve root object."
-                                }),
+                                new CAPIError(
+                                    "Discover service failed to retrieve root object.",
+                                    {rootPath : rootPath}
+                                ),
                                 false
                             );
                         }
@@ -1195,7 +1180,7 @@ define('services/DiscoveryService',["structures/CAPIError"], function (CAPIError
          * @method getObjectFromCache
          * @param name {String} name of the target object to be retrived (e.g. "Trash")
          * @param callback {Function} callback executed after performing the request
-         * @param callback.error {mixed} false or CAPIError object if an error occured
+         * @param callback.error {mixed} false or CAPIError object if an error occurred
          * @param callback.response {mixed} the target object if it was found, false otherwise.
          */
         this.getObjectFromCache = function (name, callback) {
@@ -1226,9 +1211,10 @@ define('services/DiscoveryService',["structures/CAPIError"], function (CAPIError
                 );
             } else {
                 callback(
-                    new CAPIError({
-                        errorText: "Discover service failed to find cached object with name '" + name + "'"
-                    }),
+                    new CAPIError(
+                        "Discover service failed to find cached object with name '" + name + "'.",
+                        {name: name}
+                    ),
                     false
                 );
             }
@@ -1241,7 +1227,7 @@ define('services/DiscoveryService',["structures/CAPIError"], function (CAPIError
      * @method getUrl
      * @param name {String} name of the target object (e.g. "Trash")
      * @param callback {Function} callback executed after performing the request (see "discoverRoot" call for more info)
-     * @param callback.error {mixed} false or CAPIError object if an error occured
+     * @param callback.error {mixed} false or CAPIError object if an error occurred
      * @param callback.response {mixed} the url of the target object if it was found, false otherwise.
      */
     DiscoveryService.prototype.getUrl = function (name, callback) {
@@ -1256,9 +1242,10 @@ define('services/DiscoveryService',["structures/CAPIError"], function (CAPIError
                         );
                     } else {
                         callback(
-                            new CAPIError({
-                                errorText: "Broken cached object returned when searching for '" + name + "'"
-                            }),
+                            new CAPIError(
+                                "Broken cached object returned when searching for '" + name + "'.",
+                                {name: name}
+                            ),
                             false
                         );
                     }
@@ -1278,7 +1265,7 @@ define('services/DiscoveryService',["structures/CAPIError"], function (CAPIError
      * @method getMediaType
      * @param name {String} name of the target object (e.g. "Trash")
      * @param callback {Function} callback executed after performing the request (see "discoverRoot" call for more info)
-     * @param callback.error {mixed} false or CAPIError object if an error occured
+     * @param callback.error {mixed} false or CAPIError object if an error occurred
      * @param callback.response {mixed} the media-type of the target object if it was found, false otherwise.
      */
     DiscoveryService.prototype.getMediaType = function (name, callback) {
@@ -1293,9 +1280,10 @@ define('services/DiscoveryService',["structures/CAPIError"], function (CAPIError
                         );
                     } else {
                         callback(
-                            new CAPIError({
-                                errorText: "Broken cached object returned when searching for '" + name + "'"
-                            }),
+                            new CAPIError(
+                                "Broken cached object returned when searching for '" + name + "'.",
+                                {name: name}
+                            ),
                             false
                         );
                     }
@@ -1315,7 +1303,7 @@ define('services/DiscoveryService',["structures/CAPIError"], function (CAPIError
      * @method getInfoObject
      * @param name {String} name of the target object (e.g. "Trash")
      * @param callback {Function} callback executed after performing the request (see "discoverRoot" call for more info)
-     * @param callback.error {mixed} false or CAPIError object if an error occured
+     * @param callback.error {mixed} false or CAPIError object if an error occurred
      * @param callback.response {mixed} the target object if it was found, false otherwise.
      */
     DiscoveryService.prototype.getInfoObject = function (name, callback) {
@@ -1330,9 +1318,10 @@ define('services/DiscoveryService',["structures/CAPIError"], function (CAPIError
                         );
                     } else {
                         callback(
-                            new CAPIError({
-                                errorText: "Broken cached object returned when searching for '" + name + "'"
-                            }),
+                            new CAPIError(
+                                "Broken cached object returned when searching for '" + name + "'.",
+                                {name: name}
+                            ),
                             false
                         );
                     }

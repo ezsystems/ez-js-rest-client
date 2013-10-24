@@ -223,9 +223,7 @@ define(function (require) {
                 mockFaultyAuthenticationAgent = {
                     ensureAuthentication : function(done){
                         done(
-                            new CAPIError({
-                                errorText : "Error while ensuring authentication!"
-                            }),
+                            new CAPIError("Error while ensuring authentication."),
                             false
                         );
                     }
@@ -249,7 +247,7 @@ define(function (require) {
                 expect(mockFaultyAuthenticationAgent.ensureAuthentication).toHaveBeenCalled();
                 expect(mockCallback).toHaveBeenCalledWith(
                     jasmine.any(CAPIError),
-                    jasmine.any(Response)
+                    false
                 );
             });
 
@@ -261,9 +259,7 @@ define(function (require) {
                     },
                     authenticateRequest : function(request, done){
                         done(
-                            new CAPIError({
-                                errorText : "Error while authenticating request!"
-                            }),
+                            new CAPIError("Error while authenticating request."),
                             false);
                     }
                 };
@@ -288,7 +284,7 @@ define(function (require) {
                 expect(mockFaultyAuthenticationAgent.authenticateRequest).toHaveBeenCalled();
                 expect(mockCallback).toHaveBeenCalledWith(
                     jasmine.any(CAPIError),
-                    jasmine.any(Response)
+                    false
                 );
             });
 

@@ -198,8 +198,7 @@ define(function (require) {
 
                 expect(mockCallback).toHaveBeenCalled();
                 expect(mockCallback.mostRecentCall.args[0]).toEqual(jasmine.any(CAPIError)); // errors
-                expect(mockCallback.mostRecentCall.args[1]).toEqual(jasmine.any(Response)); // response
-                expect(mockCallback.mostRecentCall.args[1].status).toEqual(testErrorCode);
+                expect(mockCallback.mostRecentCall.args[1]).toEqual(false); // response
             });
 
         });
