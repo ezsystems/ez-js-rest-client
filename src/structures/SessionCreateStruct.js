@@ -11,7 +11,6 @@ define(function () {
      * @param password {String} password for a user, which wants to start a session
      */
     var SessionCreateStruct = function (login, password) {
-
         this.body = {};
         this.body.SessionInput = {};
 
@@ -24,7 +23,6 @@ define(function () {
         };
 
         return this;
-
     };
 
     return SessionCreateStruct;

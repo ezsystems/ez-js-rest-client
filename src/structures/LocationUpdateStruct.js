@@ -9,7 +9,6 @@ define(function () {
      * @constructor
      */
     var LocationUpdateStruct = function () {
-
         this.body = {};
         this.body.LocationUpdate = {};
 
@@ -22,7 +21,6 @@ define(function () {
         };
 
         return this;
-
     };
 
     return LocationUpdateStruct;

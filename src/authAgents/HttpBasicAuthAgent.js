@@ -13,13 +13,11 @@ define(function () {
      * @param credentials.password {String} user password
      */
     var HttpBasicAuthAgent = function (credentials) {
-
         this.CAPI = null;
 
         // Private (should be!) area
         this._login = credentials.login;
         this._password = credentials.password;
-
     };
 
     /**
@@ -46,13 +44,11 @@ define(function () {
      * @param done {function}
      */
     HttpBasicAuthAgent.prototype.authenticateRequest = function (request, done) {
-
         request.httpBasicAuth = true;
         request.login = this._login;
         request.password = this._password;
 
         done(false, request);
-
     };
 
     /**

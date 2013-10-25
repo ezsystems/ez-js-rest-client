@@ -9,7 +9,6 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
               ObjectStateGroupCreateStruct, ObjectStateGroupUpdateStruct, ObjectStateCreateStruct,
               ObjectStateUpdateStruct, ViewCreateStruct, UrlAliasCreateStruct,
               UrlWildcardCreateStruct, RelationCreateStruct) {
-
     "use strict";
 
     /**
@@ -41,10 +40,8 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
      *     var contentService = jsCAPI.getContentService();
      */
     var ContentService = function (connectionManager, discoveryService) {
-
         this._connectionManager = connectionManager;
         this._discoveryService = discoveryService;
-
     };
 
     /**
@@ -79,9 +76,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
      *
      */
     ContentService.prototype.newContentUpdateStruct = function newContentUpdateStruct(language) {
-
         return new ContentUpdateStruct(language);
-
     };
 
     /**
@@ -92,9 +87,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
      * @return ContentMetadataUpdateStruct
      */
     ContentService.prototype.newContentMetadataUpdateStruct = function newContentMetadataUpdateStruct(language) {
-
         return new ContentMetadataUpdateStruct(language);
-
     };
 
     /**
@@ -107,9 +100,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
      * @return {ContentCreateStruct}
      */
     ContentService.prototype.newContentCreateStruct = function newContentCreateStruct(contentTypeId, locationCreateStruct, language) {
-
         return new ContentCreateStruct(contentTypeId, locationCreateStruct, language);
-
     };
 
     /**
@@ -121,9 +112,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
      * @return {SectionInputStruct}
      */
     ContentService.prototype.newSectionInputStruct = function newSectionInputStruct(identifier, name) {
-
         return new SectionInputStruct(identifier, name);
-
     };
 
     /**
@@ -134,9 +123,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
      * @return {LocationCreateStruct}
      */
     ContentService.prototype.newLocationCreateStruct = function newLocationCreateStruct(parentLocationId) {
-
         return new LocationCreateStruct(parentLocationId);
-
     };
 
     /**
@@ -146,9 +133,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
      * @return {LocationUpdateStruct}
      */
     ContentService.prototype.newLocationUpdateStruct = function newLocationUpdateStruct() {
-
         return new LocationUpdateStruct();
-
     };
 
     /**
@@ -159,9 +144,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
      * @return {ViewCreateStruct}
      */
     ContentService.prototype.newViewCreateStruct = function newViewCreateStruct(identifier) {
-
         return new ViewCreateStruct(identifier);
-
     };
 
     /**
@@ -172,9 +155,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
      * @return {RelationCreateStruct}
      */
     ContentService.prototype.newRelationCreateStruct = function newRelationCreateStruct(destination) {
-
         return new RelationCreateStruct(destination);
-
     };
 
     /**
@@ -194,9 +175,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
      *      );
      */
     ContentService.prototype.newObjectStateGroupCreateStruct = function newObjectStateGroupCreateStruct(identifier, languageCode, names) {
-
         return new ObjectStateGroupCreateStruct(identifier, languageCode, names);
-
     };
 
     /**
@@ -206,9 +185,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
      * @return ObjectStateGroupUpdateStruct
      */
     ContentService.prototype.newObjectStateGroupUpdateStruct = function newObjectStateGroupUpdateStruct() {
-
         return new ObjectStateGroupUpdateStruct();
-
     };
 
 
@@ -234,9 +211,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
      *      );
      */
     ContentService.prototype.newObjectStateCreateStruct = function (identifier, languageCode, priority, names, descriptions) {
-
         return new ObjectStateCreateStruct(identifier, languageCode, priority, names, descriptions);
-
     };
 
     /**
@@ -246,9 +221,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
      * @return {ObjectStateUpdateStruct}
      */
     ContentService.prototype.newObjectStateUpdateStruct = function newObjectStateUpdateStruct() {
-
         return new ObjectStateUpdateStruct();
-
     };
 
     /**
@@ -267,9 +240,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
      *     );
      */
     ContentService.prototype.newUrlAliasCreateStruct = function newUrlAliasCreateStruct(languageCode, resource, path) {
-
         return new UrlAliasCreateStruct(languageCode, resource, path);
-
     };
 
     /**
@@ -287,9 +258,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
      *     );
      */
     ContentService.prototype.newUrlWildcardCreateStruct = function newUrlWildcardCreateStruct(sourceUrl, destinationUrl, forward) {
-
         return new UrlWildcardCreateStruct(sourceUrl, destinationUrl, forward);
-
     };
 
 // ******************************
@@ -305,14 +274,12 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
      * {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     ContentService.prototype.createSection = function createSection(sectionInputStruct, callback) {
-
         var that = this;
 
         this._discoveryService.getInfoObject(
             "sections",
             function (error, sections) {
                 if (!error) {
-
                     that._connectionManager.request(
                         "POST",
                         sections._href,
@@ -355,14 +322,12 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
      * {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     ContentService.prototype.loadSections = function loadSections(callback) {
-
         var that = this;
 
         this._discoveryService.getInfoObject(
             "sections",
             function (error, sections) {
                 if (!error) {
-
                     that._connectionManager.request(
                         "GET",
                         sections._href,
@@ -376,7 +341,6 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
                 }
             }
         );
-
     };
 
     /**
@@ -485,7 +449,6 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     ContentService.prototype.loadContentByRemoteId = function loadContentByRemoteId(remoteId, callback) {
-
         var that = this;
 
         this._discoveryService.getInfoObject(
@@ -504,8 +467,6 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
                 }
             }
         );
-
-
     };
 
     /**
@@ -602,7 +563,6 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
             contentId,
             function (error, contentResponse) {
                 if (!error) {
-
                     var currentVersion = contentResponse.document.Content.CurrentVersion;
 
                     that._connectionManager.request(
@@ -665,14 +625,12 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     ContentService.prototype.loadVersions = function loadVersions(contentId, callback) {
-
         var that = this;
 
         this.loadContentInfo(
             contentId,
             function (error, contentResponse) {
                 if (!error) {
-
                     var contentVersions = contentResponse.document.Content.Versions;
 
                     that._connectionManager.request(
@@ -735,7 +693,6 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
      *      );
      */
     ContentService.prototype.createContentDraft = function createContentDraft(contentId, versionId, callback) {
-
         var that = this,
             contentVersions,
             currentVersion;
@@ -744,7 +701,6 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
             contentId,
             function (error, contentResponse) {
                 if (!error) {
-
                     if (versionId !== null) {
                         // Version id is declared
 
@@ -770,7 +726,6 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
                             {"Accept": "application/vnd.ez.api.Version+json"},
                             callback
                         );
-
                     }
                 } else {
                     callback(error, false);
@@ -835,7 +790,6 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
             contentId,
             function (error, contentResponse) {
                 if (!error) {
-
                     var locations = contentResponse.document.Content.Locations;
 
                     that._connectionManager.request(
@@ -849,11 +803,8 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
                 } else {
                     callback(error, false);
                 }
-
             }
         );
-
-
     };
 
     /**
@@ -871,7 +822,6 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
             contentId,
             function (error, contentResponse) {
                 if (!error) {
-
                     var locations = contentResponse.document.Content.Locations;
 
                     that._connectionManager.request(
@@ -885,7 +835,6 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
                 } else {
                     callback(error, false);
                 }
-
             }
         );
     };
@@ -964,7 +913,6 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
      *      );
      */
     ContentService.prototype.loadLocationChildren = function loadLocationChildren(locationId, offset, limit, callback) {
-
         // default values for all the parameters
         offset = (typeof offset === "undefined") ? 0 : offset;
         limit = (typeof limit === "undefined") ? -1 : limit;
@@ -975,7 +923,6 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
             locationId,
             function (error, locationResponse) {
                 if (!error) {
-
                     var location = locationResponse.document.Location;
 
                     that._connectionManager.request(
@@ -1081,14 +1028,12 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     ContentService.prototype.createView = function createView(viewCreateStruct, callback) {
-
         var that = this;
 
         this._discoveryService.getInfoObject(
             "views",
             function (error, views) {
                 if (!error) {
-
                     that._connectionManager.request(
                         "POST",
                         views._href,
@@ -1122,7 +1067,6 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
      *      //See loadLocationChildren for example of "offset" and "limit" arguments usage
      */
     ContentService.prototype.loadRelations = function loadRelations(versionedContentId, offset, limit, callback) {
-
         var that = this;
 
         this.loadContent(
@@ -1130,7 +1074,6 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
             {},
             function (error, versionResponse) {
                 if (!error) {
-
                     var version = versionResponse.document.Version;
 
                     that._connectionManager.request(
@@ -1160,14 +1103,12 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
      *      //See loadLocationChildren for example of "offset" and "limit" arguments usage
      */
     ContentService.prototype.loadCurrentRelations = function loadCurrentRelations(contentId, offset, limit, callback) {
-
         var that = this;
 
         this.loadCurrentVersion(
             contentId,
             function (error, currentVersionResponse) {
                 if (!error) {
-
                     var currentVersion = currentVersionResponse.document.Version;
 
                     that._connectionManager.request(
@@ -1221,7 +1162,6 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
      *      );
      */
     ContentService.prototype.addRelation = function addRelation(versionedContentId, relationCreateStruct, callback) {
-
         var that = this;
 
         this.loadContent(
@@ -1229,7 +1169,6 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
             {},
             function (error, versionResponse) {
                 if (!error) {
-
                     var version = versionResponse.document.Version;
 
                     that._connectionManager.request(
@@ -1277,14 +1216,12 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
      *      //See loadLocationChildren for example of "offset" and "limit" arguments usage
      */
     ContentService.prototype.loadTrashItems = function loadTrashItems(offset, limit, callback) {
-
         var that = this;
 
         this._discoveryService.getInfoObject(
             "trash",
             function (error, trash) {
                 if (!error) {
-
                     that._connectionManager.request(
                         "GET",
                         trash._href + '?offset=' + offset + '&limit=' + limit,
@@ -1328,7 +1265,6 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     ContentService.prototype.recover = function recover(trashItemId, destination, callback) {
-
         var headers = {"Accept": "application/vnd.ez.api.TrashItem+json"};
 
         if ((typeof destination !== "undefined") && (destination !== null)) {
@@ -1367,14 +1303,12 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     ContentService.prototype.emptyThrash = function emptyThrash(callback) {
-
         var that = this;
 
         this._discoveryService.getInfoObject(
             "trash",
             function (error, trash) {
                 if (!error) {
-
                     that._connectionManager.request(
                         "DELETE",
                         trash._href,
@@ -1494,7 +1428,6 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     ContentService.prototype.createObjectState = function createObjectState(objectStateGroupId, objectStateCreateStruct, callback) {
-
         this._connectionManager.request(
             "POST",
             objectStateGroupId + "/objectstates",
@@ -1502,7 +1435,6 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
             objectStateCreateStruct.headers,
             callback
         );
-
     };
 
     /**
@@ -1667,7 +1599,6 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     ContentService.prototype.listLocationAliases = function listLocationAliases(locationUrlAliases, custom, callback) {
-
         custom = (typeof custom === "undefined") ? true : custom;
         var parameters = (custom === true) ? "" : "?custom=false";
 

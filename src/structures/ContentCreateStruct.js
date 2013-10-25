@@ -12,7 +12,6 @@ define(function () {
      * @param languageCode {String} The language code (e.g. "eng-GB")
      */
     var ContentCreateStruct = function (contentTypeId, locationCreateStruct, languageCode) {
-
         var now = JSON.parse(JSON.stringify(new Date()));
 
         this.body = {};

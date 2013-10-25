@@ -7,7 +7,6 @@ define(['authAgents/SessionAuthAgent', 'authAgents/HttpBasicAuthAgent', 'Connect
               ConnectionFeatureFactory, XmlHttpRequestConnection, MicrosoftXmlHttpRequestConnection,
               DiscoveryService, ContentService, ContentTypeService,
               UserService) {
-
     "use strict";
 
     /**
@@ -29,7 +28,6 @@ define(['authAgents/SessionAuthAgent', 'authAgents/HttpBasicAuthAgent', 'Connect
            );
      */
     var CAPI = function (endPointUrl, authenticationAgent) {
-
         this._contentService = null;
         this._contentTypeService = null;
         this._userService = null;
@@ -119,7 +117,6 @@ define(['authAgents/SessionAuthAgent', 'authAgents/HttpBasicAuthAgent', 'Connect
             }
             return  this._userService;
         };
-
     };
 
     return CAPI;

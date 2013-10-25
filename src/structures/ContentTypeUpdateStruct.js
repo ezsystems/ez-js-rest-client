@@ -9,7 +9,6 @@ define(function () {
      * @constructor
      */
     var ContentTypeUpdateStruct = function () {
-
         this.body = {};
         this.body.ContentTypeUpdate = {};
 

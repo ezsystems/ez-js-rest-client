@@ -14,7 +14,6 @@ define(function () {
      * @param fields {Array} fields array (see example for "newUserGroupCreateStruct")
      */
     var UserCreateStruct = function (languageCode, login, email, password, fields) {
-
         this.body = {};
         this.body.UserCreate = {};
 
@@ -31,7 +30,6 @@ define(function () {
         this.headers["Content-Type"] = "application/vnd.ez.api.UserCreate+json";
 
         return this;
-
     };
 
     return UserCreateStruct;

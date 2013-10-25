@@ -12,7 +12,6 @@ define(function () {
      * @param limitations {Object} object describing limitations for new policy
      */
     var PolicyCreateStruct = function (module, theFunction, limitations) {
-
         this.body = {};
         this.body.PolicyCreate = {};
 

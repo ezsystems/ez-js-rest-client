@@ -11,7 +11,6 @@ define(function () {
      * @param fields {Array} fields array (see example in UserService.newUserGroupCreateStruct() doc)
      */
     var UserGroupCreateStruct = function (languageCode, fields) {
-
         this.body = {};
         this.body.UserGroupCreate = {};
 
@@ -25,7 +24,6 @@ define(function () {
         this.headers["Content-Type"] = "application/vnd.ez.api.UserGroupCreate+json";
 
         return this;
-
     };
 
     return UserGroupCreateStruct;

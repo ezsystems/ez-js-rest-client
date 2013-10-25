@@ -9,7 +9,6 @@ define(function () {
      * @constructor
      */
     var ObjectStateUpdateStruct = function () {
-
         this.body = {};
         this.body.ObjectStateUpdate = {};
 
@@ -18,7 +17,6 @@ define(function () {
         this.headers["Content-Type"] = "application/vnd.ez.api.ObjectStateUpdate+json";
 
         return this;
-
     };
 
     return ObjectStateUpdateStruct;

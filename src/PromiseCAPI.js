@@ -10,7 +10,6 @@ define(["CAPI", "services/PromiseService"], function (CAPI, PromiseService) {
      * @param CAPI {CAPI} main REST client object
      */
     var PromiseCAPI = function (CAPI) {
-
         var key,
             that = this;
 
@@ -36,12 +35,9 @@ define(["CAPI", "services/PromiseService"], function (CAPI, PromiseService) {
         for(key in this._capi) {
             if ((typeof this._capi[key] === "function") &&
                 ( Object.prototype.toString.call(this._capi[key].toString().match(/^function\s*(get[^\s(]+Service)/)) === '[object Array]')) {
-
                 this[key] = this.generatePromiseService(this._capi[key]);
-
             }
         }
-
     };
 
     return PromiseCAPI;

@@ -8,7 +8,6 @@ define(function () {
      * @param valuesContainer
      */
     var Response = function (valuesContainer) {
-
         /**
          * Body of the response (most times JSON string recieved from REST service via a Connection object)
          *

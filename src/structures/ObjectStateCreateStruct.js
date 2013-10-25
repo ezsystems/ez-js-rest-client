@@ -32,7 +32,6 @@ define(function () {
      *      );
      */
     var ObjectStateCreateStruct = function (identifier, languageCode, priority, names, descriptions) {
-
         this.body = {};
         this.body.ObjectStateCreate = {};
 
@@ -49,7 +48,6 @@ define(function () {
         this.headers["Content-Type"] = "application/vnd.ez.api.ObjectStateCreate+json";
 
         return this;
-
     };
 
     return ObjectStateCreateStruct;

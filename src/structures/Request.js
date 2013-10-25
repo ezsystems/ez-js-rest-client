@@ -10,7 +10,6 @@ define(function () {
      * @param valuesContainer {Object} object literal containing any request properties
      */
     var Request = function (valuesContainer) {
-
         for (var property in valuesContainer) {
             if (valuesContainer.hasOwnProperty(property)) {
                 this[property] = valuesContainer[property];

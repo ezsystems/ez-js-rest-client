@@ -10,7 +10,6 @@ define(function () {
      * @param destination {String} reference to the resource we want to make related
      */
     var RelationCreateStruct = function (destination) {
-
         this.body = {};
         this.body.RelationCreate = {};
         this.body.RelationCreate.Destination = {

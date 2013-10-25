@@ -11,7 +11,6 @@ define(["structures/Response", "structures/CAPIError"], function (Response, CAPI
      * @constructor
      */
     var MicrosoftXmlHttpRequestConnection = function () {
-
         this._xhr = new ActiveXObject("Microsoft.XMLHTTP");
 
         /**
@@ -22,7 +21,6 @@ define(["structures/Response", "structures/CAPIError"], function (Response, CAPI
          * @param callback {function} function, which will be executed on request success
          */
         this.execute = function (request, callback) {
-
             var XHR = this._xhr,
                 headerType;
 

@@ -10,7 +10,6 @@ define(function () {
      * @param limitations {Object} object describing limitations change for the policy
      */
     var PolicyUpdateStruct = function (limitations) {
-
         this.body = {};
         this.body.PolicyUpdate = {};
 

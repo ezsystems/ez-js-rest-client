@@ -13,7 +13,6 @@ define(function () {
      * @param names {Array} Multi language value (see example in ContentTypeService.newFieldDefintionCreateStruct() doc)
      */
     var FieldDefinitionCreateStruct = function (identifier, fieldType, fieldGroup, names) {
-
         this.body = {};
         this.body.FieldDefinitionCreate = {};
 

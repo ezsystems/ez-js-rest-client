@@ -9,7 +9,6 @@ define(function () {
      * @constructor
      */
     var FieldDefinitionUpdateStruct = function () {
-
         this.body = {};
         this.body.FieldDefinitionUpdate = {};
 

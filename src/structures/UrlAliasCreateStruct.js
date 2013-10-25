@@ -18,7 +18,6 @@ define(function () {
      *     );
      */
     var UrlAliasCreateStruct = function (languageCode, resource, path) {
-
         this.body = {};
         this.body.UrlAliasCreate = {};
 

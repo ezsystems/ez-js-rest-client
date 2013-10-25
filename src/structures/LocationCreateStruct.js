@@ -10,7 +10,6 @@ define(function () {
      * @param parentLocationId {String} reference to the parent location of the new Location.
      */
     var LocationCreateStruct = function (parentLocationId) {
-
         this.body = {};
         this.body.LocationCreate = {};
 
@@ -27,7 +26,6 @@ define(function () {
         };
 
         return this;
-
     };
 
     return LocationCreateStruct;

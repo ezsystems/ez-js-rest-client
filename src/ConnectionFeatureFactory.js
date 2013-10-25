@@ -10,13 +10,11 @@ define(function () {
      * @param connectionList {array} Array of connections, should be filled-in in preferred order
      */
     var ConnectionFeatureFactory = function (connectionList) {
-
         this.connectionList = connectionList;
 
         this.defaultFactory = function (Connection) {
             return new Connection();
         };
-
     };
 
     /**
@@ -31,16 +29,13 @@ define(function () {
 
         // Choosing and creating first compatible connection from connection list
         for (index = 0; index < this.connectionList.length; ++index) {
-
             if (this.connectionList[index].connection.isCompatible()) {
-
                 if (this.connectionList[index].factory) {
                     connection = this.connectionList[index].factory(this.connectionList[index].connection);
                 } else {
                     connection = this.defaultFactory(this.connectionList[index].connection);
                 }
                 break;
-
             }
         }
 

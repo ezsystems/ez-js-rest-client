@@ -10,7 +10,6 @@ define(["structures/Response", "structures/CAPIError"], function (Response, CAPI
      * @constructor
      */
     var XmlHttpRequestConnection = function () {
-
         this._xhr = new XMLHttpRequest();
 
         /**
@@ -21,7 +20,6 @@ define(["structures/Response", "structures/CAPIError"], function (Response, CAPI
          * @param callback {function} function, which will be executed on request success
          */
         this.execute = function (request, callback) {
-
             var XHR = this._xhr,
                 headerType;
 

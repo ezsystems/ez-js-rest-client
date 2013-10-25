@@ -5,7 +5,6 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
     function (SessionCreateStruct, UserCreateStruct, UserUpdateStruct,
               UserGroupCreateStruct, UserGroupUpdateStruct, PolicyCreateStruct,
               PolicyUpdateStruct, RoleInputStruct, RoleAssignInputStruct) {
-
     "use strict";
 
     /**
@@ -37,10 +36,8 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
      *     var userService = jsCAPI.getUserService();
      */
     var UserService = function (connectionManager, discoveryService) {
-
         this._connectionManager = connectionManager;
         this._discoveryService = discoveryService;
-
     };
 
 // ******************************
@@ -56,9 +53,7 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
      * @return {SessionCreateStruct}
      */
     UserService.prototype.newSessionCreateStruct = function newSessionCreateStruct(login, password) {
-
         return new SessionCreateStruct(login, password);
-
     };
 
     /**
@@ -82,9 +77,7 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
      *     );
      */
     UserService.prototype.newUserGroupCreateStruct = function newUserGroupCreateStruct(language, fields) {
-
         return new UserGroupCreateStruct(language, fields);
-
     };
 
     /**
@@ -94,9 +87,7 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
      * @return {UserGroupCreateStruct}
      */
     UserService.prototype.newUserGroupUpdateStruct = function newUserGroupUpdateStruct() {
-
         return new UserGroupUpdateStruct();
-
     };
 
     /**
@@ -111,9 +102,7 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
      * @return {UserCreateStruct}
      */
     UserService.prototype.newUserCreateStruct = function newUserCreateStruct(languageCode, login, email, password, fields) {
-
         return new UserCreateStruct(languageCode, login, email, password, fields);
-
     };
 
     /**
@@ -123,9 +112,7 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
      * @return {UserUpdateStruct}
      */
     UserService.prototype.newUserUpdateStruct = function newUserUpdateStruct() {
-
         return new UserUpdateStruct();
-
     };
 
     /**
@@ -136,9 +123,7 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
      * @return {RoleInputStruct}
      */
     UserService.prototype.newRoleInputStruct = function newRoleInputStruct(identifier) {
-
         return new RoleInputStruct(identifier);
-
     };
 
     /**
@@ -168,9 +153,7 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
      *
      */
     UserService.prototype.newRoleAssignInputStruct = function newRoleAssignInputStruct(role, limitation) {
-
         return new RoleAssignInputStruct(role, limitation);
-
     };
 
     /**
@@ -198,9 +181,7 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
      *     );
      */
     UserService.prototype.newPolicyCreateStruct = function newPolicyCreateStruct(module, theFunction, limitations) {
-
         return new PolicyCreateStruct(module, theFunction, limitations);
-
     };
 
     /**
@@ -211,9 +192,7 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
      * @return {PolicyUpdateStruct}
      */
     UserService.prototype.newPolicyUpdateStruct = function newPolicyUpdateStruct(limitations) {
-
         return new PolicyUpdateStruct(limitations);
-
     };
 
 // ******************************
@@ -228,14 +207,12 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
      *  {{#crossLink "UserService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     UserService.prototype.loadRootUserGroup = function loadRootUserGroup(callback) {
-
         var that = this;
 
         this._discoveryService.getInfoObject(
             "rootUserGroup",
             function (error, rootUserGroup) {
                 if (!error) {
-
                     that._connectionManager.request(
                         "GET",
                         rootUserGroup._href,
@@ -340,14 +317,12 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
      *  {{#crossLink "UserService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     UserService.prototype.createUserGroup = function createUserGroup(parentGroupId, userGroupCreateStruct, callback) {
-
         var that = this;
 
         this.loadUserGroup(
             parentGroupId,
             function (error, userGroupResponse) {
                 if (!error) {
-
                     var subGroups = userGroupResponse.document.UserGroup.Subgroups;
 
                     that._connectionManager.request(
@@ -394,14 +369,12 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
      *  {{#crossLink "UserService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     UserService.prototype.loadSubUserGroups = function loadSubUserGroups(userGroupId, callback) {
-
         var that = this;
 
         this.loadUserGroup(
             userGroupId,
             function (error, userGroupResponse) {
                 if (!error) {
-
                     var subGroups = userGroupResponse.document.UserGroup.Subgroups;
 
                     that._connectionManager.request(
@@ -430,14 +403,12 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
      *  {{#crossLink "UserService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     UserService.prototype.loadUsersOfUserGroup = function loadUsersOfUserGroup(userGroupId, callback) {
-
         var that = this;
 
         this.loadUserGroup(
             userGroupId,
             function (error, userGroupResponse) {
                 if (!error) {
-
                     var users = userGroupResponse.document.UserGroup.Users;
 
                     that._connectionManager.request(
@@ -455,7 +426,6 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
                 }
             }
         );
-
     };
 
     /**
@@ -492,14 +462,12 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
      *  {{#crossLink "UserService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     UserService.prototype.createUser = function createUser(userGroupId, userCreateStruct, callback) {
-
         var that = this;
 
         this.loadUserGroup(
             userGroupId,
             function (error, userGroupResponse) {
                 if (!error) {
-
                     var users = userGroupResponse.document.UserGroup.Users;
 
                     that._connectionManager.request(
@@ -614,14 +582,12 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
      *  {{#crossLink "UserService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     UserService.prototype.assignUserToUserGroup = function assignUserToUserGroup(userId, userGroupId, callback) {
-
         var that = this;
 
         this.loadUser(
             userId,
             function (error, userResponse) {
                 if (!error) {
-
                     var userGroups = userResponse.document.User.UserGroups;
 
                     that._connectionManager.request(
@@ -637,7 +603,6 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
                 } else {
                     callback(error, false);
                 }
-
             }
         );
     };
@@ -655,7 +620,6 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
             userAssignedGroupId,
             callback
         );
-
     };
 
 // ******************************
@@ -671,14 +635,12 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
      *  {{#crossLink "UserService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     UserService.prototype.createRole = function createRole(roleCreateStruct, callback) {
-
         var that = this;
 
         this._discoveryService.getInfoObject(
             "roles",
             function (error, roles) {
                 if (!error) {
-
                     that._connectionManager.request(
                     "POST",
                     roles._href,
@@ -727,7 +689,6 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
      *     userService.loadRoles("admin", 5, 5, callback);
      */
     UserService.prototype.loadRoles = function loadRoles(identifier, offset, limit, callback) {
-
         var that = this,
             identifierQuery = (identifier === "") ? "" : "&identifier=" + identifier;
 
@@ -741,7 +702,6 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
             "roles",
             function (error, roles) {
                 if (!error) {
-
                     that._connectionManager.request(
                         "GET",
                         roles._href + '?offset=' + offset + '&limit=' + limit + identifierQuery,
@@ -804,14 +764,12 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
      *  {{#crossLink "UserService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     UserService.prototype.getRoleAssignmentsForUser = function getRoleAssignmentsForUser(userId, callback) {
-
         var that = this;
 
         this.loadUser(
             userId,
             function (error, userResponse) {
                 if (!error) {
-
                     var userRoles = userResponse.document.User.Roles;
 
                     that._connectionManager.request(
@@ -840,14 +798,12 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
      *  {{#crossLink "UserService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     UserService.prototype.getRoleAssignmentsForUserGroup = function getRoleAssignmentsForUserGroup(userGroupId, callback) {
-
         var that = this;
 
         this.loadUserGroup(
             userGroupId,
             function (error, userGroupResponse) {
                 if (!error) {
-
                     var userGroupRoles = userGroupResponse.document.UserGroup.Roles;
 
                     that._connectionManager.request(
@@ -920,14 +876,12 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
      *
      */
     UserService.prototype.assignRoleToUser = function assignRoleToUser(userId, roleAssignInputStruct, callback) {
-
         var that = this;
 
         this.loadUser(
             userId,
             function (error, userResponse) {
                 if (!error) {
-
                     var userRoles = userResponse.document.User.Roles;
 
                     that._connectionManager.request(
@@ -955,14 +909,12 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
      *  {{#crossLink "UserService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     UserService.prototype.assignRoleToUserGroup = function assignRoleToUserGroup(userGroupId, roleAssignInputStruct, callback) {
-
         var that = this;
 
         this.loadUserGroup(
             userGroupId,
             function (error, userGroupResponse) {
                 if (!error) {
-
                     var userGroupRoles = userGroupResponse.document.UserGroup.Roles;
 
                     that._connectionManager.request(
@@ -1039,14 +991,12 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
      *     callback);
      */
     UserService.prototype.addPolicy = function addPolicy(roleId, policyCreateStruct, callback) {
-
         var that = this;
 
         this.loadRole(
             roleId,
             function (error, roleResponse) {
                 if (!error) {
-
                     var rolePolicies = roleResponse.document.Role.Policies;
 
                     that._connectionManager.request(
@@ -1072,14 +1022,12 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
      *  {{#crossLink "UserService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     UserService.prototype.loadPolicies = function loadPolicies(roleId, callback) {
-
         var that = this;
 
         this.loadRole(
             roleId,
             function (error, roleResponse) {
                 if (!error) {
-
                     var rolePolicies = roleResponse.document.Role.Policies;
 
                     that._connectionManager.request(
@@ -1221,9 +1169,7 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
      *  {{#crossLink "UserService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     UserService.prototype.logOut = function logOut(callback) {
-
         this._connectionManager.logOut(callback);
-
     };
 
 

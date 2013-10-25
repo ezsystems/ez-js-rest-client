@@ -10,7 +10,6 @@ define(function () {
      * @param identifier {String} unique Role identifier
      */
     var RoleInputStruct = function (identifier) {
-
         this.body = {};
         this.body.RoleInput = {};
 

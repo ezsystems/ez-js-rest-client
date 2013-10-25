@@ -13,7 +13,6 @@ define(["structures/CAPIError"], function (CAPIError) {
      * @param credentials.password {String} user password
      */
     var SessionAuthAgent = function (credentials) {
-
         // for now is initiated inside CAPI constructor
         this.CAPI = null;
 
@@ -25,7 +24,6 @@ define(["structures/CAPIError"], function (CAPIError) {
         this.sessionName = sessionStorage.getItem('ezpRestClient.sessionName');
         this.sessionId = sessionStorage.getItem('ezpRestClient.sessionId');
         this.csrfToken = sessionStorage.getItem('ezpRestClient.csrfToken');
-
     };
 
     /**
@@ -39,7 +37,6 @@ define(["structures/CAPIError"], function (CAPIError) {
      */
     SessionAuthAgent.prototype.ensureAuthentication = function (done) {
         if (this.sessionId === null) {
-
             var that = this,
                 userService = this.CAPI.getUserService(),
                 sessionCreateStruct = userService.newSessionCreateStruct(
@@ -53,7 +50,6 @@ define(["structures/CAPIError"], function (CAPIError) {
                 sessionCreateStruct,
                 function (error, sessionResponse) {
                     if (!error) {
-
                         var session = JSON.parse(sessionResponse.body).Session;
 
                         that.sessionName = session.name;
@@ -91,13 +87,11 @@ define(["structures/CAPIError"], function (CAPIError) {
      * @param done {function}
      */
     SessionAuthAgent.prototype.authenticateRequest = function (request, done) {
-
         if (request.method !== "GET" && request.method !== "HEAD" && request.method !== "OPTIONS" && request.method !== "TRACE" ) {
             request.headers["X-CSRF-Token"] = this.csrfToken;
         }
 
         done(false, request);
-
     };
 
     /**
@@ -108,7 +102,6 @@ define(["structures/CAPIError"], function (CAPIError) {
      * @param done {function}
      */
     SessionAuthAgent.prototype.logOut = function (done) {
-
         var userService = this.CAPI.getUserService(),
             that = this;
 
@@ -116,7 +109,6 @@ define(["structures/CAPIError"], function (CAPIError) {
             this.sessionId,
             function (error, response) {
                 if (!error) {
-
                     that.sessionName = null;
                     that.sessionId = null;
                     that.csrfToken = null;

@@ -12,7 +12,6 @@ define(function () {
      * @param names {Array} Multi language value (see example in ContentTypeService.newContentTypeCreateStruct() doc)
      */
     var ContentTypeCreateStruct = function (identifier, languageCode, names) {
-
         var now = JSON.parse(JSON.stringify(new Date()));
 
         this.body = {};

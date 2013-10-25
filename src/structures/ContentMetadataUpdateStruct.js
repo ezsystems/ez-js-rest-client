@@ -10,7 +10,6 @@ define(function () {
      * @param languageCode {String} The language code (eng-GB, fre-FR, ...)
      */
     var ContentMetadataUpdateStruct = function (languageCode) {
-
         var now = JSON.parse(JSON.stringify(new Date()));
 
         this.body = {};
@@ -29,7 +28,6 @@ define(function () {
         };
 
         return this;
-
     };
 
     return ContentMetadataUpdateStruct;

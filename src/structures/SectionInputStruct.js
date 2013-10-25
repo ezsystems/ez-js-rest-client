@@ -12,7 +12,6 @@ define(function () {
 
      */
     var SectionInputStruct = function (identifier, name) {
-
         this.body = {};
         this.body.SectionInput = {};
 

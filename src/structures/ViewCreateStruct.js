@@ -10,7 +10,6 @@ define(function () {
      * @param identifier {String} unique view identifier
      */
     var ViewCreateStruct = function (identifier) {
-
         this.body = {};
         this.body.ViewInput = {};
 
@@ -30,7 +29,6 @@ define(function () {
         };
 
         return this;
-
     };
 
     return ViewCreateStruct;

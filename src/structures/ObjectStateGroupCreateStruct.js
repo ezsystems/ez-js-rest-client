@@ -23,7 +23,6 @@ define(function () {
      *      );
      */
     var ObjectStateGroupCreateStruct = function (identifier, languageCode, names) {
-
         this.body = {};
         this.body.ObjectStateGroupCreate = {};
 
@@ -42,7 +41,6 @@ define(function () {
         this.headers["Content-Type"] = "application/vnd.ez.api.ObjectStateGroupCreate+json";
 
         return this;
-
     };
 
     return ObjectStateGroupCreateStruct;

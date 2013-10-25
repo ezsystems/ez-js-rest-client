@@ -11,7 +11,6 @@ define(function () {
      * @param limitation {Object} object representing limitations for assignment (see example in UserService.newRoleAssignInputStruct() doc)
      */
     var RoleAssignInputStruct = function (role, limitation) {
-
         this.body = {};
         this.body.RoleAssignInput = {};
 

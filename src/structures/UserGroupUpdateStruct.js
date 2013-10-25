@@ -11,7 +11,6 @@ define(function () {
      * @param fields {Array} fields array (see example in UserService.newUserGroupCreateStruct() doc)
      */
     var UserGroupUpdateStruct = function (languageCode, fields) {
-
         this.body = {};
         this.body.UserGroupUpdate = {};
 
@@ -23,7 +22,6 @@ define(function () {
         this.headers["Content-Type"] = "application/vnd.ez.api.UserGroupUpdate+json";
 
         return this;
-
     };
 
     return UserGroupUpdateStruct;

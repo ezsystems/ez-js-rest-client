@@ -9,7 +9,6 @@ define(function () {
      * @constructor
      */
     var UserUpdateStruct = function () {
-
         this.body = {};
         this.body.UserUpdate = {};
 
@@ -21,7 +20,6 @@ define(function () {
         this.headers["Content-Type"] = "application/vnd.ez.api.UserUpdate+json";
 
         return this;
-
     };
 
     return UserUpdateStruct;

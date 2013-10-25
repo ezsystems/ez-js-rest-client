@@ -3,7 +3,6 @@ define(["structures/ContentTypeGroupInputStruct", "structures/ContentTypeCreateS
         "structures/FieldDefinitionCreateStruct", "structures/FieldDefinitionUpdateStruct"],
     function (ContentTypeGroupInputStruct, ContentTypeCreateStruct, ContentTypeUpdateStruct,
               FieldDefinitionCreateStruct, FieldDefinitionUpdateStruct) {
-
     "use strict";
 
     /**
@@ -42,10 +41,8 @@ define(["structures/ContentTypeGroupInputStruct", "structures/ContentTypeCreateS
      *     var contentTypeService = jsCAPI.getContentTypeService();
      */
     var ContentTypeService = function (connectionManager, discoveryService) {
-
         this._connectionManager = connectionManager;
         this._discoveryService = discoveryService;
-
     };
 
 // ******************************
@@ -60,9 +57,7 @@ define(["structures/ContentTypeGroupInputStruct", "structures/ContentTypeCreateS
      * @return {ContentTypeGroupInputStruct}
      */
     ContentTypeService.prototype.newContentTypeGroupInputStruct = function newContentTypeGroupInputStruct(identifier) {
-
         return new ContentTypeGroupInputStruct(identifier);
-
     };
 
     /**
@@ -80,9 +75,7 @@ define(["structures/ContentTypeGroupInputStruct", "structures/ContentTypeCreateS
      *      );
      */
     ContentTypeService.prototype.newContentTypeCreateStruct = function newContentTypeCreateStruct(identifier, languageCode, names) {
-
         return new ContentTypeCreateStruct(identifier, languageCode, names);
-
     };
 
     /**
@@ -90,9 +83,7 @@ define(["structures/ContentTypeGroupInputStruct", "structures/ContentTypeCreateS
      * @return {ContentTypeUpdateStruct}
      */
     ContentTypeService.prototype.newContentTypeUpdateStruct = function newContentTypeUpdateStruct() {
-
         return new ContentTypeUpdateStruct();
-
     };
 
 
@@ -112,9 +103,7 @@ define(["structures/ContentTypeGroupInputStruct", "structures/ContentTypeCreateS
      *     );
      */
     ContentTypeService.prototype.newFieldDefinitionCreateStruct = function newFieldDefinitionCreateStruct(identifier, fieldType, fieldGroup, names) {
-
         return new FieldDefinitionCreateStruct(identifier, fieldType, fieldGroup, names);
-
     };
 
     /**
@@ -122,9 +111,7 @@ define(["structures/ContentTypeGroupInputStruct", "structures/ContentTypeCreateS
      * @return {FieldDefinitionUpdateStruct}
      */
     ContentTypeService.prototype.newFieldDefinitionUpdateStruct = function newFieldDefinitionUpdateStruct() {
-
         return new FieldDefinitionUpdateStruct();
-
     };
 
 
@@ -245,14 +232,12 @@ define(["structures/ContentTypeGroupInputStruct", "structures/ContentTypeCreateS
      *  {{#crossLink "ContentTypeService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     ContentTypeService.prototype.loadContentTypes = function loadContentTypes(contentTypeGroupId, callback) {
-
         var that = this;
 
         this.loadContentTypeGroup(
             contentTypeGroupId,
             function (error, contentTypeGroupResponse) {
                 if (!error) {
-
                     var contentTypeGroup = contentTypeGroupResponse.document.ContentTypeGroup;
 
                     that._connectionManager.request(
@@ -330,14 +315,12 @@ define(["structures/ContentTypeGroupInputStruct", "structures/ContentTypeCreateS
      *     );
      */
     ContentTypeService.prototype.createContentType = function createContentType(contentTypeGroupId, contentTypeCreateStruct, publish, callback) {
-
         var that = this;
 
         this.loadContentTypeGroup(
             contentTypeGroupId,
             function (error, contentTypeGroupResponse) {
                 if (!error) {
-
                     var contentTypeGroup = contentTypeGroupResponse.document.ContentTypeGroup,
                         parameters = (publish === true) ? "?publish=true": "";
 
@@ -401,14 +384,12 @@ define(["structures/ContentTypeGroupInputStruct", "structures/ContentTypeCreateS
      *  {{#crossLink "ContentTypeService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     ContentTypeService.prototype.loadContentTypeByIdentifier = function loadContentTypeByIdentifier(identifier, callback) {
-
         var that = this;
 
         this._discoveryService.getInfoObject(
             "contentTypes",
             function (error, contentTypes) {
                 if (!error) {
-
                     that._connectionManager.request(
                         "GET",
                         contentTypes._href + "?identifier=" + identifier,
@@ -614,14 +595,12 @@ define(["structures/ContentTypeGroupInputStruct", "structures/ContentTypeCreateS
      *  {{#crossLink "ContentTypeService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     ContentTypeService.prototype.addFieldDefinition = function addFieldDefinition(contentTypeId, fieldDefinitionCreateStruct, callback) {
-
         var that = this;
 
         this.loadContentTypeDraft(
             contentTypeId,
             function (error, contentTypeDraftResponse) {
                 if (!error) {
-
                     var contentTypeDraftFieldDefinitions = contentTypeDraftResponse.document.ContentType.FieldDefinitions;
 
                     that._connectionManager.request(

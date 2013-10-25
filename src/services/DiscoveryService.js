@@ -12,7 +12,6 @@ define(["structures/CAPIError"], function (CAPIError) {
      * @param connectionManager {ConnectionManager}
      */
     var DiscoveryService = function (rootPath, connectionManager) {
-
         this.connectionManager = connectionManager;
         this.rootPath = rootPath;
 
@@ -28,7 +27,6 @@ define(["structures/CAPIError"], function (CAPIError) {
          * @param callback.response {boolean} true if the root was discovered successfully, false otherwise.
          */
         this.discoverRoot = function (rootPath, callback) {
-
             if (!this.cacheObject.Root) {
                 var that = this;
                 this.connectionManager.request(
@@ -38,7 +36,6 @@ define(["structures/CAPIError"], function (CAPIError) {
                     {"Accept": "application/vnd.ez.api.Root+json"},
                     function (error, rootJSON) {
                         if (!error) {
-
                             that.copyToCache(rootJSON.document);
                             callback(false, true);
 
