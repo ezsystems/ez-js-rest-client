@@ -506,13 +506,13 @@ define(["structures/ContentTypeGroupInputStruct", "structures/ContentTypeCreateS
      *  {{#crossLink "ContentTypeService"}}Note on the callbacks usage{{/crossLink}} for more info)
      * @example
      *     var contentTypeUpdateStruct = contentTypeService.newContentTypeUpdateStruct();
-     *     
+     *
      *     contentTypeUpdateStruct.names = {};
      *     contentTypeUpdateStruct.names.value = [{
      *         "_languageCode":"eng-US",
      *         "#text":"My changed content type"
      *     }]
-     *     
+     *
      *     contentTypeService.createContentTypeDraft(
      *         "/api/ezp/v2/content/types/18",
      *         contentTypeUpdateStruct,
