@@ -17,7 +17,7 @@ define(function () {
      *         "findme-alias"
      *     );
      */
-    var UrlAliasCreateStruct = function(languageCode, resource, path){
+    var UrlAliasCreateStruct = function (languageCode, resource, path) {
 
         this.body = {};
         this.body.UrlAliasCreate = {};

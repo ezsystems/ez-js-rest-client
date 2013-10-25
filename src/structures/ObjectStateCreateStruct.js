@@ -31,7 +31,7 @@ define(function () {
      *          ]
      *      );
      */
-    var ObjectStateCreateStruct = function(identifier, languageCode, priority, names, descriptions){
+    var ObjectStateCreateStruct = function (identifier, languageCode, priority, names, descriptions) {
 
         this.body = {};
         this.body.ObjectStateCreate = {};

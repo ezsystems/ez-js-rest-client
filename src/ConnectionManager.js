@@ -12,7 +12,7 @@ define(["structures/Response", "structures/Request", "structures/CAPIError"],
      * @param authenticationAgent {object} Instance of one of the AuthAgents (e.g. SessionAuthAgent, HttpBasicAuthAgent)
      * @param connectionFactory {ConnectionFeatureFactory}  the factory which is choosing compatible connection from connections list
      */
-    var ConnectionManager = function(endPointUrl, authenticationAgent, connectionFactory) {
+    var ConnectionManager = function (endPointUrl, authenticationAgent, connectionFactory) {
 
         this._endPointUrl = endPointUrl;
         this._authenticationAgent = authenticationAgent;
@@ -35,14 +35,14 @@ define(["structures/Response", "structures/Request", "structures/CAPIError"],
      * @param headers {object}
      * @param callback {function} function, which will be executed on request success
      */
-    ConnectionManager.prototype.request = function(method, url, body, headers, callback) {
+    ConnectionManager.prototype.request = function (method, url, body, headers, callback) {
 
         // default values for all the parameters
         method = (typeof method === "undefined") ? "GET" : method;
         url = (typeof url === "undefined") ? "/" : url;
         body = (typeof body === "undefined") ? "" : body;
         headers = (typeof headers === "undefined") ? {} : headers;
-        callback = (typeof callback === "undefined") ? function(){} : callback;
+        callback = (typeof callback === "undefined") ? function () {} : callback;
 
         var that = this,
             nextRequest,
@@ -65,7 +65,7 @@ define(["structures/Response", "structures/Request", "structures/CAPIError"],
 
             // check if we are already authenticated, make it happen if not
             this._authenticationAgent.ensureAuthentication(
-                function(error, success){
+                function (error, success) {
                     if (!error) {
 
                         that._authInProgress = false;
@@ -77,7 +77,7 @@ define(["structures/Response", "structures/Request", "structures/CAPIError"],
 
                             that._authenticationAgent.authenticateRequest(
                                 nextRequest,
-                                function(error, authenticatedRequest) {
+                                function (error, authenticatedRequest) {
                                     if (!error) {
 
                                         if (that.logRequests) {
@@ -133,14 +133,14 @@ define(["structures/Response", "structures/Request", "structures/CAPIError"],
      * @param headers {object}
      * @param callback {function} function, which will be executed on request success
      */
-    ConnectionManager.prototype.notAuthorizedRequest = function(method, url, body, headers, callback) {
+    ConnectionManager.prototype.notAuthorizedRequest = function (method, url, body, headers, callback) {
 
         // default values for all the parameters
         method = (typeof method === "undefined") ? "GET" : method;
         url = (typeof url === "undefined") ? "/" : url;
         body = (typeof body === "undefined") ? "" : body;
         headers = (typeof headers === "undefined") ? {} : headers;
-        callback = (typeof callback === "undefined") ? function(){} : callback;
+        callback = (typeof callback === "undefined") ? function () {} : callback;
 
         var request = new Request({
             method : method,
@@ -167,11 +167,11 @@ define(["structures/Response", "structures/Request", "structures/CAPIError"],
      * @param url
      * @param callback
      */
-    ConnectionManager.prototype.delete = function(url, callback) {
+    ConnectionManager.prototype.delete = function (url, callback) {
 
         // default values for all the parameters
         url = (typeof url === "undefined") ? "/" : url;
-        callback = (typeof callback === "undefined") ? function(){} : callback;
+        callback = (typeof callback === "undefined") ? function () {} : callback;
 
         this.request(
             "DELETE",
@@ -190,7 +190,7 @@ define(["structures/Response", "structures/Request", "structures/CAPIError"],
      * @method logOut
      * @param callback {function}
      */
-    ConnectionManager.prototype.logOut = function(callback) {
+    ConnectionManager.prototype.logOut = function (callback) {
 
         this._authenticationAgent.logOut(callback);
 

@@ -9,7 +9,7 @@ define(function () {
      * @constructor
      * @param identifier {String} Unique identifier for the target Content Type group (e.g. "my_new_content_type_group")
      */
-    var ContentTypeGroupInputStruct = function(identifier){
+    var ContentTypeGroupInputStruct = function (identifier) {
 
         this.body = {};
         this.body.ContentTypeGroupInput = {};

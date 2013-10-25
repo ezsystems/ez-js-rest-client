@@ -8,7 +8,7 @@ define(function () {
      * @class ContentTypeUpdateStruct
      * @constructor
      */
-    var ContentTypeUpdateStruct = function(){
+    var ContentTypeUpdateStruct = function () {
 
         this.body = {};
         this.body.ContentTypeUpdate = {};

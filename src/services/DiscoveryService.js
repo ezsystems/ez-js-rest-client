@@ -11,7 +11,7 @@ define(["structures/CAPIError"], function (CAPIError) {
      * @param rootPath {String} path to Root resource
      * @param connectionManager {ConnectionManager}
      */
-    var DiscoveryService = function(rootPath, connectionManager){
+    var DiscoveryService = function (rootPath, connectionManager) {
 
         this.connectionManager = connectionManager;
         this.rootPath = rootPath;
@@ -27,7 +27,7 @@ define(["structures/CAPIError"], function (CAPIError) {
          * @param callback.error {mixed} false or CAPIError object if an error occured
          * @param callback.response {boolean} true if the root was discovered successfully, false otherwise.
          */
-        this.discoverRoot = function(rootPath, callback) {
+        this.discoverRoot = function (rootPath, callback) {
 
             if (!this.cacheObject.Root) {
                 var that = this;
@@ -36,7 +36,7 @@ define(["structures/CAPIError"], function (CAPIError) {
                     rootPath,
                     "",
                     { "Accept" : "application/vnd.ez.api.Root+json" },
-                    function(error, rootJSON) {
+                    function (error, rootJSON) {
                         if (!error) {
 
                             that.copyToCache(rootJSON.document);
@@ -63,7 +63,7 @@ define(["structures/CAPIError"], function (CAPIError) {
          * @method addToCache
          * @param object {Object}
          */
-        this.copyToCache = function(object) {
+        this.copyToCache = function (object) {
             for (var property in object) {
                 if (object.hasOwnProperty(property)) {
                     this.cacheObject[property] = object[property];
@@ -80,13 +80,13 @@ define(["structures/CAPIError"], function (CAPIError) {
          * @param callback.error {mixed} false or CAPIError object if an error occured
          * @param callback.response {mixed} the target object if it was found, false otherwise.
          */
-        this.getObjectFromCache = function(name, callback) {
+        this.getObjectFromCache = function (name, callback) {
             var object = null,
                 that = this;
             // Discovering root, if not yet discovered
             // on discovery running the request for same 'name' again
             if (!this.cacheObject.Root) {
-                this.discoverRoot(this.rootPath, function() {
+                this.discoverRoot(this.rootPath, function () {
                     that.getObjectFromCache(name, callback);
                 });
                 return;
@@ -126,10 +126,10 @@ define(["structures/CAPIError"], function (CAPIError) {
      * @param callback.error {mixed} false or CAPIError object if an error occured
      * @param callback.response {mixed} the url of the target object if it was found, false otherwise.
      */
-    DiscoveryService.prototype.getUrl = function(name, callback) {
+    DiscoveryService.prototype.getUrl = function (name, callback) {
         this.getObjectFromCache(
             name,
-            function(error, cachedObject){
+            function (error, cachedObject) {
                 if (!error) {
                     if (cachedObject) {
                         callback(
@@ -163,10 +163,10 @@ define(["structures/CAPIError"], function (CAPIError) {
      * @param callback.error {mixed} false or CAPIError object if an error occured
      * @param callback.response {mixed} the media-type of the target object if it was found, false otherwise.
      */
-    DiscoveryService.prototype.getMediaType = function(name, callback) {
+    DiscoveryService.prototype.getMediaType = function (name, callback) {
         this.getObjectFromCache(
             name,
-            function(error, cachedObject){
+            function (error, cachedObject) {
                 if (!error) {
                     if (cachedObject) {
                         callback(
@@ -200,10 +200,10 @@ define(["structures/CAPIError"], function (CAPIError) {
      * @param callback.error {mixed} false or CAPIError object if an error occured
      * @param callback.response {mixed} the target object if it was found, false otherwise.
      */
-    DiscoveryService.prototype.getInfoObject = function(name, callback) {
+    DiscoveryService.prototype.getInfoObject = function (name, callback) {
         this.getObjectFromCache(
             name,
-            function(error, cachedObject){
+            function (error, cachedObject) {
                 if (!error) {
                     if (cachedObject) {
                         callback(

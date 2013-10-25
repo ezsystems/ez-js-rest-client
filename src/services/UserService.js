@@ -36,7 +36,7 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
      * @example
      *     var userService = jsCAPI.getUserService();
      */
-    var UserService = function(connectionManager, discoveryService) {
+    var UserService = function (connectionManager, discoveryService) {
 
         this._connectionManager = connectionManager;
         this._discoveryService = discoveryService;
@@ -233,7 +233,7 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
 
         this._discoveryService.getInfoObject(
             "rootUserGroup",
-            function(error, rootUserGroup){
+            function (error, rootUserGroup) {
                 if (!error) {
 
                     that._connectionManager.request(
@@ -345,7 +345,7 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
 
         this.loadUserGroup(
             parentGroupId,
-            function(error, userGroupResponse){
+            function (error, userGroupResponse) {
                 if (!error) {
 
                     var subGroups = userGroupResponse.document.UserGroup.Subgroups;
@@ -399,7 +399,7 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
 
         this.loadUserGroup(
             userGroupId,
-            function(error, userGroupResponse){
+            function (error, userGroupResponse) {
                 if (!error) {
 
                     var subGroups = userGroupResponse.document.UserGroup.Subgroups;
@@ -435,7 +435,7 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
 
         this.loadUserGroup(
             userGroupId,
-            function(error, userGroupResponse){
+            function (error, userGroupResponse) {
                 if (!error) {
 
                     var users = userGroupResponse.document.UserGroup.Users;
@@ -497,7 +497,7 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
 
         this.loadUserGroup(
             userGroupId,
-            function(error, userGroupResponse){
+            function (error, userGroupResponse) {
                 if (!error) {
 
                     var users = userGroupResponse.document.UserGroup.Users;
@@ -619,7 +619,7 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
 
         this.loadUser(
             userId,
-            function(error, userResponse){
+            function (error, userResponse) {
                 if (!error) {
 
                     var userGroups = userResponse.document.User.UserGroups;
@@ -676,7 +676,7 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
 
         this._discoveryService.getInfoObject(
             "roles",
-            function(error, roles){
+            function (error, roles) {
                 if (!error) {
 
                     that._connectionManager.request(
@@ -739,7 +739,7 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
 
         this._discoveryService.getInfoObject(
             "roles",
-            function(error, roles){
+            function (error, roles) {
                 if (!error) {
 
                     that._connectionManager.request(
@@ -809,7 +809,7 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
 
         this.loadUser(
             userId,
-            function(error, userResponse){
+            function (error, userResponse) {
                 if (!error) {
 
                     var userRoles = userResponse.document.User.Roles;
@@ -845,7 +845,7 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
 
         this.loadUserGroup(
             userGroupId,
-            function(error, userGroupResponse){
+            function (error, userGroupResponse) {
                 if (!error) {
 
                     var userGroupRoles = userGroupResponse.document.UserGroup.Roles;
@@ -925,7 +925,7 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
 
         this.loadUser(
             userId,
-            function(error, userResponse){
+            function (error, userResponse) {
                 if (!error) {
 
                     var userRoles = userResponse.document.User.Roles;
@@ -960,7 +960,7 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
 
         this.loadUserGroup(
             userGroupId,
-            function(error, userGroupResponse){
+            function (error, userGroupResponse) {
                 if (!error) {
 
                     var userGroupRoles = userGroupResponse.document.UserGroup.Roles;
@@ -1044,7 +1044,7 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
 
         this.loadRole(
             roleId,
-            function(error, roleResponse){
+            function (error, roleResponse) {
                 if (!error) {
 
                     var rolePolicies = roleResponse.document.Role.Policies;
@@ -1077,7 +1077,7 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
 
         this.loadRole(
             roleId,
-            function(error, roleResponse){
+            function (error, roleResponse) {
                 if (!error) {
 
                     var rolePolicies = roleResponse.document.Role.Policies;

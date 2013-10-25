@@ -8,7 +8,7 @@ define(function () {
      * @class UserUpdateStruct
      * @constructor
      */
-    var UserUpdateStruct = function(){
+    var UserUpdateStruct = function () {
 
         this.body = {};
         this.body.UserUpdate = {};

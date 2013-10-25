@@ -37,7 +37,7 @@ define(["structures/CAPIError"], function (CAPIError) {
      * @method ensureAuthentication
      * @param done {Function} Callback function, which is to be called by the implementation to signal the authentication has been completed.
      */
-    SessionAuthAgent.prototype.ensureAuthentication = function(done) {
+    SessionAuthAgent.prototype.ensureAuthentication = function (done) {
         if (this.sessionId === null) {
 
             var that = this,
@@ -51,8 +51,8 @@ define(["structures/CAPIError"], function (CAPIError) {
             userService.createSession(
                 "/api/ezp/v2/user/sessions",
                 sessionCreateStruct,
-                function(error, sessionResponse){
-                    if (!error){
+                function (error, sessionResponse) {
+                    if (!error) {
 
                         var session = JSON.parse(sessionResponse.body).Session;
 
@@ -90,7 +90,7 @@ define(["structures/CAPIError"], function (CAPIError) {
      * @param request {Request}
      * @param done {function}
      */
-    SessionAuthAgent.prototype.authenticateRequest = function(request, done) {
+    SessionAuthAgent.prototype.authenticateRequest = function (request, done) {
 
         if (request.method !== "GET" && request.method !== "HEAD" && request.method !== "OPTIONS" && request.method !== "TRACE" ) {
             request.headers["X-CSRF-Token"] = this.csrfToken;
@@ -107,15 +107,15 @@ define(["structures/CAPIError"], function (CAPIError) {
      * @method logOut
      * @param done {function}
      */
-    SessionAuthAgent.prototype.logOut = function(done) {
+    SessionAuthAgent.prototype.logOut = function (done) {
 
         var userService = this.CAPI.getUserService(),
             that = this;
 
         userService.deleteSession(
             this.sessionId,
-            function(error, response){
-                if (!error){
+            function (error, response) {
+                if (!error) {
 
                     that.sessionName = null;
                     that.sessionId = null;

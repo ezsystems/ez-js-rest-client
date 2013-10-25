@@ -21,13 +21,13 @@ define(["structures/Response", "structures/CAPIError"], function (Response, CAPI
          * @param request {Request} structure containing all needed params and data
          * @param callback {function} function, which will be executed on request success
          */
-        this.execute = function(request, callback) {
+        this.execute = function (request, callback) {
 
             var XHR = this._xhr,
                 headerType;
 
             // Create the state change handler:
-            XHR.onreadystatechange = function() {
+            XHR.onreadystatechange = function () {
                 if (XHR.readyState != 4) {return;} // Not ready yet
                 if (XHR.status >= 400) {
                     callback(
@@ -80,7 +80,7 @@ define(["structures/Response", "structures/CAPIError"], function (Response, CAPI
      * @static
      * @returns {boolean} true, if connection is compatible with current environment, false otherwise
      */
-    MicrosoftXmlHttpRequestConnection.isCompatible = function(){
+    MicrosoftXmlHttpRequestConnection.isCompatible = function () {
         return !!window.ActiveXObject;
     };
 

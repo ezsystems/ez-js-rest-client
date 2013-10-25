@@ -40,7 +40,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
      * @example
      *     var contentService = jsCAPI.getContentService();
      */
-    var ContentService = function(connectionManager, discoveryService) {
+    var ContentService = function (connectionManager, discoveryService) {
 
         this._connectionManager = connectionManager;
         this._discoveryService = discoveryService;
@@ -310,7 +310,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
 
         this._discoveryService.getInfoObject(
             "sections",
-            function(error, sections) {
+            function (error, sections) {
                 if (!error) {
 
                     that._connectionManager.request(
@@ -360,7 +360,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
 
         this._discoveryService.getInfoObject(
             "sections",
-            function(error, sections) {
+            function (error, sections) {
                 if (!error) {
 
                     that._connectionManager.request(
@@ -429,7 +429,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
 
         this._discoveryService.getInfoObject(
             "content",
-            function(error, contentObjects){
+            function (error, contentObjects) {
                 if (!error) {
                     that._connectionManager.request(
                         "POST",
@@ -490,7 +490,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
 
         this._discoveryService.getInfoObject(
             "content",
-            function(error, contentObjects){
+            function (error, contentObjects) {
                 if (!error) {
                     that._connectionManager.request(
                         "GET",
@@ -600,7 +600,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
 
         this.loadContentInfo(
             contentId,
-            function(error, contentResponse){
+            function (error, contentResponse) {
                 if (!error) {
 
                     var currentVersion = contentResponse.document.Content.CurrentVersion;
@@ -670,7 +670,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
 
         this.loadContentInfo(
             contentId,
-            function(error, contentResponse){
+            function (error, contentResponse) {
                 if (!error) {
 
                     var contentVersions = contentResponse.document.Content.Versions;
@@ -742,7 +742,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
 
         this.loadContentInfo(
             contentId,
-            function(error, contentResponse){
+            function (error, contentResponse) {
                 if (!error) {
 
                     if (versionId !== null) {
@@ -833,7 +833,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
 
         this.loadContentInfo(
             contentId,
-            function(error, contentResponse){
+            function (error, contentResponse) {
                 if (!error) {
 
                     var locations = contentResponse.document.Content.Locations;
@@ -869,7 +869,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
 
         this.loadContentInfo(
             contentId,
-            function(error, contentResponse){
+            function (error, contentResponse) {
                 if (!error) {
 
                     var locations = contentResponse.document.Content.Locations;
@@ -973,7 +973,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
 
         this.loadLocation(
             locationId,
-            function(error, locationResponse){
+            function (error, locationResponse) {
                 if (!error) {
 
                     var location = locationResponse.document.Location;
@@ -1086,7 +1086,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
 
         this._discoveryService.getInfoObject(
             "views",
-            function(error, views) {
+            function (error, views) {
                 if (!error) {
 
                     that._connectionManager.request(
@@ -1128,7 +1128,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
         this.loadContent(
             versionedContentId,
             {},
-            function(error, versionResponse){
+            function (error, versionResponse) {
                 if (!error) {
 
                     var version = versionResponse.document.Version;
@@ -1165,7 +1165,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
 
         this.loadCurrentVersion(
             contentId,
-            function(error, currentVersionResponse){
+            function (error, currentVersionResponse) {
                 if (!error) {
 
                     var currentVersion = currentVersionResponse.document.Version;
@@ -1227,7 +1227,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
         this.loadContent(
             versionedContentId,
             {},
-            function(error, versionResponse){
+            function (error, versionResponse) {
                 if (!error) {
 
                     var version = versionResponse.document.Version;
@@ -1282,7 +1282,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
 
         this._discoveryService.getInfoObject(
             "trash",
-            function(error, trash) {
+            function (error, trash) {
                 if (!error) {
 
                     that._connectionManager.request(
@@ -1372,7 +1372,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
 
         this._discoveryService.getInfoObject(
             "trash",
-            function(error, trash) {
+            function (error, trash) {
                 if (!error) {
 
                     that._connectionManager.request(
@@ -1586,7 +1586,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
      * @example
      *     contentService.loadObjectState(
      *          "/api/ezp/v2/content/objectstategroups/4/objectstates/3",
-     *          function(error, objectStateResponse){
+     *          function (error, objectStateResponse) {
      *              // possible error should be handled...
      *
      *              var objectStates = {};

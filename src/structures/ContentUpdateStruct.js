@@ -9,7 +9,7 @@ define(function () {
      * @constructor
      * @param languageCode {String} The language code (eng-GB, fre-FR, ...)
      */
-    var ContentUpdateStruct = function(languageCode){
+    var ContentUpdateStruct = function (languageCode) {
 
         var now = JSON.parse(JSON.stringify(new Date()));
 

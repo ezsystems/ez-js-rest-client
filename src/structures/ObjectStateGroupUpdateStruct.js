@@ -8,7 +8,7 @@ define(function () {
      * @class ObjectStateGroupUpdateStruct
      * @constructor
      */
-    var ObjectStateGroupUpdateStruct = function(){
+    var ObjectStateGroupUpdateStruct = function () {
 
         this.body = {};
         this.body.ObjectStateGroupUpdate = {};

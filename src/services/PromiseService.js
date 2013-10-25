@@ -9,17 +9,17 @@ define(["../../node_modules/q/q"], function (q) {
      * @constructor
      * @param originalService {object} the service which should be converted into promise-based version (e.g. ContentService)
      */
-    var PromiseService = function(originalService) {
+    var PromiseService = function (originalService) {
 
         var key;
 
         this._originalService = originalService;
 
-        this.generatePromiseFunction = function(originalFunction) {
+        this.generatePromiseFunction = function (originalFunction) {
 
             var that = this;
 
-            return function() {
+            return function () {
 
                 var toBeCalledArguments = Array.prototype.slice.call(arguments),
                     deferred = q.defer();
@@ -28,7 +28,7 @@ define(["../../node_modules/q/q"], function (q) {
                     throw new EvalError("Wrong numner of arguments provided");
                 }
 
-                toBeCalledArguments.push(function(error, result) {
+                toBeCalledArguments.push(function (error, result) {
 
                     if (error) {
                         deferred.reject(error);

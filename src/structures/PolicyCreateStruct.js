@@ -11,7 +11,7 @@ define(function () {
      * @param theFunction {String} name of the function for which the new policy should be active
      * @param limitations {Object} object describing limitations for new policy
      */
-    var PolicyCreateStruct = function(module, theFunction, limitations){
+    var PolicyCreateStruct = function (module, theFunction, limitations) {
 
         this.body = {};
         this.body.PolicyCreate = {};

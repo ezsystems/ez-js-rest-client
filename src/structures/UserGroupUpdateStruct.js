@@ -10,7 +10,7 @@ define(function () {
      * @param languageCode {String} The language code (eng-GB, fre-FR, ...)
      * @param fields {Array} fields array (see example in UserService.newUserGroupCreateStruct() doc)
      */
-    var UserGroupUpdateStruct = function(languageCode, fields){
+    var UserGroupUpdateStruct = function (languageCode, fields) {
 
         this.body = {};
         this.body.UserGroupUpdate = {};

@@ -9,7 +9,7 @@ define(function () {
      * @constructor
      * @param identifier {String} unique view identifier
      */
-    var ViewCreateStruct = function(identifier){
+    var ViewCreateStruct = function (identifier) {
 
         this.body = {};
         this.body.ViewInput = {};

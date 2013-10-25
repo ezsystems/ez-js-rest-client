@@ -11,7 +11,7 @@ define(function () {
      * @param name {String} section name
 
      */
-    var SectionInputStruct = function(identifier, name){
+    var SectionInputStruct = function (identifier, name) {
 
         this.body = {};
         this.body.SectionInput = {};

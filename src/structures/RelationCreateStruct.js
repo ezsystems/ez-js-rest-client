@@ -9,7 +9,7 @@ define(function () {
      * @constructor
      * @param destination {String} reference to the resource we want to make related
      */
-    var RelationCreateStruct = function(destination){
+    var RelationCreateStruct = function (destination) {
 
         this.body = {};
         this.body.RelationCreate = {};

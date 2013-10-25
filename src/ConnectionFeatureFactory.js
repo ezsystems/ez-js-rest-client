@@ -9,11 +9,11 @@ define(function () {
      * @constructor
      * @param connectionList {array} Array of connections, should be filled-in in preferred order
      */
-    var ConnectionFeatureFactory = function(connectionList) {
+    var ConnectionFeatureFactory = function (connectionList) {
 
         this.connectionList = connectionList;
 
-        this.defaultFactory = function(Connection) {
+        this.defaultFactory = function (Connection) {
             return new Connection();
         };
 
@@ -25,7 +25,7 @@ define(function () {
      * @method createConnection
      * @return  {Connection}
      */
-    ConnectionFeatureFactory.prototype.createConnection = function(){
+    ConnectionFeatureFactory.prototype.createConnection = function () {
         var connection = null,
             index = 0;
 
@@ -34,7 +34,7 @@ define(function () {
 
             if (this.connectionList[index].connection.isCompatible()) {
 
-                if (this.connectionList[index].factory){
+                if (this.connectionList[index].factory) {
                     connection = this.connectionList[index].factory(this.connectionList[index].connection);
                 } else {
                     connection = this.defaultFactory(this.connectionList[index].connection);

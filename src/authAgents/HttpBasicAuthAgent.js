@@ -32,7 +32,7 @@ define(function () {
      * @param done {Function} Callback function, which is to be called by the implementation
      * to signal the authentication has been completed.
      */
-    HttpBasicAuthAgent.prototype.ensureAuthentication = function(done) {
+    HttpBasicAuthAgent.prototype.ensureAuthentication = function (done) {
         // ... empty for basic auth?
         done(false, true);
     };
@@ -45,7 +45,7 @@ define(function () {
      * @param request {Request}
      * @param done {function}
      */
-    HttpBasicAuthAgent.prototype.authenticateRequest = function(request, done) {
+    HttpBasicAuthAgent.prototype.authenticateRequest = function (request, done) {
 
         request.httpBasicAuth = true;
         request.login = this._login;
@@ -62,7 +62,7 @@ define(function () {
      * @method logOut
      * @param done {function}
      */
-    HttpBasicAuthAgent.prototype.logOut = function(done) {
+    HttpBasicAuthAgent.prototype.logOut = function (done) {
         done(false, true);
     };
 

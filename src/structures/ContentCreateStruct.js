@@ -11,7 +11,7 @@ define(function () {
      * @param locationCreateStruct {LocationCreateStruct} create structure for a Location object, where the new Content object will be situated
      * @param languageCode {String} The language code (e.g. "eng-GB")
      */
-    var ContentCreateStruct = function(contentTypeId, locationCreateStruct, languageCode){
+    var ContentCreateStruct = function (contentTypeId, locationCreateStruct, languageCode) {
 
         var now = JSON.parse(JSON.stringify(new Date()));
 

@@ -11,7 +11,7 @@ define(function () {
      * @param destinationUrl {String} existing resource where wildcard should point
      * @param forward {boolean} weather or not the wildcard should redirect to the resource
      */
-    var UrlWildcardCreateStruct = function(sourceUrl, destinationUrl, forward){
+    var UrlWildcardCreateStruct = function (sourceUrl, destinationUrl, forward) {
 
         this.body = {};
         this.body.UrlWildcardCreate = {};

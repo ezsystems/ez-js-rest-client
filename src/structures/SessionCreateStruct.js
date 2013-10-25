@@ -10,7 +10,7 @@ define(function () {
      * @param login {String} login for a user, which wants to start a session
      * @param password {String} password for a user, which wants to start a session
      */
-    var SessionCreateStruct = function(login, password){
+    var SessionCreateStruct = function (login, password) {
 
         this.body = {};
         this.body.SessionInput = {};

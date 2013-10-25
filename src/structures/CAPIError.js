@@ -9,7 +9,7 @@ define(function () {
      * @constructor
      * @param valuesContainer {Object} object literal containing any error properties
      */
-    var CAPIError = function(valuesContainer){
+    var CAPIError = function (valuesContainer) {
 
         for (var property in valuesContainer) {
             if (valuesContainer.hasOwnProperty(property)) {

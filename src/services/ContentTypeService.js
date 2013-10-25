@@ -2,7 +2,7 @@
 define(["structures/ContentTypeGroupInputStruct", "structures/ContentTypeCreateStruct", "structures/ContentTypeUpdateStruct",
         "structures/FieldDefinitionCreateStruct", "structures/FieldDefinitionUpdateStruct"],
     function (ContentTypeGroupInputStruct, ContentTypeCreateStruct, ContentTypeUpdateStruct,
-              FieldDefinitionCreateStruct, FieldDefinitionUpdateStruct){
+              FieldDefinitionCreateStruct, FieldDefinitionUpdateStruct) {
 
     "use strict";
 
@@ -41,7 +41,7 @@ define(["structures/ContentTypeGroupInputStruct", "structures/ContentTypeCreateS
      * @example
      *     var contentTypeService = jsCAPI.getContentTypeService();
      */
-    var ContentTypeService = function(connectionManager, discoveryService) {
+    var ContentTypeService = function (connectionManager, discoveryService) {
 
         this._connectionManager = connectionManager;
         this._discoveryService = discoveryService;
@@ -250,7 +250,7 @@ define(["structures/ContentTypeGroupInputStruct", "structures/ContentTypeCreateS
 
         this.loadContentTypeGroup(
             contentTypeGroupId,
-            function(error, contentTypeGroupResponse){
+            function (error, contentTypeGroupResponse) {
                 if (!error) {
 
                     var contentTypeGroup = contentTypeGroupResponse.document.ContentTypeGroup;
@@ -335,7 +335,7 @@ define(["structures/ContentTypeGroupInputStruct", "structures/ContentTypeCreateS
 
         this.loadContentTypeGroup(
             contentTypeGroupId,
-            function(error, contentTypeGroupResponse){
+            function (error, contentTypeGroupResponse) {
                 if (!error) {
 
                     var contentTypeGroup = contentTypeGroupResponse.document.ContentTypeGroup,
@@ -406,7 +406,7 @@ define(["structures/ContentTypeGroupInputStruct", "structures/ContentTypeCreateS
 
         this._discoveryService.getInfoObject(
             "contentTypes",
-            function(error, contentTypes) {
+            function (error, contentTypes) {
                 if (!error) {
 
                     that._connectionManager.request(
@@ -619,7 +619,7 @@ define(["structures/ContentTypeGroupInputStruct", "structures/ContentTypeCreateS
 
         this.loadContentTypeDraft(
             contentTypeId,
-            function(error, contentTypeDraftResponse){
+            function (error, contentTypeDraftResponse) {
                 if (!error) {
 
                     var contentTypeDraftFieldDefinitions = contentTypeDraftResponse.document.ContentType.FieldDefinitions;

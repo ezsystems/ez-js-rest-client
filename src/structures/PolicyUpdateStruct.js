@@ -9,7 +9,7 @@ define(function () {
      * @constructor
      * @param limitations {Object} object describing limitations change for the policy
      */
-    var PolicyUpdateStruct = function(limitations){
+    var PolicyUpdateStruct = function (limitations) {
 
         this.body = {};
         this.body.PolicyUpdate = {};

@@ -22,7 +22,7 @@ define(function () {
      *          ]
      *      );
      */
-    var ObjectStateGroupCreateStruct = function(identifier, languageCode, names){
+    var ObjectStateGroupCreateStruct = function (identifier, languageCode, names) {
 
         this.body = {};
         this.body.ObjectStateGroupCreate = {};

@@ -8,7 +8,7 @@ define(function () {
      * @class LocationUpdateStruct
      * @constructor
      */
-    var LocationUpdateStruct = function(){
+    var LocationUpdateStruct = function () {
 
         this.body = {};
         this.body.LocationUpdate = {};

@@ -9,7 +9,7 @@ define(function () {
      * @constructor
      * @param identifier {String} unique Role identifier
      */
-    var RoleInputStruct = function(identifier){
+    var RoleInputStruct = function (identifier) {
 
         this.body = {};
         this.body.RoleInput = {};

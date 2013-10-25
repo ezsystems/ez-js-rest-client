@@ -12,7 +12,7 @@ define(function () {
      * @param fieldGroup {String} identifier of existing field group (e.g. "content", "meta")
      * @param names {Array} Multi language value (see example in ContentTypeService.newFieldDefintionCreateStruct() doc)
      */
-    var FieldDefinitionCreateStruct = function(identifier, fieldType, fieldGroup, names){
+    var FieldDefinitionCreateStruct = function (identifier, fieldType, fieldGroup, names) {
 
         this.body = {};
         this.body.FieldDefinitionCreate = {};

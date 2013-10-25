@@ -13,7 +13,7 @@ define(function () {
      * @param password {String} password for a new user
      * @param fields {Array} fields array (see example for "newUserGroupCreateStruct")
      */
-    var UserCreateStruct = function(languageCode, login, email, password, fields){
+    var UserCreateStruct = function (languageCode, login, email, password, fields) {
 
         this.body = {};
         this.body.UserCreate = {};
