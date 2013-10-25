@@ -437,8 +437,7 @@ define('structures/CAPIError',[],function () {
      * @constructor
      * @param valuesContainer {Object} object literal containing any error properties
      */
-    var CAPIError = function(valuesContainer){
-
+    var CAPIError = function (valuesContainer) {
         for (var property in valuesContainer) {
             if (valuesContainer.hasOwnProperty(property)) {
                 this[property] = valuesContainer[property];
@@ -447,7 +446,6 @@ define('structures/CAPIError',[],function () {
 
         return this;
     };
-
 
     return CAPIError;
 
@@ -467,7 +465,6 @@ define('authAgents/SessionAuthAgent',["structures/CAPIError"], function (CAPIErr
      * @param credentials.password {String} user password
      */
     var SessionAuthAgent = function (credentials) {
-
         // for now is initiated inside CAPI constructor
         this.CAPI = null;
 
@@ -479,7 +476,6 @@ define('authAgents/SessionAuthAgent',["structures/CAPIError"], function (CAPIErr
         this.sessionName = sessionStorage.getItem('ezpRestClient.sessionName');
         this.sessionId = sessionStorage.getItem('ezpRestClient.sessionId');
         this.csrfToken = sessionStorage.getItem('ezpRestClient.csrfToken');
-
     };
 
     /**
@@ -491,9 +487,8 @@ define('authAgents/SessionAuthAgent',["structures/CAPIError"], function (CAPIErr
      * @method ensureAuthentication
      * @param done {Function} Callback function, which is to be called by the implementation to signal the authentication has been completed.
      */
-    SessionAuthAgent.prototype.ensureAuthentication = function(done) {
+    SessionAuthAgent.prototype.ensureAuthentication = function (done) {
         if (this.sessionId === null) {
-
             var that = this,
                 userService = this.CAPI.getUserService(),
                 sessionCreateStruct = userService.newSessionCreateStruct(
@@ -505,9 +500,8 @@ define('authAgents/SessionAuthAgent',["structures/CAPIError"], function (CAPIErr
             userService.createSession(
                 "/api/ezp/v2/user/sessions",
                 sessionCreateStruct,
-                function(error, sessionResponse){
-                    if (!error){
-
+                function (error, sessionResponse) {
+                    if (!error) {
                         var session = JSON.parse(sessionResponse.body).Session;
 
                         that.sessionName = session.name;
@@ -523,7 +517,7 @@ define('authAgents/SessionAuthAgent',["structures/CAPIError"], function (CAPIErr
                     } else {
                         done(
                             new CAPIError({
-                                errorText : "Failed to create new session."
+                                errorText: "Failed to create new session."
                             }),
                             false
                         );
@@ -544,14 +538,12 @@ define('authAgents/SessionAuthAgent',["structures/CAPIError"], function (CAPIErr
      * @param request {Request}
      * @param done {function}
      */
-    SessionAuthAgent.prototype.authenticateRequest = function(request, done) {
-
+    SessionAuthAgent.prototype.authenticateRequest = function (request, done) {
         if (request.method !== "GET" && request.method !== "HEAD" && request.method !== "OPTIONS" && request.method !== "TRACE" ) {
             request.headers["X-CSRF-Token"] = this.csrfToken;
         }
 
         done(false, request);
-
     };
 
     /**
@@ -561,16 +553,14 @@ define('authAgents/SessionAuthAgent',["structures/CAPIError"], function (CAPIErr
      * @method logOut
      * @param done {function}
      */
-    SessionAuthAgent.prototype.logOut = function(done) {
-
+    SessionAuthAgent.prototype.logOut = function (done) {
         var userService = this.CAPI.getUserService(),
             that = this;
 
         userService.deleteSession(
             this.sessionId,
-            function(error, response){
-                if (!error){
-
+            function (error, response) {
+                if (!error) {
                     that.sessionName = null;
                     that.sessionId = null;
                     that.csrfToken = null;
@@ -606,13 +596,11 @@ define('authAgents/HttpBasicAuthAgent',[],function () {
      * @param credentials.password {String} user password
      */
     var HttpBasicAuthAgent = function (credentials) {
-
         this.CAPI = null;
 
         // Private (should be!) area
         this._login = credentials.login;
         this._password = credentials.password;
-
     };
 
     /**
@@ -625,7 +613,7 @@ define('authAgents/HttpBasicAuthAgent',[],function () {
      * @param done {Function} Callback function, which is to be called by the implementation
      * to signal the authentication has been completed.
      */
-    HttpBasicAuthAgent.prototype.ensureAuthentication = function(done) {
+    HttpBasicAuthAgent.prototype.ensureAuthentication = function (done) {
         // ... empty for basic auth?
         done(false, true);
     };
@@ -638,14 +626,12 @@ define('authAgents/HttpBasicAuthAgent',[],function () {
      * @param request {Request}
      * @param done {function}
      */
-    HttpBasicAuthAgent.prototype.authenticateRequest = function(request, done) {
-
+    HttpBasicAuthAgent.prototype.authenticateRequest = function (request, done) {
         request.httpBasicAuth = true;
         request.login = this._login;
         request.password = this._password;
 
         done(false, request);
-
     };
 
     /**
@@ -655,7 +641,7 @@ define('authAgents/HttpBasicAuthAgent',[],function () {
      * @method logOut
      * @param done {function}
      */
-    HttpBasicAuthAgent.prototype.logOut = function(done) {
+    HttpBasicAuthAgent.prototype.logOut = function (done) {
         done(false, true);
     };
 
@@ -671,8 +657,7 @@ define('structures/Response',[],function () {
      * @constructor
      * @param valuesContainer
      */
-    var Response = function(valuesContainer){
-
+    var Response = function (valuesContainer) {
         /**
          * Body of the response (most times JSON string recieved from REST service via a Connection object)
          *
@@ -704,7 +689,6 @@ define('structures/Response',[],function () {
         return this;
     };
 
-
     return Response;
 
 });
@@ -719,8 +703,7 @@ define('structures/Request',[],function () {
      * @constructor
      * @param valuesContainer {Object} object literal containing any request properties
      */
-    var Request = function(valuesContainer){
-
+    var Request = function (valuesContainer) {
         for (var property in valuesContainer) {
             if (valuesContainer.hasOwnProperty(property)) {
                 this[property] = valuesContainer[property];
@@ -729,7 +712,6 @@ define('structures/Request',[],function () {
 
         return this;
     };
-
 
     return Request;
 
@@ -748,8 +730,7 @@ define('ConnectionManager',["structures/Response", "structures/Request", "struct
      * @param authenticationAgent {object} Instance of one of the AuthAgents (e.g. SessionAuthAgent, HttpBasicAuthAgent)
      * @param connectionFactory {ConnectionFeatureFactory}  the factory which is choosing compatible connection from connections list
      */
-    var ConnectionManager = function(endPointUrl, authenticationAgent, connectionFactory) {
-
+    var ConnectionManager = function (endPointUrl, authenticationAgent, connectionFactory) {
         this._endPointUrl = endPointUrl;
         this._authenticationAgent = authenticationAgent;
         this._connectionFactory = connectionFactory;
@@ -758,7 +739,6 @@ define('ConnectionManager',["structures/Response", "structures/Request", "struct
         this._authInProgress = false;
 
         this.logRequests = false;
-
     };
 
     /**
@@ -771,22 +751,21 @@ define('ConnectionManager',["structures/Response", "structures/Request", "struct
      * @param headers {object}
      * @param callback {function} function, which will be executed on request success
      */
-    ConnectionManager.prototype.request = function(method, url, body, headers, callback) {
-
+    ConnectionManager.prototype.request = function (method, url, body, headers, callback) {
         // default values for all the parameters
         method = (typeof method === "undefined") ? "GET" : method;
         url = (typeof url === "undefined") ? "/" : url;
         body = (typeof body === "undefined") ? "" : body;
         headers = (typeof headers === "undefined") ? {} : headers;
-        callback = (typeof callback === "undefined") ? function(){} : callback;
+        callback = (typeof callback === "undefined") ? function () {} : callback;
 
         var that = this,
             nextRequest,
             request = new Request({
-                method : method,
-                url : this._endPointUrl + url,
-                body : body,
-                headers : headers
+                method: method,
+                url: this._endPointUrl + url,
+                body: body,
+                headers: headers
             });
 
         // Requests suspending workflow
@@ -795,27 +774,23 @@ define('ConnectionManager',["structures/Response", "structures/Request", "struct
 
         // if our request is the first one, or authorization is not in progress, go on
         if (!this._authInProgress || (this._requestsQueue.length === 1)) {
-
             // queue all other requests, until this one is authenticated
             this._authInProgress = true;
 
             // check if we are already authenticated, make it happen if not
             this._authenticationAgent.ensureAuthentication(
-                function(error, success){
+                function (error, success) {
                     if (!error) {
-
                         that._authInProgress = false;
 
                         // emptying requests Queue
                         /*jshint boss:true */
                         /*jshint -W083 */
                         while (nextRequest = that._requestsQueue.shift()) {
-
                             that._authenticationAgent.authenticateRequest(
                                 nextRequest,
-                                function(error, authenticatedRequest) {
+                                function (error, authenticatedRequest) {
                                     if (!error) {
-
                                         if (that.logRequests) {
                                             console.dir(request);
                                         }
@@ -824,11 +799,11 @@ define('ConnectionManager',["structures/Response", "structures/Request", "struct
                                     } else {
                                         callback(
                                             new CAPIError({
-                                                errorText : "An error occured during request authentication!"
+                                                errorText: "An error occured during request authentication!"
                                             }),
                                             new Response({
-                                                status : "error",
-                                                body : ""
+                                                status: "error",
+                                                body: ""
                                             })
                                         );
                                     }
@@ -839,16 +814,15 @@ define('ConnectionManager',["structures/Response", "structures/Request", "struct
                         /*jshint boss:false */
 
                     } else {
-
                         that._authInProgress = false;
 
                         callback(
                             new CAPIError({
-                                errorText : "An error occured during ensureAuthentication call!"
+                                errorText: "An error occured during ensureAuthentication call!"
                             }),
                             new Response({
-                                status : "error",
-                                body : ""
+                                status: "error",
+                                body: ""
                             })
                         );
                     }
@@ -856,7 +830,6 @@ define('ConnectionManager',["structures/Response", "structures/Request", "struct
             );
         }
     };
-
 
     /**
      * Not authorized request function
@@ -869,20 +842,19 @@ define('ConnectionManager',["structures/Response", "structures/Request", "struct
      * @param headers {object}
      * @param callback {function} function, which will be executed on request success
      */
-    ConnectionManager.prototype.notAuthorizedRequest = function(method, url, body, headers, callback) {
-
+    ConnectionManager.prototype.notAuthorizedRequest = function (method, url, body, headers, callback) {
         // default values for all the parameters
         method = (typeof method === "undefined") ? "GET" : method;
         url = (typeof url === "undefined") ? "/" : url;
         body = (typeof body === "undefined") ? "" : body;
         headers = (typeof headers === "undefined") ? {} : headers;
-        callback = (typeof callback === "undefined") ? function(){} : callback;
+        callback = (typeof callback === "undefined") ? function () {} : callback;
 
         var request = new Request({
-            method : method,
-            url : this._endPointUrl + url,
-            body : body,
-            headers : headers
+            method: method,
+            url: this._endPointUrl + url,
+            body: body,
+            headers: headers
         });
 
         if (this.logRequests) {
@@ -891,10 +863,7 @@ define('ConnectionManager',["structures/Response", "structures/Request", "struct
 
         // Main goal
         this._connectionFactory.createConnection().execute(request, callback);
-
     };
-
-
 
     /**
      * Delete - shortcut which handles simple deletion requests in most cases
@@ -903,11 +872,10 @@ define('ConnectionManager',["structures/Response", "structures/Request", "struct
      * @param url
      * @param callback
      */
-    ConnectionManager.prototype.delete = function(url, callback) {
-
+    ConnectionManager.prototype.delete = function (url, callback) {
         // default values for all the parameters
         url = (typeof url === "undefined") ? "/" : url;
-        callback = (typeof callback === "undefined") ? function(){} : callback;
+        callback = (typeof callback === "undefined") ? function () {} : callback;
 
         this.request(
             "DELETE",
@@ -916,7 +884,6 @@ define('ConnectionManager',["structures/Response", "structures/Request", "struct
             {},
             callback
         );
-
     };
 
     /**
@@ -926,13 +893,9 @@ define('ConnectionManager',["structures/Response", "structures/Request", "struct
      * @method logOut
      * @param callback {function}
      */
-    ConnectionManager.prototype.logOut = function(callback) {
-
+    ConnectionManager.prototype.logOut = function (callback) {
         this._authenticationAgent.logOut(callback);
-
     };
-
-
 
     return ConnectionManager;
 
@@ -949,14 +912,12 @@ define('ConnectionFeatureFactory',[],function () {
      * @constructor
      * @param connectionList {array} Array of connections, should be filled-in in preferred order
      */
-    var ConnectionFeatureFactory = function(connectionList) {
-
+    var ConnectionFeatureFactory = function (connectionList) {
         this.connectionList = connectionList;
 
-        this.defaultFactory = function(Connection) {
+        this.defaultFactory = function (Connection) {
             return new Connection();
         };
-
     };
 
     /**
@@ -965,28 +926,24 @@ define('ConnectionFeatureFactory',[],function () {
      * @method createConnection
      * @return  {Connection}
      */
-    ConnectionFeatureFactory.prototype.createConnection = function(){
+    ConnectionFeatureFactory.prototype.createConnection = function () {
         var connection = null,
             index = 0;
 
         // Choosing and creating first compatible connection from connection list
         for (index = 0; index < this.connectionList.length; ++index) {
-
             if (this.connectionList[index].connection.isCompatible()) {
-
-                if (this.connectionList[index].factory){
+                if (this.connectionList[index].factory) {
                     connection = this.connectionList[index].factory(this.connectionList[index].connection);
                 } else {
                     connection = this.defaultFactory(this.connectionList[index].connection);
                 }
                 break;
-
             }
         }
 
         return connection;
     };
-
 
     return ConnectionFeatureFactory;
 
@@ -1003,7 +960,6 @@ define('connections/XmlHttpRequestConnection',["structures/Response", "structure
      * @constructor
      */
     var XmlHttpRequestConnection = function () {
-
         this._xhr = new XMLHttpRequest();
 
         /**
@@ -1013,24 +969,23 @@ define('connections/XmlHttpRequestConnection',["structures/Response", "structure
          * @param request {Request} structure containing all needed params and data
          * @param callback {function} function, which will be executed on request success
          */
-        this.execute = function(request, callback) {
-
+        this.execute = function (request, callback) {
             var XHR = this._xhr,
                 headerType;
 
             // Create the state change handler:
-            XHR.onreadystatechange = function() {
+            XHR.onreadystatechange = function () {
                 if (XHR.readyState != 4) {return;} // Not ready yet
                 if (XHR.status >= 400) {
                     callback(
                         new CAPIError({
-                            errorText : "Connection error : " + XHR.status,
-                            errorCode : XHR.status
+                            errorText: "Connection error: " + XHR.status,
+                            errorCode: XHR.status
                         }),
                         new Response({
-                            status : XHR.status,
-                            headers : XHR.getAllResponseHeaders(),
-                            body : XHR.responseText
+                            status: XHR.status,
+                            headers: XHR.getAllResponseHeaders(),
+                            body: XHR.responseText
                         })
                     );
                     return;
@@ -1039,9 +994,9 @@ define('connections/XmlHttpRequestConnection',["structures/Response", "structure
                 callback(
                     false,
                     new Response({
-                        status : XHR.status,
-                        headers : XHR.getAllResponseHeaders(),
-                        body : XHR.responseText
+                        status: XHR.status,
+                        headers: XHR.getAllResponseHeaders(),
+                        body: XHR.responseText
                     })
                 );
             };
@@ -1051,7 +1006,6 @@ define('connections/XmlHttpRequestConnection',["structures/Response", "structure
             } else {
                 XHR.open(request.method, request.url, true);
             }
-
 
             for (headerType in request.headers) {
                 if (request.headers.hasOwnProperty(headerType)) {
@@ -1072,12 +1026,11 @@ define('connections/XmlHttpRequestConnection',["structures/Response", "structure
      * @static
      * @returns {boolean} true, if connection is compatible with current environment, false otherwise
      */
-    XmlHttpRequestConnection.isCompatible = function(){
+    XmlHttpRequestConnection.isCompatible = function () {
         return !!window.XMLHttpRequest;
     };
 
     return XmlHttpRequestConnection;
-
 
 });
 /* global define */
@@ -1093,7 +1046,6 @@ define('connections/MicrosoftXmlHttpRequestConnection',["structures/Response", "
      * @constructor
      */
     var MicrosoftXmlHttpRequestConnection = function () {
-
         this._xhr = new ActiveXObject("Microsoft.XMLHTTP");
 
         /**
@@ -1103,24 +1055,23 @@ define('connections/MicrosoftXmlHttpRequestConnection',["structures/Response", "
          * @param request {Request} structure containing all needed params and data
          * @param callback {function} function, which will be executed on request success
          */
-        this.execute = function(request, callback) {
-
+        this.execute = function (request, callback) {
             var XHR = this._xhr,
                 headerType;
 
             // Create the state change handler:
-            XHR.onreadystatechange = function() {
+            XHR.onreadystatechange = function () {
                 if (XHR.readyState != 4) {return;} // Not ready yet
                 if (XHR.status >= 400) {
                     callback(
                         new CAPIError({
-                            errorText : "Connection error : " + XHR.status,
-                            errorCode : XHR.status
+                            errorText: "Connection error: " + XHR.status,
+                            errorCode: XHR.status
                         }),
                         new Response({
-                            status : XHR.status,
-                            headers : XHR.getAllResponseHeaders(),
-                            body : XHR.responseText
+                            status: XHR.status,
+                            headers: XHR.getAllResponseHeaders(),
+                            body: XHR.responseText
                         })
                     );
                     return;
@@ -1129,9 +1080,9 @@ define('connections/MicrosoftXmlHttpRequestConnection',["structures/Response", "
                 callback(
                     false,
                     new Response({
-                        status : XHR.status,
-                        headers : XHR.getAllResponseHeaders(),
-                        body : XHR.responseText
+                        status: XHR.status,
+                        headers: XHR.getAllResponseHeaders(),
+                        body: XHR.responseText
                     })
                 );
             };
@@ -1141,7 +1092,6 @@ define('connections/MicrosoftXmlHttpRequestConnection',["structures/Response", "
             } else {
                 XHR.open(request.method, request.url, true);
             }
-
 
             for (headerType in request.headers) {
                 if (request.headers.hasOwnProperty(headerType)) {
@@ -1162,7 +1112,7 @@ define('connections/MicrosoftXmlHttpRequestConnection',["structures/Response", "
      * @static
      * @returns {boolean} true, if connection is compatible with current environment, false otherwise
      */
-    MicrosoftXmlHttpRequestConnection.isCompatible = function(){
+    MicrosoftXmlHttpRequestConnection.isCompatible = function () {
         return !!window.ActiveXObject;
     };
 
@@ -1182,8 +1132,7 @@ define('services/DiscoveryService',["structures/CAPIError"], function (CAPIError
      * @param rootPath {String} path to Root resource
      * @param connectionManager {ConnectionManager}
      */
-    var DiscoveryService = function(rootPath, connectionManager){
-
+    var DiscoveryService = function (rootPath, connectionManager) {
         this.connectionManager = connectionManager;
         this.rootPath = rootPath;
 
@@ -1198,25 +1147,23 @@ define('services/DiscoveryService',["structures/CAPIError"], function (CAPIError
          * @param callback.error {mixed} false or CAPIError object if an error occured
          * @param callback.response {boolean} true if the root was discovered successfully, false otherwise.
          */
-        this.discoverRoot = function(rootPath, callback) {
-
+        this.discoverRoot = function (rootPath, callback) {
             if (!this.cacheObject.Root) {
                 var that = this;
                 this.connectionManager.request(
                     "GET",
                     rootPath,
                     "",
-                    { "Accept" : "application/vnd.ez.api.Root+json" },
-                    function(error, rootJSON) {
+                    {"Accept": "application/vnd.ez.api.Root+json"},
+                    function (error, rootJSON) {
                         if (!error) {
-
                             that.copyToCache(rootJSON.document);
                             callback(false, true);
 
                         } else {
                             callback(
                                 new CAPIError( {
-                                    errorText : "Discover service failed to retrieve root object."
+                                    errorText: "Discover service failed to retrieve root object."
                                 }),
                                 false
                             );
@@ -1234,7 +1181,7 @@ define('services/DiscoveryService',["structures/CAPIError"], function (CAPIError
          * @method addToCache
          * @param object {Object}
          */
-        this.copyToCache = function(object) {
+        this.copyToCache = function (object) {
             for (var property in object) {
                 if (object.hasOwnProperty(property)) {
                     this.cacheObject[property] = object[property];
@@ -1251,13 +1198,13 @@ define('services/DiscoveryService',["structures/CAPIError"], function (CAPIError
          * @param callback.error {mixed} false or CAPIError object if an error occured
          * @param callback.response {mixed} the target object if it was found, false otherwise.
          */
-        this.getObjectFromCache = function(name, callback) {
+        this.getObjectFromCache = function (name, callback) {
             var object = null,
                 that = this;
             // Discovering root, if not yet discovered
             // on discovery running the request for same 'name' again
             if (!this.cacheObject.Root) {
-                this.discoverRoot(this.rootPath, function() {
+                this.discoverRoot(this.rootPath, function () {
                     that.getObjectFromCache(name, callback);
                 });
                 return;
@@ -1280,7 +1227,7 @@ define('services/DiscoveryService',["structures/CAPIError"], function (CAPIError
             } else {
                 callback(
                     new CAPIError({
-                        errorText : "Discover service failed to find cached object with name '" + name + "'"
+                        errorText: "Discover service failed to find cached object with name '" + name + "'"
                     }),
                     false
                 );
@@ -1297,10 +1244,10 @@ define('services/DiscoveryService',["structures/CAPIError"], function (CAPIError
      * @param callback.error {mixed} false or CAPIError object if an error occured
      * @param callback.response {mixed} the url of the target object if it was found, false otherwise.
      */
-    DiscoveryService.prototype.getUrl = function(name, callback) {
+    DiscoveryService.prototype.getUrl = function (name, callback) {
         this.getObjectFromCache(
             name,
-            function(error, cachedObject){
+            function (error, cachedObject) {
                 if (!error) {
                     if (cachedObject) {
                         callback(
@@ -1310,7 +1257,7 @@ define('services/DiscoveryService',["structures/CAPIError"], function (CAPIError
                     } else {
                         callback(
                             new CAPIError({
-                                errorText : "Broken cached object returned when searching for '" + name + "'"
+                                errorText: "Broken cached object returned when searching for '" + name + "'"
                             }),
                             false
                         );
@@ -1334,10 +1281,10 @@ define('services/DiscoveryService',["structures/CAPIError"], function (CAPIError
      * @param callback.error {mixed} false or CAPIError object if an error occured
      * @param callback.response {mixed} the media-type of the target object if it was found, false otherwise.
      */
-    DiscoveryService.prototype.getMediaType = function(name, callback) {
+    DiscoveryService.prototype.getMediaType = function (name, callback) {
         this.getObjectFromCache(
             name,
-            function(error, cachedObject){
+            function (error, cachedObject) {
                 if (!error) {
                     if (cachedObject) {
                         callback(
@@ -1347,7 +1294,7 @@ define('services/DiscoveryService',["structures/CAPIError"], function (CAPIError
                     } else {
                         callback(
                             new CAPIError({
-                                errorText : "Broken cached object returned when searching for '" + name + "'"
+                                errorText: "Broken cached object returned when searching for '" + name + "'"
                             }),
                             false
                         );
@@ -1371,10 +1318,10 @@ define('services/DiscoveryService',["structures/CAPIError"], function (CAPIError
      * @param callback.error {mixed} false or CAPIError object if an error occured
      * @param callback.response {mixed} the target object if it was found, false otherwise.
      */
-    DiscoveryService.prototype.getInfoObject = function(name, callback) {
+    DiscoveryService.prototype.getInfoObject = function (name, callback) {
         this.getObjectFromCache(
             name,
-            function(error, cachedObject){
+            function (error, cachedObject) {
                 if (!error) {
                     if (cachedObject) {
                         callback(
@@ -1384,7 +1331,7 @@ define('services/DiscoveryService',["structures/CAPIError"], function (CAPIError
                     } else {
                         callback(
                             new CAPIError({
-                                errorText : "Broken cached object returned when searching for '" + name + "'"
+                                errorText: "Broken cached object returned when searching for '" + name + "'"
                             }),
                             false
                         );
@@ -1415,15 +1362,14 @@ define('structures/ContentCreateStruct',[],function () {
      * @param locationCreateStruct {LocationCreateStruct} create structure for a Location object, where the new Content object will be situated
      * @param languageCode {String} The language code (e.g. "eng-GB")
      */
-    var ContentCreateStruct = function(contentTypeId, locationCreateStruct, languageCode){
-
+    var ContentCreateStruct = function (contentTypeId, locationCreateStruct, languageCode) {
         var now = JSON.parse(JSON.stringify(new Date()));
 
         this.body = {};
         this.body.ContentCreate = {};
 
         this.body.ContentCreate.ContentType = {
-                "_href" : contentTypeId
+                "_href": contentTypeId
             };
 
         this.body.ContentCreate.mainLanguageCode = languageCode;
@@ -1437,8 +1383,8 @@ define('structures/ContentCreateStruct',[],function () {
         this.body.ContentCreate.fields.field = [];
 
         this.headers = {
-            "Accept" : "application/vnd.ez.api.Content+json",
-            "Content-Type" : "application/vnd.ez.api.ContentCreate+json"
+            "Accept": "application/vnd.ez.api.Content+json",
+            "Content-Type": "application/vnd.ez.api.ContentCreate+json"
         };
 
         return this;
@@ -1459,8 +1405,7 @@ define('structures/ContentUpdateStruct',[],function () {
      * @constructor
      * @param languageCode {String} The language code (eng-GB, fre-FR, ...)
      */
-    var ContentUpdateStruct = function(languageCode){
-
+    var ContentUpdateStruct = function (languageCode) {
         var now = JSON.parse(JSON.stringify(new Date()));
 
         this.body = {};
@@ -1473,12 +1418,11 @@ define('structures/ContentUpdateStruct',[],function () {
         };
 
         this.headers = {
-            "Accept" : "application/vnd.ez.api.Version+json",
-            "Content-Type" : "application/vnd.ez.api.VersionUpdate+json"
+            "Accept": "application/vnd.ez.api.Version+json",
+            "Content-Type": "application/vnd.ez.api.VersionUpdate+json"
         };
 
         return this;
-
     };
 
     return ContentUpdateStruct;
@@ -1498,8 +1442,7 @@ define('structures/SectionInputStruct',[],function () {
      * @param name {String} section name
 
      */
-    var SectionInputStruct = function(identifier, name){
-
+    var SectionInputStruct = function (identifier, name) {
         this.body = {};
         this.body.SectionInput = {};
 
@@ -1527,8 +1470,7 @@ define('structures/LocationCreateStruct',[],function () {
      * @constructor
      * @param parentLocationId {String} reference to the parent location of the new Location.
      */
-    var LocationCreateStruct = function(parentLocationId){
-
+    var LocationCreateStruct = function (parentLocationId) {
         this.body = {};
         this.body.LocationCreate = {};
 
@@ -1540,12 +1482,11 @@ define('structures/LocationCreateStruct',[],function () {
         this.body.LocationCreate.sortOrder = "ASC";
 
         this.headers = {
-            "Accept" : "application/vnd.ez.api.Location+json",
-            "Content-Type" : "application/vnd.ez.api.LocationCreate+json"
+            "Accept": "application/vnd.ez.api.Location+json",
+            "Content-Type": "application/vnd.ez.api.LocationCreate+json"
         };
 
         return this;
-
     };
 
     return LocationCreateStruct;
@@ -1562,8 +1503,7 @@ define('structures/LocationUpdateStruct',[],function () {
      * @class LocationUpdateStruct
      * @constructor
      */
-    var LocationUpdateStruct = function(){
-
+    var LocationUpdateStruct = function () {
         this.body = {};
         this.body.LocationUpdate = {};
 
@@ -1571,12 +1511,11 @@ define('structures/LocationUpdateStruct',[],function () {
         this.body.LocationUpdate.sortOrder = "ASC";
 
         this.headers = {
-            "Accept" : "application/vnd.ez.api.Location+json",
-            "Content-Type" : "application/vnd.ez.api.LocationUpdate+json"
+            "Accept": "application/vnd.ez.api.Location+json",
+            "Content-Type": "application/vnd.ez.api.LocationUpdate+json"
         };
 
         return this;
-
     };
 
     return LocationUpdateStruct;
@@ -1593,8 +1532,7 @@ define('structures/ContentMetadataUpdateStruct',[],function () {
      * @constructor
      * @param languageCode {String} The language code (eng-GB, fre-FR, ...)
      */
-    var ContentMetadataUpdateStruct = function(languageCode){
-
+    var ContentMetadataUpdateStruct = function (languageCode) {
         var now = JSON.parse(JSON.stringify(new Date()));
 
         this.body = {};
@@ -1608,12 +1546,11 @@ define('structures/ContentMetadataUpdateStruct',[],function () {
         this.body.ContentUpdate.publishDate = null;
 
         this.headers = {
-            "Accept" : "application/vnd.ez.api.ContentInfo+json",
-            "Content-Type" : "application/vnd.ez.api.ContentUpdate+json"
+            "Accept": "application/vnd.ez.api.ContentInfo+json",
+            "Content-Type": "application/vnd.ez.api.ContentUpdate+json"
         };
 
         return this;
-
     };
 
     return ContentMetadataUpdateStruct;
@@ -1644,8 +1581,7 @@ define('structures/ObjectStateGroupCreateStruct',[],function () {
      *          ]
      *      );
      */
-    var ObjectStateGroupCreateStruct = function(identifier, languageCode, names){
-
+    var ObjectStateGroupCreateStruct = function (identifier, languageCode, names) {
         this.body = {};
         this.body.ObjectStateGroupCreate = {};
 
@@ -1658,13 +1594,11 @@ define('structures/ObjectStateGroupCreateStruct',[],function () {
         this.body.ObjectStateGroupCreate.descriptions = {};
         this.body.ObjectStateGroupCreate.descriptions.value = [];
 
-
         this.headers = {};
         this.headers.Accept = "application/vnd.ez.api.ObjectStateGroup+json";
         this.headers["Content-Type"] = "application/vnd.ez.api.ObjectStateGroupCreate+json";
 
         return this;
-
     };
 
     return ObjectStateGroupCreateStruct;
@@ -1680,8 +1614,7 @@ define('structures/ObjectStateGroupUpdateStruct',[],function () {
      * @class ObjectStateGroupUpdateStruct
      * @constructor
      */
-    var ObjectStateGroupUpdateStruct = function(){
-
+    var ObjectStateGroupUpdateStruct = function () {
         this.body = {};
         this.body.ObjectStateGroupUpdate = {};
 
@@ -1690,7 +1623,6 @@ define('structures/ObjectStateGroupUpdateStruct',[],function () {
         this.headers["Content-Type"] = "application/vnd.ez.api.ObjectStateGroupUpdate+json";
 
         return this;
-
     };
 
     return ObjectStateGroupUpdateStruct;
@@ -1729,8 +1661,7 @@ define('structures/ObjectStateCreateStruct',[],function () {
      *          ]
      *      );
      */
-    var ObjectStateCreateStruct = function(identifier, languageCode, priority, names, descriptions){
-
+    var ObjectStateCreateStruct = function (identifier, languageCode, priority, names, descriptions) {
         this.body = {};
         this.body.ObjectStateCreate = {};
 
@@ -1747,7 +1678,6 @@ define('structures/ObjectStateCreateStruct',[],function () {
         this.headers["Content-Type"] = "application/vnd.ez.api.ObjectStateCreate+json";
 
         return this;
-
     };
 
     return ObjectStateCreateStruct;
@@ -1763,8 +1693,7 @@ define('structures/ObjectStateUpdateStruct',[],function () {
      * @class ObjectStateUpdateStruct
      * @constructor
      */
-    var ObjectStateUpdateStruct = function(){
-
+    var ObjectStateUpdateStruct = function () {
         this.body = {};
         this.body.ObjectStateUpdate = {};
 
@@ -1773,7 +1702,6 @@ define('structures/ObjectStateUpdateStruct',[],function () {
         this.headers["Content-Type"] = "application/vnd.ez.api.ObjectStateUpdate+json";
 
         return this;
-
     };
 
     return ObjectStateUpdateStruct;
@@ -1790,8 +1718,7 @@ define('structures/ViewCreateStruct',[],function () {
      * @constructor
      * @param identifier {String} unique view identifier
      */
-    var ViewCreateStruct = function(identifier){
-
+    var ViewCreateStruct = function (identifier) {
         this.body = {};
         this.body.ViewInput = {};
 
@@ -1806,12 +1733,11 @@ define('structures/ViewCreateStruct',[],function () {
         this.body.ViewInput.Query.spellcheck = false;
 
         this.headers = {
-            "Accept" : "application/vnd.ez.api.View+json",
-            "Content-Type" : "application/vnd.ez.api.ViewInput+json"
+            "Accept": "application/vnd.ez.api.View+json",
+            "Content-Type": "application/vnd.ez.api.ViewInput+json"
         };
 
         return this;
-
     };
 
     return ViewCreateStruct;
@@ -1836,8 +1762,7 @@ define('structures/UrlAliasCreateStruct',[],function () {
      *         "findme-alias"
      *     );
      */
-    var UrlAliasCreateStruct = function(languageCode, resource, path){
-
+    var UrlAliasCreateStruct = function (languageCode, resource, path) {
         this.body = {};
         this.body.UrlAliasCreate = {};
 
@@ -1873,8 +1798,7 @@ define('structures/UrlWildcardCreateStruct',[],function () {
      * @param destinationUrl {String} existing resource where wildcard should point
      * @param forward {boolean} weather or not the wildcard should redirect to the resource
      */
-    var UrlWildcardCreateStruct = function(sourceUrl, destinationUrl, forward){
-
+    var UrlWildcardCreateStruct = function (sourceUrl, destinationUrl, forward) {
         this.body = {};
         this.body.UrlWildcardCreate = {};
 
@@ -1903,8 +1827,7 @@ define('structures/RelationCreateStruct',[],function () {
      * @constructor
      * @param destination {String} reference to the resource we want to make related
      */
-    var RelationCreateStruct = function(destination){
-
+    var RelationCreateStruct = function (destination) {
         this.body = {};
         this.body.RelationCreate = {};
         this.body.RelationCreate.Destination = {
@@ -1932,7 +1855,6 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
               ObjectStateGroupCreateStruct, ObjectStateGroupUpdateStruct, ObjectStateCreateStruct,
               ObjectStateUpdateStruct, ViewCreateStruct, UrlAliasCreateStruct,
               UrlWildcardCreateStruct, RelationCreateStruct) {
-
     
 
     /**
@@ -1963,11 +1885,9 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
      * @example
      *     var contentService = jsCAPI.getContentService();
      */
-    var ContentService = function(connectionManager, discoveryService) {
-
+    var ContentService = function (connectionManager, discoveryService) {
         this._connectionManager = connectionManager;
         this._discoveryService = discoveryService;
-
     };
 
     /**
@@ -1984,7 +1904,7 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
             "GET",
             rootPath,
             "",
-            { "Accept" : "application/vnd.ez.api.Root+json" },
+            {"Accept": "application/vnd.ez.api.Root+json"},
             callback
         );
     };
@@ -2002,9 +1922,7 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
      *
      */
     ContentService.prototype.newContentUpdateStruct = function newContentUpdateStruct(language) {
-
         return new ContentUpdateStruct(language);
-
     };
 
     /**
@@ -2015,9 +1933,7 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
      * @return ContentMetadataUpdateStruct
      */
     ContentService.prototype.newContentMetadataUpdateStruct = function newContentMetadataUpdateStruct(language) {
-
         return new ContentMetadataUpdateStruct(language);
-
     };
 
     /**
@@ -2030,9 +1946,7 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
      * @return {ContentCreateStruct}
      */
     ContentService.prototype.newContentCreateStruct = function newContentCreateStruct(contentTypeId, locationCreateStruct, language) {
-
         return new ContentCreateStruct(contentTypeId, locationCreateStruct, language);
-
     };
 
     /**
@@ -2044,9 +1958,7 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
      * @return {SectionInputStruct}
      */
     ContentService.prototype.newSectionInputStruct = function newSectionInputStruct(identifier, name) {
-
         return new SectionInputStruct(identifier, name);
-
     };
 
     /**
@@ -2057,9 +1969,7 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
      * @return {LocationCreateStruct}
      */
     ContentService.prototype.newLocationCreateStruct = function newLocationCreateStruct(parentLocationId) {
-
         return new LocationCreateStruct(parentLocationId);
-
     };
 
     /**
@@ -2069,9 +1979,7 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
      * @return {LocationUpdateStruct}
      */
     ContentService.prototype.newLocationUpdateStruct = function newLocationUpdateStruct() {
-
         return new LocationUpdateStruct();
-
     };
 
     /**
@@ -2082,9 +1990,7 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
      * @return {ViewCreateStruct}
      */
     ContentService.prototype.newViewCreateStruct = function newViewCreateStruct(identifier) {
-
         return new ViewCreateStruct(identifier);
-
     };
 
     /**
@@ -2095,9 +2001,7 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
      * @return {RelationCreateStruct}
      */
     ContentService.prototype.newRelationCreateStruct = function newRelationCreateStruct(destination) {
-
         return new RelationCreateStruct(destination);
-
     };
 
     /**
@@ -2117,9 +2021,7 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
      *      );
      */
     ContentService.prototype.newObjectStateGroupCreateStruct = function newObjectStateGroupCreateStruct(identifier, languageCode, names) {
-
         return new ObjectStateGroupCreateStruct(identifier, languageCode, names);
-
     };
 
     /**
@@ -2129,11 +2031,8 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
      * @return ObjectStateGroupUpdateStruct
      */
     ContentService.prototype.newObjectStateGroupUpdateStruct = function newObjectStateGroupUpdateStruct() {
-
         return new ObjectStateGroupUpdateStruct();
-
     };
-
 
     /**
      * Returns create structure for ObjectState
@@ -2157,9 +2056,7 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
      *      );
      */
     ContentService.prototype.newObjectStateCreateStruct = function (identifier, languageCode, priority, names, descriptions) {
-
         return new ObjectStateCreateStruct(identifier, languageCode, priority, names, descriptions);
-
     };
 
     /**
@@ -2169,9 +2066,7 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
      * @return {ObjectStateUpdateStruct}
      */
     ContentService.prototype.newObjectStateUpdateStruct = function newObjectStateUpdateStruct() {
-
         return new ObjectStateUpdateStruct();
-
     };
 
     /**
@@ -2190,9 +2085,7 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
      *     );
      */
     ContentService.prototype.newUrlAliasCreateStruct = function newUrlAliasCreateStruct(languageCode, resource, path) {
-
         return new UrlAliasCreateStruct(languageCode, resource, path);
-
     };
 
     /**
@@ -2210,9 +2103,7 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
      *     );
      */
     ContentService.prototype.newUrlWildcardCreateStruct = function newUrlWildcardCreateStruct(sourceUrl, destinationUrl, forward) {
-
         return new UrlWildcardCreateStruct(sourceUrl, destinationUrl, forward);
-
     };
 
 // ******************************
@@ -2228,14 +2119,12 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
      * {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     ContentService.prototype.createSection = function createSection(sectionInputStruct, callback) {
-
         var that = this;
 
         this._discoveryService.getInfoObject(
             "sections",
-            function(error, sections) {
+            function (error, sections) {
                 if (!error) {
-
                     that._connectionManager.request(
                         "POST",
                         sections._href,
@@ -2278,19 +2167,17 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
      * {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     ContentService.prototype.loadSections = function loadSections(callback) {
-
         var that = this;
 
         this._discoveryService.getInfoObject(
             "sections",
-            function(error, sections) {
+            function (error, sections) {
                 if (!error) {
-
                     that._connectionManager.request(
                         "GET",
                         sections._href,
                         "",
-                        { "Accept" : sections["_media-type"] },
+                        {"Accept": sections["_media-type"]},
                         callback
                     );
 
@@ -2299,7 +2186,6 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
                 }
             }
         );
-
     };
 
     /**
@@ -2315,7 +2201,7 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
             "GET",
             sectionId,
             "",
-            { "Accept" : "application/vnd.ez.api.Section+json" },
+            {"Accept": "application/vnd.ez.api.Section+json"},
             callback
         );
     };
@@ -2352,7 +2238,7 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
 
         this._discoveryService.getInfoObject(
             "content",
-            function(error, contentObjects){
+            function (error, contentObjects) {
                 if (!error) {
                     that._connectionManager.request(
                         "POST",
@@ -2408,18 +2294,17 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     ContentService.prototype.loadContentByRemoteId = function loadContentByRemoteId(remoteId, callback) {
-
         var that = this;
 
         this._discoveryService.getInfoObject(
             "content",
-            function(error, contentObjects){
+            function (error, contentObjects) {
                 if (!error) {
                     that._connectionManager.request(
                         "GET",
                         contentObjects._href + '?remoteId=' + remoteId,
                         "",
-                        { "Accept" : contentObjects["_media-type"] },
+                        {"Accept": contentObjects["_media-type"]},
                         callback
                     );
                 } else {
@@ -2427,8 +2312,6 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
                 }
             }
         );
-
-
     };
 
     /**
@@ -2444,7 +2327,7 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
             "GET",
             contentId,
             "",
-            { "Accept" : "application/vnd.ez.api.ContentInfo+json" },
+            {"Accept": "application/vnd.ez.api.ContentInfo+json"},
             callback
         );
     };
@@ -2462,7 +2345,7 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
             "GET",
             contentId,
             "",
-            { "Accept" : "application/vnd.ez.api.Content+json" },
+            {"Accept": "application/vnd.ez.api.Content+json"},
             callback
         );
     };
@@ -2501,7 +2384,7 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
             "COPY",
             contentId,
             "",
-            { "Destination" : destinationId },
+            {"Destination": destinationId},
             callback
         );
     };
@@ -2523,16 +2406,15 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
 
         this.loadContentInfo(
             contentId,
-            function(error, contentResponse){
+            function (error, contentResponse) {
                 if (!error) {
-
                     var currentVersion = contentResponse.document.Content.CurrentVersion;
 
                     that._connectionManager.request(
                         "GET",
                         currentVersion._href,
                         "",
-                        { "Accept" : currentVersion["_media-type"] },
+                        {"Accept": currentVersion["_media-type"]},
                         callback
                     );
 
@@ -2542,7 +2424,6 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
             }
         );
     };
-
 
     /**
      * Loads a specific version of target content. This method returns fields and relations
@@ -2573,11 +2454,10 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
             "GET",
             versionedContentId + fields + responseGroups + languages,
             "",
-            { "Accept" : "application/vnd.ez.api.Version+json" },
+            {"Accept": "application/vnd.ez.api.Version+json"},
             callback
         );
     };
-
 
     /**
      *  Loads all versions for the target content
@@ -2588,21 +2468,19 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     ContentService.prototype.loadVersions = function loadVersions(contentId, callback) {
-
         var that = this;
 
         this.loadContentInfo(
             contentId,
-            function(error, contentResponse){
+            function (error, contentResponse) {
                 if (!error) {
-
                     var contentVersions = contentResponse.document.Content.Versions;
 
                     that._connectionManager.request(
                         "GET",
                         contentVersions._href,
                         "",
-                        { "Accept" : contentVersions["_media-type"] },
+                        {"Accept": contentVersions["_media-type"]},
                         callback
                     );
 
@@ -2612,7 +2490,6 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
             }
         );
     };
-
 
     /**
      * Updates the fields of a target draft
@@ -2632,7 +2509,6 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
             callback
         );
     };
-
 
     /**
      * Creates a draft from a published or archived version.
@@ -2658,16 +2534,14 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
      *      );
      */
     ContentService.prototype.createContentDraft = function createContentDraft(contentId, versionId, callback) {
-
         var that = this,
             contentVersions,
             currentVersion;
 
         this.loadContentInfo(
             contentId,
-            function(error, contentResponse){
+            function (error, contentResponse) {
                 if (!error) {
-
                     if (versionId !== null) {
                         // Version id is declared
 
@@ -2677,7 +2551,7 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
                             "COPY",
                             contentVersions._href + "/" + versionId,
                             "",
-                            { "Accept" : "application/vnd.ez.api.Version+json" },
+                            {"Accept": "application/vnd.ez.api.Version+json"},
                             callback
                         );
 
@@ -2690,10 +2564,9 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
                             "COPY",
                             currentVersion._href,
                             "",
-                            { "Accept" : "application/vnd.ez.api.Version+json" },
+                            {"Accept": "application/vnd.ez.api.Version+json"},
                             callback
                         );
-
                     }
                 } else {
                     callback(error, false);
@@ -2701,7 +2574,6 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
             }
         );
     };
-
 
     /**
      * Deletes target version of the content.
@@ -2717,7 +2589,6 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
             callback
         );
     };
-
 
     /**
      * Publishes target version of the content.
@@ -2737,7 +2608,6 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
         );
     };
 
-
 // ******************************
 // Locations management
 // ******************************
@@ -2756,9 +2626,8 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
 
         this.loadContentInfo(
             contentId,
-            function(error, contentResponse){
+            function (error, contentResponse) {
                 if (!error) {
-
                     var locations = contentResponse.document.Content.Locations;
 
                     that._connectionManager.request(
@@ -2772,11 +2641,8 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
                 } else {
                     callback(error, false);
                 }
-
             }
         );
-
-
     };
 
     /**
@@ -2792,23 +2658,21 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
 
         this.loadContentInfo(
             contentId,
-            function(error, contentResponse){
+            function (error, contentResponse) {
                 if (!error) {
-
                     var locations = contentResponse.document.Content.Locations;
 
                     that._connectionManager.request(
                         "GET",
                         locations._href,
                         "",
-                        { "Accept" : "application/vnd.ez.api.LocationList+json" },
+                        {"Accept": "application/vnd.ez.api.LocationList+json"},
                         callback
                     );
 
                 } else {
                     callback(error, false);
                 }
-
             }
         );
     };
@@ -2826,7 +2690,7 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
             "GET",
             locationId,
             "",
-            { "Accept" : "application/vnd.ez.api.Location+json" },
+            {"Accept": "application/vnd.ez.api.Location+json"},
             callback
         );
     };
@@ -2845,7 +2709,7 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
             "GET",
             locations + '?remoteId=' + remoteId,
             "",
-            { Accept : "application/vnd.ez.api.Location+json" },
+            {Accept: "application/vnd.ez.api.Location+json"},
             callback
         );
     };
@@ -2887,7 +2751,6 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
      *      );
      */
     ContentService.prototype.loadLocationChildren = function loadLocationChildren(locationId, offset, limit, callback) {
-
         // default values for all the parameters
         offset = (typeof offset === "undefined") ? 0 : offset;
         limit = (typeof limit === "undefined") ? -1 : limit;
@@ -2896,16 +2759,15 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
 
         this.loadLocation(
             locationId,
-            function(error, locationResponse){
+            function (error, locationResponse) {
                 if (!error) {
-
                     var location = locationResponse.document.Location;
 
                     that._connectionManager.request(
                         "GET",
                         location.Children._href + '?offset=' + offset + '&limit=' + limit,
                         "",
-                        { "Accept" : location.Children["_media-type"] },
+                        {"Accept": location.Children["_media-type"]},
                         callback
                     );
                 } else {
@@ -2929,7 +2791,7 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
             "COPY",
             subtree,
             "",
-            { "Destination" : targetLocation },
+            {"Destination": targetLocation},
             callback
         );
     };
@@ -2949,7 +2811,7 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
             "MOVE",
             subtree,
             "",
-            { "Destination" : targetLocation },
+            {"Destination": targetLocation},
             callback
         );
     };
@@ -2968,7 +2830,7 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
             "SWAP",
             subtree,
             "",
-            { "Destination" : targetLocation },
+            {"Destination": targetLocation},
             callback
         );
     };
@@ -3004,14 +2866,12 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     ContentService.prototype.createView = function createView(viewCreateStruct, callback) {
-
         var that = this;
 
         this._discoveryService.getInfoObject(
             "views",
-            function(error, views) {
+            function (error, views) {
                 if (!error) {
-
                     that._connectionManager.request(
                         "POST",
                         views._href,
@@ -3026,7 +2886,6 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
             }
         );
     };
-
 
 // ******************************
 // Relations management
@@ -3045,22 +2904,20 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
      *      //See loadLocationChildren for example of "offset" and "limit" arguments usage
      */
     ContentService.prototype.loadRelations = function loadRelations(versionedContentId, offset, limit, callback) {
-
         var that = this;
 
         this.loadContent(
             versionedContentId,
             {},
-            function(error, versionResponse){
+            function (error, versionResponse) {
                 if (!error) {
-
                     var version = versionResponse.document.Version;
 
                     that._connectionManager.request(
                         "GET",
                         version.Relations._href + '?offset=' + offset + '&limit=' + limit,
                         "",
-                        { "Accept" : version.Relations["_media-type"] },
+                        {"Accept": version.Relations["_media-type"]},
                         callback
                     );
                 } else {
@@ -3083,21 +2940,19 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
      *      //See loadLocationChildren for example of "offset" and "limit" arguments usage
      */
     ContentService.prototype.loadCurrentRelations = function loadCurrentRelations(contentId, offset, limit, callback) {
-
         var that = this;
 
         this.loadCurrentVersion(
             contentId,
-            function(error, currentVersionResponse){
+            function (error, currentVersionResponse) {
                 if (!error) {
-
                     var currentVersion = currentVersionResponse.document.Version;
 
                     that._connectionManager.request(
                         "GET",
                         currentVersion.Relations._href + '?offset=' + offset + '&limit=' + limit,
                         "",
-                        { "Accept" : currentVersion.Relations["_media-type"] },
+                        {"Accept": currentVersion.Relations["_media-type"]},
                         callback
                     );
 
@@ -3107,7 +2962,6 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
             }
         );
     };
-
 
     /**
      *  Loads target relation
@@ -3122,7 +2976,7 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
             "GET",
             relationId,
             "",
-            { "Accept" : "application/vnd.ez.api.Relation+json" },
+            {"Accept": "application/vnd.ez.api.Relation+json"},
             callback
         );
     };
@@ -3144,15 +2998,13 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
      *      );
      */
     ContentService.prototype.addRelation = function addRelation(versionedContentId, relationCreateStruct, callback) {
-
         var that = this;
 
         this.loadContent(
             versionedContentId,
             {},
-            function(error, versionResponse){
+            function (error, versionResponse) {
                 if (!error) {
-
                     var version = versionResponse.document.Version;
 
                     that._connectionManager.request(
@@ -3200,19 +3052,17 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
      *      //See loadLocationChildren for example of "offset" and "limit" arguments usage
      */
     ContentService.prototype.loadTrashItems = function loadTrashItems(offset, limit, callback) {
-
         var that = this;
 
         this._discoveryService.getInfoObject(
             "trash",
-            function(error, trash) {
+            function (error, trash) {
                 if (!error) {
-
                     that._connectionManager.request(
                         "GET",
                         trash._href + '?offset=' + offset + '&limit=' + limit,
                         "",
-                        { "Accept" : trash["_media-type"] },
+                        {"Accept": trash["_media-type"]},
                         callback
                     );
 
@@ -3236,7 +3086,7 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
             "GET",
             trashItemId,
             "",
-            { "Accept" : "application/vnd.ez.api.TrashItem+json" },
+            {"Accept": "application/vnd.ez.api.TrashItem+json"},
             callback
         );
     };
@@ -3251,8 +3101,7 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     ContentService.prototype.recover = function recover(trashItemId, destination, callback) {
-
-        var headers = { "Accept" : "application/vnd.ez.api.TrashItem+json" };
+        var headers = {"Accept": "application/vnd.ez.api.TrashItem+json"};
 
         if ((typeof destination !== "undefined") && (destination !== null)) {
             headers.Destination = destination;
@@ -3290,14 +3139,12 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     ContentService.prototype.emptyThrash = function emptyThrash(callback) {
-
         var that = this;
 
         this._discoveryService.getInfoObject(
             "trash",
-            function(error, trash) {
+            function (error, trash) {
                 if (!error) {
-
                     that._connectionManager.request(
                         "DELETE",
                         trash._href,
@@ -3330,7 +3177,7 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
             "GET",
             objectStateGroups,
             "",
-            { "Accept" : "application/vnd.ez.api.ObjectStateGroupList+json" },
+            {"Accept": "application/vnd.ez.api.ObjectStateGroupList+json"},
             callback
         );
     };
@@ -3348,11 +3195,10 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
             "GET",
             objectStateGroupId,
             "",
-            { "Accept" : "application/vnd.ez.api.ObjectStateGroup+json" },
+            {"Accept": "application/vnd.ez.api.ObjectStateGroup+json"},
             callback
         );
     };
-
 
     /**
      *  Create a new ObjectState group
@@ -3417,7 +3263,6 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     ContentService.prototype.createObjectState = function createObjectState(objectStateGroupId, objectStateCreateStruct, callback) {
-
         this._connectionManager.request(
             "POST",
             objectStateGroupId + "/objectstates",
@@ -3425,7 +3270,6 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
             objectStateCreateStruct.headers,
             callback
         );
-
     };
 
     /**
@@ -3441,7 +3285,7 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
             "GET",
             objectStateId,
             "",
-            { "Accept" : "application/vnd.ez.api.ObjectState+json" },
+            {"Accept": "application/vnd.ez.api.ObjectState+json"},
             callback
         );
     };
@@ -3493,7 +3337,7 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
             "GET",
             contentStatesId,
             "",
-            { "Accept" : "application/vnd.ez.api.ContentObjectStates+json" },
+            {"Accept": "application/vnd.ez.api.ContentObjectStates+json"},
             callback
         );
     };
@@ -3509,7 +3353,7 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
      * @example
      *     contentService.loadObjectState(
      *          "/api/ezp/v2/content/objectstategroups/4/objectstates/3",
-     *          function(error, objectStateResponse){
+     *          function (error, objectStateResponse) {
      *              // possible error should be handled...
      *
      *              var objectStates = {};
@@ -3532,8 +3376,8 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
             contentStatesId,
             JSON.stringify(objectStates),
             {
-                "Accept" : "application/vnd.ez.api.ContentObjectStates+json",
-                "Content-Type" : "application/vnd.ez.api.ContentObjectStates+json"
+                "Accept": "application/vnd.ez.api.ContentObjectStates+json",
+                "Content-Type": "application/vnd.ez.api.ContentObjectStates+json"
             },
             callback
         );
@@ -3575,7 +3419,7 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
             "GET",
             urlAliases,
             "",
-            { "Accept" : "application/vnd.ez.api.UrlAliasRefList+json" },
+            {"Accept": "application/vnd.ez.api.UrlAliasRefList+json"},
             callback
         );
     };
@@ -3590,7 +3434,6 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     ContentService.prototype.listLocationAliases = function listLocationAliases(locationUrlAliases, custom, callback) {
-
         custom = (typeof custom === "undefined") ? true : custom;
         var parameters = (custom === true) ? "" : "?custom=false";
 
@@ -3598,7 +3441,7 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
             "GET",
             locationUrlAliases + '/urlaliases' + parameters,
             "",
-            { "Accept" : "application/vnd.ez.api.UrlAliasRefList+json" },
+            {"Accept": "application/vnd.ez.api.UrlAliasRefList+json"},
             callback
         );
     };
@@ -3616,7 +3459,7 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
             "GET",
             urlAliasId,
             "",
-            { "Accept" : "application/vnd.ez.api.UrlAlias+json" },
+            {"Accept": "application/vnd.ez.api.UrlAlias+json"},
             callback
         );
     };
@@ -3672,7 +3515,7 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
             "GET",
             urlWildcards,
             "",
-            { "Accept" : "application/vnd.ez.api.UrlWildcardList+json" },
+            {"Accept": "application/vnd.ez.api.UrlWildcardList+json"},
             callback
         );
     };
@@ -3690,7 +3533,7 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
             "GET",
             urlWildcardId,
             "",
-            { "Accept" : "application/vnd.ez.api.UrlWildcard+json" },
+            {"Accept": "application/vnd.ez.api.UrlWildcard+json"},
             callback
         );
     };
@@ -3710,7 +3553,6 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
         );
     };
 
-
     return ContentService;
 
 });
@@ -3726,8 +3568,7 @@ define('structures/ContentTypeGroupInputStruct',[],function () {
      * @constructor
      * @param identifier {String} Unique identifier for the target Content Type group (e.g. "my_new_content_type_group")
      */
-    var ContentTypeGroupInputStruct = function(identifier){
-
+    var ContentTypeGroupInputStruct = function (identifier) {
         this.body = {};
         this.body.ContentTypeGroupInput = {};
 
@@ -3756,8 +3597,7 @@ define('structures/ContentTypeCreateStruct',[],function () {
      * @param languageCode {String} The language code (e.g. "eng-GB")
      * @param names {Array} Multi language value (see example in ContentTypeService.newContentTypeCreateStruct() doc)
      */
-    var ContentTypeCreateStruct = function(identifier, languageCode, names){
-
+    var ContentTypeCreateStruct = function (identifier, languageCode, names) {
         var now = JSON.parse(JSON.stringify(new Date()));
 
         this.body = {};
@@ -3803,8 +3643,7 @@ define('structures/ContentTypeUpdateStruct',[],function () {
      * @class ContentTypeUpdateStruct
      * @constructor
      */
-    var ContentTypeUpdateStruct = function(){
-
+    var ContentTypeUpdateStruct = function () {
         this.body = {};
         this.body.ContentTypeUpdate = {};
 
@@ -3832,8 +3671,7 @@ define('structures/FieldDefinitionCreateStruct',[],function () {
      * @param fieldGroup {String} identifier of existing field group (e.g. "content", "meta")
      * @param names {Array} Multi language value (see example in ContentTypeService.newFieldDefintionCreateStruct() doc)
      */
-    var FieldDefinitionCreateStruct = function(identifier, fieldType, fieldGroup, names){
-
+    var FieldDefinitionCreateStruct = function (identifier, fieldType, fieldGroup, names) {
         this.body = {};
         this.body.FieldDefinitionCreate = {};
 
@@ -3876,8 +3714,7 @@ define('structures/FieldDefinitionUpdateStruct',[],function () {
      * @class FieldDefinitionUpdateStruct
      * @constructor
      */
-    var FieldDefinitionUpdateStruct = function(){
-
+    var FieldDefinitionUpdateStruct = function () {
         this.body = {};
         this.body.FieldDefinitionUpdate = {};
 
@@ -3895,8 +3732,7 @@ define('structures/FieldDefinitionUpdateStruct',[],function () {
 define('services/ContentTypeService',["structures/ContentTypeGroupInputStruct", "structures/ContentTypeCreateStruct", "structures/ContentTypeUpdateStruct",
         "structures/FieldDefinitionCreateStruct", "structures/FieldDefinitionUpdateStruct"],
     function (ContentTypeGroupInputStruct, ContentTypeCreateStruct, ContentTypeUpdateStruct,
-              FieldDefinitionCreateStruct, FieldDefinitionUpdateStruct){
-
+              FieldDefinitionCreateStruct, FieldDefinitionUpdateStruct) {
     
 
     /**
@@ -3934,11 +3770,9 @@ define('services/ContentTypeService',["structures/ContentTypeGroupInputStruct", 
      * @example
      *     var contentTypeService = jsCAPI.getContentTypeService();
      */
-    var ContentTypeService = function(connectionManager, discoveryService) {
-
+    var ContentTypeService = function (connectionManager, discoveryService) {
         this._connectionManager = connectionManager;
         this._discoveryService = discoveryService;
-
     };
 
 // ******************************
@@ -3953,9 +3787,7 @@ define('services/ContentTypeService',["structures/ContentTypeGroupInputStruct", 
      * @return {ContentTypeGroupInputStruct}
      */
     ContentTypeService.prototype.newContentTypeGroupInputStruct = function newContentTypeGroupInputStruct(identifier) {
-
         return new ContentTypeGroupInputStruct(identifier);
-
     };
 
     /**
@@ -3973,9 +3805,7 @@ define('services/ContentTypeService',["structures/ContentTypeGroupInputStruct", 
      *      );
      */
     ContentTypeService.prototype.newContentTypeCreateStruct = function newContentTypeCreateStruct(identifier, languageCode, names) {
-
         return new ContentTypeCreateStruct(identifier, languageCode, names);
-
     };
 
     /**
@@ -3983,11 +3813,8 @@ define('services/ContentTypeService',["structures/ContentTypeGroupInputStruct", 
      * @return {ContentTypeUpdateStruct}
      */
     ContentTypeService.prototype.newContentTypeUpdateStruct = function newContentTypeUpdateStruct() {
-
         return new ContentTypeUpdateStruct();
-
     };
-
 
     /**
      * @method newFieldDefinitionCreateStruct
@@ -4005,9 +3832,7 @@ define('services/ContentTypeService',["structures/ContentTypeGroupInputStruct", 
      *     );
      */
     ContentTypeService.prototype.newFieldDefinitionCreateStruct = function newFieldDefinitionCreateStruct(identifier, fieldType, fieldGroup, names) {
-
         return new FieldDefinitionCreateStruct(identifier, fieldType, fieldGroup, names);
-
     };
 
     /**
@@ -4015,11 +3840,8 @@ define('services/ContentTypeService',["structures/ContentTypeGroupInputStruct", 
      * @return {FieldDefinitionUpdateStruct}
      */
     ContentTypeService.prototype.newFieldDefinitionUpdateStruct = function newFieldDefinitionUpdateStruct() {
-
         return new FieldDefinitionUpdateStruct();
-
     };
-
 
 // ******************************
 // Content Types Groups management
@@ -4056,7 +3878,6 @@ define('services/ContentTypeService',["structures/ContentTypeGroupInputStruct", 
         );
     };
 
-
     /**
      * Load all content type groups
      *
@@ -4070,7 +3891,7 @@ define('services/ContentTypeService',["structures/ContentTypeGroupInputStruct", 
             "GET",
             contentTypeGroups,
             "",
-            { "Accept" : "application/vnd.ez.api.ContentTypeGroupList+json" },
+            {"Accept": "application/vnd.ez.api.ContentTypeGroupList+json"},
             callback
         );
     };
@@ -4088,11 +3909,10 @@ define('services/ContentTypeService',["structures/ContentTypeGroupInputStruct", 
             "GET",
             contentTypeGroupId,
             "",
-            { "Accept" : "application/vnd.ez.api.ContentTypeGroup+json" },
+            {"Accept": "application/vnd.ez.api.ContentTypeGroup+json"},
             callback
         );
     };
-
 
     /**
      * Update a content type group
@@ -4138,21 +3958,19 @@ define('services/ContentTypeService',["structures/ContentTypeGroupInputStruct", 
      *  {{#crossLink "ContentTypeService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     ContentTypeService.prototype.loadContentTypes = function loadContentTypes(contentTypeGroupId, callback) {
-
         var that = this;
 
         this.loadContentTypeGroup(
             contentTypeGroupId,
-            function(error, contentTypeGroupResponse){
+            function (error, contentTypeGroupResponse) {
                 if (!error) {
-
                     var contentTypeGroup = contentTypeGroupResponse.document.ContentTypeGroup;
 
                     that._connectionManager.request(
                         "GET",
                          contentTypeGroup.ContentTypes._href,
                         "",
-                        { "Accept" : contentTypeGroup.ContentTypes["_media-type"] },
+                        {"Accept": contentTypeGroup.ContentTypes["_media-type"]},
                         callback
                     );
 
@@ -4176,7 +3994,7 @@ define('services/ContentTypeService',["structures/ContentTypeGroupInputStruct", 
             "GET",
             contentTypeGroups + "?identifier=" + identifier,
             "",
-            { "Accept" : "application/vnd.ez.api.ContentTypeGroup+json" },
+            {"Accept": "application/vnd.ez.api.ContentTypeGroup+json"},
             callback
         );
     };
@@ -4184,7 +4002,6 @@ define('services/ContentTypeService',["structures/ContentTypeGroupInputStruct", 
 // ******************************
 // Content Types management
 // ******************************
-
 
     /**
      * Create a content type
@@ -4223,16 +4040,14 @@ define('services/ContentTypeService',["structures/ContentTypeGroupInputStruct", 
      *     );
      */
     ContentTypeService.prototype.createContentType = function createContentType(contentTypeGroupId, contentTypeCreateStruct, publish, callback) {
-
         var that = this;
 
         this.loadContentTypeGroup(
             contentTypeGroupId,
-            function(error, contentTypeGroupResponse){
+            function (error, contentTypeGroupResponse) {
                 if (!error) {
-
                     var contentTypeGroup = contentTypeGroupResponse.document.ContentTypeGroup,
-                        parameters = (publish === true) ? "?publish=true" : "";
+                        parameters = (publish === true) ? "?publish=true": "";
 
                     that._connectionManager.request(
                         "POST",
@@ -4280,7 +4095,7 @@ define('services/ContentTypeService',["structures/ContentTypeGroupInputStruct", 
             "GET",
             contentTypeId,
             "",
-            { "Accept" : "application/vnd.ez.api.ContentType+json" },
+            {"Accept": "application/vnd.ez.api.ContentType+json"},
             callback
         );
     };
@@ -4294,19 +4109,17 @@ define('services/ContentTypeService',["structures/ContentTypeGroupInputStruct", 
      *  {{#crossLink "ContentTypeService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     ContentTypeService.prototype.loadContentTypeByIdentifier = function loadContentTypeByIdentifier(identifier, callback) {
-
         var that = this;
 
         this._discoveryService.getInfoObject(
             "contentTypes",
-            function(error, contentTypes) {
+            function (error, contentTypes) {
                 if (!error) {
-
                     that._connectionManager.request(
                         "GET",
                         contentTypes._href + "?identifier=" + identifier,
                         "",
-                        { "Accept" : contentTypes["_media-type"] },
+                        {"Accept": contentTypes["_media-type"]},
                         callback
                     );
 
@@ -4345,11 +4158,10 @@ define('services/ContentTypeService',["structures/ContentTypeGroupInputStruct", 
             "GET",
             contentTypeId + '/groups',
             "",
-            { "Accept" : "application/vnd.ez.api.ContentTypeGroupRefList+json" },
+            {"Accept": "application/vnd.ez.api.ContentTypeGroupRefList+json"},
             callback
         );
     };
-
 
     /**
      * Assign the target content type to the target content type group
@@ -4399,13 +4211,13 @@ define('services/ContentTypeService',["structures/ContentTypeGroupInputStruct", 
      *  {{#crossLink "ContentTypeService"}}Note on the callbacks usage{{/crossLink}} for more info)
      * @example
      *     var contentTypeUpdateStruct = contentTypeService.newContentTypeUpdateStruct();
-     *     
+     *
      *     contentTypeUpdateStruct.names = {};
      *     contentTypeUpdateStruct.names.value = [{
      *         "_languageCode":"eng-US",
      *         "#text":"My changed content type"
      *     }]
-     *     
+     *
      *     contentTypeService.createContentTypeDraft(
      *         "/api/ezp/v2/content/types/18",
      *         contentTypeUpdateStruct,
@@ -4435,7 +4247,7 @@ define('services/ContentTypeService',["structures/ContentTypeGroupInputStruct", 
             "GET",
             contentTypeId + "/draft",
             "",
-            { "Accept" : "application/vnd.ez.api.ContentType+json" },
+            {"Accept": "application/vnd.ez.api.ContentType+json"},
             callback
         );
     };
@@ -4507,14 +4319,12 @@ define('services/ContentTypeService',["structures/ContentTypeGroupInputStruct", 
      *  {{#crossLink "ContentTypeService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     ContentTypeService.prototype.addFieldDefinition = function addFieldDefinition(contentTypeId, fieldDefinitionCreateStruct, callback) {
-
         var that = this;
 
         this.loadContentTypeDraft(
             contentTypeId,
-            function(error, contentTypeDraftResponse){
+            function (error, contentTypeDraftResponse) {
                 if (!error) {
-
                     var contentTypeDraftFieldDefinitions = contentTypeDraftResponse.document.ContentType.FieldDefinitions;
 
                     that._connectionManager.request(
@@ -4545,9 +4355,7 @@ define('services/ContentTypeService',["structures/ContentTypeGroupInputStruct", 
             "GET",
             fieldDefinitionId,
             "",
-            {
-                "Accept": "application/vnd.ez.api.FieldDefinition+json"
-            },
+            {"Accept": "application/vnd.ez.api.FieldDefinition+json"},
             callback
         );
     };
@@ -4602,8 +4410,7 @@ define('structures/SessionCreateStruct',[],function () {
      * @param login {String} login for a user, which wants to start a session
      * @param password {String} password for a user, which wants to start a session
      */
-    var SessionCreateStruct = function(login, password){
-
+    var SessionCreateStruct = function (login, password) {
         this.body = {};
         this.body.SessionInput = {};
 
@@ -4611,12 +4418,11 @@ define('structures/SessionCreateStruct',[],function () {
         this.body.SessionInput.password = password;
 
         this.headers = {
-            "Accept" : "application/vnd.ez.api.Session+json",
-            "Content-Type" : "application/vnd.ez.api.SessionInput+json"
+            "Accept": "application/vnd.ez.api.Session+json",
+            "Content-Type": "application/vnd.ez.api.SessionInput+json"
         };
 
         return this;
-
     };
 
     return SessionCreateStruct;
@@ -4637,8 +4443,7 @@ define('structures/UserCreateStruct',[],function () {
      * @param password {String} password for a new user
      * @param fields {Array} fields array (see example for "newUserGroupCreateStruct")
      */
-    var UserCreateStruct = function(languageCode, login, email, password, fields){
-
+    var UserCreateStruct = function (languageCode, login, email, password, fields) {
         this.body = {};
         this.body.UserCreate = {};
 
@@ -4655,7 +4460,6 @@ define('structures/UserCreateStruct',[],function () {
         this.headers["Content-Type"] = "application/vnd.ez.api.UserCreate+json";
 
         return this;
-
     };
 
     return UserCreateStruct;
@@ -4671,8 +4475,7 @@ define('structures/UserUpdateStruct',[],function () {
      * @class UserUpdateStruct
      * @constructor
      */
-    var UserUpdateStruct = function(){
-
+    var UserUpdateStruct = function () {
         this.body = {};
         this.body.UserUpdate = {};
 
@@ -4684,7 +4487,6 @@ define('structures/UserUpdateStruct',[],function () {
         this.headers["Content-Type"] = "application/vnd.ez.api.UserUpdate+json";
 
         return this;
-
     };
 
     return UserUpdateStruct;
@@ -4702,8 +4504,7 @@ define('structures/UserGroupCreateStruct',[],function () {
      * @param languageCode {String} The language code (eng-GB, fre-FR, ...)
      * @param fields {Array} fields array (see example in UserService.newUserGroupCreateStruct() doc)
      */
-    var UserGroupCreateStruct = function(languageCode, fields){
-
+    var UserGroupCreateStruct = function (languageCode, fields) {
         this.body = {};
         this.body.UserGroupCreate = {};
 
@@ -4717,7 +4518,6 @@ define('structures/UserGroupCreateStruct',[],function () {
         this.headers["Content-Type"] = "application/vnd.ez.api.UserGroupCreate+json";
 
         return this;
-
     };
 
     return UserGroupCreateStruct;
@@ -4735,8 +4535,7 @@ define('structures/UserGroupUpdateStruct',[],function () {
      * @param languageCode {String} The language code (eng-GB, fre-FR, ...)
      * @param fields {Array} fields array (see example in UserService.newUserGroupCreateStruct() doc)
      */
-    var UserGroupUpdateStruct = function(languageCode, fields){
-
+    var UserGroupUpdateStruct = function (languageCode, fields) {
         this.body = {};
         this.body.UserGroupUpdate = {};
 
@@ -4748,7 +4547,6 @@ define('structures/UserGroupUpdateStruct',[],function () {
         this.headers["Content-Type"] = "application/vnd.ez.api.UserGroupUpdate+json";
 
         return this;
-
     };
 
     return UserGroupUpdateStruct;
@@ -4767,8 +4565,7 @@ define('structures/PolicyCreateStruct',[],function () {
      * @param theFunction {String} name of the function for which the new policy should be active
      * @param limitations {Object} object describing limitations for new policy
      */
-    var PolicyCreateStruct = function(module, theFunction, limitations){
-
+    var PolicyCreateStruct = function (module, theFunction, limitations) {
         this.body = {};
         this.body.PolicyCreate = {};
 
@@ -4799,8 +4596,7 @@ define('structures/PolicyUpdateStruct',[],function () {
      * @constructor
      * @param limitations {Object} object describing limitations change for the policy
      */
-    var PolicyUpdateStruct = function(limitations){
-
+    var PolicyUpdateStruct = function (limitations) {
         this.body = {};
         this.body.PolicyUpdate = {};
 
@@ -4828,8 +4624,7 @@ define('structures/RoleInputStruct',[],function () {
      * @constructor
      * @param identifier {String} unique Role identifier
      */
-    var RoleInputStruct = function(identifier){
-
+    var RoleInputStruct = function (identifier) {
         this.body = {};
         this.body.RoleInput = {};
 
@@ -4857,8 +4652,7 @@ define('structures/RoleAssignInputStruct',[],function () {
      * @param role {Object} object representing the target role (see example)
      * @param limitation {Object} object representing limitations for assignment (see example in UserService.newRoleAssignInputStruct() doc)
      */
-    var RoleAssignInputStruct = function(role, limitation){
-
+    var RoleAssignInputStruct = function (role, limitation) {
         this.body = {};
         this.body.RoleAssignInput = {};
 
@@ -4883,7 +4677,6 @@ define('services/UserService',['structures/SessionCreateStruct', 'structures/Use
     function (SessionCreateStruct, UserCreateStruct, UserUpdateStruct,
               UserGroupCreateStruct, UserGroupUpdateStruct, PolicyCreateStruct,
               PolicyUpdateStruct, RoleInputStruct, RoleAssignInputStruct) {
-
     
 
     /**
@@ -4914,11 +4707,9 @@ define('services/UserService',['structures/SessionCreateStruct', 'structures/Use
      * @example
      *     var userService = jsCAPI.getUserService();
      */
-    var UserService = function(connectionManager, discoveryService) {
-
+    var UserService = function (connectionManager, discoveryService) {
         this._connectionManager = connectionManager;
         this._discoveryService = discoveryService;
-
     };
 
 // ******************************
@@ -4934,9 +4725,7 @@ define('services/UserService',['structures/SessionCreateStruct', 'structures/Use
      * @return {SessionCreateStruct}
      */
     UserService.prototype.newSessionCreateStruct = function newSessionCreateStruct(login, password) {
-
         return new SessionCreateStruct(login, password);
-
     };
 
     /**
@@ -4949,20 +4738,18 @@ define('services/UserService',['structures/SessionCreateStruct', 'structures/Use
      * @example
      *     var userGroupCreateStruct = userService.newUserGroupCreateStruct(
      *         "eng-US",[{
-     *             fieldDefinitionIdentifier : "name",
-     *             languageCode : "eng-US",
-     *             fieldValue : "UserGroup"
+     *             fieldDefinitionIdentifier: "name",
+     *             languageCode: "eng-US",
+     *             fieldValue: "UserGroup"
      *         }, {
-     *             fieldDefinitionIdentifier : "description",
-     *             languageCode : "eng-US",
-     *             fieldValue : "This is the description of the user group"
+     *             fieldDefinitionIdentifier: "description",
+     *             languageCode: "eng-US",
+     *             fieldValue: "This is the description of the user group"
      *         }]
      *     );
      */
     UserService.prototype.newUserGroupCreateStruct = function newUserGroupCreateStruct(language, fields) {
-
         return new UserGroupCreateStruct(language, fields);
-
     };
 
     /**
@@ -4972,9 +4759,7 @@ define('services/UserService',['structures/SessionCreateStruct', 'structures/Use
      * @return {UserGroupCreateStruct}
      */
     UserService.prototype.newUserGroupUpdateStruct = function newUserGroupUpdateStruct() {
-
         return new UserGroupUpdateStruct();
-
     };
 
     /**
@@ -4989,9 +4774,7 @@ define('services/UserService',['structures/SessionCreateStruct', 'structures/Use
      * @return {UserCreateStruct}
      */
     UserService.prototype.newUserCreateStruct = function newUserCreateStruct(languageCode, login, email, password, fields) {
-
         return new UserCreateStruct(languageCode, login, email, password, fields);
-
     };
 
     /**
@@ -5001,9 +4784,7 @@ define('services/UserService',['structures/SessionCreateStruct', 'structures/Use
      * @return {UserUpdateStruct}
      */
     UserService.prototype.newUserUpdateStruct = function newUserUpdateStruct() {
-
         return new UserUpdateStruct();
-
     };
 
     /**
@@ -5014,9 +4795,7 @@ define('services/UserService',['structures/SessionCreateStruct', 'structures/Use
      * @return {RoleInputStruct}
      */
     UserService.prototype.newRoleInputStruct = function newRoleInputStruct(identifier) {
-
         return new RoleInputStruct(identifier);
-
     };
 
     /**
@@ -5029,26 +4808,24 @@ define('services/UserService',['structures/SessionCreateStruct', 'structures/Use
      * @example
      *     var roleAssignCreateStruct = userService.newRoleAssignInputStruct(
      *         {
-     *             "_href" : "/api/ezp/v2/user/roles/7",
-     *             "_media-type" : "application/vnd.ez.api.RoleAssignInput+json"
+     *             "_href": "/api/ezp/v2/user/roles/7",
+     *             "_media-type": "application/vnd.ez.api.RoleAssignInput+json"
      *         }, {
-     *             "_identifier" : "Section",
-     *             "values" : {
-     *                 "ref" : [{
-     *                     "_href" : "/api/ezp/v2/content/sections/1",
-     *                     "_media-type" : "application/vnd.ez.api.Section+json"
+     *             "_identifier": "Section",
+     *             "values": {
+     *                 "ref": [{
+     *                     "_href": "/api/ezp/v2/content/sections/1",
+     *                     "_media-type": "application/vnd.ez.api.Section+json"
      *                 }, {
-     *                     "_href" : "/api/ezp/v2/content/sections/4",
-     *                     "_media-type" : "application/vnd.ez.api.Section+json"
+     *                     "_href": "/api/ezp/v2/content/sections/4",
+     *                     "_media-type": "application/vnd.ez.api.Section+json"
      *                 }]
      *             }
      *         });
      *
      */
     UserService.prototype.newRoleAssignInputStruct = function newRoleAssignInputStruct(role, limitation) {
-
         return new RoleAssignInputStruct(role, limitation);
-
     };
 
     /**
@@ -5063,12 +4840,12 @@ define('services/UserService',['structures/SessionCreateStruct', 'structures/Use
      *     var policyCreateStruct = userService.newPolicyCreateStruct(
      *         "content", "publish", [{
      *             limitation: [{
-     *                 "_identifier" : "Section",
-     *                 "values" : {
-     *                     "ref" : [{
-     *                         "_href" : "5"
+     *                 "_identifier": "Section",
+     *                 "values": {
+     *                     "ref": [{
+     *                         "_href": "5"
      *                     }, {
-     *                         "_href" : "4"
+     *                         "_href": "4"
      *                     }]
      *                 }
      *             }]
@@ -5076,9 +4853,7 @@ define('services/UserService',['structures/SessionCreateStruct', 'structures/Use
      *     );
      */
     UserService.prototype.newPolicyCreateStruct = function newPolicyCreateStruct(module, theFunction, limitations) {
-
         return new PolicyCreateStruct(module, theFunction, limitations);
-
     };
 
     /**
@@ -5089,9 +4864,7 @@ define('services/UserService',['structures/SessionCreateStruct', 'structures/Use
      * @return {PolicyUpdateStruct}
      */
     UserService.prototype.newPolicyUpdateStruct = function newPolicyUpdateStruct(limitations) {
-
         return new PolicyUpdateStruct(limitations);
-
     };
 
 // ******************************
@@ -5106,21 +4879,17 @@ define('services/UserService',['structures/SessionCreateStruct', 'structures/Use
      *  {{#crossLink "UserService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     UserService.prototype.loadRootUserGroup = function loadRootUserGroup(callback) {
-
         var that = this;
 
         this._discoveryService.getInfoObject(
             "rootUserGroup",
-            function(error, rootUserGroup){
+            function (error, rootUserGroup) {
                 if (!error) {
-
                     that._connectionManager.request(
                         "GET",
                         rootUserGroup._href,
                         "",
-                        {
-                            "Accept" : rootUserGroup["_media-type"]
-                        },
+                        {"Accept": rootUserGroup["_media-type"]},
                         callback
                     );
 
@@ -5143,9 +4912,7 @@ define('services/UserService',['structures/SessionCreateStruct', 'structures/Use
             "GET",
             userGroupId,
             "",
-            {
-                "Accept" : "application/vnd.ez.api.UserGroup+json"
-            },
+            {"Accept": "application/vnd.ez.api.UserGroup+json"},
             callback
         );
     };
@@ -5164,9 +4931,7 @@ define('services/UserService',['structures/SessionCreateStruct', 'structures/Use
             "GET",
             userGroups + '?remoteId=' + remoteId,
             "",
-            {
-                "Accept" : "application/vnd.ez.api.UserGroupList+json"
-            },
+            {"Accept": "application/vnd.ez.api.UserGroupList+json"},
             callback
         );
     };
@@ -5200,13 +4965,10 @@ define('services/UserService',['structures/SessionCreateStruct', 'structures/Use
             "MOVE",
             userGroupId,
             "",
-            {
-                "Destination" : destination
-            },
+            {"Destination": destination},
             callback
         );
     };
-
 
     /**
      * Create a new user group in the provided parent user group
@@ -5218,14 +4980,12 @@ define('services/UserService',['structures/SessionCreateStruct', 'structures/Use
      *  {{#crossLink "UserService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     UserService.prototype.createUserGroup = function createUserGroup(parentGroupId, userGroupCreateStruct, callback) {
-
         var that = this;
 
         this.loadUserGroup(
             parentGroupId,
-            function(error, userGroupResponse){
+            function (error, userGroupResponse) {
                 if (!error) {
-
                     var subGroups = userGroupResponse.document.UserGroup.Subgroups;
 
                     that._connectionManager.request(
@@ -5262,7 +5022,6 @@ define('services/UserService',['structures/SessionCreateStruct', 'structures/Use
         );
     };
 
-
     /**
      * Load subgroups of the target user group
      *
@@ -5272,23 +5031,19 @@ define('services/UserService',['structures/SessionCreateStruct', 'structures/Use
      *  {{#crossLink "UserService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     UserService.prototype.loadSubUserGroups = function loadSubUserGroups(userGroupId, callback) {
-
         var that = this;
 
         this.loadUserGroup(
             userGroupId,
-            function(error, userGroupResponse){
+            function (error, userGroupResponse) {
                 if (!error) {
-
                     var subGroups = userGroupResponse.document.UserGroup.Subgroups;
 
                     that._connectionManager.request(
                         "GET",
                         subGroups._href,
                         "",
-                        {
-                            "Accept" : subGroups["_media-type"]
-                        },
+                        {"Accept": subGroups["_media-type"]},
                         callback
                     );
 
@@ -5308,23 +5063,19 @@ define('services/UserService',['structures/SessionCreateStruct', 'structures/Use
      *  {{#crossLink "UserService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     UserService.prototype.loadUsersOfUserGroup = function loadUsersOfUserGroup(userGroupId, callback) {
-
         var that = this;
 
         this.loadUserGroup(
             userGroupId,
-            function(error, userGroupResponse){
+            function (error, userGroupResponse) {
                 if (!error) {
-
                     var users = userGroupResponse.document.UserGroup.Users;
 
                     that._connectionManager.request(
                         "GET",
                         users._href,
                         "",
-                        {
-                            "Accept" : users["_media-type"]
-                        },
+                        {"Accept": users["_media-type"]},
                         callback
                     );
 
@@ -5333,7 +5084,6 @@ define('services/UserService',['structures/SessionCreateStruct', 'structures/Use
                 }
             }
         );
-
     };
 
     /**
@@ -5349,9 +5099,7 @@ define('services/UserService',['structures/SessionCreateStruct', 'structures/Use
             "GET",
             userId + '/groups',
             "",
-            {
-                "Accept" : "application/vnd.ez.api.UserGroupRefList+json"
-            },
+            {"Accept": "application/vnd.ez.api.UserGroupRefList+json"},
             callback
         );
     };
@@ -5370,14 +5118,12 @@ define('services/UserService',['structures/SessionCreateStruct', 'structures/Use
      *  {{#crossLink "UserService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     UserService.prototype.createUser = function createUser(userGroupId, userCreateStruct, callback) {
-
         var that = this;
 
         this.loadUserGroup(
             userGroupId,
-            function(error, userGroupResponse){
+            function (error, userGroupResponse) {
                 if (!error) {
-
                     var users = userGroupResponse.document.UserGroup.Users;
 
                     that._connectionManager.request(
@@ -5409,9 +5155,7 @@ define('services/UserService',['structures/SessionCreateStruct', 'structures/Use
             "GET",
             userList + '?roleId=' + roleId,
             "",
-            {
-                "Accept" : "application/vnd.ez.api.UserList+json"
-            },
+            {"Accept": "application/vnd.ez.api.UserList+json"},
             callback
         );
     };
@@ -5429,9 +5173,7 @@ define('services/UserService',['structures/SessionCreateStruct', 'structures/Use
             "GET",
             userId,
             "",
-            {
-                "Accept" : "application/vnd.ez.api.User+json"
-            },
+            {"Accept": "application/vnd.ez.api.User+json"},
             callback
         );
     };
@@ -5492,30 +5234,25 @@ define('services/UserService',['structures/SessionCreateStruct', 'structures/Use
      *  {{#crossLink "UserService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     UserService.prototype.assignUserToUserGroup = function assignUserToUserGroup(userId, userGroupId, callback) {
-
         var that = this;
 
         this.loadUser(
             userId,
-            function(error, userResponse){
+            function (error, userResponse) {
                 if (!error) {
-
                     var userGroups = userResponse.document.User.UserGroups;
 
                     that._connectionManager.request(
                         "POST",
                         userGroups._href + "?group=" + userGroupId,
                         "",
-                        {
-                            "Accept" : userGroups["_media-type"]
-                        },
+                        {"Accept": userGroups["_media-type"]},
                         callback
                     );
 
                 } else {
                     callback(error, false);
                 }
-
             }
         );
     };
@@ -5533,7 +5270,6 @@ define('services/UserService',['structures/SessionCreateStruct', 'structures/Use
             userAssignedGroupId,
             callback
         );
-
     };
 
 // ******************************
@@ -5549,14 +5285,12 @@ define('services/UserService',['structures/SessionCreateStruct', 'structures/Use
      *  {{#crossLink "UserService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     UserService.prototype.createRole = function createRole(roleCreateStruct, callback) {
-
         var that = this;
 
         this._discoveryService.getInfoObject(
             "roles",
-            function(error, roles){
+            function (error, roles) {
                 if (!error) {
-
                     that._connectionManager.request(
                     "POST",
                     roles._href,
@@ -5585,9 +5319,7 @@ define('services/UserService',['structures/SessionCreateStruct', 'structures/Use
             "GET",
             roleId,
             "",
-            {
-                "Accept" : "application/vnd.ez.api.Role+json"
-            },
+            {"Accept": "application/vnd.ez.api.Role+json"},
             callback
         );
     };
@@ -5605,7 +5337,6 @@ define('services/UserService',['structures/SessionCreateStruct', 'structures/Use
      *     userService.loadRoles("admin", 5, 5, callback);
      */
     UserService.prototype.loadRoles = function loadRoles(identifier, offset, limit, callback) {
-
         var that = this,
             identifierQuery = (identifier === "") ? "" : "&identifier=" + identifier;
 
@@ -5613,20 +5344,15 @@ define('services/UserService',['structures/SessionCreateStruct', 'structures/Use
         offset = (typeof offset === "undefined") ? 0 : offset;
         limit = (typeof limit === "undefined") ? -1 : limit;
 
-
-
         this._discoveryService.getInfoObject(
             "roles",
-            function(error, roles){
+            function (error, roles) {
                 if (!error) {
-
                     that._connectionManager.request(
                         "GET",
                         roles._href + '?offset=' + offset + '&limit=' + limit + identifierQuery,
                         "",
-                        {
-                            "Accept" : roles["_media-type"]
-                        },
+                        {"Accept": roles["_media-type"]},
                         callback
                     );
 
@@ -5656,7 +5382,6 @@ define('services/UserService',['structures/SessionCreateStruct', 'structures/Use
         );
     };
 
-
     /**
      * Delete the target role
      *
@@ -5672,7 +5397,6 @@ define('services/UserService',['structures/SessionCreateStruct', 'structures/Use
         );
     };
 
-
     /**
      * Get role assignments for the target user
      *
@@ -5682,23 +5406,19 @@ define('services/UserService',['structures/SessionCreateStruct', 'structures/Use
      *  {{#crossLink "UserService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     UserService.prototype.getRoleAssignmentsForUser = function getRoleAssignmentsForUser(userId, callback) {
-
         var that = this;
 
         this.loadUser(
             userId,
-            function(error, userResponse){
+            function (error, userResponse) {
                 if (!error) {
-
                     var userRoles = userResponse.document.User.Roles;
 
                     that._connectionManager.request(
                         "GET",
                         userRoles._href,
                         "",
-                        {
-                            "Accept" : userRoles["_media-type"]
-                        },
+                        {"Accept": userRoles["_media-type"]},
                         callback
                     );
 
@@ -5718,23 +5438,19 @@ define('services/UserService',['structures/SessionCreateStruct', 'structures/Use
      *  {{#crossLink "UserService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     UserService.prototype.getRoleAssignmentsForUserGroup = function getRoleAssignmentsForUserGroup(userGroupId, callback) {
-
         var that = this;
 
         this.loadUserGroup(
             userGroupId,
-            function(error, userGroupResponse){
+            function (error, userGroupResponse) {
                 if (!error) {
-
                     var userGroupRoles = userGroupResponse.document.UserGroup.Roles;
 
                     that._connectionManager.request(
                         "GET",
                         userGroupRoles._href,
                         "",
-                        {
-                            "Accept" : userGroupRoles["_media-type"]
-                        },
+                        {"Accept": userGroupRoles["_media-type"]},
                         callback
                     );
 
@@ -5744,7 +5460,6 @@ define('services/UserService',['structures/SessionCreateStruct', 'structures/Use
             }
         );
     };
-
 
     /**
      * Get RoleAssignment object for the target assignment (of a user to a role)
@@ -5759,9 +5474,7 @@ define('services/UserService',['structures/SessionCreateStruct', 'structures/Use
             "GET",
             userAssignmentId,
             "",
-            {
-                "Accept" : "application/vnd.ez.api.RoleAssignment+json"
-            },
+            {"Accept": "application/vnd.ez.api.RoleAssignment+json"},
             callback
         );
     };
@@ -5779,13 +5492,10 @@ define('services/UserService',['structures/SessionCreateStruct', 'structures/Use
             "GET",
             userGroupAssignmentId,
             "",
-            {
-                "Accept" : "application/vnd.ez.api.RoleAssignment+json"
-            },
+            {"Accept": "application/vnd.ez.api.RoleAssignment+json"},
             callback
         );
     };
-
 
     /**
      * Assign a role to user
@@ -5798,14 +5508,12 @@ define('services/UserService',['structures/SessionCreateStruct', 'structures/Use
      *
      */
     UserService.prototype.assignRoleToUser = function assignRoleToUser(userId, roleAssignInputStruct, callback) {
-
         var that = this;
 
         this.loadUser(
             userId,
-            function(error, userResponse){
+            function (error, userResponse) {
                 if (!error) {
-
                     var userRoles = userResponse.document.User.Roles;
 
                     that._connectionManager.request(
@@ -5822,7 +5530,6 @@ define('services/UserService',['structures/SessionCreateStruct', 'structures/Use
         );
     };
 
-
     /**
      * Assign a role to user group
      *
@@ -5833,14 +5540,12 @@ define('services/UserService',['structures/SessionCreateStruct', 'structures/Use
      *  {{#crossLink "UserService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     UserService.prototype.assignRoleToUserGroup = function assignRoleToUserGroup(userGroupId, roleAssignInputStruct, callback) {
-
         var that = this;
 
         this.loadUserGroup(
             userGroupId,
-            function(error, userGroupResponse){
+            function (error, userGroupResponse) {
                 if (!error) {
-
                     var userGroupRoles = userGroupResponse.document.UserGroup.Roles;
 
                     that._connectionManager.request(
@@ -5903,10 +5608,10 @@ define('services/UserService',['structures/SessionCreateStruct', 'structures/Use
      *     var policyCreateStruct = userService.newPolicyCreateStruct(
      *     "content",
      *     "create",
-     *     [{  _identifier : "Class",
-     *         values : {
-     *             ref : [{
-     *                 _href : "18"
+     *     [{  _identifier: "Class",
+     *         values: {
+     *             ref: [{
+     *                 _href: "18"
      *             }]
      *         }
      *     }]);
@@ -5917,14 +5622,12 @@ define('services/UserService',['structures/SessionCreateStruct', 'structures/Use
      *     callback);
      */
     UserService.prototype.addPolicy = function addPolicy(roleId, policyCreateStruct, callback) {
-
         var that = this;
 
         this.loadRole(
             roleId,
-            function(error, roleResponse){
+            function (error, roleResponse) {
                 if (!error) {
-
                     var rolePolicies = roleResponse.document.Role.Policies;
 
                     that._connectionManager.request(
@@ -5950,23 +5653,19 @@ define('services/UserService',['structures/SessionCreateStruct', 'structures/Use
      *  {{#crossLink "UserService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     UserService.prototype.loadPolicies = function loadPolicies(roleId, callback) {
-
         var that = this;
 
         this.loadRole(
             roleId,
-            function(error, roleResponse){
+            function (error, roleResponse) {
                 if (!error) {
-
                     var rolePolicies = roleResponse.document.Role.Policies;
 
                     that._connectionManager.request(
                         "GET",
                         rolePolicies._href,
                         "",
-                        {
-                            "Accept" : rolePolicies["_media-type"]
-                        },
+                        {"Accept": rolePolicies["_media-type"]},
                         callback
                     );
                 } else {
@@ -5989,9 +5688,7 @@ define('services/UserService',['structures/SessionCreateStruct', 'structures/Use
             "GET",
             policyId,
             "",
-            {
-                "Accept" : "application/vnd.ez.api.Policy+json"
-            },
+            {"Accept": "application/vnd.ez.api.Policy+json"},
             callback
         );
     };
@@ -6044,9 +5741,7 @@ define('services/UserService',['structures/SessionCreateStruct', 'structures/Use
             "GET",
             userPolicies + "?userId=" + userId,
             "",
-            {
-                "Accept" : "application/vnd.ez.api.PolicyList+json"
-            },
+            {"Accept": "application/vnd.ez.api.PolicyList+json"},
             callback
         );
     };
@@ -6099,11 +5794,8 @@ define('services/UserService',['structures/SessionCreateStruct', 'structures/Use
      *  {{#crossLink "UserService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     UserService.prototype.logOut = function logOut(callback) {
-
         this._connectionManager.logOut(callback);
-
     };
-
 
     return UserService;
 
@@ -6118,7 +5810,6 @@ define('CAPI',['authAgents/SessionAuthAgent', 'authAgents/HttpBasicAuthAgent', '
               ConnectionFeatureFactory, XmlHttpRequestConnection, MicrosoftXmlHttpRequestConnection,
               DiscoveryService, ContentService, ContentTypeService,
               UserService) {
-
     
 
     /**
@@ -6131,8 +5822,8 @@ define('CAPI',['authAgents/SessionAuthAgent', 'authAgents/HttpBasicAuthAgent', '
      * @param authenticationAgent {Object} Instance of one of the AuthAgents (e.g. SessionAuthAgent, HttpBasicAuthAgent)
      * @example
      *     var   authAgent = new SessionAuthAgent({
-               login : "admin",
-               password : "admin"
+               login: "admin",
+               password: "admin"
            }),
            jsCAPI = new CAPI(
                'http://ez.git.local',
@@ -6140,7 +5831,6 @@ define('CAPI',['authAgents/SessionAuthAgent', 'authAgents/HttpBasicAuthAgent', '
            );
      */
     var CAPI = function (endPointUrl, authenticationAgent) {
-
         this._contentService = null;
         this._contentTypeService = null;
         this._userService = null;
@@ -6178,7 +5868,7 @@ define('CAPI',['authAgents/SessionAuthAgent', 'authAgents/HttpBasicAuthAgent', '
          *          callback
          *      );
          */
-        this.getContentService = function getContentService(){
+        this.getContentService = function getContentService() {
             if  (!this._contentService)  {
                 this._contentService  =  new ContentService(
                     connectionManager,
@@ -6200,7 +5890,7 @@ define('CAPI',['authAgents/SessionAuthAgent', 'authAgents/HttpBasicAuthAgent', '
          *          callback
          *      );
          */
-        this.getContentTypeService = function getContentTypeService(){
+        this.getContentTypeService = function getContentTypeService() {
             if  (!this._contentTypeService)  {
                 this._contentTypeService  =  new ContentTypeService(
                     connectionManager,
@@ -6221,7 +5911,7 @@ define('CAPI',['authAgents/SessionAuthAgent', 'authAgents/HttpBasicAuthAgent', '
          *          callback
          *      );
          */
-        this.getUserService = function getUserService(){
+        this.getUserService = function getUserService() {
             if  (!this._userService)  {
                 this._userService  =  new UserService(
                     connectionManager,
@@ -6230,7 +5920,6 @@ define('CAPI',['authAgents/SessionAuthAgent', 'authAgents/HttpBasicAuthAgent', '
             }
             return  this._userService;
         };
-
     };
 
     return CAPI;
@@ -8186,18 +7875,15 @@ define('services/PromiseService',["../../node_modules/q/q"], function (q) {
      * @constructor
      * @param originalService {object} the service which should be converted into promise-based version (e.g. ContentService)
      */
-    var PromiseService = function(originalService) {
-
+    var PromiseService = function (originalService) {
         var key;
 
         this._originalService = originalService;
 
-        this.generatePromiseFunction = function(originalFunction) {
-
+        this.generatePromiseFunction = function (originalFunction) {
             var that = this;
 
-            return function() {
-
+            return function () {
                 var toBeCalledArguments = Array.prototype.slice.call(arguments),
                     deferred = q.defer();
 
@@ -8205,8 +7891,7 @@ define('services/PromiseService',["../../node_modules/q/q"], function (q) {
                     throw new EvalError("Wrong numner of arguments provided");
                 }
 
-                toBeCalledArguments.push(function(error, result) {
-
+                toBeCalledArguments.push(function (error, result) {
                     if (error) {
                         deferred.reject(error);
                     } else {
@@ -8219,7 +7904,6 @@ define('services/PromiseService',["../../node_modules/q/q"], function (q) {
 
                 return deferred.promise;
             };
-
         };
 
         // Auto-generating promise-based functions based on every existing service function
@@ -8227,9 +7911,7 @@ define('services/PromiseService',["../../node_modules/q/q"], function (q) {
         for(key in this._originalService) {
             if ((typeof this._originalService[key] === "function") &&
                (Object.prototype.toString.call(this._originalService[key].toString().match(/^function\s*(new[^\s(]+Struct)/)) != '[object Array]')) {
-
                 this[key] = this.generatePromiseFunction(this._originalService[key]);
-
             }
         }
     };
@@ -8251,7 +7933,6 @@ define('PromiseCAPI',["CAPI", "services/PromiseService"], function (CAPI, Promis
      * @param CAPI {CAPI} main REST client object
      */
     var PromiseCAPI = function (CAPI) {
-
         var key,
             that = this;
 
@@ -8264,8 +7945,8 @@ define('PromiseCAPI',["CAPI", "services/PromiseService"], function (CAPI, Promis
          * @param serviceFactory {function} function which returns one of the CAPI services
          * @return {function} function which returns instance of the PromiseService - promise-based wrapper around any of the CAPI services
          */
-        this.generatePromiseService = function(serviceFactory){
-            return function() {
+        this.generatePromiseService = function (serviceFactory) {
+            return function () {
                 return new PromiseService(
                     serviceFactory.call(that._capi)
                 );
@@ -8277,12 +7958,9 @@ define('PromiseCAPI',["CAPI", "services/PromiseService"], function (CAPI, Promis
         for(key in this._capi) {
             if ((typeof this._capi[key] === "function") &&
                 ( Object.prototype.toString.call(this._capi[key].toString().match(/^function\s*(get[^\s(]+Service)/)) === '[object Array]')) {
-
                 this[key] = this.generatePromiseService(this._capi[key]);
-
             }
         }
-
     };
 
     return PromiseCAPI;
