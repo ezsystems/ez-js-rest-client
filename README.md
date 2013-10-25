@@ -1,65 +1,115 @@
-JavaScript client for eZ Publish REST interface.
-===========
-Main goal is to ease the communication with the eZ Publish backend and provide a unified interface for all needed operations.
+# JavaScript client library for the eZ Publish REST API
 
-Installation
-------------
-Project maintenance is handled in nodejs environment with a help of Grunt task runner.
-To install everything properly you should install nodejs first (http://nodejs.org/).
+This repository provides a JavaScript library meant to ease the usage of [the eZ
+Publish REST API](https://confluence.ez.no/display/EZP/eZ+Publish+REST+API).
 
-Next, from project's root directory run `npm install -g grunt-cli` command.
-It will install Grunt task runner and make `grunt` command available anywhere on your system.
-Depending on the user setup, this action might require to be root.
-After that run `npm install` command . That should make other commands available.
+## Installation
 
-To be able to compile documentation or edit it on live yuidoc server you should also install yuidocjs module by running `npm install -g yuidocjs`.
+The eZ Publish JavaScript REST Client is a [bower](http://blower.io) package, so
+the easiest way to install it is to run:
 
-Maintenance
------------
-Jshint spell check on all the source files is achieved by running `grunt hint` command.
+```
+$ bower install --save ezsystems/ez-js-rest-client
+```
 
-Building
---------
-Building project files into single distribution file `dist/CAPI.js` is achieved by running `grunt build` command.
-Jshint spell check is run before the build.
+Then you can include in your project the file
+`bower\_components/ez-js-rest-client/dist/CAPI-min.js` (or the non minified
+version). It's also possible to directly take `dist/CAPI.js` or
+`dist/CAPI-min.js` in a clone of this repository.
 
-Documentation
--------------
-Project is self-documented by using yuidoc. More info on http://yui.github.io/yuidoc/.
-Building static version of current project documentation into api/ folder is achieved by running `grunt doc` command.
-By running `grunt livedoc` command you can run documentation server which gives you ability to see documentation changes in real time.
-By default yuidoc documentation server can be accessed on: http://127.0.0.1:3000
+## Development
 
-Testing - Unit tests
---------------------
-Unit Tests are executed by running `grunt test` command.
-To run unit tests and gather coverage information run `grunt coverage` command. After successfull run coverage report should be available in `test/coverage` folder.
+### Requirements
+
+The project maintenance is handled in a [nodejs](http://nodejs.org) based
+environment with a help of Grunt task runner.
+
+* Install [nodejs](http://nodejs.org/)
+* Clone this repository
+* From the root of the repository, install the local npm dependencies:
+  ```
+  $ npm install
+  ```
+* Install the global dependencies (usually you need to be root)
+  ```
+  # npm install -g grunt-cli yuidoc
+  ```
+
+### API Documentation
+
+The JavaScript API documentation can be generated in the `api` directory with:
+
+```
+$ grunt doc
+```
+Alternatively, you can run
+```
+$ grunt livedoc
+```
+to run the [yuidoc documentation
+server](http://yui.github.io/yuidoc/args/index.html#server). The dynamic
+documentation can then be reached at http://127.0.0.1:3000.
 
 
-Testing - Manual tests
-----------------------
-Manual testing functional can be achieved by installing Symfony2 bundle "jsRestClientBundle", which is situated in the test/manual/ folder.
+### Build
 
-Before bundle installation run `grunt build` command once. It will build all the source files into Resources/public/js/CAPI.js file.
+The library can be built with:
 
-Then the bundle could be installed into your current ezPublish 5.x instance using following instruction:
+```
+$ grunt build
+```
+
+This command will (re)generate the files `dist/CAPI.js` and `dist/CAPI-min.js`.
+
+### Tests
+
+#### Unit tests
+
+The unit tests can be executed with:
+```
+$ grunt test
+```
+
+It's also possible to generate a coverage report with:
+
+```
+$ grunt coverage
+```
+
+After this command, the report is available in
+`test/coverage/lcov-report/index.html`.
+
+#### Manual tests
+
+The library can be manually tested by installing the Symfony2 bundle
+*jsRestClientBundle*, which is situated in the test/manual/ folder.
+
+Before bundle installation run `grunt build` command once. It will build all the
+source files into Resources/public/js/CAPI.js file.
+
+Then the bundle could be installed into your current ezPublish 5.x instance
+using following instruction:
+
 * Create `path/to/ezpublish5/src/EzSystems` if it does not exist.
 * Symlink the bundle into /src/EzSystems/ (keep folder name).
-* Edit /ezpublish/EzPublishKernel.php and add the following line before in the return statement of the method registerBundles:
+* Edit /ezpublish/EzPublishKernel.php and add the following line before in the
+  return statement of the method registerBundles:
 
     ```php
     $bundles[] = new EzSystems\jsRestClientBundle\jsRectClientBundle();
     ```
 
-* Import routing.yml file of the bundle into main routing file by adding the following lines at the very bottom of `ezpublish/config/routing.yml`:
+* Import routing.yml file of the bundle into main routing file by adding the
+  following lines at the very bottom of `ezpublish/config/routing.yml`:
 
-    ```
+    ```yaml
     jsRestClientBundle:
         resource: "@jsRestClientBundle/Resources/config/routing.yml"
     ```
 
 * Clear the Symfony 2 caches with ezpublish/console.
 
-After these steps you may access /js-rest-client-test/ path where you will find testing html page.
-Most of requests can be configured a little bit before executing them by changing input values.
-See details of tests implementation in Resources/public/js/cookbook-*.js files.
+After these steps you may access `/js-rest-client-test/` path where you will find
+testing html page.  Most of requests can be configured a little bit before
+executing them by changing input values.  See details of tests implementation in
+Resources/public/js/cookbook-*.js files.
