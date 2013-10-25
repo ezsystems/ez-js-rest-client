@@ -631,9 +631,7 @@ define(["structures/ContentTypeGroupInputStruct", "structures/ContentTypeCreateS
             "GET",
             fieldDefinitionId,
             "",
-            {
-                "Accept": "application/vnd.ez.api.FieldDefinition+json"
-            },
+            {"Accept": "application/vnd.ez.api.FieldDefinition+json"},
             callback
         );
     };

@@ -217,9 +217,7 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
                         "GET",
                         rootUserGroup._href,
                         "",
-                        {
-                            "Accept": rootUserGroup["_media-type"]
-                        },
+                        {"Accept": rootUserGroup["_media-type"]},
                         callback
                     );
 
@@ -242,9 +240,7 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
             "GET",
             userGroupId,
             "",
-            {
-                "Accept": "application/vnd.ez.api.UserGroup+json"
-            },
+            {"Accept": "application/vnd.ez.api.UserGroup+json"},
             callback
         );
     };
@@ -263,9 +259,7 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
             "GET",
             userGroups + '?remoteId=' + remoteId,
             "",
-            {
-                "Accept": "application/vnd.ez.api.UserGroupList+json"
-            },
+            {"Accept": "application/vnd.ez.api.UserGroupList+json"},
             callback
         );
     };
@@ -299,9 +293,7 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
             "MOVE",
             userGroupId,
             "",
-            {
-                "Destination": destination
-            },
+            {"Destination": destination},
             callback
         );
     };
@@ -381,9 +373,7 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
                         "GET",
                         subGroups._href,
                         "",
-                        {
-                            "Accept": subGroups["_media-type"]
-                        },
+                        {"Accept": subGroups["_media-type"]},
                         callback
                     );
 
@@ -415,9 +405,7 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
                         "GET",
                         users._href,
                         "",
-                        {
-                            "Accept": users["_media-type"]
-                        },
+                        {"Accept": users["_media-type"]},
                         callback
                     );
 
@@ -441,9 +429,7 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
             "GET",
             userId + '/groups',
             "",
-            {
-                "Accept": "application/vnd.ez.api.UserGroupRefList+json"
-            },
+            {"Accept": "application/vnd.ez.api.UserGroupRefList+json"},
             callback
         );
     };
@@ -499,9 +485,7 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
             "GET",
             userList + '?roleId=' + roleId,
             "",
-            {
-                "Accept": "application/vnd.ez.api.UserList+json"
-            },
+            {"Accept": "application/vnd.ez.api.UserList+json"},
             callback
         );
     };
@@ -519,9 +503,7 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
             "GET",
             userId,
             "",
-            {
-                "Accept": "application/vnd.ez.api.User+json"
-            },
+            {"Accept": "application/vnd.ez.api.User+json"},
             callback
         );
     };
@@ -594,9 +576,7 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
                         "POST",
                         userGroups._href + "?group=" + userGroupId,
                         "",
-                        {
-                            "Accept": userGroups["_media-type"]
-                        },
+                        {"Accept": userGroups["_media-type"]},
                         callback
                     );
 
@@ -669,9 +649,7 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
             "GET",
             roleId,
             "",
-            {
-                "Accept": "application/vnd.ez.api.Role+json"
-            },
+            {"Accept": "application/vnd.ez.api.Role+json"},
             callback
         );
     };
@@ -706,9 +684,7 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
                         "GET",
                         roles._href + '?offset=' + offset + '&limit=' + limit + identifierQuery,
                         "",
-                        {
-                            "Accept": roles["_media-type"]
-                        },
+                        {"Accept": roles["_media-type"]},
                         callback
                     );
 
@@ -776,9 +752,7 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
                         "GET",
                         userRoles._href,
                         "",
-                        {
-                            "Accept": userRoles["_media-type"]
-                        },
+                        {"Accept": userRoles["_media-type"]},
                         callback
                     );
 
@@ -810,9 +784,7 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
                         "GET",
                         userGroupRoles._href,
                         "",
-                        {
-                            "Accept": userGroupRoles["_media-type"]
-                        },
+                        {"Accept": userGroupRoles["_media-type"]},
                         callback
                     );
 
@@ -837,9 +809,7 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
             "GET",
             userAssignmentId,
             "",
-            {
-                "Accept": "application/vnd.ez.api.RoleAssignment+json"
-            },
+            {"Accept": "application/vnd.ez.api.RoleAssignment+json"},
             callback
         );
     };
@@ -857,9 +827,7 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
             "GET",
             userGroupAssignmentId,
             "",
-            {
-                "Accept": "application/vnd.ez.api.RoleAssignment+json"
-            },
+            {"Accept": "application/vnd.ez.api.RoleAssignment+json"},
             callback
         );
     };
@@ -1034,9 +1002,7 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
                         "GET",
                         rolePolicies._href,
                         "",
-                        {
-                            "Accept": rolePolicies["_media-type"]
-                        },
+                        {"Accept": rolePolicies["_media-type"]},
                         callback
                     );
                 } else {
@@ -1059,9 +1025,7 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
             "GET",
             policyId,
             "",
-            {
-                "Accept": "application/vnd.ez.api.Policy+json"
-            },
+            {"Accept": "application/vnd.ez.api.Policy+json"},
             callback
         );
     };
@@ -1114,9 +1078,7 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
             "GET",
             userPolicies + "?userId=" + userId,
             "",
-            {
-                "Accept": "application/vnd.ez.api.PolicyList+json"
-            },
+            {"Accept": "application/vnd.ez.api.PolicyList+json"},
             callback
         );
     };
