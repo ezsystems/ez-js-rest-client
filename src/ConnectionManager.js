@@ -47,10 +47,10 @@ define(["structures/Response", "structures/Request", "structures/CAPIError"],
         var that = this,
             nextRequest,
             request = new Request({
-                method : method,
-                url : this._endPointUrl + url,
-                body : body,
-                headers : headers
+                method: method,
+                url: this._endPointUrl + url,
+                body: body,
+                headers: headers
             });
 
         // Requests suspending workflow
@@ -88,11 +88,11 @@ define(["structures/Response", "structures/Request", "structures/CAPIError"],
                                     } else {
                                         callback(
                                             new CAPIError({
-                                                errorText : "An error occured during request authentication!"
+                                                errorText: "An error occured during request authentication!"
                                             }),
                                             new Response({
-                                                status : "error",
-                                                body : ""
+                                                status: "error",
+                                                body: ""
                                             })
                                         );
                                     }
@@ -108,11 +108,11 @@ define(["structures/Response", "structures/Request", "structures/CAPIError"],
 
                         callback(
                             new CAPIError({
-                                errorText : "An error occured during ensureAuthentication call!"
+                                errorText: "An error occured during ensureAuthentication call!"
                             }),
                             new Response({
-                                status : "error",
-                                body : ""
+                                status: "error",
+                                body: ""
                             })
                         );
                     }
@@ -143,10 +143,10 @@ define(["structures/Response", "structures/Request", "structures/CAPIError"],
         callback = (typeof callback === "undefined") ? function () {} : callback;
 
         var request = new Request({
-            method : method,
-            url : this._endPointUrl + url,
-            body : body,
-            headers : headers
+            method: method,
+            url: this._endPointUrl + url,
+            body: body,
+            headers: headers
         });
 
         if (this.logRequests) {

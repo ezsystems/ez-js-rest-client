@@ -23,8 +23,8 @@ define(function () {
         };
 
         this.headers = {
-            "Accept" : "application/vnd.ez.api.Version+json",
-            "Content-Type" : "application/vnd.ez.api.VersionUpdate+json"
+            "Accept": "application/vnd.ez.api.Version+json",
+            "Content-Type": "application/vnd.ez.api.VersionUpdate+json"
         };
 
         return this;

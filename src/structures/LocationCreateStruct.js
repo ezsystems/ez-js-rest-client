@@ -22,8 +22,8 @@ define(function () {
         this.body.LocationCreate.sortOrder = "ASC";
 
         this.headers = {
-            "Accept" : "application/vnd.ez.api.Location+json",
-            "Content-Type" : "application/vnd.ez.api.LocationCreate+json"
+            "Accept": "application/vnd.ez.api.Location+json",
+            "Content-Type": "application/vnd.ez.api.LocationCreate+json"
         };
 
         return this;

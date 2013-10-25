@@ -20,8 +20,8 @@ define(['authAgents/SessionAuthAgent', 'authAgents/HttpBasicAuthAgent', 'Connect
      * @param authenticationAgent {Object} Instance of one of the AuthAgents (e.g. SessionAuthAgent, HttpBasicAuthAgent)
      * @example
      *     var   authAgent = new SessionAuthAgent({
-               login : "admin",
-               password : "admin"
+               login: "admin",
+               password: "admin"
            }),
            jsCAPI = new CAPI(
                'http://ez.git.local',

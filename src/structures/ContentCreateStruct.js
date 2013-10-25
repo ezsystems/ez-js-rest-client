@@ -19,7 +19,7 @@ define(function () {
         this.body.ContentCreate = {};
 
         this.body.ContentCreate.ContentType = {
-                "_href" : contentTypeId
+                "_href": contentTypeId
             };
 
         this.body.ContentCreate.mainLanguageCode = languageCode;
@@ -33,8 +33,8 @@ define(function () {
         this.body.ContentCreate.fields.field = [];
 
         this.headers = {
-            "Accept" : "application/vnd.ez.api.Content+json",
-            "Content-Type" : "application/vnd.ez.api.ContentCreate+json"
+            "Accept": "application/vnd.ez.api.Content+json",
+            "Content-Type": "application/vnd.ez.api.ContentCreate+json"
         };
 
         return this;

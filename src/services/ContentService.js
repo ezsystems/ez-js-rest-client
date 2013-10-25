@@ -61,7 +61,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
             "GET",
             rootPath,
             "",
-            { "Accept" : "application/vnd.ez.api.Root+json" },
+            {"Accept": "application/vnd.ez.api.Root+json"},
             callback
         );
     };
@@ -367,7 +367,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
                         "GET",
                         sections._href,
                         "",
-                        { "Accept" : sections["_media-type"] },
+                        {"Accept": sections["_media-type"]},
                         callback
                     );
 
@@ -392,7 +392,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
             "GET",
             sectionId,
             "",
-            { "Accept" : "application/vnd.ez.api.Section+json" },
+            {"Accept": "application/vnd.ez.api.Section+json"},
             callback
         );
     };
@@ -496,7 +496,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
                         "GET",
                         contentObjects._href + '?remoteId=' + remoteId,
                         "",
-                        { "Accept" : contentObjects["_media-type"] },
+                        {"Accept": contentObjects["_media-type"]},
                         callback
                     );
                 } else {
@@ -521,7 +521,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
             "GET",
             contentId,
             "",
-            { "Accept" : "application/vnd.ez.api.ContentInfo+json" },
+            {"Accept": "application/vnd.ez.api.ContentInfo+json"},
             callback
         );
     };
@@ -539,7 +539,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
             "GET",
             contentId,
             "",
-            { "Accept" : "application/vnd.ez.api.Content+json" },
+            {"Accept": "application/vnd.ez.api.Content+json"},
             callback
         );
     };
@@ -578,7 +578,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
             "COPY",
             contentId,
             "",
-            { "Destination" : destinationId },
+            {"Destination": destinationId},
             callback
         );
     };
@@ -609,7 +609,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
                         "GET",
                         currentVersion._href,
                         "",
-                        { "Accept" : currentVersion["_media-type"] },
+                        {"Accept": currentVersion["_media-type"]},
                         callback
                     );
 
@@ -650,7 +650,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
             "GET",
             versionedContentId + fields + responseGroups + languages,
             "",
-            { "Accept" : "application/vnd.ez.api.Version+json" },
+            {"Accept": "application/vnd.ez.api.Version+json"},
             callback
         );
     };
@@ -679,7 +679,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
                         "GET",
                         contentVersions._href,
                         "",
-                        { "Accept" : contentVersions["_media-type"] },
+                        {"Accept": contentVersions["_media-type"]},
                         callback
                     );
 
@@ -754,7 +754,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
                             "COPY",
                             contentVersions._href + "/" + versionId,
                             "",
-                            { "Accept" : "application/vnd.ez.api.Version+json" },
+                            {"Accept": "application/vnd.ez.api.Version+json"},
                             callback
                         );
 
@@ -767,7 +767,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
                             "COPY",
                             currentVersion._href,
                             "",
-                            { "Accept" : "application/vnd.ez.api.Version+json" },
+                            {"Accept": "application/vnd.ez.api.Version+json"},
                             callback
                         );
 
@@ -878,7 +878,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
                         "GET",
                         locations._href,
                         "",
-                        { "Accept" : "application/vnd.ez.api.LocationList+json" },
+                        {"Accept": "application/vnd.ez.api.LocationList+json"},
                         callback
                     );
 
@@ -903,7 +903,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
             "GET",
             locationId,
             "",
-            { "Accept" : "application/vnd.ez.api.Location+json" },
+            {"Accept": "application/vnd.ez.api.Location+json"},
             callback
         );
     };
@@ -922,7 +922,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
             "GET",
             locations + '?remoteId=' + remoteId,
             "",
-            { Accept : "application/vnd.ez.api.Location+json" },
+            {Accept: "application/vnd.ez.api.Location+json"},
             callback
         );
     };
@@ -982,7 +982,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
                         "GET",
                         location.Children._href + '?offset=' + offset + '&limit=' + limit,
                         "",
-                        { "Accept" : location.Children["_media-type"] },
+                        {"Accept": location.Children["_media-type"]},
                         callback
                     );
                 } else {
@@ -1006,7 +1006,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
             "COPY",
             subtree,
             "",
-            { "Destination" : targetLocation },
+            {"Destination": targetLocation},
             callback
         );
     };
@@ -1026,7 +1026,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
             "MOVE",
             subtree,
             "",
-            { "Destination" : targetLocation },
+            {"Destination": targetLocation},
             callback
         );
     };
@@ -1045,7 +1045,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
             "SWAP",
             subtree,
             "",
-            { "Destination" : targetLocation },
+            {"Destination": targetLocation},
             callback
         );
     };
@@ -1137,7 +1137,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
                         "GET",
                         version.Relations._href + '?offset=' + offset + '&limit=' + limit,
                         "",
-                        { "Accept" : version.Relations["_media-type"] },
+                        {"Accept": version.Relations["_media-type"]},
                         callback
                     );
                 } else {
@@ -1174,7 +1174,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
                         "GET",
                         currentVersion.Relations._href + '?offset=' + offset + '&limit=' + limit,
                         "",
-                        { "Accept" : currentVersion.Relations["_media-type"] },
+                        {"Accept": currentVersion.Relations["_media-type"]},
                         callback
                     );
 
@@ -1199,7 +1199,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
             "GET",
             relationId,
             "",
-            { "Accept" : "application/vnd.ez.api.Relation+json" },
+            {"Accept": "application/vnd.ez.api.Relation+json"},
             callback
         );
     };
@@ -1289,7 +1289,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
                         "GET",
                         trash._href + '?offset=' + offset + '&limit=' + limit,
                         "",
-                        { "Accept" : trash["_media-type"] },
+                        {"Accept": trash["_media-type"]},
                         callback
                     );
 
@@ -1313,7 +1313,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
             "GET",
             trashItemId,
             "",
-            { "Accept" : "application/vnd.ez.api.TrashItem+json" },
+            {"Accept": "application/vnd.ez.api.TrashItem+json"},
             callback
         );
     };
@@ -1329,7 +1329,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
      */
     ContentService.prototype.recover = function recover(trashItemId, destination, callback) {
 
-        var headers = { "Accept" : "application/vnd.ez.api.TrashItem+json" };
+        var headers = {"Accept": "application/vnd.ez.api.TrashItem+json"};
 
         if ((typeof destination !== "undefined") && (destination !== null)) {
             headers.Destination = destination;
@@ -1407,7 +1407,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
             "GET",
             objectStateGroups,
             "",
-            { "Accept" : "application/vnd.ez.api.ObjectStateGroupList+json" },
+            {"Accept": "application/vnd.ez.api.ObjectStateGroupList+json"},
             callback
         );
     };
@@ -1425,7 +1425,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
             "GET",
             objectStateGroupId,
             "",
-            { "Accept" : "application/vnd.ez.api.ObjectStateGroup+json" },
+            {"Accept": "application/vnd.ez.api.ObjectStateGroup+json"},
             callback
         );
     };
@@ -1518,7 +1518,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
             "GET",
             objectStateId,
             "",
-            { "Accept" : "application/vnd.ez.api.ObjectState+json" },
+            {"Accept": "application/vnd.ez.api.ObjectState+json"},
             callback
         );
     };
@@ -1570,7 +1570,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
             "GET",
             contentStatesId,
             "",
-            { "Accept" : "application/vnd.ez.api.ContentObjectStates+json" },
+            {"Accept": "application/vnd.ez.api.ContentObjectStates+json"},
             callback
         );
     };
@@ -1609,8 +1609,8 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
             contentStatesId,
             JSON.stringify(objectStates),
             {
-                "Accept" : "application/vnd.ez.api.ContentObjectStates+json",
-                "Content-Type" : "application/vnd.ez.api.ContentObjectStates+json"
+                "Accept": "application/vnd.ez.api.ContentObjectStates+json",
+                "Content-Type": "application/vnd.ez.api.ContentObjectStates+json"
             },
             callback
         );
@@ -1652,7 +1652,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
             "GET",
             urlAliases,
             "",
-            { "Accept" : "application/vnd.ez.api.UrlAliasRefList+json" },
+            {"Accept": "application/vnd.ez.api.UrlAliasRefList+json"},
             callback
         );
     };
@@ -1675,7 +1675,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
             "GET",
             locationUrlAliases + '/urlaliases' + parameters,
             "",
-            { "Accept" : "application/vnd.ez.api.UrlAliasRefList+json" },
+            {"Accept": "application/vnd.ez.api.UrlAliasRefList+json"},
             callback
         );
     };
@@ -1693,7 +1693,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
             "GET",
             urlAliasId,
             "",
-            { "Accept" : "application/vnd.ez.api.UrlAlias+json" },
+            {"Accept": "application/vnd.ez.api.UrlAlias+json"},
             callback
         );
     };
@@ -1749,7 +1749,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
             "GET",
             urlWildcards,
             "",
-            { "Accept" : "application/vnd.ez.api.UrlWildcardList+json" },
+            {"Accept": "application/vnd.ez.api.UrlWildcardList+json"},
             callback
         );
     };
@@ -1767,7 +1767,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
             "GET",
             urlWildcardId,
             "",
-            { "Accept" : "application/vnd.ez.api.UrlWildcard+json" },
+            {"Accept": "application/vnd.ez.api.UrlWildcard+json"},
             callback
         );
     };

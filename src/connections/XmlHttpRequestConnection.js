@@ -31,13 +31,13 @@ define(["structures/Response", "structures/CAPIError"], function (Response, CAPI
                 if (XHR.status >= 400) {
                     callback(
                         new CAPIError({
-                            errorText : "Connection error : " + XHR.status,
-                            errorCode : XHR.status
+                            errorText: "Connection error: " + XHR.status,
+                            errorCode: XHR.status
                         }),
                         new Response({
-                            status : XHR.status,
-                            headers : XHR.getAllResponseHeaders(),
-                            body : XHR.responseText
+                            status: XHR.status,
+                            headers: XHR.getAllResponseHeaders(),
+                            body: XHR.responseText
                         })
                     );
                     return;
@@ -46,9 +46,9 @@ define(["structures/Response", "structures/CAPIError"], function (Response, CAPI
                 callback(
                     false,
                     new Response({
-                        status : XHR.status,
-                        headers : XHR.getAllResponseHeaders(),
-                        body : XHR.responseText
+                        status: XHR.status,
+                        headers: XHR.getAllResponseHeaders(),
+                        body: XHR.responseText
                     })
                 );
             };

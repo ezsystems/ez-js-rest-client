@@ -177,7 +177,7 @@ define(["structures/ContentTypeGroupInputStruct", "structures/ContentTypeCreateS
             "GET",
             contentTypeGroups,
             "",
-            { "Accept" : "application/vnd.ez.api.ContentTypeGroupList+json" },
+            {"Accept": "application/vnd.ez.api.ContentTypeGroupList+json"},
             callback
         );
     };
@@ -195,7 +195,7 @@ define(["structures/ContentTypeGroupInputStruct", "structures/ContentTypeCreateS
             "GET",
             contentTypeGroupId,
             "",
-            { "Accept" : "application/vnd.ez.api.ContentTypeGroup+json" },
+            {"Accept": "application/vnd.ez.api.ContentTypeGroup+json"},
             callback
         );
     };
@@ -259,7 +259,7 @@ define(["structures/ContentTypeGroupInputStruct", "structures/ContentTypeCreateS
                         "GET",
                          contentTypeGroup.ContentTypes._href,
                         "",
-                        { "Accept" : contentTypeGroup.ContentTypes["_media-type"] },
+                        {"Accept": contentTypeGroup.ContentTypes["_media-type"]},
                         callback
                     );
 
@@ -283,7 +283,7 @@ define(["structures/ContentTypeGroupInputStruct", "structures/ContentTypeCreateS
             "GET",
             contentTypeGroups + "?identifier=" + identifier,
             "",
-            { "Accept" : "application/vnd.ez.api.ContentTypeGroup+json" },
+            {"Accept": "application/vnd.ez.api.ContentTypeGroup+json"},
             callback
         );
     };
@@ -339,7 +339,7 @@ define(["structures/ContentTypeGroupInputStruct", "structures/ContentTypeCreateS
                 if (!error) {
 
                     var contentTypeGroup = contentTypeGroupResponse.document.ContentTypeGroup,
-                        parameters = (publish === true) ? "?publish=true" : "";
+                        parameters = (publish === true) ? "?publish=true": "";
 
                     that._connectionManager.request(
                         "POST",
@@ -387,7 +387,7 @@ define(["structures/ContentTypeGroupInputStruct", "structures/ContentTypeCreateS
             "GET",
             contentTypeId,
             "",
-            { "Accept" : "application/vnd.ez.api.ContentType+json" },
+            {"Accept": "application/vnd.ez.api.ContentType+json"},
             callback
         );
     };
@@ -413,7 +413,7 @@ define(["structures/ContentTypeGroupInputStruct", "structures/ContentTypeCreateS
                         "GET",
                         contentTypes._href + "?identifier=" + identifier,
                         "",
-                        { "Accept" : contentTypes["_media-type"] },
+                        {"Accept": contentTypes["_media-type"]},
                         callback
                     );
 
@@ -452,7 +452,7 @@ define(["structures/ContentTypeGroupInputStruct", "structures/ContentTypeCreateS
             "GET",
             contentTypeId + '/groups',
             "",
-            { "Accept" : "application/vnd.ez.api.ContentTypeGroupRefList+json" },
+            {"Accept": "application/vnd.ez.api.ContentTypeGroupRefList+json"},
             callback
         );
     };
@@ -542,7 +542,7 @@ define(["structures/ContentTypeGroupInputStruct", "structures/ContentTypeCreateS
             "GET",
             contentTypeId + "/draft",
             "",
-            { "Accept" : "application/vnd.ez.api.ContentType+json" },
+            {"Accept": "application/vnd.ez.api.ContentType+json"},
             callback
         );
     };

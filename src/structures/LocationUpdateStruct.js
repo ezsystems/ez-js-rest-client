@@ -17,8 +17,8 @@ define(function () {
         this.body.LocationUpdate.sortOrder = "ASC";
 
         this.headers = {
-            "Accept" : "application/vnd.ez.api.Location+json",
-            "Content-Type" : "application/vnd.ez.api.LocationUpdate+json"
+            "Accept": "application/vnd.ez.api.Location+json",
+            "Content-Type": "application/vnd.ez.api.LocationUpdate+json"
         };
 
         return this;
