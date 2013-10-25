@@ -35,7 +35,6 @@ define(function () {
         this.body.ObjectStateGroupCreate.descriptions = {};
         this.body.ObjectStateGroupCreate.descriptions.value = [];
 
-
         this.headers = {};
         this.headers.Accept = "application/vnd.ez.api.ObjectStateGroup+json";
         this.headers["Content-Type"] = "application/vnd.ez.api.ObjectStateGroupCreate+json";

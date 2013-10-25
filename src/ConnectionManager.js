@@ -113,7 +113,6 @@ define(["structures/Response", "structures/Request", "structures/CAPIError"],
         }
     };
 
-
     /**
      * Not authorized request function
      * Used mainly for initial requests (e.g. createSession)
@@ -148,8 +147,6 @@ define(["structures/Response", "structures/Request", "structures/CAPIError"],
         this._connectionFactory.createConnection().execute(request, callback);
     };
 
-
-
     /**
      * Delete - shortcut which handles simple deletion requests in most cases
      *
@@ -181,8 +178,6 @@ define(["structures/Response", "structures/Request", "structures/CAPIError"],
     ConnectionManager.prototype.logOut = function (callback) {
         this._authenticationAgent.logOut(callback);
     };
-
-
 
     return ConnectionManager;
 

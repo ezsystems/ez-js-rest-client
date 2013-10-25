@@ -42,7 +42,6 @@ define(function () {
         return connection;
     };
 
-
     return ConnectionFeatureFactory;
 
 });

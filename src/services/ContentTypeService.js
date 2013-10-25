@@ -86,7 +86,6 @@ define(["structures/ContentTypeGroupInputStruct", "structures/ContentTypeCreateS
         return new ContentTypeUpdateStruct();
     };
 
-
     /**
      * @method newFieldDefinitionCreateStruct
      * @param identifier {String} unique field definiton identifer (e.g. "my-field")
@@ -113,7 +112,6 @@ define(["structures/ContentTypeGroupInputStruct", "structures/ContentTypeCreateS
     ContentTypeService.prototype.newFieldDefinitionUpdateStruct = function newFieldDefinitionUpdateStruct() {
         return new FieldDefinitionUpdateStruct();
     };
-
 
 // ******************************
 // Content Types Groups management
@@ -150,7 +148,6 @@ define(["structures/ContentTypeGroupInputStruct", "structures/ContentTypeCreateS
         );
     };
 
-
     /**
      * Load all content type groups
      *
@@ -186,7 +183,6 @@ define(["structures/ContentTypeGroupInputStruct", "structures/ContentTypeCreateS
             callback
         );
     };
-
 
     /**
      * Update a content type group
@@ -276,7 +272,6 @@ define(["structures/ContentTypeGroupInputStruct", "structures/ContentTypeCreateS
 // ******************************
 // Content Types management
 // ******************************
-
 
     /**
      * Create a content type
@@ -437,7 +432,6 @@ define(["structures/ContentTypeGroupInputStruct", "structures/ContentTypeCreateS
             callback
         );
     };
-
 
     /**
      * Assign the target content type to the target content type group

@@ -58,7 +58,6 @@ define(["structures/Response", "structures/CAPIError"], function (Response, CAPI
                 XHR.open(request.method, request.url, true);
             }
 
-
             for (headerType in request.headers) {
                 if (request.headers.hasOwnProperty(headerType)) {
                     XHR.setRequestHeader(

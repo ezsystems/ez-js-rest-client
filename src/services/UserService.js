@@ -298,7 +298,6 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
         );
     };
 
-
     /**
      * Create a new user group in the provided parent user group
      *
@@ -350,7 +349,6 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
             callback
         );
     };
-
 
     /**
      * Load subgroups of the target user group
@@ -674,8 +672,6 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
         offset = (typeof offset === "undefined") ? 0 : offset;
         limit = (typeof limit === "undefined") ? -1 : limit;
 
-
-
         this._discoveryService.getInfoObject(
             "roles",
             function (error, roles) {
@@ -714,7 +710,6 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
         );
     };
 
-
     /**
      * Delete the target role
      *
@@ -729,7 +724,6 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
             callback
         );
     };
-
 
     /**
      * Get role assignments for the target user
@@ -795,7 +789,6 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
         );
     };
 
-
     /**
      * Get RoleAssignment object for the target assignment (of a user to a role)
      *
@@ -832,7 +825,6 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
         );
     };
 
-
     /**
      * Assign a role to user
      *
@@ -865,7 +857,6 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
             }
         );
     };
-
 
     /**
      * Assign a role to user group
@@ -1133,7 +1124,6 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
     UserService.prototype.logOut = function logOut(callback) {
         this._connectionManager.logOut(callback);
     };
-
 
     return UserService;
 

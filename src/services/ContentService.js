@@ -188,7 +188,6 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
         return new ObjectStateGroupUpdateStruct();
     };
 
-
     /**
      * Returns create structure for ObjectState
      *
@@ -580,7 +579,6 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
         );
     };
 
-
     /**
      * Loads a specific version of target content. This method returns fields and relations
      *
@@ -615,7 +613,6 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
         );
     };
 
-
     /**
      *  Loads all versions for the target content
      *
@@ -648,7 +645,6 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
         );
     };
 
-
     /**
      * Updates the fields of a target draft
      *
@@ -667,7 +663,6 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
             callback
         );
     };
-
 
     /**
      * Creates a draft from a published or archived version.
@@ -734,7 +729,6 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
         );
     };
 
-
     /**
      * Deletes target version of the content.
      *
@@ -749,7 +743,6 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
             callback
         );
     };
-
 
     /**
      * Publishes target version of the content.
@@ -768,7 +761,6 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
             callback
         );
     };
-
 
 // ******************************
 // Locations management
@@ -1049,7 +1041,6 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
         );
     };
 
-
 // ******************************
 // Relations management
 // ******************************
@@ -1125,7 +1116,6 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
             }
         );
     };
-
 
     /**
      *  Loads target relation
@@ -1363,7 +1353,6 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
             callback
         );
     };
-
 
     /**
      *  Create a new ObjectState group
@@ -1717,7 +1706,6 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
             callback
         );
     };
-
 
     return ContentService;
 
