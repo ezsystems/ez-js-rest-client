@@ -24,7 +24,7 @@ define(["structures/CAPIError"], function (CAPIError) {
          * @method discoverRoot
          * @param rootPath {String} path to Root resource
          * @param callback {Function} callback executed after performing the request
-         * @param callback.error {mixed} false or CAPIError object if an error occured
+         * @param callback.error {mixed} false or CAPIError object if an error occurred
          * @param callback.response {boolean} true if the root was discovered successfully, false otherwise.
          */
         this.discoverRoot = function(rootPath, callback) {
@@ -75,7 +75,7 @@ define(["structures/CAPIError"], function (CAPIError) {
          * @method getObjectFromCache
          * @param name {String} name of the target object to be retrived (e.g. "Trash")
          * @param callback {Function} callback executed after performing the request
-         * @param callback.error {mixed} false or CAPIError object if an error occured
+         * @param callback.error {mixed} false or CAPIError object if an error occurred
          * @param callback.response {mixed} the target object if it was found, false otherwise.
          */
         this.getObjectFromCache = function(name, callback) {
@@ -119,7 +119,7 @@ define(["structures/CAPIError"], function (CAPIError) {
      * @method getUrl
      * @param name {String} name of the target object (e.g. "Trash")
      * @param callback {Function} callback executed after performing the request (see "discoverRoot" call for more info)
-     * @param callback.error {mixed} false or CAPIError object if an error occured
+     * @param callback.error {mixed} false or CAPIError object if an error occurred
      * @param callback.response {mixed} the url of the target object if it was found, false otherwise.
      */
     DiscoveryService.prototype.getUrl = function(name, callback) {
@@ -154,7 +154,7 @@ define(["structures/CAPIError"], function (CAPIError) {
      * @method getMediaType
      * @param name {String} name of the target object (e.g. "Trash")
      * @param callback {Function} callback executed after performing the request (see "discoverRoot" call for more info)
-     * @param callback.error {mixed} false or CAPIError object if an error occured
+     * @param callback.error {mixed} false or CAPIError object if an error occurred
      * @param callback.response {mixed} the media-type of the target object if it was found, false otherwise.
      */
     DiscoveryService.prototype.getMediaType = function(name, callback) {
@@ -189,7 +189,7 @@ define(["structures/CAPIError"], function (CAPIError) {
      * @method getInfoObject
      * @param name {String} name of the target object (e.g. "Trash")
      * @param callback {Function} callback executed after performing the request (see "discoverRoot" call for more info)
-     * @param callback.error {mixed} false or CAPIError object if an error occured
+     * @param callback.error {mixed} false or CAPIError object if an error occurred
      * @param callback.response {mixed} the target object if it was found, false otherwise.
      */
     DiscoveryService.prototype.getInfoObject = function(name, callback) {
