@@ -33,7 +33,7 @@ define(function () {
      * to signal the authentication has been completed.
      */
     HttpBasicAuthAgent.prototype.ensureAuthentication = function(done) {
-        // empty for basic auth
+        // ... empty for basic auth?
         done(false, true);
     };
 

@@ -87,9 +87,9 @@ define(["structures/Response", "structures/Request", "structures/CAPIError"],
                                         that._connectionFactory.createConnection().execute(authenticatedRequest, callback);
                                     } else {
                                         callback(
-                                            new CAPIError("An error occurred during request authentication.", {
-                                                request: nextRequest
-                                            }),
+                                            new CAPIError("An error occurred during request authentication.",
+                                                {request: nextRequest}
+                                            ),
                                             false
                                         );
                                     }
