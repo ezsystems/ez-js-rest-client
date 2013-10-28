@@ -223,7 +223,7 @@ define(function (require) {
                 mockFaultyAuthenticationAgent = {
                     ensureAuthentication : function(done){
                         done(
-                            new CAPIError("Error while ensuring authentication!"),
+                            new CAPIError("Error while ensuring authentication."),
                             false
                         );
                     }
@@ -259,7 +259,7 @@ define(function (require) {
                     },
                     authenticateRequest : function(request, done){
                         done(
-                            new CAPIError("Error while authenticating request!"),
+                            new CAPIError("Error while authenticating request."),
                             false);
                     }
                 };

@@ -198,7 +198,6 @@ define(function (require) {
 
                 expect(mockCallback).toHaveBeenCalled();
                 expect(mockCallback.mostRecentCall.args[0]).toEqual(jasmine.any(CAPIError)); // errors
-                expect(mockCallback.mostRecentCall.args[0].additionalInfo.errorCode).toEqual(testErrorCode);
                 expect(mockCallback.mostRecentCall.args[1]).toEqual(false); // response
             });
 

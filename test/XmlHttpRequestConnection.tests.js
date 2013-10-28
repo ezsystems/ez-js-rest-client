@@ -94,7 +94,7 @@ define(function (require) {
 
                 expect(mockCallback).toHaveBeenCalled();
                 expect(mockCallback.mostRecentCall.args[0]).toEqual(false); // errors
-                expect(mockCallback.mostRecentCall.args[1]).toEqual(jasmine.any(Response)); // errors
+                expect(mockCallback.mostRecentCall.args[1]).toEqual(jasmine.any(Response)); // response
 
             });
 
@@ -200,7 +200,6 @@ define(function (require) {
 
                 expect(mockCallback).toHaveBeenCalled();
                 expect(mockCallback.mostRecentCall.args[0]).toEqual(jasmine.any(CAPIError)); // errors
-                expect(mockCallback.mostRecentCall.args[0].additionalInfo.errorCode).toEqual(testErrorCode);
                 expect(mockCallback.mostRecentCall.args[1]).toEqual(false); // response
             });
 

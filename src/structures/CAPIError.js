@@ -13,9 +13,7 @@ define(function () {
     var CAPIError = function(message, additionalInfo){
         this.name = "CAPIError";
         this.message = message;
-        if (arguments.length > 1) {
-            this.additionalInfo = additionalInfo;
-        }
+        this.additionalInfo = additionalInfo;
     };
 
     CAPIError.prototype = new Error();

@@ -30,7 +30,10 @@ define(["structures/Response", "structures/CAPIError"], function (Response, CAPI
                 if (XHR.readyState != 4) {return;} // Not ready yet
                 if (XHR.status >= 400) {
                     callback(
-                        new CAPIError("Connection error : " + XHR.status, {errorCode : XHR.status}),
+                        new CAPIError("Connection error : " + XHR.status, {errorCode : XHR.status} + ".", {
+                            errorCode : XHR.status,
+                            xhr: XHR
+                        }),
                         false
                     );
                     return;
