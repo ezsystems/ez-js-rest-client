@@ -718,7 +718,7 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
      * Search roles by string identifier and apply certain limit and offset on the result set
      *
      * @method loadRoles
-     * @param identifier {String} string identifier of the roles to search (e.g. "admin")
+     * @param [identifier] {String} string identifier of the roles to search (e.g. "admin")
      * @param [limit=-1] {int} the limit of the result set
      * @param [offset=0] {int} the offset of the result set
      * @param callback {Function} callback executed after performing the request (see
@@ -729,23 +729,32 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
     UserService.prototype.loadRoles = function loadRoles(identifier, limit, offset, callback) {
 
         var that = this,
-            identifierQuery = (identifier === "") ? "" : "&identifier=" + identifier,
+            identifierQuery,
+            defaultIdentifier = "",
             defaultLimit = -1,
             defaultOffset = 0;
 
-        // default values for ommited parameters (if any)
+        // default values for omitted parameters (if any)
         if (arguments.length < 4) {
-            if (typeof limit == "function") {
+            if (typeof identifier == "function") {
                 // no optional params are passed
+                callback = identifier;
+                identifier = defaultIdentifier;
+                limit = defaultLimit;
+                offset = defaultOffset;
+            } else if (typeof limit == "function") {
+                // only identifier is passed
                 callback = limit;
                 limit = defaultLimit;
                 offset = defaultOffset;
             } else {
-                // only limit is passed
+                // identifier and limit are passed
                 callback = offset;
                 offset = defaultOffset;
             }
         }
+
+        identifierQuery = (identifier === "") ? "" : "&identifier=" + identifier;
 
         this._discoveryService.getInfoObject(
             "roles",
@@ -754,7 +763,7 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
 
                     that._connectionManager.request(
                         "GET",
-                        roles._href + '?limit=' + offset + '&offset=' + limit + identifierQuery,
+                        roles._href + '?limit=' + limit + '&offset=' + offset + identifierQuery,
                         "",
                         {
                             "Accept" : roles["_media-type"]

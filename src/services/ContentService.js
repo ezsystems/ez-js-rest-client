@@ -645,7 +645,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
             defaultResponseGroups = '',
             defaultLanguages = '';
 
-        // default values for ommited parameters (if any)
+        // default values for omitted parameters (if any)
         if (arguments.length < 5) {
             if (typeof fields == "function") {
                 //no optional parameteres are passed
@@ -765,42 +765,28 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
      */
     ContentService.prototype.createContentDraft = function createContentDraft(contentId, versionId, callback) {
 
-        var that = this,
-            contentVersions,
-            currentVersion;
+        var that = this;
 
         this.loadContentInfo(
             contentId,
             function(error, contentResponse){
+                var url = '';
+
                 if (!error) {
 
-                    if (typeof versionId != "function") {
-                        // Version id is not ommited
-                        contentVersions = contentResponse.document.Content.Versions;
-
-                        that._connectionManager.request(
-                            "COPY",
-                            contentVersions._href + "/" + versionId,
-                            "",
-                            { "Accept" : "application/vnd.ez.api.Version+json" },
-                            callback
-                        );
-
+                    if (typeof versionId !== "function") {
+                        url = contentResponse.document.Content.Versions._href + "/" + versionId;
                     } else {
-                        // Version id is ommited
                         callback = versionId;
-
-                        currentVersion = contentResponse.document.Content.CurrentVersion;
-
-                        that._connectionManager.request(
-                            "COPY",
-                            currentVersion._href,
-                            "",
-                            { "Accept" : "application/vnd.ez.api.Version+json" },
-                            callback
-                        );
-
+                        url = contentResponse.document.Content.CurrentVersion._href;
                     }
+
+                    that._connectionManager.request(
+                        "COPY", url, "",
+                        { "Accept" : "application/vnd.ez.api.Version+json" },
+                        callback
+                    );
+
                 } else {
                     callback(error, false);
                 }
@@ -998,7 +984,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
             defaultLimit = -1,
             defaultOffset = 0;
 
-        // default values for ommited parameters (if any)
+        // default values for omitted parameters (if any)
         if (arguments.length < 4) {
             if (typeof limit == "function") {
                 // no optional params are passed
@@ -1168,7 +1154,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
             defaultLimit = -1,
             defaultOffset = 0;
 
-        // default values for ommited parameters (if any)
+        // default values for omitted parameters (if any)
         if (arguments.length < 4) {
             if (typeof limit == "function") {
                 // no optional params are passed
@@ -1222,7 +1208,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
             defaultLimit = -1,
             defaultOffset = 0;
 
-        // default values for ommited parameters (if any)
+        // default values for omitted parameters (if any)
         if (arguments.length < 4) {
             if (typeof limit == "function") {
                 // no optional params are passed
@@ -1355,7 +1341,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
             defaultLimit = -1,
             defaultOffset = 0;
 
-        // default values for ommited parameters (if any)
+        // default values for omitted parameters (if any)
         if (arguments.length < 3) {
             if (typeof limit == "function") {
                 // no optional params are passed
@@ -1421,10 +1407,8 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
         var headers = { "Accept" : "application/vnd.ez.api.TrashItem+json" };
 
         if ((typeof destination != "function")) {
-            // destination is not ommited
             headers.Destination = destination;
         } else {
-            // destination is ommited
             callback = destination;
         }
 
@@ -1763,7 +1747,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
 
         var parameters;
 
-        // default values for ommited parameters (if any)
+        // default values for omitted parameters (if any)
         if (arguments.length < 3) {
             callback = custom;
             custom = true;
