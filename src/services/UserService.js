@@ -763,7 +763,7 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
 
                     that._connectionManager.request(
                         "GET",
-                        roles._href + '?limit=' + limit + '&offset=' + offset + identifierQuery,
+                        roles._href + '?offset=' + offset + '&limit=' + limit + identifierQuery,
                         "",
                         {
                             "Accept" : roles["_media-type"]

@@ -783,7 +783,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
 
                     that._connectionManager.request(
                         "COPY", url, "",
-                        { "Accept" : "application/vnd.ez.api.Version+json" },
+                        {"Accept": "application/vnd.ez.api.Version+json"},
                         callback
                     );
 
@@ -1007,7 +1007,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
 
                     that._connectionManager.request(
                         "GET",
-                        location.Children._href + '?limit=' + limit + '&offset=' + offset,
+                        location.Children._href + '?offset=' + offset + '&limit=' + limit,
                         "",
                         { "Accept" : location.Children["_media-type"] },
                         callback
@@ -1178,7 +1178,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
 
                     that._connectionManager.request(
                         "GET",
-                        version.Relations._href + '?limit=' + limit + '&offset=' + offset,
+                        version.Relations._href + '?offset=' + offset + '&limit=' + limit,
                         "",
                         { "Accept" : version.Relations["_media-type"] },
                         callback
@@ -1231,7 +1231,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
 
                     that._connectionManager.request(
                         "GET",
-                        currentVersion.Relations._href + '?limit=' + limit + '&offset=' + offset,
+                        currentVersion.Relations._href + '?offset=' + offset + '&limit=' + limit,
                         "",
                         { "Accept" : currentVersion.Relations["_media-type"] },
                         callback
@@ -1362,7 +1362,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
 
                     that._connectionManager.request(
                         "GET",
-                        trash._href + '?limit=' + limit + '&offset=' + offset,
+                        trash._href + '?offset=' + offset + '&limit=' + limit,
                         "",
                         { "Accept" : trash["_media-type"] },
                         callback
