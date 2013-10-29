@@ -80,11 +80,17 @@ define(function (require) {
                     jasmine.any(Request),
                     jasmine.any(Function)
                 );
+
                 expect(mockConnectionFactory.createConnection).toHaveBeenCalled();
                 expect(mockConnection.execute).toHaveBeenCalledWith(
                     jasmine.any(Request),
                     mockCallback
                 );
+
+                expect(mockConnection.execute.mostRecentCall.args[0].method).toEqual("GET"); //method
+                expect(mockConnection.execute.mostRecentCall.args[0].url).toEqual(endPointUrl + rootId); //url
+                expect(mockConnection.execute.mostRecentCall.args[0].body).toEqual(""); //body
+                expect(mockConnection.execute.mostRecentCall.args[0].headers).toEqual({}); //headers
             });
 
             it("request (with calls logging and minimum arguments set)", function(){
@@ -93,11 +99,7 @@ define(function (require) {
                 spyOn(console, 'dir').andCallThrough;
 
                 connectionManager.request(
-                    undefined,
-                    undefined,
-                    undefined,
-                    undefined,
-                    undefined
+                    mockCallback
                 );
 
                 expect(mockAuthenticationAgent.ensureAuthentication).toHaveBeenCalled();
@@ -107,9 +109,90 @@ define(function (require) {
                 );
                 expect(mockConnection.execute).toHaveBeenCalledWith(
                     jasmine.any(Request),
-                    jasmine.any(Function)
+                    mockCallback
                 );
                 expect(console.dir).toHaveBeenCalledWith(jasmine.any(Request));
+
+                expect(mockConnection.execute.mostRecentCall.args[0].method).toEqual("GET"); //method
+                expect(mockConnection.execute.mostRecentCall.args[0].url).toEqual(endPointUrl + "/"); //url
+                expect(mockConnection.execute.mostRecentCall.args[0].body).toEqual(""); //body
+                expect(mockConnection.execute.mostRecentCall.args[0].headers).toEqual({}); //headers
+
+            });
+
+            it("request (with 1 optional argument)", function(){
+
+                connectionManager.request(
+                    "GET",
+                    mockCallback
+                );
+
+                expect(mockAuthenticationAgent.ensureAuthentication).toHaveBeenCalled();
+                expect(mockAuthenticationAgent.authenticateRequest).toHaveBeenCalledWith(
+                    jasmine.any(Request),
+                    jasmine.any(Function)
+                );
+                expect(mockConnection.execute).toHaveBeenCalledWith(
+                    jasmine.any(Request),
+                    mockCallback
+                );
+
+                expect(mockConnection.execute.mostRecentCall.args[0].method).toEqual("GET"); //method
+                expect(mockConnection.execute.mostRecentCall.args[0].url).toEqual(endPointUrl + "/"); //url
+                expect(mockConnection.execute.mostRecentCall.args[0].body).toEqual(""); //body
+                expect(mockConnection.execute.mostRecentCall.args[0].headers).toEqual({}); //headers
+
+            });
+
+            it("request (with 2 optional arguments)", function(){
+
+                connectionManager.request(
+                    "GET",
+                    rootId,
+                    mockCallback
+                );
+
+                expect(mockAuthenticationAgent.ensureAuthentication).toHaveBeenCalled();
+                expect(mockAuthenticationAgent.authenticateRequest).toHaveBeenCalledWith(
+                    jasmine.any(Request),
+                    jasmine.any(Function)
+                );
+                expect(mockConnection.execute).toHaveBeenCalledWith(
+                    jasmine.any(Request),
+                    mockCallback
+                );
+
+                expect(mockConnection.execute.mostRecentCall.args[0].method).toEqual("GET"); //method
+                expect(mockConnection.execute.mostRecentCall.args[0].url).toEqual(endPointUrl + rootId); //url
+                expect(mockConnection.execute.mostRecentCall.args[0].body).toEqual(""); //body
+                expect(mockConnection.execute.mostRecentCall.args[0].headers).toEqual({}); //headers
+
+            });
+
+            it("request (with 3 optional arguments)", function(){
+
+                connectionManager.request(
+                    "GET",
+                    rootId,
+                    "",
+                    mockCallback
+                );
+
+                expect(mockAuthenticationAgent.ensureAuthentication).toHaveBeenCalled();
+                expect(mockAuthenticationAgent.authenticateRequest).toHaveBeenCalledWith(
+                    jasmine.any(Request),
+                    jasmine.any(Function)
+                );
+                expect(mockConnection.execute).toHaveBeenCalledWith(
+                    jasmine.any(Request),
+                    mockCallback
+                );
+
+                expect(mockConnection.execute.mostRecentCall.args[0].method).toEqual("GET"); //method
+                expect(mockConnection.execute.mostRecentCall.args[0].url).toEqual(endPointUrl + rootId); //url
+                expect(mockConnection.execute.mostRecentCall.args[0].body).toEqual(""); //body
+                expect(mockConnection.execute.mostRecentCall.args[0].headers).toEqual({}); //headers
+
             });
 
             it("request (and stores request in queue while authentication is still in progress)", function(){
@@ -158,21 +241,84 @@ define(function (require) {
                 spyOn(console, 'dir').andCallThrough;
 
                 connectionManager.notAuthorizedRequest(
-                    undefined,
-                    undefined,
-                    undefined,
-                    undefined,
-                    undefined
+                    mockCallback
                 );
 
                 expect(mockAuthenticationAgent.ensureAuthentication).not.toHaveBeenCalled();
                 expect(mockAuthenticationAgent.authenticateRequest).not.toHaveBeenCalled();
                 expect(mockConnection.execute).toHaveBeenCalledWith(
                     jasmine.any(Request),
-                    jasmine.any(Function)
+                    mockCallback
                 );
                 expect(console.dir).toHaveBeenCalledWith(jasmine.any(Request));
             });
+
+            it("notAuthorizedRequest (with 1 optional argument)", function(){
+
+                connectionManager.notAuthorizedRequest(
+                    "GET",
+                    mockCallback
+                );
+
+                expect(mockAuthenticationAgent.ensureAuthentication).not.toHaveBeenCalled();
+                expect(mockAuthenticationAgent.authenticateRequest).not.toHaveBeenCalled();
+                expect(mockConnection.execute).toHaveBeenCalledWith(
+                    jasmine.any(Request),
+                    mockCallback
+                );
+
+                expect(mockConnection.execute.mostRecentCall.args[0].method).toEqual("GET"); //method
+                expect(mockConnection.execute.mostRecentCall.args[0].url).toEqual(endPointUrl + "/"); //url
+                expect(mockConnection.execute.mostRecentCall.args[0].body).toEqual(""); //body
+                expect(mockConnection.execute.mostRecentCall.args[0].headers).toEqual({}); //headers
+
+            });
+
+            it("notAuthorizedRequest (with 2 optional arguments)", function(){
+
+                connectionManager.notAuthorizedRequest(
+                    "GET",
+                    rootId,
+                    mockCallback
+                );
+
+                expect(mockAuthenticationAgent.ensureAuthentication).not.toHaveBeenCalled();
+                expect(mockAuthenticationAgent.authenticateRequest).not.toHaveBeenCalled();
+                expect(mockConnection.execute).toHaveBeenCalledWith(
+                    jasmine.any(Request),
+                    mockCallback
+                );
+
+                expect(mockConnection.execute.mostRecentCall.args[0].method).toEqual("GET"); //method
+                expect(mockConnection.execute.mostRecentCall.args[0].url).toEqual(endPointUrl + rootId); //url
+                expect(mockConnection.execute.mostRecentCall.args[0].body).toEqual(""); //body
+                expect(mockConnection.execute.mostRecentCall.args[0].headers).toEqual({}); //headers
+
+            });
+
+            it("notAuthorizedRequest (with 3 optional arguments)", function(){
+
+                connectionManager.notAuthorizedRequest(
+                    "GET",
+                    rootId,
+                    "",
+                    mockCallback
+                );
+
+                expect(mockAuthenticationAgent.ensureAuthentication).not.toHaveBeenCalled();
+                expect(mockAuthenticationAgent.authenticateRequest).not.toHaveBeenCalled();
+                expect(mockConnection.execute).toHaveBeenCalledWith(
+                    jasmine.any(Request),
+                    mockCallback
+                );
+
+                expect(mockConnection.execute.mostRecentCall.args[0].method).toEqual("GET"); //method
+                expect(mockConnection.execute.mostRecentCall.args[0].url).toEqual(endPointUrl + rootId); //url
+                expect(mockConnection.execute.mostRecentCall.args[0].body).toEqual(""); //body
+                expect(mockConnection.execute.mostRecentCall.args[0].headers).toEqual({}); //headers
+
+            });
+
 
             it("delete", function(){
 

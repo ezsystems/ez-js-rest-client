@@ -29,29 +29,54 @@ define(["structures/Response", "structures/Request", "structures/CAPIError"],
      * Basic request function
      *
      * @method request
-     * @param method {String} request method ("POST", "GET" etc)
-     * @param url {String} requested REST resource
-     * @param body {JSON}
-     * @param headers {object}
+     * @param [method] {String} request method ("POST", "GET" etc)
+     * @param [url] {String} requested REST resource
+     * @param [body] {JSON}
+     * @param [headers] {object}
      * @param callback {function} function, which will be executed on request success
      */
     ConnectionManager.prototype.request = function(method, url, body, headers, callback) {
-
-        // default values for all the parameters
-        method = (typeof method === "undefined") ? "GET" : method;
-        url = (typeof url === "undefined") ? "/" : url;
-        body = (typeof body === "undefined") ? "" : body;
-        headers = (typeof headers === "undefined") ? {} : headers;
-        callback = (typeof callback === "undefined") ? function(){} : callback;
-
         var that = this,
+            request,
             nextRequest,
-            request = new Request({
-                method : method,
-                url : this._endPointUrl + url,
-                body : body,
-                headers : headers
-            });
+            defaultMethod = "GET",
+            defaultUrl = "/",
+            defaultBody = "",
+            defaultHeaders = {};
+
+        // default values for omitted parameters (if any)
+        if (arguments.length < 5) {
+            if (typeof method == "function") {
+                //no optional parameteres are passed
+                callback = method;
+                method = defaultMethod;
+                url = defaultUrl;
+                body = defaultBody;
+                headers = defaultHeaders;
+            } else if (typeof url == "function") {
+                // only first 1 optional parameter is passed
+                callback = url;
+                url = defaultUrl;
+                body = defaultBody;
+                headers = defaultHeaders;
+            } else if (typeof body == "function") {
+                // only first 2 optional parameters are passed
+                callback = body;
+                body = defaultBody;
+                headers = defaultHeaders;
+            } else {
+                // only first 3 optional parameters are passed
+                callback = headers;
+                headers = defaultHeaders;
+            }
+        }
+
+        request = new Request({
+            method : method,
+            url : this._endPointUrl + url,
+            body : body,
+            headers : headers
+        });
 
         // Requests suspending workflow
         // first, put any request in queue anyway (the queue will be emptied after ensuring authentication)
@@ -127,22 +152,47 @@ define(["structures/Response", "structures/Request", "structures/CAPIError"],
      * Used mainly for initial requests (e.g. createSession)
      *
      * @method notAuthorizedRequest
-     * @param method {String} request method ("POST", "GET" etc)
-     * @param url {String} requested REST resource
-     * @param body {JSON}
-     * @param headers {object}
+     * @param [method] {String} request method ("POST", "GET" etc)
+     * @param [url] {String} requested REST resource
+     * @param [body] {JSON}
+     * @param [headers] {object}
      * @param callback {function} function, which will be executed on request success
      */
     ConnectionManager.prototype.notAuthorizedRequest = function(method, url, body, headers, callback) {
+        var request,
+            defaultMethod = "GET",
+            defaultUrl = "/",
+            defaultBody = "",
+            defaultHeaders = {};
 
-        // default values for all the parameters
-        method = (typeof method === "undefined") ? "GET" : method;
-        url = (typeof url === "undefined") ? "/" : url;
-        body = (typeof body === "undefined") ? "" : body;
-        headers = (typeof headers === "undefined") ? {} : headers;
-        callback = (typeof callback === "undefined") ? function(){} : callback;
+        // default values for omitted parameters (if any)
+        if (arguments.length < 5) {
+            if (typeof method == "function") {
+                //no optional parameteres are passed
+                callback = method;
+                method = defaultMethod;
+                url = defaultUrl;
+                body = defaultBody;
+                headers = defaultHeaders;
+            } else if (typeof url == "function") {
+                // only first 1 optional parameter is passed
+                callback = url;
+                url = defaultUrl;
+                body = defaultBody;
+                headers = defaultHeaders;
+            } else if (typeof body == "function") {
+                // only first 2 optional parameters are passed
+                callback = body;
+                body = defaultBody;
+                headers = defaultHeaders;
+            } else {
+                // only first 3 optional parameters are passed
+                callback = headers;
+                headers = defaultHeaders;
+            }
+        }
 
-        var request = new Request({
+        request = new Request({
             method : method,
             url : this._endPointUrl + url,
             body : body,
