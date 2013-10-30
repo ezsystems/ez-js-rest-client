@@ -18,13 +18,16 @@ define(function (require) {
             anotherContentTypeService,
             anotherUserService;
 
-        beforeEach(function (){
+        beforeEach(function () {
             mockAuthenticationAgent = {
-                CAPI: null
+                _CAPI: null,
+                setCAPI: function (CAPI) {
+                    this._CAPI = CAPI;
+                }
             };
         });
 
-        it("is running constructor correctly", function(){
+        it("is running constructor correctly", function () {
 
             jsCAPI = new CAPI(
                 endPointUrl,
@@ -32,19 +35,19 @@ define(function (require) {
             );
 
             expect(jsCAPI).toBeDefined();
-            expect(mockAuthenticationAgent.CAPI).toBe(jsCAPI);
+            expect(mockAuthenticationAgent._CAPI).toBe(jsCAPI);
         });
 
-        describe("is calling services correctly (and they are singletons):", function(){
+        describe("is calling services correctly (and they are singletons):", function () {
 
-            beforeEach(function (){
+            beforeEach(function () {
                 jsCAPI = new CAPI(
                     endPointUrl,
                     mockAuthenticationAgent
                 );
             });
 
-            it("ContentService", function(){
+            it("ContentService", function () {
 
                 contentService = jsCAPI.getContentService();
                 anotherContentService = jsCAPI.getContentService();
@@ -54,7 +57,7 @@ define(function (require) {
                 expect(anotherContentService).toBe(contentService);
             });
 
-            it("ContentTypeService", function(){
+            it("ContentTypeService", function () {
 
                 contentTypeService = jsCAPI.getContentTypeService();
                 anotherContentTypeService = jsCAPI.getContentTypeService();
@@ -64,7 +67,7 @@ define(function (require) {
                 expect(anotherContentTypeService).toBe(contentTypeService);
             });
 
-            it("UserService", function(){
+            it("UserService", function () {
 
                 userService = jsCAPI.getUserService();
                 anotherUserService = jsCAPI.getUserService();

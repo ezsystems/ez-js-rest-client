@@ -466,10 +466,9 @@ define('authAgents/SessionAuthAgent',["structures/CAPIError"], function (CAPIErr
      * @param credentials.password {String} user password
      */
     var SessionAuthAgent = function (credentials) {
-        // for now is initiated inside CAPI constructor
-        this.CAPI = null;
+        // is initiated inside CAPI constructor by using setCAPI() method
+        this._CAPI = null;
 
-        // Private (should be!) area
         this._login = credentials.login;
         this._password = credentials.password;
 
@@ -491,7 +490,7 @@ define('authAgents/SessionAuthAgent',["structures/CAPIError"], function (CAPIErr
     SessionAuthAgent.prototype.ensureAuthentication = function (done) {
         if (this.sessionId === null) {
             var that = this,
-                userService = this.CAPI.getUserService(),
+                userService = this._CAPI.getUserService(),
                 sessionCreateStruct = userService.newSessionCreateStruct(
                     this._login,
                     this._password
@@ -556,7 +555,7 @@ define('authAgents/SessionAuthAgent',["structures/CAPIError"], function (CAPIErr
      * @param done {function}
      */
     SessionAuthAgent.prototype.logOut = function (done) {
-        var userService = this.CAPI.getUserService(),
+        var userService = this._CAPI.getUserService(),
             that = this;
 
         userService.deleteSession(
@@ -580,6 +579,16 @@ define('authAgents/SessionAuthAgent',["structures/CAPIError"], function (CAPIErr
         );
     };
 
+    /**
+     * Set the instance of the CAPI to be used by the agent
+     *
+     * @method setCAPI
+     * @param CAPI {CAPI} current instance of the CAPI object
+     */
+    SessionAuthAgent.prototype.setCAPI = function (CAPI) {
+        this._CAPI = CAPI;
+    };
+
     return SessionAuthAgent;
 
 });
@@ -598,9 +607,6 @@ define('authAgents/HttpBasicAuthAgent',[],function () {
      * @param credentials.password {String} user password
      */
     var HttpBasicAuthAgent = function (credentials) {
-        this.CAPI = null;
-
-        // Private (should be!) area
         this._login = credentials.login;
         this._password = credentials.password;
     };
@@ -645,6 +651,16 @@ define('authAgents/HttpBasicAuthAgent',[],function () {
      */
     HttpBasicAuthAgent.prototype.logOut = function (done) {
         done(false, true);
+    };
+
+    /**
+     * Set the instance of the CAPI to be used by the agent
+     * As HttpBasicAuthAgent has no use for the CAPI, implementation is empty
+     *
+     * @method setCAPI
+     * @param CAPI {CAPI} current instance of the CAPI object
+     */
+    HttpBasicAuthAgent.prototype.setCAPI = function (CAPI) {
     };
 
     return HttpBasicAuthAgent;
@@ -5990,8 +6006,7 @@ define('CAPI',['authAgents/SessionAuthAgent', 'authAgents/HttpBasicAuthAgent', '
         this._contentTypeService = null;
         this._userService = null;
 
-        authenticationAgent.CAPI = this;
-        // No other way to use session authorization... or is it?
+        authenticationAgent.setCAPI(this);
 
         // Array of connections, should be filled-in in preferred order
         //TODO: consider moving to some sort of configuration file...

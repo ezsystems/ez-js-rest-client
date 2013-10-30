@@ -13,10 +13,9 @@ define(["structures/CAPIError"], function (CAPIError) {
      * @param credentials.password {String} user password
      */
     var SessionAuthAgent = function (credentials) {
-        // for now is initiated inside CAPI constructor
-        this.CAPI = null;
+        // is initiated inside CAPI constructor by using setCAPI() method
+        this._CAPI = null;
 
-        // Private (should be!) area
         this._login = credentials.login;
         this._password = credentials.password;
 
@@ -38,7 +37,7 @@ define(["structures/CAPIError"], function (CAPIError) {
     SessionAuthAgent.prototype.ensureAuthentication = function (done) {
         if (this.sessionId === null) {
             var that = this,
-                userService = this.CAPI.getUserService(),
+                userService = this._CAPI.getUserService(),
                 sessionCreateStruct = userService.newSessionCreateStruct(
                     this._login,
                     this._password
@@ -103,7 +102,7 @@ define(["structures/CAPIError"], function (CAPIError) {
      * @param done {function}
      */
     SessionAuthAgent.prototype.logOut = function (done) {
-        var userService = this.CAPI.getUserService(),
+        var userService = this._CAPI.getUserService(),
             that = this;
 
         userService.deleteSession(
@@ -125,6 +124,16 @@ define(["structures/CAPIError"], function (CAPIError) {
                 }
             }
         );
+    };
+
+    /**
+     * Set the instance of the CAPI to be used by the agent
+     *
+     * @method setCAPI
+     * @param CAPI {CAPI} current instance of the CAPI object
+     */
+    SessionAuthAgent.prototype.setCAPI = function (CAPI) {
+        this._CAPI = CAPI;
     };
 
     return SessionAuthAgent;

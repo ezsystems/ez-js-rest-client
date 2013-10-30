@@ -13,9 +13,6 @@ define(function () {
      * @param credentials.password {String} user password
      */
     var HttpBasicAuthAgent = function (credentials) {
-        this.CAPI = null;
-
-        // Private (should be!) area
         this._login = credentials.login;
         this._password = credentials.password;
     };
@@ -60,6 +57,16 @@ define(function () {
      */
     HttpBasicAuthAgent.prototype.logOut = function (done) {
         done(false, true);
+    };
+
+    /**
+     * Set the instance of the CAPI to be used by the agent
+     * As HttpBasicAuthAgent has no use for the CAPI, implementation is empty
+     *
+     * @method setCAPI
+     * @param CAPI {CAPI} current instance of the CAPI object
+     */
+    HttpBasicAuthAgent.prototype.setCAPI = function (CAPI) {
     };
 
     return HttpBasicAuthAgent;
