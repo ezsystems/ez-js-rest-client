@@ -71,7 +71,7 @@ define(["structures/Response", "structures/CAPIError"], function (Response, CAPI
      *
      * @method isCompatible
      * @static
-     * @returns {boolean} true, if connection is compatible with current environment, false otherwise
+     * @return {boolean} whether the connection is compatible with current environment
      */
     MicrosoftXmlHttpRequestConnection.isCompatible = function () {
         return !!window.ActiveXObject;
