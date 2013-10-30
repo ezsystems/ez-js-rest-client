@@ -32,8 +32,7 @@ define(['authAgents/SessionAuthAgent', 'authAgents/HttpBasicAuthAgent', 'Connect
         this._contentTypeService = null;
         this._userService = null;
 
-        authenticationAgent.CAPI = this;
-        // No other way to use session authorization... or is it?
+        authenticationAgent.setCAPI(this);
 
         // Array of connections, should be filled-in in preferred order
         //TODO: consider moving to some sort of configuration file...

@@ -92,7 +92,7 @@ define(function (require) {
                     login : testLogin,
                     password : testPassword
                 });
-                sessionAuthAgent.CAPI = mockCAPI;
+                sessionAuthAgent.setCAPI(mockCAPI);
 
             });
 
@@ -124,7 +124,7 @@ define(function (require) {
                     login : testLogin,
                     password : testPassword
                 });
-                sessionAuthAgent.CAPI = mockCAPI;
+                sessionAuthAgent.setCAPI(mockCAPI);
 
                 sessionAuthAgent.ensureAuthentication(mockCallback);
 
@@ -212,6 +212,15 @@ define(function (require) {
 
                 expect(mockCallback).toHaveBeenCalledWith(false, true);
             });
+
+            it("setCAPI", function(){
+                var anotherCAPI = {};
+                sessionAuthAgent.setCAPI(anotherCAPI);
+
+                expect(sessionAuthAgent._CAPI).toBe(anotherCAPI);
+            });
+
+
         });
 
         describe("is returning errors correctly, when user service fails, while performing:", function(){
@@ -255,7 +264,7 @@ define(function (require) {
                     login : testLogin,
                     password : testPassword
                 });
-                sessionAuthAgent.CAPI = mockFaultyCAPI;
+                sessionAuthAgent.setCAPI(mockFaultyCAPI);
 
             });
 

@@ -19,7 +19,10 @@ define(function (require) {
 
         beforeEach(function (){
             mockAuthenticationAgent = {
-                CAPI: null
+                _CAPI: null,
+                setCAPI: function(CAPI) {
+                    this._CAPI = CAPI;
+                }
             };
         });
 
@@ -31,7 +34,7 @@ define(function (require) {
             );
 
             expect(jsCAPI).toBeDefined();
-            expect(mockAuthenticationAgent.CAPI).toBe(jsCAPI);
+            expect(mockAuthenticationAgent._CAPI).toBe(jsCAPI);
         });
 
         describe("is calling services correctly (and they are singletons):", function(){
