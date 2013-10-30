@@ -29,10 +29,10 @@ define(["structures/Response", "structures/Request", "structures/CAPIError"],
      * Basic request function
      *
      * @method request
-     * @param [method] {String} request method ("POST", "GET" etc)
-     * @param [url] {String} requested REST resource
-     * @param [body] {JSON}
-     * @param [headers] {object}
+     * @param [method="GET"] {String} request method ("POST", "GET" etc)
+     * @param [url="/"] {String} requested REST resource
+     * @param [body=""] {JSON}
+     * @param [headers={}] {object}
      * @param callback {function} function, which will be executed on request success
      */
     ConnectionManager.prototype.request = function(method, url, body, headers, callback) {
@@ -152,10 +152,10 @@ define(["structures/Response", "structures/Request", "structures/CAPIError"],
      * Used mainly for initial requests (e.g. createSession)
      *
      * @method notAuthorizedRequest
-     * @param [method] {String} request method ("POST", "GET" etc)
-     * @param [url] {String} requested REST resource
-     * @param [body] {JSON}
-     * @param [headers] {object}
+     * @param [method="GET"] {String} request method ("POST", "GET" etc)
+     * @param [url="/"] {String} requested REST resource
+     * @param [body=""] {JSON}
+     * @param [headers={}] {object}
      * @param callback {function} function, which will be executed on request success
      */
     ConnectionManager.prototype.notAuthorizedRequest = function(method, url, body, headers, callback) {
