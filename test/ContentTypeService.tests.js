@@ -1,3 +1,4 @@
+/* global define, describe, it, expect, beforeEach, jasmine, spyOn */
 define(function (require) {
 
     // Declaring dependencies
@@ -17,6 +18,7 @@ define(function (require) {
             mockDiscoveryService,
             mockFaultyDiscoveryService,
             mockCallback,
+            contentTypeService,
             discoveryService,
             testContentTypeGroups = "/api/ezp/v2/content/typegroups",
             testContentTypeGroupId = "/api/ezp/v2/content/typegroups/1",
@@ -102,7 +104,7 @@ define(function (require) {
                         }
 
                     }
-                }
+                };
 
                 spyOn(mockDiscoveryService, 'getInfoObject').andCallThrough();
 
@@ -144,7 +146,9 @@ define(function (require) {
                 expect(mockConnectionManager.request.mostRecentCall.args[0]).toEqual("GET"); //method
                 expect(mockConnectionManager.request.mostRecentCall.args[1]).toEqual(testContentTypeGroups); //url
                 expect(mockConnectionManager.request.mostRecentCall.args[2]).toEqual(""); // body
-                expect(mockConnectionManager.request.mostRecentCall.args[3].Accept).toEqual("application/vnd.ez.api.ContentTypeGroupList+json"); // headers
+                expect(
+                    mockConnectionManager.request.mostRecentCall.args[3].Accept
+                ).toEqual("application/vnd.ez.api.ContentTypeGroupList+json"); // headers
                 expect(mockConnectionManager.request.mostRecentCall.args[4]).toBe(mockCallback); // callback
             });
 
@@ -158,7 +162,9 @@ define(function (require) {
                 expect(mockConnectionManager.request.mostRecentCall.args[0]).toEqual("GET"); //method
                 expect(mockConnectionManager.request.mostRecentCall.args[1]).toEqual(testContentTypeGroupId); //url
                 expect(mockConnectionManager.request.mostRecentCall.args[2]).toEqual(""); // body
-                expect(mockConnectionManager.request.mostRecentCall.args[3].Accept).toEqual("application/vnd.ez.api.ContentTypeGroup+json"); // headers
+                expect(
+                    mockConnectionManager.request.mostRecentCall.args[3].Accept
+                ).toEqual("application/vnd.ez.api.ContentTypeGroup+json"); // headers
                 expect(mockConnectionManager.request.mostRecentCall.args[4]).toBe(mockCallback); // callback
             });
 
@@ -171,9 +177,13 @@ define(function (require) {
 
                 expect(mockConnectionManager.request).toHaveBeenCalled();
                 expect(mockConnectionManager.request.mostRecentCall.args[0]).toEqual("GET"); //method
-                expect(mockConnectionManager.request.mostRecentCall.args[1]).toEqual(testContentTypeGroups + '?identifier=' + testContentTypeGroupIdentifier); //url
+                expect(
+                    mockConnectionManager.request.mostRecentCall.args[1]
+                ).toEqual(testContentTypeGroups + '?identifier=' + testContentTypeGroupIdentifier); //url
                 expect(mockConnectionManager.request.mostRecentCall.args[2]).toEqual(""); // body
-                expect(mockConnectionManager.request.mostRecentCall.args[3].Accept).toEqual("application/vnd.ez.api.ContentTypeGroup+json"); // headers
+                expect(
+                    mockConnectionManager.request.mostRecentCall.args[3].Accept
+                ).toEqual("application/vnd.ez.api.ContentTypeGroup+json"); // headers
                 expect(mockConnectionManager.request.mostRecentCall.args[4]).toBe(mockCallback); // callback
             });
 
@@ -223,7 +233,9 @@ define(function (require) {
                 expect(mockConnectionManager.request.mostRecentCall.args[0]).toEqual("GET"); //method
                 expect(mockConnectionManager.request.mostRecentCall.args[1]).toEqual(testContentTypeGroupTypes); //url
                 expect(mockConnectionManager.request.mostRecentCall.args[2]).toEqual(""); // body
-                expect(mockConnectionManager.request.mostRecentCall.args[3].Accept).toEqual("application/vnd.ez.api.ContentTypeInfoList+json"); // headers
+                expect(
+                    mockConnectionManager.request.mostRecentCall.args[3].Accept
+                ).toEqual("application/vnd.ez.api.ContentTypeInfoList+json"); // headers
                 expect(mockConnectionManager.request.mostRecentCall.args[4]).toBe(mockCallback); // callback
             });
 
@@ -365,9 +377,13 @@ define(function (require) {
 
                 expect(mockConnectionManager.request).toHaveBeenCalled();
                 expect(mockConnectionManager.request.mostRecentCall.args[0]).toEqual("GET"); //method
-                expect(mockConnectionManager.request.mostRecentCall.args[1]).toEqual(testContentTypes + "?identifier=" + testContentTypeIdentifier); //url
+                expect(
+                    mockConnectionManager.request.mostRecentCall.args[1]
+                ).toEqual(testContentTypes + "?identifier=" + testContentTypeIdentifier); //url
                 expect(mockConnectionManager.request.mostRecentCall.args[2]).toEqual(""); // body
-                expect(mockConnectionManager.request.mostRecentCall.args[3].Accept).toEqual("application/vnd.ez.api.ContentTypeInfoList+json"); // headers
+                expect(
+                    mockConnectionManager.request.mostRecentCall.args[3].Accept
+                ).toEqual("application/vnd.ez.api.ContentTypeInfoList+json"); // headers
                 expect(mockConnectionManager.request.mostRecentCall.args[4]).toBe(mockCallback); // callback
             });
 
@@ -392,7 +408,9 @@ define(function (require) {
                 expect(mockConnectionManager.request.mostRecentCall.args[0]).toEqual("GET"); //method
                 expect(mockConnectionManager.request.mostRecentCall.args[1]).toEqual(testContentTypeId + "/groups"); //url
                 expect(mockConnectionManager.request.mostRecentCall.args[2]).toEqual(""); // body
-                expect(mockConnectionManager.request.mostRecentCall.args[3].Accept).toEqual("application/vnd.ez.api.ContentTypeGroupRefList+json"); // headers
+                expect(
+                    mockConnectionManager.request.mostRecentCall.args[3].Accept
+                ).toEqual("application/vnd.ez.api.ContentTypeGroupRefList+json"); // headers
                 expect(mockConnectionManager.request.mostRecentCall.args[4]).toBe(mockCallback); // callback
             });
 
@@ -405,7 +423,9 @@ define(function (require) {
 
                 expect(mockConnectionManager.request).toHaveBeenCalled();
                 expect(mockConnectionManager.request.mostRecentCall.args[0]).toEqual("POST"); //method
-                expect(mockConnectionManager.request.mostRecentCall.args[1]).toEqual(testContentTypeId + "/groups" + "?group=" + testContentTypeGroupId); //url
+                expect(
+                    mockConnectionManager.request.mostRecentCall.args[1]
+                ).toEqual(testContentTypeId + "/groups" + "?group=" + testContentTypeGroupId); //url
                 expect(mockConnectionManager.request.mostRecentCall.args[2]).toEqual(""); // body
                 expect(mockConnectionManager.request.mostRecentCall.args[3]).toEqual({}); // headers
                 expect(mockConnectionManager.request.mostRecentCall.args[4]).toBe(mockCallback); // callback

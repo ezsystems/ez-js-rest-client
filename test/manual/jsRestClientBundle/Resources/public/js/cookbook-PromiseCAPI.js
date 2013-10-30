@@ -1,11 +1,9 @@
+/* global CAPI, SessionAuthAgent, PromiseCAPI */
 // Some simple PromiseCAPI usage scenario
 
 var jsCAPI = new CAPI(
         'http://ez.git.local',
-        new SessionAuthAgent({
-            login : "admin",
-            password : "admin"
-        })
+        new SessionAuthAgent({login: "admin", password: "admin"})
     );
 
 var jsPromiseCAPI = new PromiseCAPI(jsCAPI);
@@ -25,5 +23,5 @@ promise.then(
         console.log(error);
 
     }
-)
+);
 

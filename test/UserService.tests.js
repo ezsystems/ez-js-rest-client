@@ -1,3 +1,4 @@
+/* global define, describe, it, expect, beforeEach, jasmine, spyOn */
 define(function (require) {
 
     // Declaring dependencies
@@ -159,7 +160,7 @@ define(function (require) {
                         }
 
                     }
-                }
+                };
 
                 spyOn(mockDiscoveryService, 'getInfoObject').andCallThrough();
 
@@ -247,21 +248,15 @@ define(function (require) {
 
                 spyOn(userService, 'loadUserGroup').andCallFake(fakedLoadUserGroup);
 
-                var userGroupCreateStruct = userService.newUserGroupCreateStruct(
-                        "eng-US",
-                        [
-                            {
-                                fieldDefinitionIdentifier : "name",
-                                languageCode : "eng-US",
-                                fieldValue : "UserGroup"
-                            },
-                            {
-                                fieldDefinitionIdentifier : "description",
-                                languageCode : "eng-US",
-                                fieldValue : "This is the description of the user group"
-                            }
-                        ]
-                    );
+                var userGroupCreateStruct = userService.newUserGroupCreateStruct("eng-US", [{
+                        fieldDefinitionIdentifier : "name",
+                        languageCode : "eng-US",
+                        fieldValue : "UserGroup"
+                    }, {
+                        fieldDefinitionIdentifier : "description",
+                        languageCode : "eng-US",
+                        fieldValue : "This is the description of the user group"
+                    }]);
 
                 userService.createUserGroup(
                     testRootUserGroup,
@@ -353,7 +348,9 @@ define(function (require) {
                 expect(mockConnectionManager.request.mostRecentCall.args[0]).toEqual("GET"); //method
                 expect(mockConnectionManager.request.mostRecentCall.args[1]).toEqual(testUserId + "/groups"); //url
                 expect(mockConnectionManager.request.mostRecentCall.args[2]).toEqual(""); // body
-                expect(mockConnectionManager.request.mostRecentCall.args[3].Accept).toEqual("application/vnd.ez.api.UserGroupRefList+json"); // headers
+                expect(
+                    mockConnectionManager.request.mostRecentCall.args[3].Accept
+                ).toEqual("application/vnd.ez.api.UserGroupRefList+json"); // headers
                 expect(mockConnectionManager.request.mostRecentCall.args[4]).toBe(mockCallback); // callback
             });
 
@@ -366,23 +363,17 @@ define(function (require) {
                 spyOn(userService, 'loadUserGroup').andCallFake(fakedLoadUserGroup);
 
                 var userCreateStruct = userService.newUserCreateStruct(
-                        "eng-US",
-                        "johndoe4",
-                        "johndoe4@nowhere.no",
-                        "johndoepass4",
-                        [
-                            {
-                                fieldDefinitionIdentifier : "first_name",
-                                languageCode : "eng-US",
-                                fieldValue : "John"
-                            },
-                            {
-                                fieldDefinitionIdentifier : "last_name",
-                                languageCode : "eng-US",
-                                fieldValue : "Doe"
-                            }
-                        ]
-                    );
+                    "eng-US", "johndoe4", "johndoe4@nowhere.no", "johndoepass4", [{
+                        fieldDefinitionIdentifier : "first_name",
+                        languageCode : "eng-US",
+                        fieldValue : "John"
+                    },
+                    {
+                        fieldDefinitionIdentifier : "last_name",
+                        languageCode : "eng-US",
+                        fieldValue : "Doe"
+                    }]
+                );
 
                 userService.createUser(
                     testUserGroupId,
@@ -548,7 +539,9 @@ define(function (require) {
 
                 expect(mockConnectionManager.request).toHaveBeenCalled();
                 expect(mockConnectionManager.request.mostRecentCall.args[0]).toEqual("GET"); //method
-                expect(mockConnectionManager.request.mostRecentCall.args[1]).toEqual(testRoles + '?offset=' + testOffset + '&limit=' + testLimit + '&identifier=' + testRoleIdentifier); //url
+                expect(
+                    mockConnectionManager.request.mostRecentCall.args[1]
+                ).toEqual(testRoles + '?offset=' + testOffset + '&limit=' + testLimit + '&identifier=' + testRoleIdentifier); //url
                 expect(mockConnectionManager.request.mostRecentCall.args[2]).toEqual(""); // body
                 expect(mockConnectionManager.request.mostRecentCall.args[3].Accept).toEqual("application/vnd.ez.api.RoleList+json"); // headers
                 expect(mockConnectionManager.request.mostRecentCall.args[4]).toBe(mockCallback); // callback
@@ -566,7 +559,9 @@ define(function (require) {
 
                 expect(mockConnectionManager.request).toHaveBeenCalled();
                 expect(mockConnectionManager.request.mostRecentCall.args[0]).toEqual("GET"); //method
-                expect(mockConnectionManager.request.mostRecentCall.args[1]).toEqual(testRoles + '?offset=' + testOffset + '&limit=' + testLimit); //url
+                expect(
+                    mockConnectionManager.request.mostRecentCall.args[1]
+                ).toEqual(testRoles + '?offset=' + testOffset + '&limit=' + testLimit); //url
                 expect(mockConnectionManager.request.mostRecentCall.args[2]).toEqual(""); // body
                 expect(mockConnectionManager.request.mostRecentCall.args[3].Accept).toEqual("application/vnd.ez.api.RoleList+json"); // headers
                 expect(mockConnectionManager.request.mostRecentCall.args[4]).toBe(mockCallback); // callback
@@ -659,7 +654,9 @@ define(function (require) {
                 expect(mockConnectionManager.request.mostRecentCall.args[0]).toEqual("GET"); //method
                 expect(mockConnectionManager.request.mostRecentCall.args[1]).toEqual(testUserRoles); //url
                 expect(mockConnectionManager.request.mostRecentCall.args[2]).toEqual(""); // body
-                expect(mockConnectionManager.request.mostRecentCall.args[3].Accept).toEqual("application/vnd.ez.api.RoleAssignmentList+json"); // headers
+                expect(
+                    mockConnectionManager.request.mostRecentCall.args[3].Accept
+                ).toEqual("application/vnd.ez.api.RoleAssignmentList+json"); // headers
                 expect(mockConnectionManager.request.mostRecentCall.args[4]).toBe(mockCallback); // callback
             });
 
@@ -676,7 +673,9 @@ define(function (require) {
                 expect(mockConnectionManager.request.mostRecentCall.args[0]).toEqual("GET"); //method
                 expect(mockConnectionManager.request.mostRecentCall.args[1]).toEqual(testUserGroupRoles); //url
                 expect(mockConnectionManager.request.mostRecentCall.args[2]).toEqual(""); // body
-                expect(mockConnectionManager.request.mostRecentCall.args[3].Accept).toEqual("application/vnd.ez.api.RoleAssignmentList+json"); // headers
+                expect(
+                    mockConnectionManager.request.mostRecentCall.args[3].Accept
+                ).toEqual("application/vnd.ez.api.RoleAssignmentList+json"); // headers
                 expect(mockConnectionManager.request.mostRecentCall.args[4]).toBe(mockCallback); // callback
             });
 
@@ -714,27 +713,24 @@ define(function (require) {
 
                 spyOn(userService, 'loadUser').andCallFake(fakedLoadUser);
 
-                var roleAssignCreateStruct = userService.newRoleAssignInputStruct(
-                        {
-                            "_href" : "/api/ezp/v2/user/roles/7",
-                            "_media-type" : "application/vnd.ez.api.RoleAssignInput+json"
-                        },
-                        {
-                            "_identifier" : "Section",
-                            "values" : {
-                                "ref" : [
-                                    {
-                                        "_href" : "/api/ezp/v2/content/sections/1",
-                                        "_media-type" : "application/vnd.ez.api.Section+json"
-                                    },
-                                    {
-                                        "_href" : "/api/ezp/v2/content/sections/4",
-                                        "_media-type" : "application/vnd.ez.api.Section+json"
-                                    }
-                                ]
-                            }
+                var roleAssignCreateStruct = userService.newRoleAssignInputStruct({
+                        "_href" : "/api/ezp/v2/user/roles/7",
+                        "_media-type" : "application/vnd.ez.api.RoleAssignInput+json"
+                    }, {
+                        "_identifier" : "Section",
+                        "values" : {
+                            "ref" : [
+                                {
+                                    "_href" : "/api/ezp/v2/content/sections/1",
+                                    "_media-type" : "application/vnd.ez.api.Section+json"
+                                },
+                                {
+                                    "_href" : "/api/ezp/v2/content/sections/4",
+                                    "_media-type" : "application/vnd.ez.api.Section+json"
+                                }
+                            ]
                         }
-                    );
+                    });
 
                 userService.assignRoleToUser(
                     testUserId,
@@ -873,25 +869,18 @@ define(function (require) {
 
             it("updatePolicy", function () {
 
-                var policyUpdateStruct = userService.newPolicyUpdateStruct(
-                        [
-                            {
-                                "_identifier" : "Section",
-                                "values" : {
-                                    "ref" : [
-                                        {
-                                            "_href" : "/api/ezp/v2/content/sections/1",
-                                            "_media-type" : "application/vnd.ez.api.Section+json"
-                                        },
-                                        {
-                                            "_href" : "/api/ezp/v2/content/sections/4",
-                                            "_media-type" : "application/vnd.ez.api.Section+json"
-                                        }
-                                    ]
-                                }
-                            }
-                        ]
-                    );
+                var policyUpdateStruct = userService.newPolicyUpdateStruct([{
+                    "_identifier": "Section",
+                    "values": {
+                        "ref": [{
+                            "_href": "/api/ezp/v2/content/sections/1",
+                            "_media-type": "application/vnd.ez.api.Section+json"
+                        }, {
+                            "_href": "/api/ezp/v2/content/sections/4",
+                            "_media-type": "application/vnd.ez.api.Section+json"
+                        }]
+                    }
+                }]);
 
                 userService.updatePolicy(
                     testPolicyId,

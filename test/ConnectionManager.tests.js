@@ -1,8 +1,8 @@
+/* global define, describe, it, expect, beforeEach, jasmine, spyOn */
 define(function (require) {
 
     var ConnectionManager = require("ConnectionManager"),
         Request = require("structures/Request"),
-        Response = require("structures/Response"),
         CAPIError = require("structures/CAPIError");
 
     describe("Connection Manager", function () {
@@ -32,7 +32,7 @@ define(function (require) {
                 logOut : function(callback){
                     callback(false, true);
                 }
-            }
+            };
             spyOn(mockAuthenticationAgent, 'ensureAuthentication').andCallThrough();
             spyOn(mockAuthenticationAgent, 'authenticateRequest').andCallThrough();
             spyOn(mockAuthenticationAgent, 'logOut').andCallThrough();
@@ -96,7 +96,7 @@ define(function (require) {
             it("request (with calls logging and minimum arguments set)", function(){
 
                 connectionManager.logRequests = testTrue;
-                spyOn(console, 'dir').andCallThrough;
+                spyOn(console, 'dir').andCallThrough();
 
                 connectionManager.request(
                     mockCallback
@@ -238,7 +238,7 @@ define(function (require) {
             it("notAuthorizedRequest (with calls logging and minimum arguments set)", function(){
 
                 connectionManager.logRequests = testTrue;
-                spyOn(console, 'dir').andCallThrough;
+                spyOn(console, 'dir').andCallThrough();
 
                 connectionManager.notAuthorizedRequest(
                     mockCallback

@@ -1,3 +1,4 @@
+/* global eZ */
 // Some simple js REST CAPI usage scenario
 var authAgent = new eZ.SessionAuthAgent({
         login : "admin",
@@ -110,14 +111,14 @@ var updateSectionLoader = document.getElementById('update-section-loader');
 updateSectionAnchor.onclick = function(e){
 
     var updateSectionInput = document.getElementById('update-section-input'),
-        sectionInput;
+        sectionInputStruct;
 
     if (updateSectionInput.value.length){
 
         updateSectionLoader.style.display = 'block';
         e.preventDefault();
 
-        sectionInputStruct = new SectionInputStruct(
+        sectionInputStruct = contentService.newSectionInputStruct(
             "testSection" + Math.random()*1000000,
             "Test Section " + Math.round(Math.random()*1000)
         );
@@ -651,6 +652,7 @@ newLocationCreateStructAnchor.onclick = function(e){
 var CreateLocationAnchor = document.getElementById('create-location');
 var CreateLocationLoader = document.getElementById('create-location-loader');
 CreateLocationAnchor.onclick = function(e){
+    var locationCreateStruct, CreateLocationInput;
 
     CreateLocationLoader.style.display = 'block';
     e.preventDefault();
@@ -660,7 +662,7 @@ CreateLocationAnchor.onclick = function(e){
         "/api/ezp/v2/content/locations/1/2/118"
     );
 
-    var CreateLocationInput = document.getElementById('create-location-input');
+    CreateLocationInput = document.getElementById('create-location-input');
     if (CreateLocationInput.value.length){
         contentService.createLocation(
             CreateLocationInput.value,
@@ -1564,6 +1566,7 @@ LoadUrlWildcardsAnchor.onclick = function(e){
 var LoadUrlWildcardAnchor = document.getElementById('load-url-wildcard');
 var LoadUrlWildcardLoader = document.getElementById('load-url-wildcard-loader');
 LoadUrlWildcardAnchor.onclick = function(e){
+    var LoadUrlWildcardInput;
 
     LoadUrlWildcardLoader.style.display = 'block';
     e.preventDefault();
@@ -1584,6 +1587,7 @@ LoadUrlWildcardAnchor.onclick = function(e){
 var DeleteUrlWildcardAnchor = document.getElementById('delete-url-wildcard');
 var DeleteUrlWildcardLoader = document.getElementById('delete-url-wildcard-loader');
 DeleteUrlWildcardAnchor.onclick = function(e){
+    var DeleteUrlWildcardInput;
 
     DeleteUrlWildcardLoader.style.display = 'block';
     e.preventDefault();

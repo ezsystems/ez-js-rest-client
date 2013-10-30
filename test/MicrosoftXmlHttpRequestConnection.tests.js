@@ -1,3 +1,4 @@
+/* global define, describe, it, expect, beforeEach, jasmine, spyOn */
 define(function (require) {
 
     // Declaring dependencies
@@ -62,7 +63,7 @@ define(function (require) {
                 };
                 spyOn(mockXMLHttpRequest.prototype, 'send').andCallThrough();
 
-                ActiveXObject = (function (what) {
+                window.ActiveXObject = (function (what) {
                     return mockXMLHttpRequest;
                 }());
 
@@ -144,9 +145,9 @@ define(function (require) {
                 };
                 spyOn(mockXMLHttpRequest.prototype, 'send').andCallThrough();
 
-                ActiveXObject = (function () {
+                window.ActiveXObject = (function () {
                     return mockXMLHttpRequest;
-                }())
+                }());
 
                 connection = new MicrosoftXmlHttpRequestConnection();
 
@@ -185,9 +186,9 @@ define(function (require) {
                 };
                 spyOn(mockXMLHttpRequest.prototype, 'send').andCallThrough();
 
-                ActiveXObject = (function () {
+                window.ActiveXObject = (function () {
                     return mockXMLHttpRequest;
-                }())
+                }());
 
                 connection = new MicrosoftXmlHttpRequestConnection();
 

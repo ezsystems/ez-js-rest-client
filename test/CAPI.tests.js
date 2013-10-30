@@ -1,3 +1,4 @@
+/* global define, describe, it, expect, beforeEach */
 define(function (require) {
 
     var CAPI = require("CAPI"),

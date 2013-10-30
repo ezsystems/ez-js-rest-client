@@ -1,3 +1,4 @@
+/* global define, describe, it, expect */
 define(function (require) {
 
     // Declaring dependencies

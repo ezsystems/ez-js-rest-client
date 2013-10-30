@@ -1,3 +1,4 @@
+/* global define, describe, it, expect, beforeEach, jasmine, spyOn */
 define(function (require) {
 
     // Declaring dependencies
@@ -12,7 +13,6 @@ define(function (require) {
             mockRootResponse,
             discoveryService,
             testRootPath = "/api/ezp/v2/",
-            testName = "trash",
             testTrashObject = {
                 "_media-type" : "application/vnd.ez.api.Trash+json",
                 "_href" : "/api/ezp/v2/content/trash"
@@ -91,7 +91,7 @@ define(function (require) {
 
                 discoveryService.copyToCache({"trash": testTrashObject});
 
-                expect(discoveryService.cacheObject["trash"]).toEqual(testTrashObject);
+                expect(discoveryService.cacheObject.trash).toEqual(testTrashObject);
             });
 
             it("getObjectFromCache", function(){

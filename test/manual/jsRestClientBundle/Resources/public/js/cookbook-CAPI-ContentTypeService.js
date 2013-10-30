@@ -1,3 +1,4 @@
+/* global jsCAPI */
 // Some simple js REST CAPI Content Type Service usage scenario
 
 var contentTypeService = jsCAPI.getContentTypeService();

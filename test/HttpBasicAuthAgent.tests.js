@@ -1,8 +1,8 @@
+/* global define, describe, it, expect, beforeEach, jasmine */
 define(function (require) {
 
     // Declaring dependencies
-    var HttpBasicAuthAgent = require("authAgents/HttpBasicAuthAgent"),
-        CAPIError = require("structures/CAPIError");
+    var HttpBasicAuthAgent = require("authAgents/HttpBasicAuthAgent");
 
     describe("Http Basic Authorization Agent", function () {
 

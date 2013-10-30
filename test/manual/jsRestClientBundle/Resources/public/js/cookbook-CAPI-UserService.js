@@ -1,3 +1,4 @@
+/* global jsCAPI */
 // Some simple js REST CAPI User Service usage scenario
 
 var userService = jsCAPI.getUserService();
@@ -714,14 +715,15 @@ AddPolicyAnchor.onclick = function(e){
         policyCreateStruct = userService.newPolicyCreateStruct(
         "content",
         "create",
-        [{  _identifier : "Class",
+        [{
+            _identifier : "Class",
             values : {
                 ref : [{
                     _href : "18"
                 }]
             }
         }]
-        );
+    );
 
     // TODO: what's up with limitations?
     // REST returns:

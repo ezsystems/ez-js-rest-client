@@ -1,8 +1,20 @@
+/* global define, describe, it, expect, beforeEach, jasmine, spyOn */
 define(function (require) {
 
     // Declaring dependencies
     var SessionAuthAgent = require("authAgents/SessionAuthAgent"),
-        CAPIError = require("structures/CAPIError");
+        CAPIError = require("structures/CAPIError"),
+        sessionStorage = {
+            getItem: function(identifier){
+                return null;
+            },
+            setItem: function(identifier){
+                return;
+            },
+            removeItem: function(identifier){
+                return;
+            }
+        };
 
     describe("Session Authorization Agent", function () {
 
@@ -23,17 +35,6 @@ define(function (require) {
 
         beforeEach(function (){
 
-            sessionStorage = {
-                getItem: function(identifier){
-                    return null;
-                },
-                setItem: function(identifier){
-                    return;
-                },
-                removeItem: function(identifier){
-                    return;
-                }
-            };
             spyOn(sessionStorage, 'getItem').andCallThrough();
             spyOn(sessionStorage, 'setItem').andCallThrough();
             spyOn(sessionStorage, 'removeItem').andCallThrough();
@@ -62,13 +63,13 @@ define(function (require) {
                     callback(
                         false,
                         mockSessionResponse
-                    )
+                    );
                 },
                 deleteSession: function(sessionId, callback){
                     callback(
                         false,
                         true
-                    )
+                    );
                 }
             };
             spyOn(mockUserService, 'newSessionCreateStruct').andCallThrough();
@@ -222,13 +223,13 @@ define(function (require) {
                         callback(
                             true,
                             false
-                        )
+                        );
                     },
                     createSession: function(sessions, sessionCreateStruct, callback){
                         callback(
                             true,
                             false
-                        )
+                        );
                     },
                     newSessionCreateStruct: function(login, password){
                         return {

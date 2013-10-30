@@ -1,3 +1,4 @@
+/* global define, describe, it, expect, beforeEach, jasmine, spyOn */
 define(function (require) {
 
     var ConnectionFeatureFactory = require('ConnectionFeatureFactory');
@@ -14,12 +15,10 @@ define(function (require) {
         beforeEach(function (){
 
             mockCompatibleConnection = (function(){
-                var connection = function(){
-
-                }
+                var connection = function () {};
                 connection.isCompatible = function(){
                     return true;
-                }
+                };
                 return connection;
             }());
             spyOn(mockCompatibleConnection, 'isCompatible').andCallThrough();
@@ -28,7 +27,7 @@ define(function (require) {
                 var connection = function(){};
                 connection.isCompatible = function(){
                     return false;
-                }
+                };
                 return connection;
             }());
             spyOn(mockIncompatibleConnection, 'isCompatible').andCallThrough();
