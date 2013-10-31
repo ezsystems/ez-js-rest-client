@@ -16,7 +16,12 @@ define(function (require) {
             userService,
             anotherContentService,
             anotherContentTypeService,
-            anotherUserService;
+            anotherUserService,
+            testOptions = {
+                logRequests: true,
+                rootPath: '/testrootpath/',
+                connectionStack: []
+            };
 
         beforeEach(function () {
             mockAuthenticationAgent = {
@@ -43,7 +48,8 @@ define(function (require) {
             beforeEach(function () {
                 jsCAPI = new CAPI(
                     endPointUrl,
-                    mockAuthenticationAgent
+                    mockAuthenticationAgent,
+                    testOptions
                 );
             });
 
@@ -55,6 +61,11 @@ define(function (require) {
                 expect(contentService).toBeDefined();
                 expect(contentService instanceof ContentService).toBeTruthy();
                 expect(anotherContentService).toBe(contentService);
+
+                expect(contentService._connectionManager.logRequests).toBe(testOptions.logRequests);
+                expect(contentService._connectionManager._connectionFactory.connectionList).toBe(testOptions.connectionStack);
+                expect(contentService._discoveryService.rootPath).toBe(testOptions.rootPath);
+
             });
 
             it("ContentTypeService", function () {

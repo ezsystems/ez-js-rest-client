@@ -214,7 +214,7 @@ define(function (require) {
                 expect(mockCallback).toHaveBeenCalledWith(false, true);
             });
 
-            it("setCAPI", function(){
+            it("setCAPI", function () {
                 var anotherCAPI = {};
                 sessionAuthAgent.setCAPI(anotherCAPI);
 
