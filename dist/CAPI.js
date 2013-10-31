@@ -5991,40 +5991,56 @@ define('CAPI',['authAgents/SessionAuthAgent', 'authAgents/HttpBasicAuthAgent', '
      * @constructor
      * @param endPointUrl {String} url pointing to REST root
      * @param authenticationAgent {Object} Instance of one of the AuthAgents (e.g. SessionAuthAgent, HttpBasicAuthAgent)
+     * @param [options] {Object} Object containing different options for the CAPI (see example)
      * @example
      *     var   authAgent = new SessionAuthAgent({
                login: "admin",
                password: "admin"
            }),
            jsCAPI = new CAPI(
-               'http://ez.git.local',
-               authAgent
-           );
+               'http://ez.git.local', authAgent, {
+               logRequests: true, // Whether we should log each request to the js console or not
+               rootPath: '/api/ezp/v2/', // Path to the REST root
+               connectionStack: [ // Array of connections, should be filled-in in preferred order
+                    {connection: XmlHttpRequestConnection},
+                    {connection: MicrosoftXmlHttpRequestConnection}
+               ]
+           });
      */
-    var CAPI = function (endPointUrl, authenticationAgent) {
+    var CAPI = function (endPointUrl, authenticationAgent, options) {
+        var defaultOptions = {
+                logRequests: false, // Whether we should log each request to the js console or not
+                rootPath: '/api/ezp/v2/', // Path to the REST root
+                connectionStack: [ // Array of connections, should be filled-in in preferred order
+                    {connection: XmlHttpRequestConnection},
+                    {connection: MicrosoftXmlHttpRequestConnection}
+                ]
+            },
+            mergedOptions = defaultOptions,
+            option,
+            connectionFactory,
+            connectionManager,
+            discoveryService;
+
         this._contentService = null;
         this._contentTypeService = null;
         this._userService = null;
 
         authenticationAgent.setCAPI(this);
 
-        // Array of connections, should be filled-in in preferred order
-        //TODO: consider moving to some sort of configuration file...
-        var connectionStack = [
-                {
-                    connection: XmlHttpRequestConnection
-                },
-                {
-                    connection: MicrosoftXmlHttpRequestConnection
+        // Merging provided options (if any) with defaults
+        if (typeof options == "object") {
+            for (option in options) {
+                if (options.hasOwnProperty(option)) {
+                    mergedOptions[option] = options[option];
                 }
-            ],
-            connectionFactory = new ConnectionFeatureFactory(connectionStack),
-            connectionManager = new ConnectionManager(endPointUrl, authenticationAgent, connectionFactory),
-            //TODO: move hardcoded rootPath to the same config file as above...
-            discoveryService = new DiscoveryService('/api/ezp/v2/', connectionManager);
+            }
+        }
 
-        //TODO: move logRequests to the same config file as above...
-        connectionManager.logRequests = true;
+        connectionFactory = new ConnectionFeatureFactory(mergedOptions.connectionStack);
+        connectionManager = new ConnectionManager(endPointUrl, authenticationAgent, connectionFactory);
+        connectionManager.logRequests = mergedOptions.logRequests;
+        discoveryService = new DiscoveryService(mergedOptions.rootPath, connectionManager);
 
         /**
          * Get instance of Content Service. Use ContentService to retrieve information and execute operations related to Content.

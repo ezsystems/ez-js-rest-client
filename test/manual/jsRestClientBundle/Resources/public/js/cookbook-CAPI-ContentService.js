@@ -5,7 +5,10 @@ var authAgent = new eZ.SessionAuthAgent({
     }),
     jsCAPI = new eZ.CAPI(
         'http://ez.git.local',
-        authAgent
+        authAgent,
+        {
+            logRequests: true
+        }
     );
 
 var contentService = jsCAPI.getContentService();
