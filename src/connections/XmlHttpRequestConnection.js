@@ -10,7 +10,7 @@ define(["structures/Response", "structures/CAPIError"], function (Response, CAPI
      * @constructor
      */
     var XmlHttpRequestConnection = function () {
-        this._xhr = new XMLHttpRequest();
+        this._xhr = new XMLHttpRequest()
 
         /**
          * Basic request implemented via XHR technique

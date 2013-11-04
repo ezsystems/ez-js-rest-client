@@ -21,7 +21,7 @@ define(function (require) {
         beforeEach(function (){
             mockAuthenticationAgent = {
                 CAPI: null
-            };
+            }
         });
 
         it("is running constructor correctly", function(){

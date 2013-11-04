@@ -48,7 +48,6 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
      * List the root resources of the eZ Publish installation. Root resources contain many paths and references to other parts of the REST interface.
      * This call is used by DiscoveryService automatically, whenever needed.
      *
-     * @method loadRoot
      * @param rootPath {String} path to Root resource
      * @param callback {Function} callback executed after performing the request (see
      * {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
