@@ -11,16 +11,25 @@ define(function (require) {
         var connection,
             mockCallback,
             mockXMLHttpRequest,
-            mockRequest = {
-                body : { testBody : ""},
-                headers : { testHeader : "testHeaderValue"},
-                httpBasicAuth : false,
-                method : "GET",
-                url : "/"
-            },
+            mockRequest,
+            HeadersObject,
             testLogin = "login",
             testPassword = "password",
             testErrorCode = 400;
+
+        HeadersObject = function () {
+            this.testHeader = "testHeaderValue";
+        };
+        HeadersObject.prototype.dummyProperty = "prototype dummy property";
+
+        mockRequest = {
+            body : { testBody : ""},
+            headers : new HeadersObject(),
+            httpBasicAuth : false,
+            method : "GET",
+            url : "/"
+        };
+
 
         beforeEach(function (){
 

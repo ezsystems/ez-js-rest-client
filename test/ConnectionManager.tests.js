@@ -335,21 +335,6 @@ define(function (require) {
                 );
             });
 
-            it("delete (with minimum arguments set)", function(){
-
-                connectionManager.delete(
-                    undefined,
-                    undefined
-                );
-
-                expect(mockAuthenticationAgent.ensureAuthentication).toHaveBeenCalled();
-                expect(mockAuthenticationAgent.authenticateRequest).toHaveBeenCalled();
-                expect(mockConnection.execute).toHaveBeenCalledWith(
-                    jasmine.any(Request),
-                    jasmine.any(Function)
-                );
-            });
-
             it("logOut", function(){
 
                 connectionManager.logOut(mockCallback);

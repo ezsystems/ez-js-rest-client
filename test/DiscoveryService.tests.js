@@ -88,10 +88,16 @@ define(function (require) {
             });
 
             it("copyToCache", function(){
+                var TestObject = function () {
+                    this.trash = testTrashObject;
+                };
 
-                discoveryService.copyToCache({"trash": testTrashObject});
+                TestObject.prototype.dummyProperty = "prototype dummy property";
+
+                discoveryService.copyToCache(new TestObject());
 
                 expect(discoveryService.cacheObject.trash).toEqual(testTrashObject);
+                expect(discoveryService.cacheObject.dummyProperty).toBeUndefined();
             });
 
             it("getObjectFromCache", function(){
