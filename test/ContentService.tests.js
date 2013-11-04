@@ -289,7 +289,7 @@ define(function (require) {
                     );
 
                     updateStruct.body.ContentUpdate.Section = "/api/ezp/v2/content/sections/2";
-                    updateStruct.body.ContentUpdate.remoteId = "random-id-" + Math.random()*1000000;
+                    updateStruct.body.ContentUpdate.remoteId = "random-id-";
 
                     contentService.updateContentMetadata(
                         testContentId,
@@ -494,7 +494,7 @@ define(function (require) {
                         fieldInfo = {
                             "fieldDefinitionIdentifier": "title",
                             "languageCode": "eng-US",
-                            "fieldValue": "This is a new title" + Math.random()*1000000
+                            "fieldValue": "This is a new title"
                         };
 
                     contentUpdateStruct.body.VersionUpdate.fields.field.push(fieldInfo);
@@ -790,7 +790,7 @@ define(function (require) {
 
                 it("updateLocation", function () {
                     var locationUpdateStruct = contentService.newLocationUpdateStruct();
-                    locationUpdateStruct.remoteId = "random-remote-id-" + Math.random()*100000;
+                    locationUpdateStruct.remoteId = "random-remote-id-";
 
                     contentService.updateLocation(
                         testLocation,
@@ -998,8 +998,8 @@ define(function (require) {
 
                 it("createSection", function () {
                     var sectionInputStruct = contentService.newSectionInputStruct(
-                        "testSection" + Math.random()*1000000,
-                        "Test Section " + Math.round(Math.random()*1000)
+                        "testSection",
+                        "Test Section"
                     );
 
                     contentService.createSection(
@@ -1020,8 +1020,8 @@ define(function (require) {
 
                 it("updateSection", function () {
                     var sectionInputStruct = new SectionInputStruct(
-                        "testSection" + Math.random()*1000000,
-                        "Test Section " + Math.round(Math.random()*1000)
+                        "testSection",
+                        "Test Section"
                     );
 
                     contentService.updateSection(
@@ -1234,12 +1234,12 @@ define(function (require) {
 
                 it("createObjectStateGroup", function () {
                     var objectStateGroupCreateStruct = contentService.newObjectStateGroupCreateStruct(
-                        "some-id" + Math.random(10000),
+                        "some-id",
                         "eng-US",
                         [
                             {
                                 "_languageCode":"eng-US",
-                                "#text":"Some Name " + Math.random(10000)
+                                "#text":"Some Name"
                             }
                         ]
                     );
@@ -1263,7 +1263,7 @@ define(function (require) {
                 it("updateObjectStateGroup", function () {
                     var objectStateGroupUpdateStruct = contentService.newObjectStateGroupUpdateStruct();
 
-                    objectStateGroupUpdateStruct.body.ObjectStateGroupUpdate.identifier = "some-id" + Math.random(10000);
+                    objectStateGroupUpdateStruct.body.ObjectStateGroupUpdate.identifier = "some-id";
 
                     contentService.updateObjectStateGroup(
                         testObjectStateGroup,
@@ -1333,13 +1333,13 @@ define(function (require) {
 
                 it("createObjectState", function () {
                     var objectStateCreateStruct = contentService.newObjectStateCreateStruct(
-                        "some-id" + Math.random(10000),
+                        "some-id",
                         "eng-US",
                         0,
                         [
                             {
                                 "_languageCode":"eng-US",
-                                "#text":"Some Name " + Math.random(10000)
+                                "#text":"Some Name"
                             }
                         ],
                         []
@@ -1363,7 +1363,7 @@ define(function (require) {
                 it("updateObjectState", function () {
                     var objectStateUpdateStruct = contentService.newObjectStateUpdateStruct();
 
-                    objectStateUpdateStruct.body.ObjectStateUpdate.identifier = "some-id" + Math.random(10000);
+                    objectStateUpdateStruct.body.ObjectStateUpdate.identifier = "some-id";
 
                     contentService.updateObjectState(
                         testObjectState,
@@ -1579,7 +1579,7 @@ define(function (require) {
 
                 it("createUrlWildCard", function () {
                     var urlWildcardCreateStruct = contentService.newUrlWildcardCreateStruct(
-                            "some-new-wildcard-" + Math.random(100) * 1000,
+                            "some-new-wildcard",
                             "testLocation",
                             "false"
                         );
@@ -1827,8 +1827,8 @@ define(function (require) {
 
             it("createSection", function () {
                 var sectionInputStruct = new SectionInputStruct(
-                    "testSection" + Math.random()*1000000,
-                    "Test Section " + Math.round(Math.random()*1000)
+                    "testSection",
+                    "Test Section"
                 );
 
                 contentService.createSection(

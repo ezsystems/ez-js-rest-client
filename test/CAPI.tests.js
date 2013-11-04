@@ -17,11 +17,15 @@ define(function (require) {
             anotherContentService,
             anotherContentTypeService,
             anotherUserService,
-            testOptions = {
-                logRequests: true,
-                rootPath: '/testrootpath/',
-                connectionStack: []
+            testOptions,
+            TestOptionsObject = function () {
+                this.logRequests = true;
+                this.rootPath = '/testrootpath/';
+                this.connectionStack = [];
             };
+
+        TestOptionsObject.prototype.dummyProperty = "dummy prototype property";
+        testOptions = new TestOptionsObject();
 
         beforeEach(function () {
             mockAuthenticationAgent = {

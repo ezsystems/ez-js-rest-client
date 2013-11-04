@@ -70,7 +70,7 @@ define(function (require) {
     // ******************************
     // Cases without errors
     // ******************************
-        describe("is calling injected objects with right arguments while running calls", function () {
+        describe("is calling injected objects with right arguments while performing", function () {
 
             // ******************************
             // Faked internal service calls
@@ -280,12 +280,12 @@ define(function (require) {
                     {
                         fieldDefinitionIdentifier : "name",
                         languageCode : "eng-US",
-                        fieldValue : "UserGroup" + Math.random(100)
+                        fieldValue : "UserGroup"
                     },
                     {
                         fieldDefinitionIdentifier : "description",
                         languageCode : "eng-US",
-                        fieldValue : "This is the random description of the user group" + Math.random(100)
+                        fieldValue : "This is the random description of the user group"
                     }
                 ];
 
@@ -489,7 +489,7 @@ define(function (require) {
             it("createRole", function () {
 
                 var roleCreateStruct = userService.newRoleInputStruct(
-                    "random-role-id-" + Math.random()
+                    "random-role-id"
                 );
 
                 userService.createRole(
@@ -614,7 +614,7 @@ define(function (require) {
             it("updateRole", function () {
 
                 var roleUpdateStruct = userService.newRoleInputStruct(
-                    "random-role-id-" + Math.random()
+                    "random-role-id"
                 );
 
                 userService.updateRole(
@@ -972,7 +972,7 @@ define(function (require) {
             // ******************************
             // Structures
             // ******************************
-            describe("creating structures", function () {
+            describe("structures creation", function () {
 
                 it("newSessionCreateStruct", function(){
 
@@ -1107,7 +1107,7 @@ define(function (require) {
                     );
                 };
 
-            describe("dealing with faulty Discovery Service and running", function(){
+            describe("dealing with faulty Discovery Service and performing", function(){
 
                 beforeEach(function(){
 
@@ -1145,7 +1145,7 @@ define(function (require) {
                 it("createRole", function () {
 
                     var roleCreateStruct = userService.newRoleInputStruct(
-                        "random-role-id-" + Math.random()
+                        "random-role-id"
                     );
 
                     userService.createRole(
@@ -1181,7 +1181,7 @@ define(function (require) {
             });
 
 
-            describe("dealing with faulty inner calls", function(){
+            describe("dealing with faulty inner calls and performing", function(){
 
                 beforeEach(function (){
                     userService = new UserService(

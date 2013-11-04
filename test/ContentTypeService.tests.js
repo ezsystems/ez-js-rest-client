@@ -51,7 +51,7 @@ define(function (require) {
     // ******************************
     // Cases without errors
     // ******************************
-        describe("is calling injected objects with right arguments while running calls", function () {
+        describe("is calling injected objects with right arguments while performing", function () {
 
             // ******************************
             // Faked internal service calls
@@ -118,7 +118,7 @@ define(function (require) {
             it("createContentTypeGroup", function () {
 
                 var contentTypeGroupCreateStruct = contentTypeService.newContentTypeGroupInputStruct(
-                    "some-group-id" + Math.random(100)
+                    "some-group-id"
                 );
 
                 contentTypeService.createContentTypeGroup(
@@ -191,7 +191,7 @@ define(function (require) {
             it("updateContentTypeGroup", function () {
 
                 var contentTypeGroupUpdateStruct = contentTypeService.newContentTypeGroupInputStruct(
-                    "some-group-id" + Math.random(100)
+                    "some-group-id"
                 );
 
                 contentTypeService.updateContentTypeGroup(
@@ -251,24 +251,24 @@ define(function (require) {
                     fieldDefinition;
 
                 contentTypeCreateStruct = contentTypeService.newContentTypeCreateStruct(
-                    "content-type-id-" + Math.random(100),
+                    "content-type-id",
                     "eng-US",
                     [
                         {
                             "_languageCode":"eng-US",
-                            "#text":"Some Name " + Math.random(10000)
+                            "#text":"Some Name"
                         }
                     ]
                 );
 
                 fieldDefinition = contentTypeService.newFieldDefinitionCreateStruct(
-                    "fd-id-" + Math.random(100),
+                    "fd-id",
                     "ezstring",
                     "content",
                     [
                         {
                             "_languageCode":"eng-US",
-                            "#text":"Some FD Name " + Math.random(10000)
+                            "#text":"Some FD Name"
                         }
                     ]
                 );
@@ -298,24 +298,24 @@ define(function (require) {
                     fieldDefinition;
 
                 contentTypeCreateStruct = contentTypeService.newContentTypeCreateStruct(
-                    "content-type-id-" + Math.random(100),
+                    "content-type-id",
                     "eng-US",
                     [
                         {
                             "_languageCode":"eng-US",
-                            "#text":"Some Name " + Math.random(10000)
+                            "#text":"Some Name"
                         }
                     ]
                 );
 
                 fieldDefinition = contentTypeService.newFieldDefinitionCreateStruct(
-                    "fd-id-" + Math.random(100),
+                    "fd-id",
                     "ezstring",
                     "content",
                     [
                         {
                             "_languageCode":"eng-US",
-                            "#text":"Some FD Name " + Math.random(10000)
+                            "#text":"Some FD Name"
                         }
                     ]
                 );
@@ -453,7 +453,7 @@ define(function (require) {
                 contentTypeUpdateStruct.names.value = [
                     {
                         "_languageCode":"eng-US",
-                        "#text":"Some new FD Name " + Math.random(10000)
+                        "#text":"Some new FD Name"
                     }
                 ];
 
@@ -494,7 +494,7 @@ define(function (require) {
                 contentTypeUpdateStruct.names.value = [
                     {
                         "_languageCode":"eng-US",
-                        "#text":"Some new FD Name " + Math.random(10000)
+                        "#text":"Some new FD Name"
                     }
                 ];
 
@@ -546,13 +546,13 @@ define(function (require) {
                 spyOn(contentTypeService, 'loadContentTypeDraft').andCallFake(fakedLoadContentTypeDraft);
 
                 var fieldDefinitionCreateStruct = contentTypeService.newFieldDefinitionCreateStruct(
-                    "fd-id-" + Math.random(100),
+                    "fd-id",
                     "ezstring",
                     "content",
                     [
                         {
                             "_languageCode":"eng-US",
-                            "#text":"Some FD Name " + Math.random(10000)
+                            "#text":"Some FD Name"
                         }
                     ]
                 );
@@ -623,7 +623,7 @@ define(function (require) {
             // ******************************
             // Structures
             // ******************************
-            describe("creating structures", function () {
+            describe("structures creation", function () {
 
                 it("newContentTypeGroupInputStruct", function(){
 
@@ -733,7 +733,7 @@ define(function (require) {
 
             });
 
-            describe("dealing with faulty inner calls", function(){
+            describe("dealing with faulty inner calls and performing", function(){
 
                 beforeEach(function (){
                     discoveryService = new DiscoveryService(
@@ -764,24 +764,24 @@ define(function (require) {
                         fieldDefinition;
 
                     contentTypeCreateStruct = contentTypeService.newContentTypeCreateStruct(
-                        "content-type-id-" + Math.random(100),
+                        "content-type-id",
                         "eng-US",
                         [
                             {
                                 "_languageCode":"eng-US",
-                                "#text":"Some Name " + Math.random(10000)
+                                "#text":"Some Name"
                             }
                         ]
                     );
 
                     fieldDefinition = contentTypeService.newFieldDefinitionCreateStruct(
-                        "fd-id-" + Math.random(100),
+                        "fd-id",
                         "ezstring",
                         "content",
                         [
                             {
                                 "_languageCode":"eng-US",
-                                "#text":"Some FD Name " + Math.random(10000)
+                                "#text":"Some FD Name"
                             }
                         ]
                     );
@@ -805,13 +805,13 @@ define(function (require) {
                     spyOn(contentTypeService, 'loadContentTypeDraft').andCallFake(fakedFaultyLoadContentTypeDraft);
 
                     var fieldDefinitionCreateStruct = contentTypeService.newFieldDefinitionCreateStruct(
-                        "fd-id-" + Math.random(100),
+                        "fd-id",
                         "ezstring",
                         "content",
                         [
                             {
                                 "_languageCode":"eng-US",
-                                "#text":"Some FD Name " + Math.random(10000)
+                                "#text":"Some FD Name"
                             }
                         ]
                     );

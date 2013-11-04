@@ -197,10 +197,6 @@ define(["structures/Response", "structures/Request", "structures/CAPIError"],
      * @param callback
      */
     ConnectionManager.prototype.delete = function (url, callback) {
-        // default values for all the parameters
-        url = (typeof url === "undefined") ? "/" : url;
-        callback = (typeof callback === "undefined") ? function () {} : callback;
-
         this.request(
             "DELETE",
             url,

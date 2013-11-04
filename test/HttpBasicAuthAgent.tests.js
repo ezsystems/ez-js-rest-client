@@ -8,6 +8,7 @@ define(function (require) {
 
         var testLogin = "login",
             testPassword = "password",
+            mockCAPI = {},
             mockCallback,
             mockRequest,
             httpBasicAuthAgent;
@@ -16,7 +17,7 @@ define(function (require) {
             mockCallback = jasmine.createSpy('mockCallback');
         });
 
-        describe("is correctly performing calls:", function(){
+        describe("is correctly performing", function(){
 
             beforeEach(function (){
 
@@ -44,6 +45,10 @@ define(function (require) {
                 expect(mockRequest.httpBasicAuth).toEqual(true);
                 expect(mockRequest.login).toEqual(testLogin);
                 expect(mockRequest.password).toEqual(testPassword);
+            });
+
+            it("setCAPI (which does exactly nothing for this very agent, but should be present for uniformity)", function(){
+                httpBasicAuthAgent.setCAPI(mockCAPI);
             });
 
             it("logOut", function(){

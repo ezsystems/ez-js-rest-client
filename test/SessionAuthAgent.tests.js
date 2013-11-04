@@ -224,7 +224,7 @@ define(function (require) {
 
         });
 
-        describe("is returning errors correctly, when user service fails, while performing:", function(){
+        describe("is returning errors correctly, when user service fails, while performing", function(){
 
             beforeEach(function (){
                 mockFaultyUserService = {
