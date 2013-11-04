@@ -29,8 +29,8 @@ define(["structures/Response", "structures/Request", "structures/CAPIError"],
      * @method request
      * @param [method="GET"] {String} request method ("POST", "GET" etc)
      * @param [url="/"] {String} requested REST resource
-     * @param [body=""] {JSON}
-     * @param [headers={}] {object}
+     * @param [body=""] {String} a string which should be passed in request body to the REST service
+     * @param [headers={}] {object} object literal describing request headers
      * @param callback {function} function, which will be executed on request success
      */
     ConnectionManager.prototype.request = function (method, url, body, headers, callback) {
@@ -136,8 +136,8 @@ define(["structures/Response", "structures/Request", "structures/CAPIError"],
      * @method notAuthorizedRequest
      * @param [method="GET"] {String} request method ("POST", "GET" etc)
      * @param [url="/"] {String} requested REST resource
-     * @param [body=""] {JSON}
-     * @param [headers={}] {object}
+     * @param [body=""] {String} a string which should be passed in request body to the REST service
+     * @param [headers={}] {object} object literal describing request headers
      * @param callback {function} function, which will be executed on request success
      */
     ConnectionManager.prototype.notAuthorizedRequest = function(method, url, body, headers, callback) {
@@ -193,8 +193,8 @@ define(["structures/Response", "structures/Request", "structures/CAPIError"],
      * Delete - shortcut which handles simple deletion requests in most cases
      *
      * @method delete
-     * @param url
-     * @param callback
+     * @param url {String} target REST resource
+     * @param callback {function} function, which will be executed on request success
      */
     ConnectionManager.prototype.delete = function (url, callback) {
         this.request(
@@ -211,7 +211,7 @@ define(["structures/Response", "structures/Request", "structures/CAPIError"],
      * Kills currently active session and resets localStorage params (sessionId, CSRFToken)
      *
      * @method logOut
-     * @param callback {function}
+     * @param callback {function} function, which will be executed on request success
      */
     ConnectionManager.prototype.logOut = function (callback) {
         this._authenticationAgent.logOut(callback);
