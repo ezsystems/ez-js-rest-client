@@ -174,7 +174,8 @@ define(["structures/CAPIError"], function (CAPIError) {
             callback(false, object);
         } else {
             callback(
-                new CAPIError("Discover service failed to find cached object with name '" + name + "'.",
+                new CAPIError(
+                    "Discover service failed to find cached object with name '" + name + "'.",
                     {name: name}
                 ),
                 false

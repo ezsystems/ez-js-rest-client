@@ -23,10 +23,10 @@ define(function (require) {
                 }
             };
 
-        beforeEach(function (){
+        beforeEach(function () {
 
             mockConnectionManager = {
-                request : function(method, url, body, headers, callback){
+                request : function (method, url, body, headers, callback) {
                     mockRootResponse = {};
                     mockRootResponse.document = testRootObject;
                     callback(false, mockRootResponse);
@@ -42,14 +42,14 @@ define(function (require) {
     // ******************************
         describe("is calling objects with right arguments and saves info correctly while running", function () {
 
-            beforeEach(function (){
+            beforeEach(function () {
                 discoveryService = new DiscoveryService(
                     testRootPath,
                     mockConnectionManager
                 );
             });
 
-            it("discoverRoot", function(){
+            it("discoverRoot", function () {
 
                 spyOn(mockConnectionManager, 'request').andCallThrough();
 
@@ -84,14 +84,14 @@ define(function (require) {
 
             });
 
-            it("copyToCache", function(){
+            it("copyToCache", function () {
 
                 discoveryService._copyToCache({"trash": testTrashObject});
 
                 expect(discoveryService.cacheObject.trash).toEqual(testTrashObject);
             });
 
-            it("copyToCache with faulty object", function(){
+            it("copyToCache with faulty object", function () {
 
                 discoveryService._copyToCache({"trash": null});
 
@@ -101,7 +101,7 @@ define(function (require) {
 
 
 
-            it("getObjectFromCache", function(){
+            it("getObjectFromCache", function () {
 
                 spyOn(discoveryService, '_discoverRoot').andCallThrough();
 
@@ -116,7 +116,7 @@ define(function (require) {
                 expect(mockCallback.mostRecentCall.args[1]).toEqual(testTrashObject); //response
             });
 
-            it("getObjectFromCache when object is cached but not in Root ", function(){
+            it("getObjectFromCache when object is cached but not in Root ", function () {
 
                 spyOn(discoveryService, '_discoverRoot').andCallThrough();
 
@@ -133,7 +133,7 @@ define(function (require) {
                 expect(mockCallback.mostRecentCall.args[1]).toEqual(testTrashObject); //response
             });
 
-            it("getUrl", function(){
+            it("getUrl", function () {
 
                 spyOn(discoveryService, '_getObjectFromCache').andCallThrough();
 
@@ -148,7 +148,7 @@ define(function (require) {
                 expect(mockCallback.mostRecentCall.args[1]).toEqual(testTrashObject._href); //response
             });
 
-            it("getMediaType", function(){
+            it("getMediaType", function () {
 
                 spyOn(discoveryService, '_getObjectFromCache').andCallThrough();
 
@@ -163,7 +163,7 @@ define(function (require) {
                 expect(mockCallback.mostRecentCall.args[1]).toEqual(testTrashObject["_media-type"]); //response
             });
 
-            it("getInfoObject", function(){
+            it("getInfoObject", function () {
 
                 spyOn(discoveryService, '_getObjectFromCache').andCallThrough();
 
@@ -183,12 +183,12 @@ define(function (require) {
     // ******************************
     // Cases with errors
     // ******************************
-        describe("is returning errors correctly, while", function (){
+        describe("is returning errors correctly, while", function () {
 
-            it("running discoverRoot call, and Connection Manager fails to connect", function(){
+            it("running discoverRoot call, and Connection Manager fails to connect", function () {
 
                 mockFaultyConnectionManager = {
-                    request : function(method, url, body, headers, callback){
+                    request : function (method, url, body, headers, callback) {
                         callback(new CAPIError(""), false);
                     }
                 };
@@ -217,10 +217,10 @@ define(function (require) {
 
             });
 
-            it("running getObjectFromCache call, and Connection Manager fails to connect", function(){
+            it("running getObjectFromCache call, and Connection Manager fails to connect", function () {
 
                 mockFaultyConnectionManager = {
-                    request : function(method, url, body, headers, callback){
+                    request : function (method, url, body, headers, callback) {
                         callback(new CAPIError(""), false);
                     }
                 };
@@ -250,14 +250,14 @@ define(function (require) {
 
             describe("trying to access non-existent object (sorry no magic in stock today, only trash :)", function () {
 
-                beforeEach(function (){
+                beforeEach(function () {
                     discoveryService = new DiscoveryService(
                         testRootPath,
                         mockConnectionManager
                     );
                 });
 
-                it("getObjectFromCache", function(){
+                it("getObjectFromCache", function () {
 
                     spyOn(discoveryService, '_discoverRoot').andCallThrough();
 
@@ -272,7 +272,7 @@ define(function (require) {
                     expect(mockCallback.mostRecentCall.args[1]).toEqual(false); //response
                 });
 
-                it("getUrl", function(){
+                it("getUrl", function () {
 
                     spyOn(discoveryService, '_getObjectFromCache').andCallThrough();
 
@@ -287,7 +287,7 @@ define(function (require) {
                     expect(mockCallback.mostRecentCall.args[1]).toEqual(false); //response
                 });
 
-                it("getMediaType", function(){
+                it("getMediaType", function () {
 
                     spyOn(discoveryService, '_getObjectFromCache').andCallThrough();
 
@@ -302,7 +302,7 @@ define(function (require) {
                     expect(mockCallback.mostRecentCall.args[1]).toEqual(false); //response
                 });
 
-                it("getInfoObject", function(){
+                it("getInfoObject", function () {
 
                     spyOn(discoveryService, '_getObjectFromCache').andCallThrough();
 
