@@ -95,7 +95,7 @@ define(function (require) {
 
                 discoveryService._copyToCache({"trash": null});
 
-                expect(discoveryService.cacheObject["trash"]).toBeUndefined();
+                expect(discoveryService.cacheObject.trash).toBeUndefined();
             });
 
 
