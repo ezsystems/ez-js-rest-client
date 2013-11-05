@@ -107,14 +107,23 @@ module.exports = function(grunt) {
             livedoc: {
                 command: 'yuidoc --server 3000 --config yuidoc.json',
                 options: {
+                    async: true,
+                    execOptions: { detached: true },
                     stdout: true,
                     stderr: true
                 }
             }
         },
         open : {
-            ldocserver : {
+            livedoc: {
                 path: 'http://127.0.0.1:3000/'
+            }
+        },
+        wait: {
+            livedoc: {
+                options: {
+                    delay: 7000
+                }
             }
         }
     });
@@ -124,7 +133,8 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-istanbul');
     grunt.loadNpmTasks('grunt-contrib-jasmine');
     grunt.loadNpmTasks('grunt-contrib-yuidoc');
-    grunt.loadNpmTasks('grunt-shell');
+    grunt.loadNpmTasks('grunt-shell-spawn');
+    grunt.loadNpmTasks('grunt-wait');
     grunt.loadNpmTasks('grunt-open');
 
     grunt.registerTask('hint', ['jshint']);
@@ -132,6 +142,6 @@ module.exports = function(grunt) {
     grunt.registerTask('test', ['jshint', 'jasmine:test'] );
     grunt.registerTask('coverage', ['jshint', 'instrument', 'jasmine:coverage'] );
     grunt.registerTask('doc', ['yuidoc'] );
-    grunt.registerTask('livedoc', ['open:ldocserver', 'shell:livedoc'] );
+    grunt.registerTask('livedoc', ['shell:livedoc', 'wait:livedoc', 'open:livedoc'] );
 
 };
