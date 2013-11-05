@@ -110,20 +110,11 @@ module.exports = function(grunt) {
                     stdout: true,
                     stderr: true
                 }
-            },
-            openlivedocwin: {
-                command: 'start http://localhost:3000/',
-                options: {
-                    stdout: true,
-                    stderr: true
-                }
-            },
-            openlivedoclin: {
-                command: 'xdg-open http://localhost:3000/',
-                options: {
-                    stdout: true,
-                    stderr: true
-                }
+            }
+        },
+        open : {
+            ldocserver : {
+                path: 'http://127.0.0.1:3000/'
             }
         }
     });
@@ -134,14 +125,13 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-jasmine');
     grunt.loadNpmTasks('grunt-contrib-yuidoc');
     grunt.loadNpmTasks('grunt-shell');
+    grunt.loadNpmTasks('grunt-open');
 
     grunt.registerTask('hint', ['jshint']);
     grunt.registerTask('build', ['jshint', 'requirejs']);
     grunt.registerTask('test', ['jshint', 'jasmine:test'] );
     grunt.registerTask('coverage', ['jshint', 'instrument', 'jasmine:coverage'] );
     grunt.registerTask('doc', ['yuidoc'] );
-    grunt.registerTask('livedoc', ['shell:livedoc'] );
-    grunt.registerTask('oldocwin', ['shell:openlivedocwin'] );
-    grunt.registerTask('oldoclin', ['shell:openlivedocwin'] );
+    grunt.registerTask('livedoc', ['open:ldocserver', 'shell:livedoc'] );
 
 };
