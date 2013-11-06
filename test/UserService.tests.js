@@ -181,12 +181,13 @@ define(function (require) {
                 expect(mockDiscoveryService.getInfoObject.mostRecentCall.args[0]).toEqual("rootUserGroup"); //name
                 expect(mockDiscoveryService.getInfoObject.mostRecentCall.args[1]).toEqual(jasmine.any(Function)); //callback
 
-                expect(mockConnectionManager.request).toHaveBeenCalled();
-                expect(mockConnectionManager.request.mostRecentCall.args[0]).toEqual("GET"); //method
-                expect(mockConnectionManager.request.mostRecentCall.args[1]).toEqual(testRootUserGroup); //url
-                expect(mockConnectionManager.request.mostRecentCall.args[2]).toEqual(""); // body
-                expect(mockConnectionManager.request.mostRecentCall.args[3].Accept).toEqual("application/vnd.ez.api.UserGroup+json"); // headers
-                expect(mockConnectionManager.request.mostRecentCall.args[4]).toBe(mockCallback); // callback
+                expect(mockConnectionManager.request).toHaveBeenCalledWith(
+                    "GET",
+                    testRootUserGroup,
+                    "",
+                    {Accept: "application/vnd.ez.api.UserGroup+json"},
+                    mockCallback
+                );
             });
 
             it("loadUserGroup", function () {
@@ -195,12 +196,13 @@ define(function (require) {
                     mockCallback
                 );
 
-                expect(mockConnectionManager.request).toHaveBeenCalled();
-                expect(mockConnectionManager.request.mostRecentCall.args[0]).toEqual("GET"); //method
-                expect(mockConnectionManager.request.mostRecentCall.args[1]).toEqual(testUserGroupId); //url
-                expect(mockConnectionManager.request.mostRecentCall.args[2]).toEqual(""); // body
-                expect(mockConnectionManager.request.mostRecentCall.args[3].Accept).toEqual("application/vnd.ez.api.UserGroup+json"); // headers
-                expect(mockConnectionManager.request.mostRecentCall.args[4]).toBe(mockCallback); // callback
+                expect(mockConnectionManager.request).toHaveBeenCalledWith(
+                    "GET",
+                    testUserGroupId,
+                    "",
+                    {Accept: "application/vnd.ez.api.UserGroup+json"},
+                    mockCallback
+                );
             });
 
             it("loadUserGroupByRemoteId", function () {
@@ -210,12 +212,13 @@ define(function (require) {
                     mockCallback
                 );
 
-                expect(mockConnectionManager.request).toHaveBeenCalled();
-                expect(mockConnectionManager.request.mostRecentCall.args[0]).toEqual("GET"); //method
-                expect(mockConnectionManager.request.mostRecentCall.args[1]).toEqual(testUserGroups + "?remoteId=" + testRemoteId); //url
-                expect(mockConnectionManager.request.mostRecentCall.args[2]).toEqual(""); // body
-                expect(mockConnectionManager.request.mostRecentCall.args[3].Accept).toEqual("application/vnd.ez.api.UserGroupList+json"); // headers
-                expect(mockConnectionManager.request.mostRecentCall.args[4]).toBe(mockCallback); // callback
+                expect(mockConnectionManager.request).toHaveBeenCalledWith(
+                    "GET",
+                    testUserGroups + "?remoteId=" + testRemoteId,
+                    "",
+                    {Accept: "application/vnd.ez.api.UserGroupList+json"},
+                    mockCallback
+                );
             });
 
             it("deleteUserGroup", function () {
@@ -236,12 +239,13 @@ define(function (require) {
                     mockCallback
                 );
 
-                expect(mockConnectionManager.request).toHaveBeenCalled();
-                expect(mockConnectionManager.request.mostRecentCall.args[0]).toEqual("MOVE"); //method
-                expect(mockConnectionManager.request.mostRecentCall.args[1]).toEqual(testUserGroupId); //url
-                expect(mockConnectionManager.request.mostRecentCall.args[2]).toEqual(""); // body
-                expect(mockConnectionManager.request.mostRecentCall.args[3].Destination).toEqual(testAnotherUserGroupId); // headers
-                expect(mockConnectionManager.request.mostRecentCall.args[4]).toBe(mockCallback); // callback
+                expect(mockConnectionManager.request).toHaveBeenCalledWith(
+                    "MOVE",
+                    testUserGroupId,
+                    "",
+                    {Destination: testAnotherUserGroupId},
+                    mockCallback
+                    );
             });
 
             it("createUserGroup", function () {
@@ -264,12 +268,13 @@ define(function (require) {
                     mockCallback
                 );
 
-                expect(mockConnectionManager.request).toHaveBeenCalled();
-                expect(mockConnectionManager.request.mostRecentCall.args[0]).toEqual("POST"); //method
-                expect(mockConnectionManager.request.mostRecentCall.args[1]).toEqual(testUserGroupSubgroups); //url
-                expect(mockConnectionManager.request.mostRecentCall.args[2]).toEqual(JSON.stringify(userGroupCreateStruct.body)); // body
-                expect(mockConnectionManager.request.mostRecentCall.args[3]).toEqual(userGroupCreateStruct.headers); // headers
-                expect(mockConnectionManager.request.mostRecentCall.args[4]).toBe(mockCallback); // callback
+                expect(mockConnectionManager.request).toHaveBeenCalledWith(
+                    "POST",
+                    testUserGroupSubgroups,
+                    JSON.stringify(userGroupCreateStruct.body),
+                    userGroupCreateStruct.headers,
+                    mockCallback
+                );
             });
 
             it("updateUserGroup", function () {
@@ -295,12 +300,13 @@ define(function (require) {
                     mockCallback
                 );
 
-                expect(mockConnectionManager.request).toHaveBeenCalled();
-                expect(mockConnectionManager.request.mostRecentCall.args[0]).toEqual("PATCH"); //method
-                expect(mockConnectionManager.request.mostRecentCall.args[1]).toEqual(testUserGroupId); //url
-                expect(mockConnectionManager.request.mostRecentCall.args[2]).toEqual(JSON.stringify(userGroupUpdateStruct.body)); // body
-                expect(mockConnectionManager.request.mostRecentCall.args[3]).toEqual(userGroupUpdateStruct.headers); // headers
-                expect(mockConnectionManager.request.mostRecentCall.args[4]).toBe(mockCallback); // callback
+                expect(mockConnectionManager.request).toHaveBeenCalledWith(
+                    "PATCH",
+                    testUserGroupId,
+                    JSON.stringify(userGroupUpdateStruct.body),
+                    userGroupUpdateStruct.headers,
+                    mockCallback
+                );
             });
 
             it("loadSubUserGroups", function () {
@@ -312,12 +318,13 @@ define(function (require) {
                     mockCallback
                 );
 
-                expect(mockConnectionManager.request).toHaveBeenCalled();
-                expect(mockConnectionManager.request.mostRecentCall.args[0]).toEqual("GET"); //method
-                expect(mockConnectionManager.request.mostRecentCall.args[1]).toEqual(testUserGroupSubgroups); //url
-                expect(mockConnectionManager.request.mostRecentCall.args[2]).toEqual(""); // body
-                expect(mockConnectionManager.request.mostRecentCall.args[3].Accept).toEqual("application/vnd.ez.api.UserGroupList+json"); // headers
-                expect(mockConnectionManager.request.mostRecentCall.args[4]).toBe(mockCallback); // callback
+                expect(mockConnectionManager.request).toHaveBeenCalledWith(
+                    "GET",
+                    testUserGroupSubgroups,
+                    "",
+                    {Accept: "application/vnd.ez.api.UserGroupList+json"},
+                    mockCallback
+                );
             });
 
             it("loadUsersOfUserGroup", function () {
@@ -329,12 +336,13 @@ define(function (require) {
                     mockCallback
                 );
 
-                expect(mockConnectionManager.request).toHaveBeenCalled();
-                expect(mockConnectionManager.request.mostRecentCall.args[0]).toEqual("GET"); //method
-                expect(mockConnectionManager.request.mostRecentCall.args[1]).toEqual(testUserGroupUsers); //url
-                expect(mockConnectionManager.request.mostRecentCall.args[2]).toEqual(""); // body
-                expect(mockConnectionManager.request.mostRecentCall.args[3].Accept).toEqual("application/vnd.ez.api.UserList+json"); // headers
-                expect(mockConnectionManager.request.mostRecentCall.args[4]).toBe(mockCallback); // callback
+                expect(mockConnectionManager.request).toHaveBeenCalledWith(
+                    "GET",
+                    testUserGroupUsers,
+                    "",
+                    {Accept: "application/vnd.ez.api.UserList+json"},
+                    mockCallback
+                );
             });
 
             it("loadUserGroupsOfUser", function () {
@@ -344,7 +352,13 @@ define(function (require) {
                     mockCallback
                 );
 
-                expect(mockConnectionManager.request).toHaveBeenCalled();
+                expect(mockConnectionManager.request).toHaveBeenCalledWith(
+                    "GET",
+                    testUserId + "/groups",
+                    "",
+                    {Accept: "application/vnd.ez.api.UserGroupRefList+json"},
+                    mockCallback
+                );
                 expect(mockConnectionManager.request.mostRecentCall.args[0]).toEqual("GET"); //method
                 expect(mockConnectionManager.request.mostRecentCall.args[1]).toEqual(testUserId + "/groups"); //url
                 expect(mockConnectionManager.request.mostRecentCall.args[2]).toEqual(""); // body
@@ -381,12 +395,13 @@ define(function (require) {
                     mockCallback
                 );
 
-                expect(mockConnectionManager.request).toHaveBeenCalled();
-                expect(mockConnectionManager.request.mostRecentCall.args[0]).toEqual("POST"); //method
-                expect(mockConnectionManager.request.mostRecentCall.args[1]).toEqual(testUserGroupUsers); //url
-                expect(mockConnectionManager.request.mostRecentCall.args[2]).toEqual(JSON.stringify(userCreateStruct.body)); // body
-                expect(mockConnectionManager.request.mostRecentCall.args[3]).toEqual(userCreateStruct.headers); // headers
-                expect(mockConnectionManager.request.mostRecentCall.args[4]).toBe(mockCallback); // callback
+                expect(mockConnectionManager.request).toHaveBeenCalledWith(
+                    "POST",
+                    testUserGroupUsers,
+                    JSON.stringify(userCreateStruct.body),
+                    userCreateStruct.headers,
+                    mockCallback
+                );
             });
 
             it("getRoleAssignments", function () {
@@ -397,12 +412,13 @@ define(function (require) {
                     mockCallback
                 );
 
-                expect(mockConnectionManager.request).toHaveBeenCalled();
-                expect(mockConnectionManager.request.mostRecentCall.args[0]).toEqual("GET"); //method
-                expect(mockConnectionManager.request.mostRecentCall.args[1]).toEqual(testUserGroups + "?roleId=" + testRoleId); //url
-                expect(mockConnectionManager.request.mostRecentCall.args[2]).toEqual(""); // body
-                expect(mockConnectionManager.request.mostRecentCall.args[3].Accept).toEqual("application/vnd.ez.api.UserList+json"); // headers
-                expect(mockConnectionManager.request.mostRecentCall.args[4]).toBe(mockCallback); // callback
+                expect(mockConnectionManager.request).toHaveBeenCalledWith(
+                    "GET",
+                    testUserGroups + "?roleId=" + testRoleId,
+                    "",
+                    {Accept: "application/vnd.ez.api.UserList+json"},
+                    mockCallback
+                );
             });
 
             it("loadUser", function () {
@@ -412,12 +428,13 @@ define(function (require) {
                     mockCallback
                 );
 
-                expect(mockConnectionManager.request).toHaveBeenCalled();
-                expect(mockConnectionManager.request.mostRecentCall.args[0]).toEqual("GET"); //method
-                expect(mockConnectionManager.request.mostRecentCall.args[1]).toEqual(testUserId); //url
-                expect(mockConnectionManager.request.mostRecentCall.args[2]).toEqual(""); // body
-                expect(mockConnectionManager.request.mostRecentCall.args[3].Accept).toEqual("application/vnd.ez.api.User+json"); // headers
-                expect(mockConnectionManager.request.mostRecentCall.args[4]).toBe(mockCallback); // callback
+                expect(mockConnectionManager.request).toHaveBeenCalledWith(
+                    "GET",
+                    testUserId,
+                    "",
+                    {Accept: "application/vnd.ez.api.User+json"},
+                    mockCallback
+                );
             });
 
             it("updateUserGroup", function () {
@@ -431,12 +448,13 @@ define(function (require) {
                     mockCallback
                 );
 
-                expect(mockConnectionManager.request).toHaveBeenCalled();
-                expect(mockConnectionManager.request.mostRecentCall.args[0]).toEqual("PATCH"); //method
-                expect(mockConnectionManager.request.mostRecentCall.args[1]).toEqual(testUserId); //url
-                expect(mockConnectionManager.request.mostRecentCall.args[2]).toEqual(JSON.stringify(userUpdateStruct.body)); // body
-                expect(mockConnectionManager.request.mostRecentCall.args[3]).toEqual(userUpdateStruct.headers); // headers
-                expect(mockConnectionManager.request.mostRecentCall.args[4]).toBe(mockCallback); // callback
+                expect(mockConnectionManager.request).toHaveBeenCalledWith(
+                    "PATCH",
+                    testUserId,
+                    JSON.stringify(userUpdateStruct.body),
+                    userUpdateStruct.headers,
+                    mockCallback
+                );
             });
 
             it("deleteUser", function () {
@@ -464,12 +482,13 @@ define(function (require) {
                     mockCallback
                 );
 
-                expect(mockConnectionManager.request).toHaveBeenCalled();
-                expect(mockConnectionManager.request.mostRecentCall.args[0]).toEqual("POST"); //method
-                expect(mockConnectionManager.request.mostRecentCall.args[1]).toEqual(testUserUserGroups + "?group=" + testUserGroupId); //url
-                expect(mockConnectionManager.request.mostRecentCall.args[2]).toEqual(""); // body
-                expect(mockConnectionManager.request.mostRecentCall.args[3].Accept).toEqual("application/vnd.ez.api.UserGroupList+json"); // headers
-                expect(mockConnectionManager.request.mostRecentCall.args[4]).toBe(mockCallback); // callback
+                expect(mockConnectionManager.request).toHaveBeenCalledWith(
+                    "POST",
+                    testUserUserGroups + "?group=" + testUserGroupId,
+                    "",
+                    {Accept: "application/vnd.ez.api.UserGroupList+json"},
+                    mockCallback
+                );
             });
 
             it("unassignUserFromUserGroup", function () {
@@ -501,12 +520,13 @@ define(function (require) {
                 expect(mockDiscoveryService.getInfoObject.mostRecentCall.args[0]).toEqual("roles"); //name
                 expect(mockDiscoveryService.getInfoObject.mostRecentCall.args[1]).toEqual(jasmine.any(Function)); //callback
 
-                expect(mockConnectionManager.request).toHaveBeenCalled();
-                expect(mockConnectionManager.request.mostRecentCall.args[0]).toEqual("POST"); //method
-                expect(mockConnectionManager.request.mostRecentCall.args[1]).toEqual(testRoles); //url
-                expect(mockConnectionManager.request.mostRecentCall.args[2]).toEqual(JSON.stringify(roleCreateStruct.body)); // body
-                expect(mockConnectionManager.request.mostRecentCall.args[3]).toEqual(roleCreateStruct.headers); // headers
-                expect(mockConnectionManager.request.mostRecentCall.args[4]).toBe(mockCallback); // callback
+                expect(mockConnectionManager.request).toHaveBeenCalledWith(
+                    "POST",
+                    testRoles,
+                    JSON.stringify(roleCreateStruct.body),
+                    roleCreateStruct.headers,
+                    mockCallback
+                );
             });
 
             it("loadRole", function () {
@@ -516,12 +536,13 @@ define(function (require) {
                     mockCallback
                 );
 
-                expect(mockConnectionManager.request).toHaveBeenCalled();
-                expect(mockConnectionManager.request.mostRecentCall.args[0]).toEqual("GET"); //method
-                expect(mockConnectionManager.request.mostRecentCall.args[1]).toEqual(testRoleId); //url
-                expect(mockConnectionManager.request.mostRecentCall.args[2]).toEqual(""); // body
-                expect(mockConnectionManager.request.mostRecentCall.args[3].Accept).toEqual("application/vnd.ez.api.Role+json"); // headers
-                expect(mockConnectionManager.request.mostRecentCall.args[4]).toBe(mockCallback); // callback
+                expect(mockConnectionManager.request).toHaveBeenCalledWith(
+                    "GET",
+                    testRoleId,
+                    "",
+                    {Accept: "application/vnd.ez.api.Role+json"},
+                    mockCallback
+                );
             });
 
             it("loadRoles", function () {
@@ -537,14 +558,13 @@ define(function (require) {
                 expect(mockDiscoveryService.getInfoObject.mostRecentCall.args[0]).toEqual("roles"); //name
                 expect(mockDiscoveryService.getInfoObject.mostRecentCall.args[1]).toEqual(jasmine.any(Function)); //callback
 
-                expect(mockConnectionManager.request).toHaveBeenCalled();
-                expect(mockConnectionManager.request.mostRecentCall.args[0]).toEqual("GET"); //method
-                expect(
-                    mockConnectionManager.request.mostRecentCall.args[1]
-                ).toEqual(testRoles + '?offset=' + testOffset + '&limit=' + testLimit + '&identifier=' + testRoleIdentifier); //url
-                expect(mockConnectionManager.request.mostRecentCall.args[2]).toEqual(""); // body
-                expect(mockConnectionManager.request.mostRecentCall.args[3].Accept).toEqual("application/vnd.ez.api.RoleList+json"); // headers
-                expect(mockConnectionManager.request.mostRecentCall.args[4]).toBe(mockCallback); // callback
+                expect(mockConnectionManager.request).toHaveBeenCalledWith(
+                    "GET",
+                    testRoles + '?offset=' + testOffset + '&limit=' + testLimit + '&identifier=' + testRoleIdentifier,
+                    "",
+                    {Accept: "application/vnd.ez.api.RoleList+json"},
+                    mockCallback
+                );
             });
 
             it("loadRoles with minimum arguments set", function () {
@@ -557,14 +577,13 @@ define(function (require) {
                 expect(mockDiscoveryService.getInfoObject.mostRecentCall.args[0]).toEqual("roles"); //name
                 expect(mockDiscoveryService.getInfoObject.mostRecentCall.args[1]).toEqual(jasmine.any(Function)); //callback
 
-                expect(mockConnectionManager.request).toHaveBeenCalled();
-                expect(mockConnectionManager.request.mostRecentCall.args[0]).toEqual("GET"); //method
-                expect(
-                    mockConnectionManager.request.mostRecentCall.args[1]
-                ).toEqual(testRoles + '?offset=' + testOffset + '&limit=' + testLimit); //url
-                expect(mockConnectionManager.request.mostRecentCall.args[2]).toEqual(""); // body
-                expect(mockConnectionManager.request.mostRecentCall.args[3].Accept).toEqual("application/vnd.ez.api.RoleList+json"); // headers
-                expect(mockConnectionManager.request.mostRecentCall.args[4]).toBe(mockCallback); // callback
+                expect(mockConnectionManager.request).toHaveBeenCalledWith(
+                    "GET",
+                    testRoles + '?offset=' + testOffset + '&limit=' + testLimit,
+                    "",
+                    {Accept: "application/vnd.ez.api.RoleList+json"},
+                    mockCallback
+                );
             });
 
             it("loadRoles with 1 optional argument", function () {
@@ -578,14 +597,13 @@ define(function (require) {
                 expect(mockDiscoveryService.getInfoObject.mostRecentCall.args[0]).toEqual("roles"); //name
                 expect(mockDiscoveryService.getInfoObject.mostRecentCall.args[1]).toEqual(jasmine.any(Function)); //callback
 
-                expect(mockConnectionManager.request).toHaveBeenCalled();
-                expect(mockConnectionManager.request.mostRecentCall.args[0]).toEqual("GET"); //method
-                expect(
-                    mockConnectionManager.request.mostRecentCall.args[1]
-                ).toEqual(testRoles + '?offset=' + testOffset + '&limit=' + testLimit + '&identifier=' + testRoleIdentifier); //url
-                expect(mockConnectionManager.request.mostRecentCall.args[2]).toEqual(""); // body
-                expect(mockConnectionManager.request.mostRecentCall.args[3].Accept).toEqual("application/vnd.ez.api.RoleList+json"); // headers
-                expect(mockConnectionManager.request.mostRecentCall.args[4]).toBe(mockCallback); // callback
+                expect(mockConnectionManager.request).toHaveBeenCalledWith(
+                    "GET",
+                    testRoles + '?offset=' + testOffset + '&limit=' + testLimit + '&identifier=' + testRoleIdentifier,
+                    "",
+                    {Accept: "application/vnd.ez.api.RoleList+json"},
+                    mockCallback
+                );
             });
 
             it("loadRoles with 2 optional arguments", function () {
@@ -600,14 +618,13 @@ define(function (require) {
                 expect(mockDiscoveryService.getInfoObject.mostRecentCall.args[0]).toEqual("roles"); //name
                 expect(mockDiscoveryService.getInfoObject.mostRecentCall.args[1]).toEqual(jasmine.any(Function)); //callback
 
-                expect(mockConnectionManager.request).toHaveBeenCalled();
-                expect(mockConnectionManager.request.mostRecentCall.args[0]).toEqual("GET"); //method
-                expect(
-                    mockConnectionManager.request.mostRecentCall.args[1]
-                ).toEqual(testRoles + '?offset=' + testOffset + '&limit=' + testLimit + '&identifier=' + testRoleIdentifier); //url
-                expect(mockConnectionManager.request.mostRecentCall.args[2]).toEqual(""); // body
-                expect(mockConnectionManager.request.mostRecentCall.args[3].Accept).toEqual("application/vnd.ez.api.RoleList+json"); // headers
-                expect(mockConnectionManager.request.mostRecentCall.args[4]).toBe(mockCallback); // callback
+                expect(mockConnectionManager.request).toHaveBeenCalledWith(
+                    "GET",
+                    testRoles + '?offset=' + testOffset + '&limit=' + testLimit + '&identifier=' + testRoleIdentifier,
+                    "",
+                    {Accept: "application/vnd.ez.api.RoleList+json"},
+                    mockCallback
+                );
             });
 
 
@@ -623,12 +640,13 @@ define(function (require) {
                     mockCallback
                 );
 
-                expect(mockConnectionManager.request).toHaveBeenCalled();
-                expect(mockConnectionManager.request.mostRecentCall.args[0]).toEqual("PATCH"); //method
-                expect(mockConnectionManager.request.mostRecentCall.args[1]).toEqual(testRoleId); //url
-                expect(mockConnectionManager.request.mostRecentCall.args[2]).toEqual(JSON.stringify(roleUpdateStruct.body)); // body
-                expect(mockConnectionManager.request.mostRecentCall.args[3]).toEqual(roleUpdateStruct.headers); // headers
-                expect(mockConnectionManager.request.mostRecentCall.args[4]).toBe(mockCallback); // callback
+                expect(mockConnectionManager.request).toHaveBeenCalledWith(
+                    "PATCH",
+                    testRoleId,
+                    JSON.stringify(roleUpdateStruct.body),
+                    roleUpdateStruct.headers,
+                    mockCallback
+                );
             });
 
             it("deleteRole", function () {
@@ -654,14 +672,13 @@ define(function (require) {
                     mockCallback
                 );
 
-                expect(mockConnectionManager.request).toHaveBeenCalled();
-                expect(mockConnectionManager.request.mostRecentCall.args[0]).toEqual("GET"); //method
-                expect(mockConnectionManager.request.mostRecentCall.args[1]).toEqual(testUserRoles); //url
-                expect(mockConnectionManager.request.mostRecentCall.args[2]).toEqual(""); // body
-                expect(
-                    mockConnectionManager.request.mostRecentCall.args[3].Accept
-                ).toEqual("application/vnd.ez.api.RoleAssignmentList+json"); // headers
-                expect(mockConnectionManager.request.mostRecentCall.args[4]).toBe(mockCallback); // callback
+                expect(mockConnectionManager.request).toHaveBeenCalledWith(
+                    "GET",
+                    testUserRoles,
+                    "",
+                    {Accept: "application/vnd.ez.api.RoleAssignmentList+json"},
+                    mockCallback
+                );
             });
 
             it("getRoleAssignmentsForUserGroup", function () {
@@ -673,14 +690,13 @@ define(function (require) {
                     mockCallback
                 );
 
-                expect(mockConnectionManager.request).toHaveBeenCalled();
-                expect(mockConnectionManager.request.mostRecentCall.args[0]).toEqual("GET"); //method
-                expect(mockConnectionManager.request.mostRecentCall.args[1]).toEqual(testUserGroupRoles); //url
-                expect(mockConnectionManager.request.mostRecentCall.args[2]).toEqual(""); // body
-                expect(
-                    mockConnectionManager.request.mostRecentCall.args[3].Accept
-                ).toEqual("application/vnd.ez.api.RoleAssignmentList+json"); // headers
-                expect(mockConnectionManager.request.mostRecentCall.args[4]).toBe(mockCallback); // callback
+                expect(mockConnectionManager.request).toHaveBeenCalledWith(
+                    "GET",
+                    testUserGroupRoles,
+                    "",
+                    {Accept: "application/vnd.ez.api.RoleAssignmentList+json"},
+                    mockCallback
+                );
             });
 
             it("getUserAssignmentObject", function () {
@@ -690,12 +706,13 @@ define(function (require) {
                     mockCallback
                 );
 
-                expect(mockConnectionManager.request).toHaveBeenCalled();
-                expect(mockConnectionManager.request.mostRecentCall.args[0]).toEqual("GET"); //method
-                expect(mockConnectionManager.request.mostRecentCall.args[1]).toEqual(testUserAssignmentId); //url
-                expect(mockConnectionManager.request.mostRecentCall.args[2]).toEqual(""); // body
-                expect(mockConnectionManager.request.mostRecentCall.args[3].Accept).toEqual("application/vnd.ez.api.RoleAssignment+json"); // headers
-                expect(mockConnectionManager.request.mostRecentCall.args[4]).toBe(mockCallback); // callback
+                expect(mockConnectionManager.request).toHaveBeenCalledWith(
+                    "GET",
+                    testUserAssignmentId,
+                    "",
+                    {Accept: "application/vnd.ez.api.RoleAssignment+json"},
+                    mockCallback
+                );
             });
 
             it("getUserGroupAssignmentObject", function () {
@@ -705,12 +722,13 @@ define(function (require) {
                     mockCallback
                 );
 
-                expect(mockConnectionManager.request).toHaveBeenCalled();
-                expect(mockConnectionManager.request.mostRecentCall.args[0]).toEqual("GET"); //method
-                expect(mockConnectionManager.request.mostRecentCall.args[1]).toEqual(testUserGroupAssignmentId); //url
-                expect(mockConnectionManager.request.mostRecentCall.args[2]).toEqual(""); // body
-                expect(mockConnectionManager.request.mostRecentCall.args[3].Accept).toEqual("application/vnd.ez.api.RoleAssignment+json"); // headers
-                expect(mockConnectionManager.request.mostRecentCall.args[4]).toBe(mockCallback); // callback
+                expect(mockConnectionManager.request).toHaveBeenCalledWith(
+                    "GET",
+                    testUserGroupAssignmentId,
+                    "",
+                    {Accept: "application/vnd.ez.api.RoleAssignment+json"},
+                    mockCallback
+                );
             });
 
             it("assignRoleToUser", function () {
@@ -742,12 +760,13 @@ define(function (require) {
                     mockCallback
                 );
 
-                expect(mockConnectionManager.request).toHaveBeenCalled();
-                expect(mockConnectionManager.request.mostRecentCall.args[0]).toEqual("POST"); //method
-                expect(mockConnectionManager.request.mostRecentCall.args[1]).toEqual(testUserRoles); //url
-                expect(mockConnectionManager.request.mostRecentCall.args[2]).toEqual(JSON.stringify(roleAssignCreateStruct.body)); // body
-                expect(mockConnectionManager.request.mostRecentCall.args[3]).toEqual(roleAssignCreateStruct.headers); // headers
-                expect(mockConnectionManager.request.mostRecentCall.args[4]).toBe(mockCallback); // callback
+                expect(mockConnectionManager.request).toHaveBeenCalledWith(
+                    "POST",
+                    testUserRoles,
+                    JSON.stringify(roleAssignCreateStruct.body),
+                    roleAssignCreateStruct.headers,
+                    mockCallback
+                );
             });
 
             it("assignRoleToUserGroup", function () {
@@ -782,12 +801,13 @@ define(function (require) {
                     mockCallback
                 );
 
-                expect(mockConnectionManager.request).toHaveBeenCalled();
-                expect(mockConnectionManager.request.mostRecentCall.args[0]).toEqual("POST"); //method
-                expect(mockConnectionManager.request.mostRecentCall.args[1]).toEqual(testUserGroupRoles); //url
-                expect(mockConnectionManager.request.mostRecentCall.args[2]).toEqual(JSON.stringify(roleAssignCreateStruct.body)); // body
-                expect(mockConnectionManager.request.mostRecentCall.args[3]).toEqual(roleAssignCreateStruct.headers); // headers
-                expect(mockConnectionManager.request.mostRecentCall.args[4]).toBe(mockCallback); // callback
+                expect(mockConnectionManager.request).toHaveBeenCalledWith(
+                    "POST",
+                    testUserGroupRoles,
+                    JSON.stringify(roleAssignCreateStruct.body),
+                    roleAssignCreateStruct.headers,
+                    mockCallback
+                );
             });
 
             it("unassignRoleFromUser", function () {
@@ -831,12 +851,13 @@ define(function (require) {
                     mockCallback
                 );
 
-                expect(mockConnectionManager.request).toHaveBeenCalled();
-                expect(mockConnectionManager.request.mostRecentCall.args[0]).toEqual("POST"); //method
-                expect(mockConnectionManager.request.mostRecentCall.args[1]).toEqual(testRolePolicies); //url
-                expect(mockConnectionManager.request.mostRecentCall.args[2]).toEqual(JSON.stringify(policyCreateStruct.body)); // body
-                expect(mockConnectionManager.request.mostRecentCall.args[3]).toEqual(policyCreateStruct.headers); // headers
-                expect(mockConnectionManager.request.mostRecentCall.args[4]).toBe(mockCallback); // callback
+                expect(mockConnectionManager.request).toHaveBeenCalledWith(
+                    "POST",
+                    testRolePolicies,
+                    JSON.stringify(policyCreateStruct.body),
+                    policyCreateStruct.headers,
+                    mockCallback
+                );
             });
 
             it("loadPolicies", function () {
@@ -848,12 +869,13 @@ define(function (require) {
                     mockCallback
                 );
 
-                expect(mockConnectionManager.request).toHaveBeenCalled();
-                expect(mockConnectionManager.request.mostRecentCall.args[0]).toEqual("GET"); //method
-                expect(mockConnectionManager.request.mostRecentCall.args[1]).toEqual(testRolePolicies); //url
-                expect(mockConnectionManager.request.mostRecentCall.args[2]).toEqual(""); // body
-                expect(mockConnectionManager.request.mostRecentCall.args[3].Accept).toEqual("application/vnd.ez.api.PolicyList+json"); // headers
-                expect(mockConnectionManager.request.mostRecentCall.args[4]).toBe(mockCallback); // callback
+                expect(mockConnectionManager.request).toHaveBeenCalledWith(
+                    "GET",
+                    testRolePolicies,
+                    "",
+                    {Accept: "application/vnd.ez.api.PolicyList+json"},
+                    mockCallback
+                );
             });
 
             it("loadPolicy", function () {
@@ -863,12 +885,13 @@ define(function (require) {
                     mockCallback
                 );
 
-                expect(mockConnectionManager.request).toHaveBeenCalled();
-                expect(mockConnectionManager.request.mostRecentCall.args[0]).toEqual("GET"); //method
-                expect(mockConnectionManager.request.mostRecentCall.args[1]).toEqual(testPolicyId); //url
-                expect(mockConnectionManager.request.mostRecentCall.args[2]).toEqual(""); // body
-                expect(mockConnectionManager.request.mostRecentCall.args[3].Accept).toEqual("application/vnd.ez.api.Policy+json"); // headers
-                expect(mockConnectionManager.request.mostRecentCall.args[4]).toBe(mockCallback); // callback
+                expect(mockConnectionManager.request).toHaveBeenCalledWith(
+                    "GET",
+                    testPolicyId,
+                    "",
+                    {Accept: "application/vnd.ez.api.Policy+json"},
+                    mockCallback
+                );
             });
 
             it("updatePolicy", function () {
@@ -892,12 +915,13 @@ define(function (require) {
                     mockCallback
                 );
 
-                expect(mockConnectionManager.request).toHaveBeenCalled();
-                expect(mockConnectionManager.request.mostRecentCall.args[0]).toEqual("PATCH"); //method
-                expect(mockConnectionManager.request.mostRecentCall.args[1]).toEqual(testPolicyId); //url
-                expect(mockConnectionManager.request.mostRecentCall.args[2]).toEqual(JSON.stringify(policyUpdateStruct.body)); // body
-                expect(mockConnectionManager.request.mostRecentCall.args[3]).toEqual(policyUpdateStruct.headers); // headers
-                expect(mockConnectionManager.request.mostRecentCall.args[4]).toBe(mockCallback); // callback
+                expect(mockConnectionManager.request).toHaveBeenCalledWith(
+                    "PATCH",
+                    testPolicyId,
+                    JSON.stringify(policyUpdateStruct.body),
+                    policyUpdateStruct.headers,
+                    mockCallback
+                );
             });
 
             it("deletePolicy", function () {
@@ -919,12 +943,13 @@ define(function (require) {
                     mockCallback
                 );
 
-                expect(mockConnectionManager.request).toHaveBeenCalled();
-                expect(mockConnectionManager.request.mostRecentCall.args[0]).toEqual("GET"); //method
-                expect(mockConnectionManager.request.mostRecentCall.args[1]).toEqual(testPolicies + "?userId=" + testUserId); //url
-                expect(mockConnectionManager.request.mostRecentCall.args[2]).toEqual(""); // body
-                expect(mockConnectionManager.request.mostRecentCall.args[3].Accept).toEqual("application/vnd.ez.api.PolicyList+json"); // headers
-                expect(mockConnectionManager.request.mostRecentCall.args[4]).toBe(mockCallback); // callback
+                expect(mockConnectionManager.request).toHaveBeenCalledWith(
+                    "GET",
+                    testPolicies + "?userId=" + testUserId,
+                    "",
+                    {Accept: "application/vnd.ez.api.PolicyList+json"},
+                    mockCallback
+                );
             });
 
             // ******************************
@@ -943,12 +968,13 @@ define(function (require) {
                     mockCallback
                 );
 
-                expect(mockConnectionManager.notAuthorizedRequest).toHaveBeenCalled();
-                expect(mockConnectionManager.notAuthorizedRequest.mostRecentCall.args[0]).toEqual("POST"); //method
-                expect(mockConnectionManager.notAuthorizedRequest.mostRecentCall.args[1]).toEqual(testSessions); //url
-                expect(mockConnectionManager.notAuthorizedRequest.mostRecentCall.args[2]).toEqual(JSON.stringify(sessionCreateStruct.body)); // body
-                expect(mockConnectionManager.notAuthorizedRequest.mostRecentCall.args[3]).toEqual(sessionCreateStruct.headers); // headers
-                expect(mockConnectionManager.notAuthorizedRequest.mostRecentCall.args[4]).toBe(mockCallback); // callback
+                expect(mockConnectionManager.notAuthorizedRequest).toHaveBeenCalledWith(
+                    "POST",
+                    testSessions,
+                    JSON.stringify(sessionCreateStruct.body),
+                    sessionCreateStruct.headers,
+                    mockCallback
+                );
             });
 
             it("deleteSession", function () {

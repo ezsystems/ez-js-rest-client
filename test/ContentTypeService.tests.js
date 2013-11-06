@@ -127,13 +127,13 @@ define(function (require) {
                     mockCallback
                 );
 
-                expect(mockConnectionManager.request).toHaveBeenCalled();
-                expect(mockConnectionManager.request.mostRecentCall.args[0]).toEqual("POST"); //method
-                expect(mockConnectionManager.request.mostRecentCall.args[1]).toEqual(testContentTypeGroups); //url
-                expect(mockConnectionManager.request.mostRecentCall.args[2]).toEqual(JSON.stringify(contentTypeGroupCreateStruct.body)); // body
-                expect(mockConnectionManager.request.mostRecentCall.args[3]).toEqual(contentTypeGroupCreateStruct.headers); // headers
-                expect(mockConnectionManager.request.mostRecentCall.args[4]).toBe(mockCallback); // callback
-
+                expect(mockConnectionManager.request).toHaveBeenCalledWith(
+                    "POST",
+                    testContentTypeGroups,
+                    JSON.stringify(contentTypeGroupCreateStruct.body),
+                    contentTypeGroupCreateStruct.headers,
+                    mockCallback
+                );
             });
 
             it("loadContentTypeGroups", function () {
@@ -142,14 +142,13 @@ define(function (require) {
                     mockCallback
                 );
 
-                expect(mockConnectionManager.request).toHaveBeenCalled();
-                expect(mockConnectionManager.request.mostRecentCall.args[0]).toEqual("GET"); //method
-                expect(mockConnectionManager.request.mostRecentCall.args[1]).toEqual(testContentTypeGroups); //url
-                expect(mockConnectionManager.request.mostRecentCall.args[2]).toEqual(""); // body
-                expect(
-                    mockConnectionManager.request.mostRecentCall.args[3].Accept
-                ).toEqual("application/vnd.ez.api.ContentTypeGroupList+json"); // headers
-                expect(mockConnectionManager.request.mostRecentCall.args[4]).toBe(mockCallback); // callback
+                expect(mockConnectionManager.request).toHaveBeenCalledWith(
+                    "GET",
+                    testContentTypeGroups,
+                    "",
+                    {Accept: "application/vnd.ez.api.ContentTypeGroupList+json"},
+                    mockCallback
+                );
             });
 
             it("loadContentTypeGroup", function () {
@@ -158,14 +157,13 @@ define(function (require) {
                     mockCallback
                 );
 
-                expect(mockConnectionManager.request).toHaveBeenCalled();
-                expect(mockConnectionManager.request.mostRecentCall.args[0]).toEqual("GET"); //method
-                expect(mockConnectionManager.request.mostRecentCall.args[1]).toEqual(testContentTypeGroupId); //url
-                expect(mockConnectionManager.request.mostRecentCall.args[2]).toEqual(""); // body
-                expect(
-                    mockConnectionManager.request.mostRecentCall.args[3].Accept
-                ).toEqual("application/vnd.ez.api.ContentTypeGroup+json"); // headers
-                expect(mockConnectionManager.request.mostRecentCall.args[4]).toBe(mockCallback); // callback
+                expect(mockConnectionManager.request).toHaveBeenCalledWith(
+                    "GET",
+                    testContentTypeGroupId,
+                    "",
+                    {Accept: "application/vnd.ez.api.ContentTypeGroup+json"},
+                    mockCallback
+                );
             });
 
             it("loadContentTypeGroupByIdentifier", function () {
@@ -175,16 +173,13 @@ define(function (require) {
                     mockCallback
                 );
 
-                expect(mockConnectionManager.request).toHaveBeenCalled();
-                expect(mockConnectionManager.request.mostRecentCall.args[0]).toEqual("GET"); //method
-                expect(
-                    mockConnectionManager.request.mostRecentCall.args[1]
-                ).toEqual(testContentTypeGroups + '?identifier=' + testContentTypeGroupIdentifier); //url
-                expect(mockConnectionManager.request.mostRecentCall.args[2]).toEqual(""); // body
-                expect(
-                    mockConnectionManager.request.mostRecentCall.args[3].Accept
-                ).toEqual("application/vnd.ez.api.ContentTypeGroup+json"); // headers
-                expect(mockConnectionManager.request.mostRecentCall.args[4]).toBe(mockCallback); // callback
+                expect(mockConnectionManager.request).toHaveBeenCalledWith(
+                    "GET",
+                    testContentTypeGroups + '?identifier=' + testContentTypeGroupIdentifier,
+                    "",
+                    {Accept: "application/vnd.ez.api.ContentTypeGroup+json"},
+                    mockCallback
+                );
             });
 
 
@@ -200,13 +195,13 @@ define(function (require) {
                     mockCallback
                 );
 
-                expect(mockConnectionManager.request).toHaveBeenCalled();
-                expect(mockConnectionManager.request.mostRecentCall.args[0]).toEqual("PATCH"); //method
-                expect(mockConnectionManager.request.mostRecentCall.args[1]).toEqual(testContentTypeGroupId); //url
-                expect(mockConnectionManager.request.mostRecentCall.args[2]).toEqual(JSON.stringify(contentTypeGroupUpdateStruct.body)); // body
-                expect(mockConnectionManager.request.mostRecentCall.args[3]).toEqual(contentTypeGroupUpdateStruct.headers); // headers
-                expect(mockConnectionManager.request.mostRecentCall.args[4]).toBe(mockCallback); // callback
-
+                expect(mockConnectionManager.request).toHaveBeenCalledWith(
+                    "PATCH",
+                    testContentTypeGroupId,
+                    JSON.stringify(contentTypeGroupUpdateStruct.body),
+                    contentTypeGroupUpdateStruct.headers,
+                    mockCallback
+                );
             });
 
             it("deleteContentTypeGroup", function () {
@@ -229,14 +224,13 @@ define(function (require) {
                     mockCallback
                 );
 
-                expect(mockConnectionManager.request).toHaveBeenCalled();
-                expect(mockConnectionManager.request.mostRecentCall.args[0]).toEqual("GET"); //method
-                expect(mockConnectionManager.request.mostRecentCall.args[1]).toEqual(testContentTypeGroupTypes); //url
-                expect(mockConnectionManager.request.mostRecentCall.args[2]).toEqual(""); // body
-                expect(
-                    mockConnectionManager.request.mostRecentCall.args[3].Accept
-                ).toEqual("application/vnd.ez.api.ContentTypeInfoList+json"); // headers
-                expect(mockConnectionManager.request.mostRecentCall.args[4]).toBe(mockCallback); // callback
+                expect(mockConnectionManager.request).toHaveBeenCalledWith(
+                    "GET",
+                    testContentTypeGroupTypes,
+                    "",
+                    {Accept: "application/vnd.ez.api.ContentTypeInfoList+json"},
+                    mockCallback
+                );
             });
 
 
@@ -282,12 +276,13 @@ define(function (require) {
                     mockCallback
                 );
 
-                expect(mockConnectionManager.request).toHaveBeenCalled();
-                expect(mockConnectionManager.request.mostRecentCall.args[0]).toEqual("POST"); //method
-                expect(mockConnectionManager.request.mostRecentCall.args[1]).toEqual(testContentTypeGroupTypes + "?publish=" + testTrue); //url
-                expect(mockConnectionManager.request.mostRecentCall.args[2]).toEqual(JSON.stringify(contentTypeCreateStruct.body)); // body
-                expect(mockConnectionManager.request.mostRecentCall.args[3]).toEqual(contentTypeCreateStruct.headers); // headers
-                expect(mockConnectionManager.request.mostRecentCall.args[4]).toBe(mockCallback); // callback
+                expect(mockConnectionManager.request).toHaveBeenCalledWith(
+                    "POST",
+                    testContentTypeGroupTypes + "?publish=" + testTrue,
+                    JSON.stringify(contentTypeCreateStruct.body),
+                    contentTypeCreateStruct.headers,
+                    mockCallback
+                );
             });
 
             it("createContentType (and do not publish)", function () {
@@ -329,12 +324,13 @@ define(function (require) {
                     mockCallback
                 );
 
-                expect(mockConnectionManager.request).toHaveBeenCalled();
-                expect(mockConnectionManager.request.mostRecentCall.args[0]).toEqual("POST"); //method
-                expect(mockConnectionManager.request.mostRecentCall.args[1]).toEqual(testContentTypeGroupTypes); //url
-                expect(mockConnectionManager.request.mostRecentCall.args[2]).toEqual(JSON.stringify(contentTypeCreateStruct.body)); // body
-                expect(mockConnectionManager.request.mostRecentCall.args[3]).toEqual(contentTypeCreateStruct.headers); // headers
-                expect(mockConnectionManager.request.mostRecentCall.args[4]).toBe(mockCallback); // callback
+                expect(mockConnectionManager.request).toHaveBeenCalledWith(
+                    "POST",
+                    testContentTypeGroupTypes,
+                    JSON.stringify(contentTypeCreateStruct.body),
+                    contentTypeCreateStruct.headers,
+                    mockCallback
+                );
             });
 
             it("copyContentType", function () {
@@ -343,12 +339,13 @@ define(function (require) {
                     mockCallback
                 );
 
-                expect(mockConnectionManager.request).toHaveBeenCalled();
-                expect(mockConnectionManager.request.mostRecentCall.args[0]).toEqual("COPY"); //method
-                expect(mockConnectionManager.request.mostRecentCall.args[1]).toEqual(testContentTypeId); //url
-                expect(mockConnectionManager.request.mostRecentCall.args[2]).toEqual(""); // body
-                expect(mockConnectionManager.request.mostRecentCall.args[3]).toEqual({}); // headers
-                expect(mockConnectionManager.request.mostRecentCall.args[4]).toBe(mockCallback); // callback
+                expect(mockConnectionManager.request).toHaveBeenCalledWith(
+                    "COPY",
+                    testContentTypeId,
+                    "",
+                    {},
+                    mockCallback
+                );
             });
 
             it("loadContentType", function () {
@@ -357,12 +354,13 @@ define(function (require) {
                     mockCallback
                 );
 
-                expect(mockConnectionManager.request).toHaveBeenCalled();
-                expect(mockConnectionManager.request.mostRecentCall.args[0]).toEqual("GET"); //method
-                expect(mockConnectionManager.request.mostRecentCall.args[1]).toEqual(testContentTypeId); //url
-                expect(mockConnectionManager.request.mostRecentCall.args[2]).toEqual(""); // body
-                expect(mockConnectionManager.request.mostRecentCall.args[3].Accept).toEqual("application/vnd.ez.api.ContentType+json"); // headers
-                expect(mockConnectionManager.request.mostRecentCall.args[4]).toBe(mockCallback); // callback
+                expect(mockConnectionManager.request).toHaveBeenCalledWith(
+                    "GET",
+                    testContentTypeId,
+                    "",
+                    {Accept: "application/vnd.ez.api.ContentType+json"},
+                    mockCallback
+                );
             });
 
             it("loadContentTypeByIdentifier", function () {
@@ -375,16 +373,13 @@ define(function (require) {
                 expect(mockDiscoveryService.getInfoObject.mostRecentCall.args[0]).toEqual("contentTypes"); //name
                 expect(mockDiscoveryService.getInfoObject.mostRecentCall.args[1]).toEqual(jasmine.any(Function)); //callback
 
-                expect(mockConnectionManager.request).toHaveBeenCalled();
-                expect(mockConnectionManager.request.mostRecentCall.args[0]).toEqual("GET"); //method
-                expect(
-                    mockConnectionManager.request.mostRecentCall.args[1]
-                ).toEqual(testContentTypes + "?identifier=" + testContentTypeIdentifier); //url
-                expect(mockConnectionManager.request.mostRecentCall.args[2]).toEqual(""); // body
-                expect(
-                    mockConnectionManager.request.mostRecentCall.args[3].Accept
-                ).toEqual("application/vnd.ez.api.ContentTypeInfoList+json"); // headers
-                expect(mockConnectionManager.request.mostRecentCall.args[4]).toBe(mockCallback); // callback
+                expect(mockConnectionManager.request).toHaveBeenCalledWith(
+                    "GET",
+                    testContentTypes + "?identifier=" + testContentTypeIdentifier,
+                    "",
+                    {Accept: "application/vnd.ez.api.ContentTypeInfoList+json"},
+                    mockCallback
+                );
             });
 
             it("deleteContentType", function () {
@@ -404,14 +399,13 @@ define(function (require) {
                     mockCallback
                 );
 
-                expect(mockConnectionManager.request).toHaveBeenCalled();
-                expect(mockConnectionManager.request.mostRecentCall.args[0]).toEqual("GET"); //method
-                expect(mockConnectionManager.request.mostRecentCall.args[1]).toEqual(testContentTypeId + "/groups"); //url
-                expect(mockConnectionManager.request.mostRecentCall.args[2]).toEqual(""); // body
-                expect(
-                    mockConnectionManager.request.mostRecentCall.args[3].Accept
-                ).toEqual("application/vnd.ez.api.ContentTypeGroupRefList+json"); // headers
-                expect(mockConnectionManager.request.mostRecentCall.args[4]).toBe(mockCallback); // callback
+                expect(mockConnectionManager.request).toHaveBeenCalledWith(
+                    "GET",
+                    testContentTypeId + "/groups",
+                    "",
+                    {Accept: "application/vnd.ez.api.ContentTypeGroupRefList+json"},
+                    mockCallback
+                );
             });
 
             it("assignContentTypeGroup", function () {
@@ -421,14 +415,13 @@ define(function (require) {
                     mockCallback
                 );
 
-                expect(mockConnectionManager.request).toHaveBeenCalled();
-                expect(mockConnectionManager.request.mostRecentCall.args[0]).toEqual("POST"); //method
-                expect(
-                    mockConnectionManager.request.mostRecentCall.args[1]
-                ).toEqual(testContentTypeId + "/groups" + "?group=" + testContentTypeGroupId); //url
-                expect(mockConnectionManager.request.mostRecentCall.args[2]).toEqual(""); // body
-                expect(mockConnectionManager.request.mostRecentCall.args[3]).toEqual({}); // headers
-                expect(mockConnectionManager.request.mostRecentCall.args[4]).toBe(mockCallback); // callback
+                expect(mockConnectionManager.request).toHaveBeenCalledWith(
+                    "POST",
+                    testContentTypeId + "/groups" + "?group=" + testContentTypeGroupId,
+                    "",
+                    {},
+                    mockCallback
+                );
             });
 
             it("unassignContentTypeGroup", function () {
@@ -463,13 +456,13 @@ define(function (require) {
                     mockCallback
                 );
 
-                expect(mockConnectionManager.request).toHaveBeenCalled();
-                expect(mockConnectionManager.request.mostRecentCall.args[0]).toEqual("POST"); //method
-                expect(mockConnectionManager.request.mostRecentCall.args[1]).toEqual(testContentTypeId); //url
-                expect(mockConnectionManager.request.mostRecentCall.args[2]).toEqual(JSON.stringify(contentTypeUpdateStruct.body)); // body
-                expect(mockConnectionManager.request.mostRecentCall.args[3]).toEqual(contentTypeUpdateStruct.headers); // headers
-                expect(mockConnectionManager.request.mostRecentCall.args[4]).toBe(mockCallback); // callback
-
+                expect(mockConnectionManager.request).toHaveBeenCalledWith(
+                    "POST",
+                    testContentTypeId,
+                    JSON.stringify(contentTypeUpdateStruct.body),
+                    contentTypeUpdateStruct.headers,
+                    mockCallback
+                );
             });
 
             it("loadContentTypeDraft", function () {
@@ -478,12 +471,13 @@ define(function (require) {
                     mockCallback
                 );
 
-                expect(mockConnectionManager.request).toHaveBeenCalled();
-                expect(mockConnectionManager.request.mostRecentCall.args[0]).toEqual("GET"); //method
-                expect(mockConnectionManager.request.mostRecentCall.args[1]).toEqual(testContentTypeId + "/draft"); //url
-                expect(mockConnectionManager.request.mostRecentCall.args[2]).toEqual(""); // body
-                expect(mockConnectionManager.request.mostRecentCall.args[3].Accept).toEqual("application/vnd.ez.api.ContentType+json"); // headers
-                expect(mockConnectionManager.request.mostRecentCall.args[4]).toBe(mockCallback); // callback
+                expect(mockConnectionManager.request).toHaveBeenCalledWith(
+                    "GET",
+                    testContentTypeId + "/draft",
+                    "",
+                    {Accept: "application/vnd.ez.api.ContentType+json"},
+                    mockCallback
+                );
             });
 
             it("updateContentTypeDraftMetadata", function () {
@@ -504,12 +498,13 @@ define(function (require) {
                     mockCallback
                 );
 
-                expect(mockConnectionManager.request).toHaveBeenCalled();
-                expect(mockConnectionManager.request.mostRecentCall.args[0]).toEqual("PATCH"); //method
-                expect(mockConnectionManager.request.mostRecentCall.args[1]).toEqual(testContentTypeDraftId); //url
-                expect(mockConnectionManager.request.mostRecentCall.args[2]).toEqual(JSON.stringify(contentTypeUpdateStruct.body)); // body
-                expect(mockConnectionManager.request.mostRecentCall.args[3]).toEqual(contentTypeUpdateStruct.headers); // headers
-                expect(mockConnectionManager.request.mostRecentCall.args[4]).toBe(mockCallback); // callback
+                expect(mockConnectionManager.request).toHaveBeenCalledWith(
+                    "PATCH",
+                    testContentTypeDraftId,
+                    JSON.stringify(contentTypeUpdateStruct.body),
+                    contentTypeUpdateStruct.headers,
+                    mockCallback
+                );
             });
 
             it("publishContentTypeDraft", function () {
@@ -518,12 +513,13 @@ define(function (require) {
                     mockCallback
                 );
 
-                expect(mockConnectionManager.request).toHaveBeenCalled();
-                expect(mockConnectionManager.request.mostRecentCall.args[0]).toEqual("PUBLISH"); //method
-                expect(mockConnectionManager.request.mostRecentCall.args[1]).toEqual(testContentTypeDraftId); //url
-                expect(mockConnectionManager.request.mostRecentCall.args[2]).toEqual(""); // body
-                expect(mockConnectionManager.request.mostRecentCall.args[3]).toEqual({}); // headers
-                expect(mockConnectionManager.request.mostRecentCall.args[4]).toBe(mockCallback); // callback
+                expect(mockConnectionManager.request).toHaveBeenCalledWith(
+                    "PUBLISH",
+                    testContentTypeDraftId,
+                    "",
+                    {},
+                    mockCallback
+                );
             });
 
             it("deleteContentTypeDraft", function () {
@@ -563,13 +559,13 @@ define(function (require) {
                     mockCallback
                 );
 
-                expect(mockConnectionManager.request).toHaveBeenCalled();
-                expect(mockConnectionManager.request.mostRecentCall.args[0]).toEqual("POST"); //method
-                expect(mockConnectionManager.request.mostRecentCall.args[1]).toEqual(testContentTypeDraftFieldDefinitions); //url
-                expect(mockConnectionManager.request.mostRecentCall.args[2]).toEqual(JSON.stringify(fieldDefinitionCreateStruct.body)); // body
-                expect(mockConnectionManager.request.mostRecentCall.args[3]).toEqual(fieldDefinitionCreateStruct.headers); // headers
-                expect(mockConnectionManager.request.mostRecentCall.args[4]).toBe(mockCallback); // callback
-
+                expect(mockConnectionManager.request).toHaveBeenCalledWith(
+                    "POST",
+                    testContentTypeDraftFieldDefinitions,
+                    JSON.stringify(fieldDefinitionCreateStruct.body),
+                    fieldDefinitionCreateStruct.headers,
+                    mockCallback
+                );
             });
 
             it("loadFieldDefinition", function () {
@@ -578,12 +574,13 @@ define(function (require) {
                     mockCallback
                 );
 
-                expect(mockConnectionManager.request).toHaveBeenCalled();
-                expect(mockConnectionManager.request.mostRecentCall.args[0]).toEqual("GET"); //method
-                expect(mockConnectionManager.request.mostRecentCall.args[1]).toEqual(testFieldDefintionId); //url
-                expect(mockConnectionManager.request.mostRecentCall.args[2]).toEqual(""); // body
-                expect(mockConnectionManager.request.mostRecentCall.args[3].Accept).toEqual("application/vnd.ez.api.FieldDefinition+json"); // headers
-                expect(mockConnectionManager.request.mostRecentCall.args[4]).toBe(mockCallback); // callback
+                expect(mockConnectionManager.request).toHaveBeenCalledWith(
+                    "GET",
+                    testFieldDefintionId,
+                    "",
+                    {Accept: "application/vnd.ez.api.FieldDefinition+json"},
+                    mockCallback
+                );
             });
 
             it("updateFieldDefinition", function () {
@@ -601,12 +598,13 @@ define(function (require) {
                     mockCallback
                 );
 
-                expect(mockConnectionManager.request).toHaveBeenCalled();
-                expect(mockConnectionManager.request.mostRecentCall.args[0]).toEqual("PATCH"); //method
-                expect(mockConnectionManager.request.mostRecentCall.args[1]).toEqual(testFieldDefintionId); //url
-                expect(mockConnectionManager.request.mostRecentCall.args[2]).toEqual(JSON.stringify(fieldDefinitionUpdateStruct.body)); // body
-                expect(mockConnectionManager.request.mostRecentCall.args[3]).toEqual(fieldDefinitionUpdateStruct.headers); // headers
-                expect(mockConnectionManager.request.mostRecentCall.args[4]).toBe(mockCallback); // callback
+                expect(mockConnectionManager.request).toHaveBeenCalledWith(
+                    "PATCH",
+                    testFieldDefintionId,
+                    JSON.stringify(fieldDefinitionUpdateStruct.body),
+                    fieldDefinitionUpdateStruct.headers,
+                    mockCallback
+                );
             });
 
             it("deleteFieldDefinition", function () {
