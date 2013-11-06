@@ -1,4 +1,17 @@
 module.exports = function(grunt) {
+
+    var qPath = {
+            "q": "../node_modules/q/q"
+        },
+        testPaths = {
+            "q": "../node_modules/q/q",
+            "jasmineCAPIMatchers": "../test/jasmine/CAPIMatchers"
+        },
+        coveragePaths = {
+            "q": "../node_modules/q/q",
+            "jasmineCAPIMatchers": "../../../test/jasmine/CAPIMatchers"
+        };
+
     grunt.initConfig({
         requirejs: {
             dist: {
@@ -7,6 +20,7 @@ module.exports = function(grunt) {
                     name : 'PromiseCAPI',
                     optimize: "none",
                     baseUrl: "src/",
+                    paths: qPath,
                     out: "dist/CAPI.js",
                     wrap: {
                         startFile: 'wrap/wrap.start.js',
@@ -20,6 +34,7 @@ module.exports = function(grunt) {
                     name : 'PromiseCAPI',
                     optimize: "uglify",
                     baseUrl: "src/",
+                    paths: qPath,
                     out: "dist/CAPI-min.js",
                     wrap: {
                         startFile: 'wrap/wrap.start.js',
@@ -33,6 +48,7 @@ module.exports = function(grunt) {
                     name : 'PromiseCAPI',
                     optimize: "none",
                     baseUrl: "src/",
+                    paths: qPath,
                     out: "test/manual/jsRestClientBundle/Resources/public/js/CAPI.js",
                     wrap: {
                         startFile: 'wrap/wrap.start.js',
@@ -45,7 +61,7 @@ module.exports = function(grunt) {
             options: {
                 jshintrc: 'jshint.json'
             },
-            all: ['src/*.js', 'src/*/*.js', 'test/*.tests.js']
+            all: ['src/*.js', 'src/*/*.js', 'test/*.tests.js', 'test/jasmine/*.js']
         },
         instrument : {
             files : ['src/*.js','src/*/*.js'],
@@ -59,7 +75,8 @@ module.exports = function(grunt) {
                 template: require('grunt-template-jasmine-requirejs'),
                 templateOptions: {
                     requireConfig: {
-                        baseUrl: 'src/'
+                        baseUrl: 'src/',
+                        paths: testPaths
                     }
                 }
             },
@@ -82,7 +99,8 @@ module.exports = function(grunt) {
                         template: require('grunt-template-jasmine-requirejs'),
                         templateOptions: {
                             requireConfig: {
-                                baseUrl: 'test/instrument/src/'
+                                baseUrl: 'test/instrument/src/',
+                                paths: coveragePaths
                             }
                         }
                     }
