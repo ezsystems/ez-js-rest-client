@@ -53,7 +53,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
      * @param callback {Function} callback executed after performing the request (see
      * {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentService.prototype.loadRoot = function loadRoot(rootPath, callback) {
+    ContentService.prototype.loadRoot = function (rootPath, callback) {
         this._connectionManager.request(
             "GET",
             rootPath,
@@ -75,7 +75,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
      * @return {ContentUpdateStruct}
      *
      */
-    ContentService.prototype.newContentUpdateStruct = function newContentUpdateStruct(language) {
+    ContentService.prototype.newContentUpdateStruct = function (language) {
         return new ContentUpdateStruct(language);
     };
 
@@ -86,7 +86,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
      * @param language {String} The language code (eng-GB, fre-FR, ...)
      * @return ContentMetadataUpdateStruct
      */
-    ContentService.prototype.newContentMetadataUpdateStruct = function newContentMetadataUpdateStruct(language) {
+    ContentService.prototype.newContentMetadataUpdateStruct = function (language) {
         return new ContentMetadataUpdateStruct(language);
     };
 
@@ -99,7 +99,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
      * @param language {String} The language code (eng-GB, fre-FR, ...)
      * @return {ContentCreateStruct}
      */
-    ContentService.prototype.newContentCreateStruct = function newContentCreateStruct(contentTypeId, locationCreateStruct, language) {
+    ContentService.prototype.newContentCreateStruct = function (contentTypeId, locationCreateStruct, language) {
         return new ContentCreateStruct(contentTypeId, locationCreateStruct, language);
     };
 
@@ -111,7 +111,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
      * @param name {String} section name (e.g. "Media")
      * @return {SectionInputStruct}
      */
-    ContentService.prototype.newSectionInputStruct = function newSectionInputStruct(identifier, name) {
+    ContentService.prototype.newSectionInputStruct = function (identifier, name) {
         return new SectionInputStruct(identifier, name);
     };
 
@@ -122,7 +122,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
      * @param parentLocationId {String} Reference to the parent location of the new Location. (e.g. "/api/ezp/v2/content/locations/1/2/118")
      * @return {LocationCreateStruct}
      */
-    ContentService.prototype.newLocationCreateStruct = function newLocationCreateStruct(parentLocationId) {
+    ContentService.prototype.newLocationCreateStruct = function (parentLocationId) {
         return new LocationCreateStruct(parentLocationId);
     };
 
@@ -132,7 +132,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
      * @method newLocationUpdateStruct
      * @return {LocationUpdateStruct}
      */
-    ContentService.prototype.newLocationUpdateStruct = function newLocationUpdateStruct() {
+    ContentService.prototype.newLocationUpdateStruct = function () {
         return new LocationUpdateStruct();
     };
 
@@ -143,7 +143,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
      * @param identifier {String} unique view identifier (e.g. "my-new-view")
      * @return {ViewCreateStruct}
      */
-    ContentService.prototype.newViewCreateStruct = function newViewCreateStruct(identifier) {
+    ContentService.prototype.newViewCreateStruct = function (identifier) {
         return new ViewCreateStruct(identifier);
     };
 
@@ -154,7 +154,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
      * @param destination {String} reference to the resource we want to make related
      * @return {RelationCreateStruct}
      */
-    ContentService.prototype.newRelationCreateStruct = function newRelationCreateStruct(destination) {
+    ContentService.prototype.newRelationCreateStruct = function (destination) {
         return new RelationCreateStruct(destination);
     };
 
@@ -174,7 +174,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
      *          }]
      *      );
      */
-    ContentService.prototype.newObjectStateGroupCreateStruct = function newObjectStateGroupCreateStruct(identifier, languageCode, names) {
+    ContentService.prototype.newObjectStateGroupCreateStruct = function (identifier, languageCode, names) {
         return new ObjectStateGroupCreateStruct(identifier, languageCode, names);
     };
 
@@ -184,7 +184,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
      * @method newObjectStateGroupUpdateStruct
      * @return ObjectStateGroupUpdateStruct
      */
-    ContentService.prototype.newObjectStateGroupUpdateStruct = function newObjectStateGroupUpdateStruct() {
+    ContentService.prototype.newObjectStateGroupUpdateStruct = function () {
         return new ObjectStateGroupUpdateStruct();
     };
 
@@ -219,7 +219,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
      * @method newObjectStateUpdateStruct
      * @return {ObjectStateUpdateStruct}
      */
-    ContentService.prototype.newObjectStateUpdateStruct = function newObjectStateUpdateStruct() {
+    ContentService.prototype.newObjectStateUpdateStruct = function () {
         return new ObjectStateUpdateStruct();
     };
 
@@ -238,7 +238,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
      *         "findme-alias"
      *     );
      */
-    ContentService.prototype.newUrlAliasCreateStruct = function newUrlAliasCreateStruct(languageCode, resource, path) {
+    ContentService.prototype.newUrlAliasCreateStruct = function (languageCode, resource, path) {
         return new UrlAliasCreateStruct(languageCode, resource, path);
     };
 
@@ -256,7 +256,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
      *         "false"
      *     );
      */
-    ContentService.prototype.newUrlWildcardCreateStruct = function newUrlWildcardCreateStruct(sourceUrl, destinationUrl, forward) {
+    ContentService.prototype.newUrlWildcardCreateStruct = function (sourceUrl, destinationUrl, forward) {
         return new UrlWildcardCreateStruct(sourceUrl, destinationUrl, forward);
     };
 
@@ -272,7 +272,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
      * @param callback {Function} callback executed after performing the request (see
      * {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentService.prototype.createSection = function createSection(sectionInputStruct, callback) {
+    ContentService.prototype.createSection = function (sectionInputStruct, callback) {
         var that = this;
 
         this._discoveryService.getInfoObject(
@@ -303,7 +303,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
      * @param callback {Function} callback executed after performing the request (see
      * {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentService.prototype.updateSection = function updateSection(sectionId, sectionInputStruct, callback) {
+    ContentService.prototype.updateSection = function (sectionId, sectionInputStruct, callback) {
         this._connectionManager.request(
             "PATCH",
             sectionId,
@@ -320,7 +320,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
      * @param callback {Function} callback executed after performing the request (see
      * {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentService.prototype.loadSections = function loadSections(callback) {
+    ContentService.prototype.loadSections = function (callback) {
         var that = this;
 
         this._discoveryService.getInfoObject(
@@ -350,7 +350,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentService.prototype.loadSection = function loadSection(sectionId, callback) {
+    ContentService.prototype.loadSection = function (sectionId, callback) {
         this._connectionManager.request(
             "GET",
             sectionId,
@@ -368,7 +368,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentService.prototype.deleteSection = function deleteSection(sectionId, callback) {
+    ContentService.prototype.deleteSection = function (sectionId, callback) {
         this._connectionManager.delete(
             sectionId,
             callback
@@ -387,7 +387,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentService.prototype.createContent = function createContent(contentCreateStruct, callback) {
+    ContentService.prototype.createContent = function (contentCreateStruct, callback) {
         var that = this;
 
         this._discoveryService.getInfoObject(
@@ -429,7 +429,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
      *          callback
      *      );
      */
-    ContentService.prototype.updateContentMetadata = function updateContentMetadata(contentId, contentMetadataUpdateStruct, callback) {
+    ContentService.prototype.updateContentMetadata = function (contentId, contentMetadataUpdateStruct, callback) {
         this._connectionManager.request(
             "PATCH",
             contentId,
@@ -447,7 +447,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentService.prototype.loadContentByRemoteId = function loadContentByRemoteId(remoteId, callback) {
+    ContentService.prototype.loadContentByRemoteId = function (remoteId, callback) {
         var that = this;
 
         this._discoveryService.getInfoObject(
@@ -477,7 +477,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentService.prototype.loadContentInfo = function loadContentInfo(contentId, callback) {
+    ContentService.prototype.loadContentInfo = function (contentId, callback) {
         this._connectionManager.request(
             "GET",
             contentId,
@@ -495,7 +495,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentService.prototype.loadContentInfoAndCurrentVersion = function loadContentInfoAndCurrentVersion(contentId, callback) {
+    ContentService.prototype.loadContentInfoAndCurrentVersion = function (contentId, callback) {
         this._connectionManager.request(
             "GET",
             contentId,
@@ -518,7 +518,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
      *          callback
      *      );
      */
-    ContentService.prototype.deleteContent = function deleteContent(contentId, callback) {
+    ContentService.prototype.deleteContent = function (contentId, callback) {
         this._connectionManager.delete(
             contentId,
             callback
@@ -534,7 +534,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentService.prototype.copyContent = function copyContent(contentId, destinationId, callback) {
+    ContentService.prototype.copyContent = function (contentId, destinationId, callback) {
         this._connectionManager.request(
             "COPY",
             contentId,
@@ -556,7 +556,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentService.prototype.loadCurrentVersion = function loadCurrentVersion(contentId, callback) {
+    ContentService.prototype.loadCurrentVersion = function (contentId, callback) {
         var that = this;
 
         this.loadContentInfo(
@@ -599,7 +599,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
      *          callback
      *     );
      */
-    ContentService.prototype.loadContent = function loadContent(versionedContentId, fields, responseGroups, languages, callback) {
+    ContentService.prototype.loadContent = function (versionedContentId, fields, responseGroups, languages, callback) {
         var defaultFields = '',
             defaultResponseGroups = '',
             defaultLanguages = '';
@@ -651,7 +651,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentService.prototype.loadVersions = function loadVersions(contentId, callback) {
+    ContentService.prototype.loadVersions = function (contentId, callback) {
         var that = this;
 
         this.loadContentInfo(
@@ -684,7 +684,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentService.prototype.updateContent = function updateContent(versionedContentId, contentUpdateStruct, callback) {
+    ContentService.prototype.updateContent = function (versionedContentId, contentUpdateStruct, callback) {
         this._connectionManager.request(
             "PATCH",
             versionedContentId,
@@ -717,7 +717,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
      *          callback
      *      );
      */
-    ContentService.prototype.createContentDraft = function createContentDraft(contentId, versionId, callback) {
+    ContentService.prototype.createContentDraft = function (contentId, versionId, callback) {
         var that = this;
 
         this.loadContentInfo(
@@ -754,7 +754,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentService.prototype.deleteVersion = function deleteVersion(versionedContentId, callback) {
+    ContentService.prototype.deleteVersion = function (versionedContentId, callback) {
         this._connectionManager.delete(
             versionedContentId,
             callback
@@ -769,7 +769,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentService.prototype.publishVersion = function publishVersion(versionedContentId, callback) {
+    ContentService.prototype.publishVersion = function (versionedContentId, callback) {
         this._connectionManager.request(
             "PUBLISH",
             versionedContentId,
@@ -792,7 +792,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentService.prototype.createLocation = function createLocation(contentId, locationCreateStruct, callback) {
+    ContentService.prototype.createLocation = function (contentId, locationCreateStruct, callback) {
         var that = this;
 
         this.loadContentInfo(
@@ -824,7 +824,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentService.prototype.loadLocations = function loadLocations(contentId, callback) {
+    ContentService.prototype.loadLocations = function (contentId, callback) {
         var that = this;
 
         this.loadContentInfo(
@@ -856,7 +856,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentService.prototype.loadLocation = function loadLocation(locationId, callback) {
+    ContentService.prototype.loadLocation = function (locationId, callback) {
         this._connectionManager.request(
             "GET",
             locationId,
@@ -875,7 +875,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentService.prototype.loadLocationByRemoteId = function loadLocationByRemoteId(locations, remoteId, callback) {
+    ContentService.prototype.loadLocationByRemoteId = function (locations, remoteId, callback) {
         this._connectionManager.request(
             "GET",
             locations + '?remoteId=' + remoteId,
@@ -894,7 +894,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentService.prototype.updateLocation = function updateLocation(locationId, locationUpdateStruct, callback) {
+    ContentService.prototype.updateLocation = function (locationId, locationUpdateStruct, callback) {
         this._connectionManager.request(
             "PATCH",
             locationId,
@@ -921,7 +921,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
      *          callback
      *      );
      */
-    ContentService.prototype.loadLocationChildren = function loadLocationChildren(locationId, limit, offset, callback) {
+    ContentService.prototype.loadLocationChildren = function (locationId, limit, offset, callback) {
 
         var that = this,
             defaultLimit = -1,
@@ -971,7 +971,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentService.prototype.copySubtree = function copySubtree(subtree, targetLocation, callback) {
+    ContentService.prototype.copySubtree = function (subtree, targetLocation, callback) {
         this._connectionManager.request(
             "COPY",
             subtree,
@@ -991,7 +991,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentService.prototype.moveSubtree = function moveSubtree(subtree, targetLocation, callback) {
+    ContentService.prototype.moveSubtree = function (subtree, targetLocation, callback) {
         this._connectionManager.request(
             "MOVE",
             subtree,
@@ -1010,7 +1010,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentService.prototype.swapLocation = function swapLocation(subtree, targetLocation, callback) {
+    ContentService.prototype.swapLocation = function (subtree, targetLocation, callback) {
         this._connectionManager.request(
             "SWAP",
             subtree,
@@ -1031,7 +1031,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentService.prototype.deleteLocation = function deleteLocation(locationId, callback) {
+    ContentService.prototype.deleteLocation = function (locationId, callback) {
         this._connectionManager.delete(
             locationId,
             callback
@@ -1050,7 +1050,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentService.prototype.createView = function createView(viewCreateStruct, callback) {
+    ContentService.prototype.createView = function (viewCreateStruct, callback) {
         var that = this;
 
         this._discoveryService.getInfoObject(
@@ -1088,7 +1088,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
      * @example
      *      //See loadLocationChildren for example of "offset" and "limit" arguments usage
      */
-    ContentService.prototype.loadRelations = function loadRelations(versionedContentId, limit, offset, callback) {
+    ContentService.prototype.loadRelations = function (versionedContentId, limit, offset, callback) {
 
         var that = this,
             defaultLimit = -1,
@@ -1142,7 +1142,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
      * @example
      *      //See loadLocationChildren for example of "offset" and "limit" arguments usage
      */
-    ContentService.prototype.loadCurrentRelations = function loadCurrentRelations(contentId, limit, offset, callback) {
+    ContentService.prototype.loadCurrentRelations = function (contentId, limit, offset, callback) {
 
         var that = this,
             defaultLimit = -1,
@@ -1191,7 +1191,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentService.prototype.loadRelation = function loadRelation(relationId, callback) {
+    ContentService.prototype.loadRelation = function (relationId, callback) {
         this._connectionManager.request(
             "GET",
             relationId,
@@ -1217,7 +1217,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
      *          callback
      *      );
      */
-    ContentService.prototype.addRelation = function addRelation(versionedContentId, relationCreateStruct, callback) {
+    ContentService.prototype.addRelation = function (versionedContentId, relationCreateStruct, callback) {
         var that = this;
 
         this.loadContent(
@@ -1250,7 +1250,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentService.prototype.deleteRelation = function deleteRelation(relationId, callback) {
+    ContentService.prototype.deleteRelation = function (relationId, callback) {
         this._connectionManager.delete(
             relationId,
             callback
@@ -1272,7 +1272,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
      * @example
      *      //See loadLocationChildren for example of "offset" and "limit" arguments usage
      */
-    ContentService.prototype.loadTrashItems = function loadTrashItems(limit, offset, callback) {
+    ContentService.prototype.loadTrashItems = function (limit, offset, callback) {
 
         var that = this,
             defaultLimit = -1,
@@ -1319,7 +1319,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentService.prototype.loadTrashItem = function loadTrashItem(trashItemId, callback) {
+    ContentService.prototype.loadTrashItem = function (trashItemId, callback) {
         this._connectionManager.request(
             "GET",
             trashItemId,
@@ -1338,7 +1338,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentService.prototype.recover = function recover(trashItemId, destination, callback) {
+    ContentService.prototype.recover = function (trashItemId, destination, callback) {
 
         var headers = {"Accept": "application/vnd.ez.api.TrashItem+json"};
 
@@ -1365,7 +1365,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentService.prototype.deleteTrashItem = function deleteTrashItem(trashItemId, callback) {
+    ContentService.prototype.deleteTrashItem = function (trashItemId, callback) {
         this._connectionManager.delete(
             trashItemId,
             callback
@@ -1379,7 +1379,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentService.prototype.emptyThrash = function emptyThrash(callback) {
+    ContentService.prototype.emptyThrash = function (callback) {
         var that = this;
 
         this._discoveryService.getInfoObject(
@@ -1413,7 +1413,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentService.prototype.loadObjectStateGroups = function loadObjectStateGroups(objectStateGroups, callback) {
+    ContentService.prototype.loadObjectStateGroups = function (objectStateGroups, callback) {
         this._connectionManager.request(
             "GET",
             objectStateGroups,
@@ -1431,7 +1431,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentService.prototype.loadObjectStateGroup = function loadObjectStateGroup(objectStateGroupId, callback) {
+    ContentService.prototype.loadObjectStateGroup = function (objectStateGroupId, callback) {
         this._connectionManager.request(
             "GET",
             objectStateGroupId,
@@ -1450,7 +1450,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentService.prototype.createObjectStateGroup = function createObjectStateGroup(objectStateGroups, objectStateGroupCreateStruct, callback) {
+    ContentService.prototype.createObjectStateGroup = function (objectStateGroups, objectStateGroupCreateStruct, callback) {
         this._connectionManager.request(
             "POST",
             objectStateGroups,
@@ -1469,7 +1469,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentService.prototype.updateObjectStateGroup = function updateObjectStateGroup(objectStateGroupId, objectStateGroupUpdateStruct, callback) {
+    ContentService.prototype.updateObjectStateGroup = function (objectStateGroupId, objectStateGroupUpdateStruct, callback) {
         this._connectionManager.request(
             "PATCH",
             objectStateGroupId,
@@ -1487,7 +1487,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentService.prototype.deleteObjectStateGroup = function deleteObjectStateGroup(objectStateGroupId, callback) {
+    ContentService.prototype.deleteObjectStateGroup = function (objectStateGroupId, callback) {
         this._connectionManager.delete(
             objectStateGroupId,
             callback
@@ -1503,7 +1503,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentService.prototype.createObjectState = function createObjectState(objectStateGroupId, objectStateCreateStruct, callback) {
+    ContentService.prototype.createObjectState = function (objectStateGroupId, objectStateCreateStruct, callback) {
         this._connectionManager.request(
             "POST",
             objectStateGroupId + "/objectstates",
@@ -1521,7 +1521,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentService.prototype.loadObjectState = function loadObjectState(objectStateId, callback) {
+    ContentService.prototype.loadObjectState = function (objectStateId, callback) {
         this._connectionManager.request(
             "GET",
             objectStateId,
@@ -1540,7 +1540,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentService.prototype.updateObjectState = function updateObjectState(objectStateId, objectStateUpdateStruct, callback) {
+    ContentService.prototype.updateObjectState = function (objectStateId, objectStateUpdateStruct, callback) {
         this._connectionManager.request(
             "PATCH",
             objectStateId,
@@ -1558,7 +1558,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentService.prototype.deleteObjectState = function deleteObjectState(objectStateId, callback) {
+    ContentService.prototype.deleteObjectState = function (objectStateId, callback) {
         this._connectionManager.delete(
             objectStateId,
             callback
@@ -1573,7 +1573,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentService.prototype.getContentState = function getContentState(contentStatesId, callback) {
+    ContentService.prototype.getContentState = function (contentStatesId, callback) {
         this._connectionManager.request(
             "GET",
             contentStatesId,
@@ -1611,7 +1611,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
      *          }
      *     );
      */
-    ContentService.prototype.setContentState = function setContentState(contentStatesId, objectStates, callback) {
+    ContentService.prototype.setContentState = function (contentStatesId, objectStates, callback) {
         this._connectionManager.request(
             "PATCH",
             contentStatesId,
@@ -1637,7 +1637,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentService.prototype.createUrlAlias = function createUrlAlias(urlAliases, urlAliasCreateStruct, callback) {
+    ContentService.prototype.createUrlAlias = function (urlAliases, urlAliasCreateStruct, callback) {
         this._connectionManager.request(
             "POST",
             urlAliases,
@@ -1655,7 +1655,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentService.prototype.listGlobalAliases = function listGlobalAliases(urlAliases, callback) {
+    ContentService.prototype.listGlobalAliases = function (urlAliases, callback) {
         this._connectionManager.request(
             "GET",
             urlAliases,
@@ -1674,7 +1674,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentService.prototype.listLocationAliases = function listLocationAliases(locationUrlAliases, custom, callback) {
+    ContentService.prototype.listLocationAliases = function (locationUrlAliases, custom, callback) {
 
         var parameters;
 
@@ -1703,7 +1703,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentService.prototype.loadUrlAlias = function loadUrlAlias(urlAliasId, callback) {
+    ContentService.prototype.loadUrlAlias = function (urlAliasId, callback) {
         this._connectionManager.request(
             "GET",
             urlAliasId,
@@ -1721,7 +1721,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentService.prototype.deleteUrlAlias = function deleteUrlAlias(urlAliasId, callback) {
+    ContentService.prototype.deleteUrlAlias = function (urlAliasId, callback) {
         this._connectionManager.delete(
             urlAliasId,
             callback
@@ -1741,7 +1741,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentService.prototype.createUrlWildcard = function createUrlWildcard(urlWildcards, urlWildcardCreateStruct, callback) {
+    ContentService.prototype.createUrlWildcard = function (urlWildcards, urlWildcardCreateStruct, callback) {
         this._connectionManager.request(
             "POST",
             urlWildcards,
@@ -1759,7 +1759,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentService.prototype.loadUrlWildcards = function loadUrlWildcards(urlWildcards, callback) {
+    ContentService.prototype.loadUrlWildcards = function (urlWildcards, callback) {
         this._connectionManager.request(
             "GET",
             urlWildcards,
@@ -1777,7 +1777,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentService.prototype.loadUrlWildcard = function loadUrlWildcard(urlWildcardId, callback) {
+    ContentService.prototype.loadUrlWildcard = function (urlWildcardId, callback) {
         this._connectionManager.request(
             "GET",
             urlWildcardId,
@@ -1795,7 +1795,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentService.prototype.deleteUrlWildcard = function deleteUrlWildcard(urlWildcardId, callback) {
+    ContentService.prototype.deleteUrlWildcard = function (urlWildcardId, callback) {
         this._connectionManager.delete(
             urlWildcardId,
             callback

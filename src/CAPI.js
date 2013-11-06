@@ -80,7 +80,7 @@ define(['authAgents/SessionAuthAgent', 'authAgents/HttpBasicAuthAgent', 'Connect
          *          callback
          *      );
          */
-        this.getContentService = function getContentService() {
+        this.getContentService = function () {
             if  (!this._contentService)  {
                 this._contentService  =  new ContentService(
                     connectionManager,
@@ -102,7 +102,7 @@ define(['authAgents/SessionAuthAgent', 'authAgents/HttpBasicAuthAgent', 'Connect
          *          callback
          *      );
          */
-        this.getContentTypeService = function getContentTypeService() {
+        this.getContentTypeService = function () {
             if  (!this._contentTypeService)  {
                 this._contentTypeService  =  new ContentTypeService(
                     connectionManager,
@@ -123,7 +123,7 @@ define(['authAgents/SessionAuthAgent', 'authAgents/HttpBasicAuthAgent', 'Connect
          *          callback
          *      );
          */
-        this.getUserService = function getUserService() {
+        this.getUserService = function () {
             if  (!this._userService)  {
                 this._userService  =  new UserService(
                     connectionManager,

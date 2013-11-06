@@ -1904,7 +1904,7 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
      * @param callback {Function} callback executed after performing the request (see
      * {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentService.prototype.loadRoot = function loadRoot(rootPath, callback) {
+    ContentService.prototype.loadRoot = function (rootPath, callback) {
         this._connectionManager.request(
             "GET",
             rootPath,
@@ -1926,7 +1926,7 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
      * @return {ContentUpdateStruct}
      *
      */
-    ContentService.prototype.newContentUpdateStruct = function newContentUpdateStruct(language) {
+    ContentService.prototype.newContentUpdateStruct = function (language) {
         return new ContentUpdateStruct(language);
     };
 
@@ -1937,7 +1937,7 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
      * @param language {String} The language code (eng-GB, fre-FR, ...)
      * @return ContentMetadataUpdateStruct
      */
-    ContentService.prototype.newContentMetadataUpdateStruct = function newContentMetadataUpdateStruct(language) {
+    ContentService.prototype.newContentMetadataUpdateStruct = function (language) {
         return new ContentMetadataUpdateStruct(language);
     };
 
@@ -1950,7 +1950,7 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
      * @param language {String} The language code (eng-GB, fre-FR, ...)
      * @return {ContentCreateStruct}
      */
-    ContentService.prototype.newContentCreateStruct = function newContentCreateStruct(contentTypeId, locationCreateStruct, language) {
+    ContentService.prototype.newContentCreateStruct = function (contentTypeId, locationCreateStruct, language) {
         return new ContentCreateStruct(contentTypeId, locationCreateStruct, language);
     };
 
@@ -1962,7 +1962,7 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
      * @param name {String} section name (e.g. "Media")
      * @return {SectionInputStruct}
      */
-    ContentService.prototype.newSectionInputStruct = function newSectionInputStruct(identifier, name) {
+    ContentService.prototype.newSectionInputStruct = function (identifier, name) {
         return new SectionInputStruct(identifier, name);
     };
 
@@ -1973,7 +1973,7 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
      * @param parentLocationId {String} Reference to the parent location of the new Location. (e.g. "/api/ezp/v2/content/locations/1/2/118")
      * @return {LocationCreateStruct}
      */
-    ContentService.prototype.newLocationCreateStruct = function newLocationCreateStruct(parentLocationId) {
+    ContentService.prototype.newLocationCreateStruct = function (parentLocationId) {
         return new LocationCreateStruct(parentLocationId);
     };
 
@@ -1983,7 +1983,7 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
      * @method newLocationUpdateStruct
      * @return {LocationUpdateStruct}
      */
-    ContentService.prototype.newLocationUpdateStruct = function newLocationUpdateStruct() {
+    ContentService.prototype.newLocationUpdateStruct = function () {
         return new LocationUpdateStruct();
     };
 
@@ -1994,7 +1994,7 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
      * @param identifier {String} unique view identifier (e.g. "my-new-view")
      * @return {ViewCreateStruct}
      */
-    ContentService.prototype.newViewCreateStruct = function newViewCreateStruct(identifier) {
+    ContentService.prototype.newViewCreateStruct = function (identifier) {
         return new ViewCreateStruct(identifier);
     };
 
@@ -2005,7 +2005,7 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
      * @param destination {String} reference to the resource we want to make related
      * @return {RelationCreateStruct}
      */
-    ContentService.prototype.newRelationCreateStruct = function newRelationCreateStruct(destination) {
+    ContentService.prototype.newRelationCreateStruct = function (destination) {
         return new RelationCreateStruct(destination);
     };
 
@@ -2025,7 +2025,7 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
      *          }]
      *      );
      */
-    ContentService.prototype.newObjectStateGroupCreateStruct = function newObjectStateGroupCreateStruct(identifier, languageCode, names) {
+    ContentService.prototype.newObjectStateGroupCreateStruct = function (identifier, languageCode, names) {
         return new ObjectStateGroupCreateStruct(identifier, languageCode, names);
     };
 
@@ -2035,7 +2035,7 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
      * @method newObjectStateGroupUpdateStruct
      * @return ObjectStateGroupUpdateStruct
      */
-    ContentService.prototype.newObjectStateGroupUpdateStruct = function newObjectStateGroupUpdateStruct() {
+    ContentService.prototype.newObjectStateGroupUpdateStruct = function () {
         return new ObjectStateGroupUpdateStruct();
     };
 
@@ -2070,7 +2070,7 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
      * @method newObjectStateUpdateStruct
      * @return {ObjectStateUpdateStruct}
      */
-    ContentService.prototype.newObjectStateUpdateStruct = function newObjectStateUpdateStruct() {
+    ContentService.prototype.newObjectStateUpdateStruct = function () {
         return new ObjectStateUpdateStruct();
     };
 
@@ -2089,7 +2089,7 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
      *         "findme-alias"
      *     );
      */
-    ContentService.prototype.newUrlAliasCreateStruct = function newUrlAliasCreateStruct(languageCode, resource, path) {
+    ContentService.prototype.newUrlAliasCreateStruct = function (languageCode, resource, path) {
         return new UrlAliasCreateStruct(languageCode, resource, path);
     };
 
@@ -2107,7 +2107,7 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
      *         "false"
      *     );
      */
-    ContentService.prototype.newUrlWildcardCreateStruct = function newUrlWildcardCreateStruct(sourceUrl, destinationUrl, forward) {
+    ContentService.prototype.newUrlWildcardCreateStruct = function (sourceUrl, destinationUrl, forward) {
         return new UrlWildcardCreateStruct(sourceUrl, destinationUrl, forward);
     };
 
@@ -2123,7 +2123,7 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
      * @param callback {Function} callback executed after performing the request (see
      * {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentService.prototype.createSection = function createSection(sectionInputStruct, callback) {
+    ContentService.prototype.createSection = function (sectionInputStruct, callback) {
         var that = this;
 
         this._discoveryService.getInfoObject(
@@ -2154,7 +2154,7 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
      * @param callback {Function} callback executed after performing the request (see
      * {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentService.prototype.updateSection = function updateSection(sectionId, sectionInputStruct, callback) {
+    ContentService.prototype.updateSection = function (sectionId, sectionInputStruct, callback) {
         this._connectionManager.request(
             "PATCH",
             sectionId,
@@ -2171,7 +2171,7 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
      * @param callback {Function} callback executed after performing the request (see
      * {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentService.prototype.loadSections = function loadSections(callback) {
+    ContentService.prototype.loadSections = function (callback) {
         var that = this;
 
         this._discoveryService.getInfoObject(
@@ -2201,7 +2201,7 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentService.prototype.loadSection = function loadSection(sectionId, callback) {
+    ContentService.prototype.loadSection = function (sectionId, callback) {
         this._connectionManager.request(
             "GET",
             sectionId,
@@ -2219,7 +2219,7 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentService.prototype.deleteSection = function deleteSection(sectionId, callback) {
+    ContentService.prototype.deleteSection = function (sectionId, callback) {
         this._connectionManager.delete(
             sectionId,
             callback
@@ -2238,7 +2238,7 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentService.prototype.createContent = function createContent(contentCreateStruct, callback) {
+    ContentService.prototype.createContent = function (contentCreateStruct, callback) {
         var that = this;
 
         this._discoveryService.getInfoObject(
@@ -2280,7 +2280,7 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
      *          callback
      *      );
      */
-    ContentService.prototype.updateContentMetadata = function updateContentMetadata(contentId, contentMetadataUpdateStruct, callback) {
+    ContentService.prototype.updateContentMetadata = function (contentId, contentMetadataUpdateStruct, callback) {
         this._connectionManager.request(
             "PATCH",
             contentId,
@@ -2298,7 +2298,7 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentService.prototype.loadContentByRemoteId = function loadContentByRemoteId(remoteId, callback) {
+    ContentService.prototype.loadContentByRemoteId = function (remoteId, callback) {
         var that = this;
 
         this._discoveryService.getInfoObject(
@@ -2328,7 +2328,7 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentService.prototype.loadContentInfo = function loadContentInfo(contentId, callback) {
+    ContentService.prototype.loadContentInfo = function (contentId, callback) {
         this._connectionManager.request(
             "GET",
             contentId,
@@ -2346,7 +2346,7 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentService.prototype.loadContentInfoAndCurrentVersion = function loadContentInfoAndCurrentVersion(contentId, callback) {
+    ContentService.prototype.loadContentInfoAndCurrentVersion = function (contentId, callback) {
         this._connectionManager.request(
             "GET",
             contentId,
@@ -2369,7 +2369,7 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
      *          callback
      *      );
      */
-    ContentService.prototype.deleteContent = function deleteContent(contentId, callback) {
+    ContentService.prototype.deleteContent = function (contentId, callback) {
         this._connectionManager.delete(
             contentId,
             callback
@@ -2385,7 +2385,7 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentService.prototype.copyContent = function copyContent(contentId, destinationId, callback) {
+    ContentService.prototype.copyContent = function (contentId, destinationId, callback) {
         this._connectionManager.request(
             "COPY",
             contentId,
@@ -2407,7 +2407,7 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentService.prototype.loadCurrentVersion = function loadCurrentVersion(contentId, callback) {
+    ContentService.prototype.loadCurrentVersion = function (contentId, callback) {
         var that = this;
 
         this.loadContentInfo(
@@ -2450,7 +2450,7 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
      *          callback
      *     );
      */
-    ContentService.prototype.loadContent = function loadContent(versionedContentId, fields, responseGroups, languages, callback) {
+    ContentService.prototype.loadContent = function (versionedContentId, fields, responseGroups, languages, callback) {
         var defaultFields = '',
             defaultResponseGroups = '',
             defaultLanguages = '';
@@ -2502,7 +2502,7 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentService.prototype.loadVersions = function loadVersions(contentId, callback) {
+    ContentService.prototype.loadVersions = function (contentId, callback) {
         var that = this;
 
         this.loadContentInfo(
@@ -2535,7 +2535,7 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentService.prototype.updateContent = function updateContent(versionedContentId, contentUpdateStruct, callback) {
+    ContentService.prototype.updateContent = function (versionedContentId, contentUpdateStruct, callback) {
         this._connectionManager.request(
             "PATCH",
             versionedContentId,
@@ -2568,7 +2568,7 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
      *          callback
      *      );
      */
-    ContentService.prototype.createContentDraft = function createContentDraft(contentId, versionId, callback) {
+    ContentService.prototype.createContentDraft = function (contentId, versionId, callback) {
         var that = this;
 
         this.loadContentInfo(
@@ -2605,7 +2605,7 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentService.prototype.deleteVersion = function deleteVersion(versionedContentId, callback) {
+    ContentService.prototype.deleteVersion = function (versionedContentId, callback) {
         this._connectionManager.delete(
             versionedContentId,
             callback
@@ -2620,7 +2620,7 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentService.prototype.publishVersion = function publishVersion(versionedContentId, callback) {
+    ContentService.prototype.publishVersion = function (versionedContentId, callback) {
         this._connectionManager.request(
             "PUBLISH",
             versionedContentId,
@@ -2643,7 +2643,7 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentService.prototype.createLocation = function createLocation(contentId, locationCreateStruct, callback) {
+    ContentService.prototype.createLocation = function (contentId, locationCreateStruct, callback) {
         var that = this;
 
         this.loadContentInfo(
@@ -2675,7 +2675,7 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentService.prototype.loadLocations = function loadLocations(contentId, callback) {
+    ContentService.prototype.loadLocations = function (contentId, callback) {
         var that = this;
 
         this.loadContentInfo(
@@ -2707,7 +2707,7 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentService.prototype.loadLocation = function loadLocation(locationId, callback) {
+    ContentService.prototype.loadLocation = function (locationId, callback) {
         this._connectionManager.request(
             "GET",
             locationId,
@@ -2726,7 +2726,7 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentService.prototype.loadLocationByRemoteId = function loadLocationByRemoteId(locations, remoteId, callback) {
+    ContentService.prototype.loadLocationByRemoteId = function (locations, remoteId, callback) {
         this._connectionManager.request(
             "GET",
             locations + '?remoteId=' + remoteId,
@@ -2745,7 +2745,7 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentService.prototype.updateLocation = function updateLocation(locationId, locationUpdateStruct, callback) {
+    ContentService.prototype.updateLocation = function (locationId, locationUpdateStruct, callback) {
         this._connectionManager.request(
             "PATCH",
             locationId,
@@ -2772,7 +2772,7 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
      *          callback
      *      );
      */
-    ContentService.prototype.loadLocationChildren = function loadLocationChildren(locationId, limit, offset, callback) {
+    ContentService.prototype.loadLocationChildren = function (locationId, limit, offset, callback) {
 
         var that = this,
             defaultLimit = -1,
@@ -2822,7 +2822,7 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentService.prototype.copySubtree = function copySubtree(subtree, targetLocation, callback) {
+    ContentService.prototype.copySubtree = function (subtree, targetLocation, callback) {
         this._connectionManager.request(
             "COPY",
             subtree,
@@ -2842,7 +2842,7 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentService.prototype.moveSubtree = function moveSubtree(subtree, targetLocation, callback) {
+    ContentService.prototype.moveSubtree = function (subtree, targetLocation, callback) {
         this._connectionManager.request(
             "MOVE",
             subtree,
@@ -2861,7 +2861,7 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentService.prototype.swapLocation = function swapLocation(subtree, targetLocation, callback) {
+    ContentService.prototype.swapLocation = function (subtree, targetLocation, callback) {
         this._connectionManager.request(
             "SWAP",
             subtree,
@@ -2882,7 +2882,7 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentService.prototype.deleteLocation = function deleteLocation(locationId, callback) {
+    ContentService.prototype.deleteLocation = function (locationId, callback) {
         this._connectionManager.delete(
             locationId,
             callback
@@ -2901,7 +2901,7 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentService.prototype.createView = function createView(viewCreateStruct, callback) {
+    ContentService.prototype.createView = function (viewCreateStruct, callback) {
         var that = this;
 
         this._discoveryService.getInfoObject(
@@ -2939,7 +2939,7 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
      * @example
      *      //See loadLocationChildren for example of "offset" and "limit" arguments usage
      */
-    ContentService.prototype.loadRelations = function loadRelations(versionedContentId, limit, offset, callback) {
+    ContentService.prototype.loadRelations = function (versionedContentId, limit, offset, callback) {
 
         var that = this,
             defaultLimit = -1,
@@ -2993,7 +2993,7 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
      * @example
      *      //See loadLocationChildren for example of "offset" and "limit" arguments usage
      */
-    ContentService.prototype.loadCurrentRelations = function loadCurrentRelations(contentId, limit, offset, callback) {
+    ContentService.prototype.loadCurrentRelations = function (contentId, limit, offset, callback) {
 
         var that = this,
             defaultLimit = -1,
@@ -3042,7 +3042,7 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentService.prototype.loadRelation = function loadRelation(relationId, callback) {
+    ContentService.prototype.loadRelation = function (relationId, callback) {
         this._connectionManager.request(
             "GET",
             relationId,
@@ -3068,7 +3068,7 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
      *          callback
      *      );
      */
-    ContentService.prototype.addRelation = function addRelation(versionedContentId, relationCreateStruct, callback) {
+    ContentService.prototype.addRelation = function (versionedContentId, relationCreateStruct, callback) {
         var that = this;
 
         this.loadContent(
@@ -3101,7 +3101,7 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentService.prototype.deleteRelation = function deleteRelation(relationId, callback) {
+    ContentService.prototype.deleteRelation = function (relationId, callback) {
         this._connectionManager.delete(
             relationId,
             callback
@@ -3123,7 +3123,7 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
      * @example
      *      //See loadLocationChildren for example of "offset" and "limit" arguments usage
      */
-    ContentService.prototype.loadTrashItems = function loadTrashItems(limit, offset, callback) {
+    ContentService.prototype.loadTrashItems = function (limit, offset, callback) {
 
         var that = this,
             defaultLimit = -1,
@@ -3170,7 +3170,7 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentService.prototype.loadTrashItem = function loadTrashItem(trashItemId, callback) {
+    ContentService.prototype.loadTrashItem = function (trashItemId, callback) {
         this._connectionManager.request(
             "GET",
             trashItemId,
@@ -3189,7 +3189,7 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentService.prototype.recover = function recover(trashItemId, destination, callback) {
+    ContentService.prototype.recover = function (trashItemId, destination, callback) {
 
         var headers = {"Accept": "application/vnd.ez.api.TrashItem+json"};
 
@@ -3216,7 +3216,7 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentService.prototype.deleteTrashItem = function deleteTrashItem(trashItemId, callback) {
+    ContentService.prototype.deleteTrashItem = function (trashItemId, callback) {
         this._connectionManager.delete(
             trashItemId,
             callback
@@ -3230,7 +3230,7 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentService.prototype.emptyThrash = function emptyThrash(callback) {
+    ContentService.prototype.emptyThrash = function (callback) {
         var that = this;
 
         this._discoveryService.getInfoObject(
@@ -3264,7 +3264,7 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentService.prototype.loadObjectStateGroups = function loadObjectStateGroups(objectStateGroups, callback) {
+    ContentService.prototype.loadObjectStateGroups = function (objectStateGroups, callback) {
         this._connectionManager.request(
             "GET",
             objectStateGroups,
@@ -3282,7 +3282,7 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentService.prototype.loadObjectStateGroup = function loadObjectStateGroup(objectStateGroupId, callback) {
+    ContentService.prototype.loadObjectStateGroup = function (objectStateGroupId, callback) {
         this._connectionManager.request(
             "GET",
             objectStateGroupId,
@@ -3301,7 +3301,7 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentService.prototype.createObjectStateGroup = function createObjectStateGroup(objectStateGroups, objectStateGroupCreateStruct, callback) {
+    ContentService.prototype.createObjectStateGroup = function (objectStateGroups, objectStateGroupCreateStruct, callback) {
         this._connectionManager.request(
             "POST",
             objectStateGroups,
@@ -3320,7 +3320,7 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentService.prototype.updateObjectStateGroup = function updateObjectStateGroup(objectStateGroupId, objectStateGroupUpdateStruct, callback) {
+    ContentService.prototype.updateObjectStateGroup = function (objectStateGroupId, objectStateGroupUpdateStruct, callback) {
         this._connectionManager.request(
             "PATCH",
             objectStateGroupId,
@@ -3338,7 +3338,7 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentService.prototype.deleteObjectStateGroup = function deleteObjectStateGroup(objectStateGroupId, callback) {
+    ContentService.prototype.deleteObjectStateGroup = function (objectStateGroupId, callback) {
         this._connectionManager.delete(
             objectStateGroupId,
             callback
@@ -3354,7 +3354,7 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentService.prototype.createObjectState = function createObjectState(objectStateGroupId, objectStateCreateStruct, callback) {
+    ContentService.prototype.createObjectState = function (objectStateGroupId, objectStateCreateStruct, callback) {
         this._connectionManager.request(
             "POST",
             objectStateGroupId + "/objectstates",
@@ -3372,7 +3372,7 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentService.prototype.loadObjectState = function loadObjectState(objectStateId, callback) {
+    ContentService.prototype.loadObjectState = function (objectStateId, callback) {
         this._connectionManager.request(
             "GET",
             objectStateId,
@@ -3391,7 +3391,7 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentService.prototype.updateObjectState = function updateObjectState(objectStateId, objectStateUpdateStruct, callback) {
+    ContentService.prototype.updateObjectState = function (objectStateId, objectStateUpdateStruct, callback) {
         this._connectionManager.request(
             "PATCH",
             objectStateId,
@@ -3409,7 +3409,7 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentService.prototype.deleteObjectState = function deleteObjectState(objectStateId, callback) {
+    ContentService.prototype.deleteObjectState = function (objectStateId, callback) {
         this._connectionManager.delete(
             objectStateId,
             callback
@@ -3424,7 +3424,7 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentService.prototype.getContentState = function getContentState(contentStatesId, callback) {
+    ContentService.prototype.getContentState = function (contentStatesId, callback) {
         this._connectionManager.request(
             "GET",
             contentStatesId,
@@ -3462,7 +3462,7 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
      *          }
      *     );
      */
-    ContentService.prototype.setContentState = function setContentState(contentStatesId, objectStates, callback) {
+    ContentService.prototype.setContentState = function (contentStatesId, objectStates, callback) {
         this._connectionManager.request(
             "PATCH",
             contentStatesId,
@@ -3488,7 +3488,7 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentService.prototype.createUrlAlias = function createUrlAlias(urlAliases, urlAliasCreateStruct, callback) {
+    ContentService.prototype.createUrlAlias = function (urlAliases, urlAliasCreateStruct, callback) {
         this._connectionManager.request(
             "POST",
             urlAliases,
@@ -3506,7 +3506,7 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentService.prototype.listGlobalAliases = function listGlobalAliases(urlAliases, callback) {
+    ContentService.prototype.listGlobalAliases = function (urlAliases, callback) {
         this._connectionManager.request(
             "GET",
             urlAliases,
@@ -3525,7 +3525,7 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentService.prototype.listLocationAliases = function listLocationAliases(locationUrlAliases, custom, callback) {
+    ContentService.prototype.listLocationAliases = function (locationUrlAliases, custom, callback) {
 
         var parameters;
 
@@ -3554,7 +3554,7 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentService.prototype.loadUrlAlias = function loadUrlAlias(urlAliasId, callback) {
+    ContentService.prototype.loadUrlAlias = function (urlAliasId, callback) {
         this._connectionManager.request(
             "GET",
             urlAliasId,
@@ -3572,7 +3572,7 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentService.prototype.deleteUrlAlias = function deleteUrlAlias(urlAliasId, callback) {
+    ContentService.prototype.deleteUrlAlias = function (urlAliasId, callback) {
         this._connectionManager.delete(
             urlAliasId,
             callback
@@ -3592,7 +3592,7 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentService.prototype.createUrlWildcard = function createUrlWildcard(urlWildcards, urlWildcardCreateStruct, callback) {
+    ContentService.prototype.createUrlWildcard = function (urlWildcards, urlWildcardCreateStruct, callback) {
         this._connectionManager.request(
             "POST",
             urlWildcards,
@@ -3610,7 +3610,7 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentService.prototype.loadUrlWildcards = function loadUrlWildcards(urlWildcards, callback) {
+    ContentService.prototype.loadUrlWildcards = function (urlWildcards, callback) {
         this._connectionManager.request(
             "GET",
             urlWildcards,
@@ -3628,7 +3628,7 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentService.prototype.loadUrlWildcard = function loadUrlWildcard(urlWildcardId, callback) {
+    ContentService.prototype.loadUrlWildcard = function (urlWildcardId, callback) {
         this._connectionManager.request(
             "GET",
             urlWildcardId,
@@ -3646,7 +3646,7 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentService.prototype.deleteUrlWildcard = function deleteUrlWildcard(urlWildcardId, callback) {
+    ContentService.prototype.deleteUrlWildcard = function (urlWildcardId, callback) {
         this._connectionManager.delete(
             urlWildcardId,
             callback
@@ -3886,7 +3886,7 @@ define('services/ContentTypeService',["structures/ContentTypeGroupInputStruct", 
      * @param identifier {String} unique content type group identifer (e.g. "my-group")
      * @return {ContentTypeGroupInputStruct}
      */
-    ContentTypeService.prototype.newContentTypeGroupInputStruct = function newContentTypeGroupInputStruct(identifier) {
+    ContentTypeService.prototype.newContentTypeGroupInputStruct = function (identifier) {
         return new ContentTypeGroupInputStruct(identifier);
     };
 
@@ -3904,7 +3904,7 @@ define('services/ContentTypeService',["structures/ContentTypeGroupInputStruct", 
      *          }]
      *      );
      */
-    ContentTypeService.prototype.newContentTypeCreateStruct = function newContentTypeCreateStruct(identifier, languageCode, names) {
+    ContentTypeService.prototype.newContentTypeCreateStruct = function (identifier, languageCode, names) {
         return new ContentTypeCreateStruct(identifier, languageCode, names);
     };
 
@@ -3912,7 +3912,7 @@ define('services/ContentTypeService',["structures/ContentTypeGroupInputStruct", 
      * @method newContentTypeUpdateStruct
      * @return {ContentTypeUpdateStruct}
      */
-    ContentTypeService.prototype.newContentTypeUpdateStruct = function newContentTypeUpdateStruct() {
+    ContentTypeService.prototype.newContentTypeUpdateStruct = function () {
         return new ContentTypeUpdateStruct();
     };
 
@@ -3931,7 +3931,7 @@ define('services/ContentTypeService',["structures/ContentTypeGroupInputStruct", 
      *         }]
      *     );
      */
-    ContentTypeService.prototype.newFieldDefinitionCreateStruct = function newFieldDefinitionCreateStruct(identifier, fieldType, fieldGroup, names) {
+    ContentTypeService.prototype.newFieldDefinitionCreateStruct = function (identifier, fieldType, fieldGroup, names) {
         return new FieldDefinitionCreateStruct(identifier, fieldType, fieldGroup, names);
     };
 
@@ -3939,7 +3939,7 @@ define('services/ContentTypeService',["structures/ContentTypeGroupInputStruct", 
      * @method newFieldDefinitionUpdateStruct
      * @return {FieldDefinitionUpdateStruct}
      */
-    ContentTypeService.prototype.newFieldDefinitionUpdateStruct = function newFieldDefinitionUpdateStruct() {
+    ContentTypeService.prototype.newFieldDefinitionUpdateStruct = function () {
         return new FieldDefinitionUpdateStruct();
     };
 
@@ -3968,7 +3968,7 @@ define('services/ContentTypeService',["structures/ContentTypeGroupInputStruct", 
      *         callback
      *     );
      */
-    ContentTypeService.prototype.createContentTypeGroup = function createContentTypeGroup(contentTypeGroups, contentTypeGroupCreateStruct, callback) {
+    ContentTypeService.prototype.createContentTypeGroup = function (contentTypeGroups, contentTypeGroupCreateStruct, callback) {
         this._connectionManager.request(
             "POST",
             contentTypeGroups,
@@ -3986,7 +3986,7 @@ define('services/ContentTypeService',["structures/ContentTypeGroupInputStruct", 
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentTypeService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentTypeService.prototype.loadContentTypeGroups = function loadContentTypeGroups(contentTypeGroups, callback) {
+    ContentTypeService.prototype.loadContentTypeGroups = function (contentTypeGroups, callback) {
         this._connectionManager.request(
             "GET",
             contentTypeGroups,
@@ -4004,7 +4004,7 @@ define('services/ContentTypeService',["structures/ContentTypeGroupInputStruct", 
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentTypeService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentTypeService.prototype.loadContentTypeGroup = function loadContentTypeGroup(contentTypeGroupId, callback) {
+    ContentTypeService.prototype.loadContentTypeGroup = function (contentTypeGroupId, callback) {
         this._connectionManager.request(
             "GET",
             contentTypeGroupId,
@@ -4023,8 +4023,7 @@ define('services/ContentTypeService',["structures/ContentTypeGroupInputStruct", 
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentTypeService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentTypeService.prototype.updateContentTypeGroup = function updateContentTypeGroup(
-        contentTypeGroupId, contentTypeGroupUpdateStruct, callback) {
+    ContentTypeService.prototype.updateContentTypeGroup = function (contentTypeGroupId, contentTypeGroupUpdateStruct, callback) {
         this._connectionManager.request(
             "PATCH",
             contentTypeGroupId,
@@ -4042,7 +4041,7 @@ define('services/ContentTypeService',["structures/ContentTypeGroupInputStruct", 
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentTypeService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentTypeService.prototype.deleteContentTypeGroup = function deleteContentTypeGroup(contentTypeGroupId, callback) {
+    ContentTypeService.prototype.deleteContentTypeGroup = function (contentTypeGroupId, callback) {
         this._connectionManager.delete(
             contentTypeGroupId,
             callback
@@ -4057,7 +4056,7 @@ define('services/ContentTypeService',["structures/ContentTypeGroupInputStruct", 
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentTypeService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentTypeService.prototype.loadContentTypes = function loadContentTypes(contentTypeGroupId, callback) {
+    ContentTypeService.prototype.loadContentTypes = function (contentTypeGroupId, callback) {
         var that = this;
 
         this.loadContentTypeGroup(
@@ -4088,8 +4087,7 @@ define('services/ContentTypeService',["structures/ContentTypeGroupInputStruct", 
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentTypeService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentTypeService.prototype.loadContentTypeGroupByIdentifier = function loadContentTypeGroupByIdentifier(
-        contentTypeGroups, identifier, callback) {
+    ContentTypeService.prototype.loadContentTypeGroupByIdentifier = function (contentTypeGroups, identifier, callback) {
         this._connectionManager.request(
             "GET",
             contentTypeGroups + "?identifier=" + identifier,
@@ -4139,7 +4137,7 @@ define('services/ContentTypeService',["structures/ContentTypeGroupInputStruct", 
      *         callback
      *     );
      */
-    ContentTypeService.prototype.createContentType = function createContentType(contentTypeGroupId, contentTypeCreateStruct, publish, callback) {
+    ContentTypeService.prototype.createContentType = function (contentTypeGroupId, contentTypeCreateStruct, publish, callback) {
         var that = this;
 
         this.loadContentTypeGroup(
@@ -4172,7 +4170,7 @@ define('services/ContentTypeService',["structures/ContentTypeGroupInputStruct", 
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentTypeService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentTypeService.prototype.copyContentType = function copyContentType(contentTypeId, callback) {
+    ContentTypeService.prototype.copyContentType = function (contentTypeId, callback) {
         this._connectionManager.request(
             "COPY",
             contentTypeId,
@@ -4190,7 +4188,7 @@ define('services/ContentTypeService',["structures/ContentTypeGroupInputStruct", 
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentTypeService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentTypeService.prototype.loadContentType = function loadContentType(contentTypeId, callback) {
+    ContentTypeService.prototype.loadContentType = function (contentTypeId, callback) {
         this._connectionManager.request(
             "GET",
             contentTypeId,
@@ -4208,7 +4206,7 @@ define('services/ContentTypeService',["structures/ContentTypeGroupInputStruct", 
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentTypeService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentTypeService.prototype.loadContentTypeByIdentifier = function loadContentTypeByIdentifier(identifier, callback) {
+    ContentTypeService.prototype.loadContentTypeByIdentifier = function (identifier, callback) {
         var that = this;
 
         this._discoveryService.getInfoObject(
@@ -4238,7 +4236,7 @@ define('services/ContentTypeService',["structures/ContentTypeGroupInputStruct", 
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentTypeService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentTypeService.prototype.deleteContentType = function deleteContentType(contentTypeId, callback) {
+    ContentTypeService.prototype.deleteContentType = function (contentTypeId, callback) {
         this._connectionManager.delete(
             contentTypeId,
             callback
@@ -4253,7 +4251,7 @@ define('services/ContentTypeService',["structures/ContentTypeGroupInputStruct", 
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentTypeService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentTypeService.prototype.loadGroupsOfContentType = function loadGroupsOfContentType(contentTypeId, callback) {
+    ContentTypeService.prototype.loadGroupsOfContentType = function (contentTypeId, callback) {
         this._connectionManager.request(
             "GET",
             contentTypeId + '/groups',
@@ -4272,7 +4270,7 @@ define('services/ContentTypeService',["structures/ContentTypeGroupInputStruct", 
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentTypeService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentTypeService.prototype.assignContentTypeGroup = function assignContentTypeGroup(contentTypeId, groupId, callback) {
+    ContentTypeService.prototype.assignContentTypeGroup = function (contentTypeId, groupId, callback) {
         this._connectionManager.request(
             "POST",
             contentTypeId + "/groups" + "?group=" + groupId,
@@ -4290,7 +4288,7 @@ define('services/ContentTypeService',["structures/ContentTypeGroupInputStruct", 
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentTypeService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentTypeService.prototype.unassignContentTypeGroup = function unassignContentTypeGroup(contentTypeAssignedGroupId, callback) {
+    ContentTypeService.prototype.unassignContentTypeGroup = function (contentTypeAssignedGroupId, callback) {
         this._connectionManager.delete(
             contentTypeAssignedGroupId,
             callback
@@ -4324,7 +4322,7 @@ define('services/ContentTypeService',["structures/ContentTypeGroupInputStruct", 
      *         callback
      *     );
      */
-    ContentTypeService.prototype.createContentTypeDraft = function createContentTypeDraft(contentTypeId, contentTypeUpdateStruct, callback) {
+    ContentTypeService.prototype.createContentTypeDraft = function (contentTypeId, contentTypeUpdateStruct, callback) {
         this._connectionManager.request(
             "POST",
             contentTypeId,
@@ -4342,7 +4340,7 @@ define('services/ContentTypeService',["structures/ContentTypeGroupInputStruct", 
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentTypeService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentTypeService.prototype.loadContentTypeDraft = function loadContentTypeDraft(contentTypeId, callback) {
+    ContentTypeService.prototype.loadContentTypeDraft = function (contentTypeId, callback) {
         this._connectionManager.request(
             "GET",
             contentTypeId + "/draft",
@@ -4361,8 +4359,7 @@ define('services/ContentTypeService',["structures/ContentTypeGroupInputStruct", 
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentTypeService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentTypeService.prototype.updateContentTypeDraftMetadata = function updateContentTypeDraftMetadata(
-        contentTypeDraftId, contentTypeUpdateStruct, callback) {
+    ContentTypeService.prototype.updateContentTypeDraftMetadata = function (contentTypeDraftId, contentTypeUpdateStruct, callback) {
         this._connectionManager.request(
             "PATCH",
             contentTypeDraftId,
@@ -4380,7 +4377,7 @@ define('services/ContentTypeService',["structures/ContentTypeGroupInputStruct", 
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentTypeService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentTypeService.prototype.publishContentTypeDraft = function publishContentTypeDraft(contentTypeDraftId, callback) {
+    ContentTypeService.prototype.publishContentTypeDraft = function (contentTypeDraftId, callback) {
         this._connectionManager.request(
             "PUBLISH",
             contentTypeDraftId,
@@ -4398,7 +4395,7 @@ define('services/ContentTypeService',["structures/ContentTypeGroupInputStruct", 
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentTypeService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentTypeService.prototype.deleteContentTypeDraft = function deleteContentTypeDraft(contentTypeDraftId, callback) {
+    ContentTypeService.prototype.deleteContentTypeDraft = function (contentTypeDraftId, callback) {
         this._connectionManager.delete(
             contentTypeDraftId,
             callback
@@ -4418,7 +4415,7 @@ define('services/ContentTypeService',["structures/ContentTypeGroupInputStruct", 
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentTypeService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentTypeService.prototype.addFieldDefinition = function addFieldDefinition(contentTypeId, fieldDefinitionCreateStruct, callback) {
+    ContentTypeService.prototype.addFieldDefinition = function (contentTypeId, fieldDefinitionCreateStruct, callback) {
         var that = this;
 
         this.loadContentTypeDraft(
@@ -4450,7 +4447,7 @@ define('services/ContentTypeService',["structures/ContentTypeGroupInputStruct", 
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentTypeService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentTypeService.prototype.loadFieldDefinition = function loadFieldDefinition(fieldDefinitionId, callback) {
+    ContentTypeService.prototype.loadFieldDefinition = function (fieldDefinitionId, callback) {
         this._connectionManager.request(
             "GET",
             fieldDefinitionId,
@@ -4469,7 +4466,7 @@ define('services/ContentTypeService',["structures/ContentTypeGroupInputStruct", 
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentTypeService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentTypeService.prototype.updateFieldDefinition = function updateFieldDefinition(fieldDefinitionId, fieldDefinitionUpdateStruct, callback) {
+    ContentTypeService.prototype.updateFieldDefinition = function (fieldDefinitionId, fieldDefinitionUpdateStruct, callback) {
         this._connectionManager.request(
             "PATCH",
             fieldDefinitionId,
@@ -4487,7 +4484,7 @@ define('services/ContentTypeService',["structures/ContentTypeGroupInputStruct", 
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentTypeService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentTypeService.prototype.deleteFieldDefinition = function deleteFieldDefinition(fieldDefinitionId, callback) {
+    ContentTypeService.prototype.deleteFieldDefinition = function (fieldDefinitionId, callback) {
         this._connectionManager.delete(
             fieldDefinitionId,
             callback
@@ -4824,7 +4821,7 @@ define('services/UserService',['structures/SessionCreateStruct', 'structures/Use
      * @param password {String} password for a user, which wants to start a session
      * @return {SessionCreateStruct}
      */
-    UserService.prototype.newSessionCreateStruct = function newSessionCreateStruct(login, password) {
+    UserService.prototype.newSessionCreateStruct = function (login, password) {
         return new SessionCreateStruct(login, password);
     };
 
@@ -4848,7 +4845,7 @@ define('services/UserService',['structures/SessionCreateStruct', 'structures/Use
      *         }]
      *     );
      */
-    UserService.prototype.newUserGroupCreateStruct = function newUserGroupCreateStruct(language, fields) {
+    UserService.prototype.newUserGroupCreateStruct = function (language, fields) {
         return new UserGroupCreateStruct(language, fields);
     };
 
@@ -4858,7 +4855,7 @@ define('services/UserService',['structures/SessionCreateStruct', 'structures/Use
      * @method newUserGroupUpdateStruct
      * @return {UserGroupCreateStruct}
      */
-    UserService.prototype.newUserGroupUpdateStruct = function newUserGroupUpdateStruct() {
+    UserService.prototype.newUserGroupUpdateStruct = function () {
         return new UserGroupUpdateStruct();
     };
 
@@ -4873,7 +4870,7 @@ define('services/UserService',['structures/SessionCreateStruct', 'structures/Use
      * @param fields {Array} fields array (see example for "newUserGroupCreateStruct")
      * @return {UserCreateStruct}
      */
-    UserService.prototype.newUserCreateStruct = function newUserCreateStruct(languageCode, login, email, password, fields) {
+    UserService.prototype.newUserCreateStruct = function (languageCode, login, email, password, fields) {
         return new UserCreateStruct(languageCode, login, email, password, fields);
     };
 
@@ -4883,7 +4880,7 @@ define('services/UserService',['structures/SessionCreateStruct', 'structures/Use
      * @method newUserUpdateStruct
      * @return {UserUpdateStruct}
      */
-    UserService.prototype.newUserUpdateStruct = function newUserUpdateStruct() {
+    UserService.prototype.newUserUpdateStruct = function () {
         return new UserUpdateStruct();
     };
 
@@ -4894,7 +4891,7 @@ define('services/UserService',['structures/SessionCreateStruct', 'structures/Use
      * @param identifier {String} unique identifier for the new role (e.g. "editor")
      * @return {RoleInputStruct}
      */
-    UserService.prototype.newRoleInputStruct = function newRoleInputStruct(identifier) {
+    UserService.prototype.newRoleInputStruct = function (identifier) {
         return new RoleInputStruct(identifier);
     };
 
@@ -4924,7 +4921,7 @@ define('services/UserService',['structures/SessionCreateStruct', 'structures/Use
      *         });
      *
      */
-    UserService.prototype.newRoleAssignInputStruct = function newRoleAssignInputStruct(role, limitation) {
+    UserService.prototype.newRoleAssignInputStruct = function (role, limitation) {
         return new RoleAssignInputStruct(role, limitation);
     };
 
@@ -4952,7 +4949,7 @@ define('services/UserService',['structures/SessionCreateStruct', 'structures/Use
      *         }]
      *     );
      */
-    UserService.prototype.newPolicyCreateStruct = function newPolicyCreateStruct(module, theFunction, limitations) {
+    UserService.prototype.newPolicyCreateStruct = function (module, theFunction, limitations) {
         return new PolicyCreateStruct(module, theFunction, limitations);
     };
 
@@ -4963,7 +4960,7 @@ define('services/UserService',['structures/SessionCreateStruct', 'structures/Use
      * @param limitations {Object} object describing limitations change for the policy (see "newPolicyCreateStruct" example)
      * @return {PolicyUpdateStruct}
      */
-    UserService.prototype.newPolicyUpdateStruct = function newPolicyUpdateStruct(limitations) {
+    UserService.prototype.newPolicyUpdateStruct = function (limitations) {
         return new PolicyUpdateStruct(limitations);
     };
 
@@ -4978,7 +4975,7 @@ define('services/UserService',['structures/SessionCreateStruct', 'structures/Use
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "UserService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    UserService.prototype.loadRootUserGroup = function loadRootUserGroup(callback) {
+    UserService.prototype.loadRootUserGroup = function (callback) {
         var that = this;
 
         this._discoveryService.getInfoObject(
@@ -5007,7 +5004,7 @@ define('services/UserService',['structures/SessionCreateStruct', 'structures/Use
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "UserService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    UserService.prototype.loadUserGroup = function loadUserGroup(userGroupId, callback) {
+    UserService.prototype.loadUserGroup = function (userGroupId, callback) {
         this._connectionManager.request(
             "GET",
             userGroupId,
@@ -5026,7 +5023,7 @@ define('services/UserService',['structures/SessionCreateStruct', 'structures/Use
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "UserService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    UserService.prototype.loadUserGroupByRemoteId = function loadUserGroupByRemoteId(userGroups, remoteId, callback) {
+    UserService.prototype.loadUserGroupByRemoteId = function (userGroups, remoteId, callback) {
         this._connectionManager.request(
             "GET",
             userGroups + '?remoteId=' + remoteId,
@@ -5044,7 +5041,7 @@ define('services/UserService',['structures/SessionCreateStruct', 'structures/Use
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "UserService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    UserService.prototype.deleteUserGroup = function deleteUserGroup(userGroupId, callback) {
+    UserService.prototype.deleteUserGroup = function (userGroupId, callback) {
         this._connectionManager.delete(
             userGroupId,
             callback
@@ -5060,7 +5057,7 @@ define('services/UserService',['structures/SessionCreateStruct', 'structures/Use
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "UserService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    UserService.prototype.moveUserGroup = function moveUserGroup(userGroupId, destination, callback) {
+    UserService.prototype.moveUserGroup = function (userGroupId, destination, callback) {
         this._connectionManager.request(
             "MOVE",
             userGroupId,
@@ -5079,7 +5076,7 @@ define('services/UserService',['structures/SessionCreateStruct', 'structures/Use
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "UserService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    UserService.prototype.createUserGroup = function createUserGroup(parentGroupId, userGroupCreateStruct, callback) {
+    UserService.prototype.createUserGroup = function (parentGroupId, userGroupCreateStruct, callback) {
         var that = this;
 
         this.loadUserGroup(
@@ -5112,7 +5109,7 @@ define('services/UserService',['structures/SessionCreateStruct', 'structures/Use
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "UserService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    UserService.prototype.updateUserGroup = function updateUserGroup(userGroupId, userGroupUpdateStruct, callback) {
+    UserService.prototype.updateUserGroup = function (userGroupId, userGroupUpdateStruct, callback) {
         this._connectionManager.request(
             "PATCH",
             userGroupId,
@@ -5130,7 +5127,7 @@ define('services/UserService',['structures/SessionCreateStruct', 'structures/Use
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "UserService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    UserService.prototype.loadSubUserGroups = function loadSubUserGroups(userGroupId, callback) {
+    UserService.prototype.loadSubUserGroups = function (userGroupId, callback) {
         var that = this;
 
         this.loadUserGroup(
@@ -5162,7 +5159,7 @@ define('services/UserService',['structures/SessionCreateStruct', 'structures/Use
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "UserService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    UserService.prototype.loadUsersOfUserGroup = function loadUsersOfUserGroup(userGroupId, callback) {
+    UserService.prototype.loadUsersOfUserGroup = function (userGroupId, callback) {
         var that = this;
 
         this.loadUserGroup(
@@ -5194,7 +5191,7 @@ define('services/UserService',['structures/SessionCreateStruct', 'structures/Use
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "UserService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    UserService.prototype.loadUserGroupsOfUser = function loadUserGroupsOfUser(userId, callback) {
+    UserService.prototype.loadUserGroupsOfUser = function (userId, callback) {
         this._connectionManager.request(
             "GET",
             userId + '/groups',
@@ -5217,7 +5214,7 @@ define('services/UserService',['structures/SessionCreateStruct', 'structures/Use
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "UserService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    UserService.prototype.createUser = function createUser(userGroupId, userCreateStruct, callback) {
+    UserService.prototype.createUser = function (userGroupId, userCreateStruct, callback) {
         var that = this;
 
         this.loadUserGroup(
@@ -5250,7 +5247,7 @@ define('services/UserService',['structures/SessionCreateStruct', 'structures/Use
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "UserService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    UserService.prototype.getRoleAssignments = function getRoleAssignments(userList, roleId, callback) {
+    UserService.prototype.getRoleAssignments = function (userList, roleId, callback) {
         this._connectionManager.request(
             "GET",
             userList + '?roleId=' + roleId,
@@ -5268,7 +5265,7 @@ define('services/UserService',['structures/SessionCreateStruct', 'structures/Use
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "UserService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    UserService.prototype.loadUser = function loadUser(userId, callback) {
+    UserService.prototype.loadUser = function (userId, callback) {
         this._connectionManager.request(
             "GET",
             userId,
@@ -5295,7 +5292,7 @@ define('services/UserService',['structures/SessionCreateStruct', 'structures/Use
      *         callback
      *     );
      */
-    UserService.prototype.updateUser = function updateUser(userId, userUpdateStruct, callback) {
+    UserService.prototype.updateUser = function (userId, userUpdateStruct, callback) {
         this._connectionManager.request(
             "PATCH",
             userId,
@@ -5313,7 +5310,7 @@ define('services/UserService',['structures/SessionCreateStruct', 'structures/Use
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "UserService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    UserService.prototype.deleteUser = function deleteUser(userId, callback) {
+    UserService.prototype.deleteUser = function (userId, callback) {
         this._connectionManager.delete(
             userId,
             callback
@@ -5333,7 +5330,7 @@ define('services/UserService',['structures/SessionCreateStruct', 'structures/Use
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "UserService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    UserService.prototype.assignUserToUserGroup = function assignUserToUserGroup(userId, userGroupId, callback) {
+    UserService.prototype.assignUserToUserGroup = function (userId, userGroupId, callback) {
         var that = this;
 
         this.loadUser(
@@ -5365,7 +5362,7 @@ define('services/UserService',['structures/SessionCreateStruct', 'structures/Use
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "UserService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    UserService.prototype.unassignUserFromUserGroup = function unassignUserFromUserGroup(userAssignedGroupId, callback) {
+    UserService.prototype.unassignUserFromUserGroup = function (userAssignedGroupId, callback) {
         this._connectionManager.delete(
             userAssignedGroupId,
             callback
@@ -5384,7 +5381,7 @@ define('services/UserService',['structures/SessionCreateStruct', 'structures/Use
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "UserService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    UserService.prototype.createRole = function createRole(roleCreateStruct, callback) {
+    UserService.prototype.createRole = function (roleCreateStruct, callback) {
         var that = this;
 
         this._discoveryService.getInfoObject(
@@ -5414,7 +5411,7 @@ define('services/UserService',['structures/SessionCreateStruct', 'structures/Use
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "UserService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    UserService.prototype.loadRole = function loadRole(roleId, callback) {
+    UserService.prototype.loadRole = function (roleId, callback) {
         this._connectionManager.request(
             "GET",
             roleId,
@@ -5436,7 +5433,7 @@ define('services/UserService',['structures/SessionCreateStruct', 'structures/Use
      * @example
      *     userService.loadRoles("admin", 5, 5, callback);
      */
-    UserService.prototype.loadRoles = function loadRoles(identifier, limit, offset, callback) {
+    UserService.prototype.loadRoles = function (identifier, limit, offset, callback) {
 
         var that = this,
             identifierQuery,
@@ -5494,7 +5491,7 @@ define('services/UserService',['structures/SessionCreateStruct', 'structures/Use
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "UserService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    UserService.prototype.updateRole = function updateRole(roleId, roleUpdateStruct, callback) {
+    UserService.prototype.updateRole = function (roleId, roleUpdateStruct, callback) {
         this._connectionManager.request(
             "PATCH",
             roleId,
@@ -5512,7 +5509,7 @@ define('services/UserService',['structures/SessionCreateStruct', 'structures/Use
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "UserService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    UserService.prototype.deleteRole = function deleteRole(roleId, callback) {
+    UserService.prototype.deleteRole = function (roleId, callback) {
         this._connectionManager.delete(
             roleId,
             callback
@@ -5527,7 +5524,7 @@ define('services/UserService',['structures/SessionCreateStruct', 'structures/Use
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "UserService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    UserService.prototype.getRoleAssignmentsForUser = function getRoleAssignmentsForUser(userId, callback) {
+    UserService.prototype.getRoleAssignmentsForUser = function (userId, callback) {
         var that = this;
 
         this.loadUser(
@@ -5559,7 +5556,7 @@ define('services/UserService',['structures/SessionCreateStruct', 'structures/Use
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "UserService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    UserService.prototype.getRoleAssignmentsForUserGroup = function getRoleAssignmentsForUserGroup(userGroupId, callback) {
+    UserService.prototype.getRoleAssignmentsForUserGroup = function (userGroupId, callback) {
         var that = this;
 
         this.loadUserGroup(
@@ -5591,7 +5588,7 @@ define('services/UserService',['structures/SessionCreateStruct', 'structures/Use
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "UserService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    UserService.prototype.getUserAssignmentObject = function getUserAssignmentObject(userAssignmentId, callback) {
+    UserService.prototype.getUserAssignmentObject = function (userAssignmentId, callback) {
         this._connectionManager.request(
             "GET",
             userAssignmentId,
@@ -5609,7 +5606,7 @@ define('services/UserService',['structures/SessionCreateStruct', 'structures/Use
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "UserService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    UserService.prototype.getUserGroupAssignmentObject = function getUserGroupAssignmentObject(userGroupAssignmentId, callback) {
+    UserService.prototype.getUserGroupAssignmentObject = function (userGroupAssignmentId, callback) {
         this._connectionManager.request(
             "GET",
             userGroupAssignmentId,
@@ -5629,7 +5626,7 @@ define('services/UserService',['structures/SessionCreateStruct', 'structures/Use
      *  {{#crossLink "UserService"}}Note on the callbacks usage{{/crossLink}} for more info)
      *
      */
-    UserService.prototype.assignRoleToUser = function assignRoleToUser(userId, roleAssignInputStruct, callback) {
+    UserService.prototype.assignRoleToUser = function (userId, roleAssignInputStruct, callback) {
         var that = this;
 
         this.loadUser(
@@ -5662,7 +5659,7 @@ define('services/UserService',['structures/SessionCreateStruct', 'structures/Use
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "UserService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    UserService.prototype.assignRoleToUserGroup = function assignRoleToUserGroup(userGroupId, roleAssignInputStruct, callback) {
+    UserService.prototype.assignRoleToUserGroup = function (userGroupId, roleAssignInputStruct, callback) {
         var that = this;
 
         this.loadUserGroup(
@@ -5694,7 +5691,7 @@ define('services/UserService',['structures/SessionCreateStruct', 'structures/Use
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "UserService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    UserService.prototype.unassignRoleFromUser = function unassignRoleFromUser(userRoleId, callback) {
+    UserService.prototype.unassignRoleFromUser = function (userRoleId, callback) {
         this._connectionManager.delete(
             userRoleId,
             callback
@@ -5709,7 +5706,7 @@ define('services/UserService',['structures/SessionCreateStruct', 'structures/Use
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "UserService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    UserService.prototype.unassignRoleFromUserGroup = function unassignRoleFromUserGroup(userGroupRoleId, callback) {
+    UserService.prototype.unassignRoleFromUserGroup = function (userGroupRoleId, callback) {
         this._connectionManager.delete(
             userGroupRoleId,
             callback
@@ -5745,7 +5742,7 @@ define('services/UserService',['structures/SessionCreateStruct', 'structures/Use
      *     policyCreateStruct,
      *     callback);
      */
-    UserService.prototype.addPolicy = function addPolicy(roleId, policyCreateStruct, callback) {
+    UserService.prototype.addPolicy = function (roleId, policyCreateStruct, callback) {
         var that = this;
 
         this.loadRole(
@@ -5777,7 +5774,7 @@ define('services/UserService',['structures/SessionCreateStruct', 'structures/Use
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "UserService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    UserService.prototype.loadPolicies = function loadPolicies(roleId, callback) {
+    UserService.prototype.loadPolicies = function (roleId, callback) {
         var that = this;
 
         this.loadRole(
@@ -5809,7 +5806,7 @@ define('services/UserService',['structures/SessionCreateStruct', 'structures/Use
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "UserService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    UserService.prototype.loadPolicy = function loadPolicy(policyId, callback) {
+    UserService.prototype.loadPolicy = function (policyId, callback) {
         this._connectionManager.request(
             "GET",
             policyId,
@@ -5828,7 +5825,7 @@ define('services/UserService',['structures/SessionCreateStruct', 'structures/Use
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "UserService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    UserService.prototype.updatePolicy = function updatePolicy(policyId, policyUpdateStruct, callback) {
+    UserService.prototype.updatePolicy = function (policyId, policyUpdateStruct, callback) {
         this._connectionManager.request(
             "PATCH",
             policyId,
@@ -5846,7 +5843,7 @@ define('services/UserService',['structures/SessionCreateStruct', 'structures/Use
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "UserService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    UserService.prototype.deletePolicy = function deletePolicy(policyId, callback) {
+    UserService.prototype.deletePolicy = function (policyId, callback) {
         this._connectionManager.delete(
             policyId,
             callback
@@ -5862,7 +5859,7 @@ define('services/UserService',['structures/SessionCreateStruct', 'structures/Use
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "UserService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    UserService.prototype.loadPoliciesByUserId = function loadPoliciesByUserId(userPolicies, userId, callback) {
+    UserService.prototype.loadPoliciesByUserId = function (userPolicies, userId, callback) {
         this._connectionManager.request(
             "GET",
             userPolicies + "?userId=" + userId,
@@ -5885,7 +5882,7 @@ define('services/UserService',['structures/SessionCreateStruct', 'structures/Use
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "UserService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    UserService.prototype.createSession = function createSession(sessions, sessionCreateStruct, callback) {
+    UserService.prototype.createSession = function (sessions, sessionCreateStruct, callback) {
         this._connectionManager.notAuthorizedRequest(
             "POST",
             sessions,
@@ -5903,7 +5900,7 @@ define('services/UserService',['structures/SessionCreateStruct', 'structures/Use
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "UserService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    UserService.prototype.deleteSession = function deleteSession(sessionId, callback) {
+    UserService.prototype.deleteSession = function (sessionId, callback) {
         this._connectionManager.delete(
             sessionId,
             callback
@@ -5919,7 +5916,7 @@ define('services/UserService',['structures/SessionCreateStruct', 'structures/Use
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "UserService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    UserService.prototype.logOut = function logOut(callback) {
+    UserService.prototype.logOut = function (callback) {
         this._connectionManager.logOut(callback);
     };
 
@@ -6009,7 +6006,7 @@ define('CAPI',['authAgents/SessionAuthAgent', 'authAgents/HttpBasicAuthAgent', '
          *          callback
          *      );
          */
-        this.getContentService = function getContentService() {
+        this.getContentService = function () {
             if  (!this._contentService)  {
                 this._contentService  =  new ContentService(
                     connectionManager,
@@ -6031,7 +6028,7 @@ define('CAPI',['authAgents/SessionAuthAgent', 'authAgents/HttpBasicAuthAgent', '
          *          callback
          *      );
          */
-        this.getContentTypeService = function getContentTypeService() {
+        this.getContentTypeService = function () {
             if  (!this._contentTypeService)  {
                 this._contentTypeService  =  new ContentTypeService(
                     connectionManager,
@@ -6052,7 +6049,7 @@ define('CAPI',['authAgents/SessionAuthAgent', 'authAgents/HttpBasicAuthAgent', '
          *          callback
          *      );
          */
-        this.getUserService = function getUserService() {
+        this.getUserService = function () {
             if  (!this._userService)  {
                 this._userService  =  new UserService(
                     connectionManager,
@@ -8006,7 +8003,7 @@ return Q;
 });
 
 /* global define */
-define('services/PromiseService',["../../node_modules/q/q"], function (q) {
+define('services/PromiseService',["../../node_modules/q/q", "structures/CAPIError"], function (q, CAPIError) {
     
 
     /**
@@ -8019,17 +8016,14 @@ define('services/PromiseService',["../../node_modules/q/q"], function (q) {
     var PromiseService = function (originalService) {
         var key;
 
-        this._originalService = originalService;
-
-        this.generatePromiseFunction = function (originalFunction) {
-            var that = this;
+        this._generatePromiseFunction = function (originalFunction) {
 
             return function () {
                 var toBeCalledArguments = Array.prototype.slice.call(arguments),
                     deferred = q.defer();
 
                 if (originalFunction.length - 1 !== arguments.length) {
-                    throw new EvalError("Wrong numner of arguments provided");
+                    throw new CAPIError("Wrong number of arguments provided for promise-based function.");
                 }
 
                 toBeCalledArguments.push(function (error, result) {
@@ -8041,7 +8035,7 @@ define('services/PromiseService',["../../node_modules/q/q"], function (q) {
 
                 });
 
-                originalFunction.apply(that._originalService, toBeCalledArguments);
+                originalFunction.apply(originalService, toBeCalledArguments);
 
                 return deferred.promise;
             };
@@ -8049,10 +8043,9 @@ define('services/PromiseService',["../../node_modules/q/q"], function (q) {
 
         // Auto-generating promise-based functions based on every existing service function
         // taking into account all the functions with signature different from "new....Struct"
-        for(key in this._originalService) {
-            if ((typeof this._originalService[key] === "function") &&
-               (Object.prototype.toString.call(this._originalService[key].toString().match(/^function\s*(new[^\s(]+Struct)/)) != '[object Array]')) {
-                this[key] = this.generatePromiseFunction(this._originalService[key]);
+        for(key in originalService) {
+            if ( (typeof originalService[key] === "function") && !(/^(new[^\s(]+Struct)/).test(key) ) {
+                this[key] = this._generatePromiseFunction(originalService[key]);
             }
         }
     };
@@ -8074,32 +8067,39 @@ define('PromiseCAPI',["CAPI", "services/PromiseService"], function (CAPI, Promis
      * @param CAPI {CAPI} main REST client object
      */
     var PromiseCAPI = function (CAPI) {
-        var key,
-            that = this;
-
-        this._capi = CAPI;
+        var key;
 
         /**
-         * Convert any CAPI service into Promise-based service.
+         * Array of promise-based services instances (needed to implement singletons approach)
          *
-         * @method generatePromiseService
-         * @param serviceFactory {function} function which returns one of the CAPI services
-         * @return {function} function which returns instance of the PromiseService - promise-based wrapper around any of the CAPI services
+         * @attribute _services
+         * @type {Array}
+         * @protected
          */
-        this.generatePromiseService = function (serviceFactory) {
+        this._services = [];
+
+        /**
+         * Convert any CAPI service into Promise-based service (if needed).
+         *
+         * @method _getPromiseService
+         * @param serviceFactoryName {String} name of the function which returns one of the CAPI services
+         * @return {function} function which returns instance of the PromiseService - promise-based wrapper around any of the CAPI services
+         * @protected
+         */
+        this._getPromiseService = function (serviceFactoryName) {
             return function () {
-                return new PromiseService(
-                    serviceFactory.call(that._capi)
-                );
+                if (!this._services[serviceFactoryName]) {
+                    this._services[serviceFactoryName] = new PromiseService(CAPI[serviceFactoryName].call(CAPI));
+                }
+                return this._services[serviceFactoryName];
             };
         };
 
         // Auto-generating promise-based services based on every existing CAPI service
         // taking into account only functions with "get....Service" signature
-        for(key in this._capi) {
-            if ((typeof this._capi[key] === "function") &&
-                ( Object.prototype.toString.call(this._capi[key].toString().match(/^function\s*(get[^\s(]+Service)/)) === '[object Array]')) {
-                this[key] = this.generatePromiseService(this._capi[key]);
+        for (key in CAPI) {
+            if ( (typeof CAPI[key] === "function") && (/^(get[^\s(]+Service)/).test(key) ) {
+                this[key] = this._getPromiseService(key);
             }
         }
     };

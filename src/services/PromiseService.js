@@ -1,5 +1,5 @@
 /* global define */
-define(["../../node_modules/q/q"], function (q) {
+define(["../../node_modules/q/q", "structures/CAPIError"], function (q, CAPIError) {
     "use strict";
 
     /**
@@ -12,17 +12,14 @@ define(["../../node_modules/q/q"], function (q) {
     var PromiseService = function (originalService) {
         var key;
 
-        this._originalService = originalService;
-
-        this.generatePromiseFunction = function (originalFunction) {
-            var that = this;
+        this._generatePromiseFunction = function (originalFunction) {
 
             return function () {
                 var toBeCalledArguments = Array.prototype.slice.call(arguments),
                     deferred = q.defer();
 
                 if (originalFunction.length - 1 !== arguments.length) {
-                    throw new EvalError("Wrong numner of arguments provided");
+                    throw new CAPIError("Wrong number of arguments provided for promise-based function.");
                 }
 
                 toBeCalledArguments.push(function (error, result) {
@@ -34,7 +31,7 @@ define(["../../node_modules/q/q"], function (q) {
 
                 });
 
-                originalFunction.apply(that._originalService, toBeCalledArguments);
+                originalFunction.apply(originalService, toBeCalledArguments);
 
                 return deferred.promise;
             };
@@ -42,10 +39,9 @@ define(["../../node_modules/q/q"], function (q) {
 
         // Auto-generating promise-based functions based on every existing service function
         // taking into account all the functions with signature different from "new....Struct"
-        for(key in this._originalService) {
-            if ((typeof this._originalService[key] === "function") &&
-               (Object.prototype.toString.call(this._originalService[key].toString().match(/^function\s*(new[^\s(]+Struct)/)) != '[object Array]')) {
-                this[key] = this.generatePromiseFunction(this._originalService[key]);
+        for(key in originalService) {
+            if ( (typeof originalService[key] === "function") && !(/^(new[^\s(]+Struct)/).test(key) ) {
+                this[key] = this._generatePromiseFunction(originalService[key]);
             }
         }
     };
