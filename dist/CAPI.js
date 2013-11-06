@@ -1080,7 +1080,7 @@ define('connections/XmlHttpRequestConnection',["structures/Response", "structure
      *
      * @method isCompatible
      * @static
-     * @returns {boolean} true, if connection is compatible with current environment, false otherwise
+     * @return {boolean} whether the connection is compatible with current environment
      */
     XmlHttpRequestConnection.isCompatible = function () {
         return !!window.XMLHttpRequest;
@@ -1162,7 +1162,7 @@ define('connections/MicrosoftXmlHttpRequestConnection',["structures/Response", "
      *
      * @method isCompatible
      * @static
-     * @returns {boolean} true, if connection is compatible with current environment, false otherwise
+     * @return {boolean} whether the connection is compatible with current environment
      */
     MicrosoftXmlHttpRequestConnection.isCompatible = function () {
         return !!window.ActiveXObject;
@@ -8051,7 +8051,7 @@ return Q;
 });
 
 /* global define */
-define('services/PromiseService',["../../node_modules/q/q"], function (q) {
+define('services/PromiseService',["../../node_modules/q/q","structures/CAPIError"], function (q, CAPIError) {
     
 
     /**
@@ -8064,17 +8064,14 @@ define('services/PromiseService',["../../node_modules/q/q"], function (q) {
     var PromiseService = function (originalService) {
         var key;
 
-        this._originalService = originalService;
-
-        this.generatePromiseFunction = function (originalFunction) {
-            var that = this;
+        this._generatePromiseFunction = function (originalFunction) {
 
             return function () {
                 var toBeCalledArguments = Array.prototype.slice.call(arguments),
                     deferred = q.defer();
 
                 if (originalFunction.length - 1 !== arguments.length) {
-                    throw new EvalError("Wrong numner of arguments provided");
+                    throw new CAPIError("Wrong number of arguments provided for promise-based function.");
                 }
 
                 toBeCalledArguments.push(function (error, result) {
@@ -8086,7 +8083,7 @@ define('services/PromiseService',["../../node_modules/q/q"], function (q) {
 
                 });
 
-                originalFunction.apply(that._originalService, toBeCalledArguments);
+                originalFunction.apply(originalService, toBeCalledArguments);
 
                 return deferred.promise;
             };
@@ -8094,10 +8091,9 @@ define('services/PromiseService',["../../node_modules/q/q"], function (q) {
 
         // Auto-generating promise-based functions based on every existing service function
         // taking into account all the functions with signature different from "new....Struct"
-        for(key in this._originalService) {
-            if ((typeof this._originalService[key] === "function") &&
-               (Object.prototype.toString.call(this._originalService[key].toString().match(/^function\s*(new[^\s(]+Struct)/)) != '[object Array]')) {
-                this[key] = this.generatePromiseFunction(this._originalService[key]);
+        for(key in originalService) {
+            if ( (typeof originalService[key] === "function") && !(/^function\s*(new[^\s(]+Struct)/).test(originalService[key].toString()) ) {
+                this[key] = this._generatePromiseFunction(originalService[key]);
             }
         }
     };
@@ -8119,32 +8115,31 @@ define('PromiseCAPI',["CAPI", "services/PromiseService"], function (CAPI, Promis
      * @param CAPI {CAPI} main REST client object
      */
     var PromiseCAPI = function (CAPI) {
-        var key,
-            that = this;
-
-        this._capi = CAPI;
+        var key;
 
         /**
-         * Convert any CAPI service into Promise-based service.
+         * Convert any CAPI service into Promise-based service (if needed).
          *
-         * @method generatePromiseService
-         * @param serviceFactory {function} function which returns one of the CAPI services
+         * @method getPromiseService
+         * @param serviceFactoryName {String} name of the function which returns one of the CAPI services
          * @return {function} function which returns instance of the PromiseService - promise-based wrapper around any of the CAPI services
          */
-        this.generatePromiseService = function (serviceFactory) {
+        this._getPromiseService = function (serviceFactoryName) {
+            var singletonId = "_" + serviceFactoryName;
+
             return function () {
-                return new PromiseService(
-                    serviceFactory.call(that._capi)
-                );
+                if (!this[singletonId]) {
+                    this[singletonId] = new PromiseService(CAPI[serviceFactoryName].call(CAPI));
+                }
+                return this[singletonId];
             };
         };
 
         // Auto-generating promise-based services based on every existing CAPI service
         // taking into account only functions with "get....Service" signature
-        for(key in this._capi) {
-            if ((typeof this._capi[key] === "function") &&
-                ( Object.prototype.toString.call(this._capi[key].toString().match(/^function\s*(get[^\s(]+Service)/)) === '[object Array]')) {
-                this[key] = this.generatePromiseService(this._capi[key]);
+        for (key in CAPI) {
+            if ( (typeof CAPI[key] === "function") && (/^function\s*(get[^\s(]+Service)/).test(CAPI[key].toString()) ) {
+                this[key] = this._getPromiseService(key);
             }
         }
     };
