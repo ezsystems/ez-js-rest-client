@@ -121,10 +121,15 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-yuidoc');
     grunt.loadNpmTasks('grunt-shell');
 
+    // Helper task required to provide the "q" library to instrumented version of the "PromiseService" module
+    grunt.registerTask('prepareQ', 'Copy q library into instrument folder', function () {
+        grunt.file.copy('./node_modules/q/q.js', './test/instrument/node_modules/q/q.js');
+    });
+
     grunt.registerTask('hint', ['jshint']);
     grunt.registerTask('build', ['jshint', 'requirejs']);
     grunt.registerTask('test', ['jshint', 'jasmine:test'] );
-    grunt.registerTask('coverage', ['jshint', 'instrument', 'jasmine:coverage'] );
+    grunt.registerTask('coverage', ['jshint', 'prepareQ', 'instrument', 'jasmine:coverage'] );
     grunt.registerTask('doc', ['yuidoc'] );
     grunt.registerTask('livedoc', ['shell:livedoc'] );
 
