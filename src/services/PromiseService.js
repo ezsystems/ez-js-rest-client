@@ -2,6 +2,9 @@
 define(["../../node_modules/q/q","structures/CAPIError"], function (q, CAPIError) {
     "use strict";
 
+    // Silencing false positive according to http://stackoverflow.com/a/18112535/125264
+    q.stopUnhandledRejectionTracking();
+
     /**
      * Creates an instance of promise-based service object based on original service
      *

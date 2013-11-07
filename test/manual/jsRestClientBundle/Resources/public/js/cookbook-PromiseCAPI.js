@@ -11,12 +11,12 @@ var jsCAPI = new eZ.CAPI(
     promise = promiseContentService.loadSection("/api/ezp/v2/content/sections/1");
 
 promise.then(
-    function(result) {
+    function (result) {
 
         console.log(result);
 
     },
-    function(error) {
+    function (error) {
 
         console.log(error);
 
