@@ -69,7 +69,8 @@ module.exports = function(grunt) {
                 template: require('grunt-template-jasmine-requirejs'),
                 templateOptions: {
                     requireConfig: {
-                        baseUrl: 'src/'
+                        baseUrl: 'src/',
+                        map: mapQ
                     }
                 }
             },
