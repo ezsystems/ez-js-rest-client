@@ -1,4 +1,18 @@
 module.exports = function(grunt) {
+
+    var baseSourcesPath = "src/",
+        wrapStartFile = 'wrap/wrap.start.js',
+        wrapEndFile = 'wrap/wrap.end.js',
+        sourceFiles = [
+            'src/*.js',
+            'src/*/*.js'
+        ],
+        testFiles = [
+            'test/*.tests.js',
+            'test/manual/jsRestClientBundle/Resources/public/js/*.js',
+            '!test/manual/jsRestClientBundle/Resources/public/js/CAPI.js'
+        ];
+
     grunt.initConfig({
         requirejs: {
             dist: {
@@ -6,11 +20,11 @@ module.exports = function(grunt) {
                     almond: true,
                     name : 'PromiseCAPI',
                     optimize: "none",
-                    baseUrl: "src/",
+                    baseUrl: baseSourcesPath,
                     out: "dist/CAPI.js",
                     wrap: {
-                        startFile: 'wrap/wrap.start.js',
-                        endFile: 'wrap/wrap.end.js'
+                        startFile: wrapStartFile,
+                        endFile: wrapEndFile
                     }
                 }
             },
@@ -19,11 +33,11 @@ module.exports = function(grunt) {
                     almond: true,
                     name : 'PromiseCAPI',
                     optimize: "uglify",
-                    baseUrl: "src/",
+                    baseUrl: baseSourcesPath,
                     out: "dist/CAPI-min.js",
                     wrap: {
-                        startFile: 'wrap/wrap.start.js',
-                        endFile: 'wrap/wrap.end.js'
+                        startFile: wrapStartFile,
+                        endFile: wrapEndFile
                     }
                 }
             },
@@ -32,11 +46,11 @@ module.exports = function(grunt) {
                     almond: true,
                     name : 'PromiseCAPI',
                     optimize: "none",
-                    baseUrl: "src/",
+                    baseUrl: baseSourcesPath,
                     out: "test/manual/jsRestClientBundle/Resources/public/js/CAPI.js",
                     wrap: {
-                        startFile: 'wrap/wrap.start.js',
-                        endFile: 'wrap/wrap.end.js'
+                        startFile: wrapStartFile,
+                        endFile: wrapEndFile
                     }
                 }
             }
@@ -45,10 +59,10 @@ module.exports = function(grunt) {
             options: {
                 jshintrc: 'jshint.json'
             },
-            all: ['src/*.js', 'src/*/*.js', 'test/*.tests.js']
+            all: [sourceFiles, testFiles]
         },
         instrument : {
-            files : ['src/*.js','src/*/*.js'],
+            files : sourceFiles,
             options : {
                 basePath : 'test/instrument'
             }
@@ -59,7 +73,7 @@ module.exports = function(grunt) {
                 template: require('grunt-template-jasmine-requirejs'),
                 templateOptions: {
                     requireConfig: {
-                        baseUrl: 'src/'
+                        baseUrl: baseSourcesPath
                     }
                 }
             },
@@ -98,7 +112,7 @@ module.exports = function(grunt) {
                 url: '<%= pkg.repository %>',
                 logo: "http://ez.no/extension/ez_ezno/design/ezno_2011/images/ez-logo.png",
                 options: {
-                    paths: 'src/',
+                    paths: baseSourcesPath,
                     outdir: 'api/'
                 }
             }
