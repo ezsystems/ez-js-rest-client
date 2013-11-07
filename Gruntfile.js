@@ -1,4 +1,11 @@
 module.exports = function(grunt) {
+
+    var mapQ = {
+        "services/PromiseService": {
+            "q": "../node_modules/q/q"
+        }
+    };
+
     grunt.initConfig({
         requirejs: {
             dist: {
@@ -7,6 +14,7 @@ module.exports = function(grunt) {
                     name : 'PromiseCAPI',
                     optimize: "none",
                     baseUrl: "src/",
+                    map: mapQ,
                     out: "dist/CAPI.js",
                     wrap: {
                         startFile: 'wrap/wrap.start.js',
@@ -20,6 +28,7 @@ module.exports = function(grunt) {
                     name : 'PromiseCAPI',
                     optimize: "uglify",
                     baseUrl: "src/",
+                    map: mapQ,
                     out: "dist/CAPI-min.js",
                     wrap: {
                         startFile: 'wrap/wrap.start.js',
@@ -33,6 +42,7 @@ module.exports = function(grunt) {
                     name : 'PromiseCAPI',
                     optimize: "none",
                     baseUrl: "src/",
+                    map: mapQ,
                     out: "test/manual/jsRestClientBundle/Resources/public/js/CAPI.js",
                     wrap: {
                         startFile: 'wrap/wrap.start.js',
@@ -82,7 +92,8 @@ module.exports = function(grunt) {
                         template: require('grunt-template-jasmine-requirejs'),
                         templateOptions: {
                             requireConfig: {
-                                baseUrl: 'test/instrument/src/'
+                                baseUrl: 'test/instrument/src/',
+                                map: mapQ
                             }
                         }
                     }
@@ -121,15 +132,10 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-yuidoc');
     grunt.loadNpmTasks('grunt-shell');
 
-    // Helper task required to provide the "q" library to instrumented version of the "PromiseService" module
-    grunt.registerTask('prepareQ', 'Copy q library into instrument folder', function () {
-        grunt.file.copy('./node_modules/q/q.js', './test/instrument/node_modules/q/q.js');
-    });
-
     grunt.registerTask('hint', ['jshint']);
     grunt.registerTask('build', ['jshint', 'requirejs']);
     grunt.registerTask('test', ['jshint', 'jasmine:test'] );
-    grunt.registerTask('coverage', ['jshint', 'prepareQ', 'instrument', 'jasmine:coverage'] );
+    grunt.registerTask('coverage', ['jshint', 'instrument', 'jasmine:coverage'] );
     grunt.registerTask('doc', ['yuidoc'] );
     grunt.registerTask('livedoc', ['shell:livedoc'] );
 
