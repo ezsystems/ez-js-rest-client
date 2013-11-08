@@ -105,14 +105,13 @@ define(["structures/CAPIError"], function (CAPIError) {
                 "",
                 {"Accept": "application/vnd.ez.api.Root+json"},
                 function (error, rootJSON) {
-                    if (!error) {
-
-                        that._copyToCache(rootJSON.document);
-                        callback(false, true);
-
-                    } else {
+                    if (error) {
                         callback(error, false);
+                        return;
                     }
+
+                    that._copyToCache(rootJSON.document);
+                    callback(false, true);
                 }
             );
         } else {

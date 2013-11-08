@@ -278,18 +278,18 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
         this._discoveryService.getInfoObject(
             "sections",
             function (error, sections) {
-                if (!error) {
-                    that._connectionManager.request(
-                        "POST",
-                        sections._href,
-                        JSON.stringify(sectionInputStruct.body),
-                        sectionInputStruct.headers,
-                        callback
-                    );
-
-                } else {
+                if (error) {
                     callback(error, false);
+                    return;
                 }
+
+                that._connectionManager.request(
+                    "POST",
+                    sections._href,
+                    JSON.stringify(sectionInputStruct.body),
+                    sectionInputStruct.headers,
+                    callback
+                );
             }
         );
     };
@@ -326,18 +326,18 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
         this._discoveryService.getInfoObject(
             "sections",
             function (error, sections) {
-                if (!error) {
-                    that._connectionManager.request(
-                        "GET",
-                        sections._href,
-                        "",
-                        {"Accept": sections["_media-type"]},
-                        callback
-                    );
-
-                } else {
+                if (error) {
                     callback(error, false);
+                    return;
                 }
+
+                that._connectionManager.request(
+                    "GET",
+                    sections._href,
+                    "",
+                    {"Accept": sections["_media-type"]},
+                    callback
+                );
             }
         );
     };
@@ -393,18 +393,18 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
         this._discoveryService.getInfoObject(
             "content",
             function (error, contentObjects) {
-                if (!error) {
-                    that._connectionManager.request(
-                        "POST",
-                        contentObjects._href,
-                        JSON.stringify(contentCreateStruct.body),
-                        contentCreateStruct.headers,
-                        callback
-                    );
-
-                } else {
+                if (error) {
                     callback(error, false);
+                    return;
                 }
+
+                that._connectionManager.request(
+                    "POST",
+                    contentObjects._href,
+                    JSON.stringify(contentCreateStruct.body),
+                    contentCreateStruct.headers,
+                    callback
+                );
             }
         );
     };
@@ -453,17 +453,18 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
         this._discoveryService.getInfoObject(
             "content",
             function (error, contentObjects) {
-                if (!error) {
-                    that._connectionManager.request(
-                        "GET",
-                        contentObjects._href + '?remoteId=' + remoteId,
-                        "",
-                        {"Accept": contentObjects["_media-type"]},
-                        callback
-                    );
-                } else {
+                if (error) {
                     callback(error, false);
+                    return;
                 }
+
+                that._connectionManager.request(
+                    "GET",
+                    contentObjects._href + '?remoteId=' + remoteId,
+                    "",
+                    {"Accept": contentObjects["_media-type"]},
+                    callback
+                );
             }
         );
     };
@@ -561,20 +562,20 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
         this.loadContentInfo(
             contentId,
             function (error, contentResponse) {
-                if (!error) {
-                    var currentVersion = contentResponse.document.Content.CurrentVersion;
-
-                    that._connectionManager.request(
-                        "GET",
-                        currentVersion._href,
-                        "",
-                        {"Accept": currentVersion["_media-type"]},
-                        callback
-                    );
-
-                } else {
+                if (error) {
                     callback(error, false);
+                    return;
                 }
+
+                var currentVersion = contentResponse.document.Content.CurrentVersion;
+
+                that._connectionManager.request(
+                    "GET",
+                    currentVersion._href,
+                    "",
+                    {"Accept": currentVersion["_media-type"]},
+                    callback
+                );
             }
         );
     };
@@ -656,20 +657,20 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
         this.loadContentInfo(
             contentId,
             function (error, contentResponse) {
-                if (!error) {
-                    var contentVersions = contentResponse.document.Content.Versions;
-
-                    that._connectionManager.request(
-                        "GET",
-                        contentVersions._href,
-                        "",
-                        {"Accept": contentVersions["_media-type"]},
-                        callback
-                    );
-
-                } else {
+                if (error) {
                     callback(error, false);
+                    return;
                 }
+
+                var contentVersions = contentResponse.document.Content.Versions;
+
+                that._connectionManager.request(
+                    "GET",
+                    contentVersions._href,
+                    "",
+                    {"Accept": contentVersions["_media-type"]},
+                    callback
+                );
             }
         );
     };
@@ -724,24 +725,23 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
             function (error, contentResponse) {
                 var url = '';
 
-                if (!error) {
-
-                    if (typeof versionId !== "function") {
-                        url = contentResponse.document.Content.Versions._href + "/" + versionId;
-                    } else {
-                        callback = versionId;
-                        url = contentResponse.document.Content.CurrentVersion._href;
-                    }
-
-                    that._connectionManager.request(
-                        "COPY", url, "",
-                        {"Accept": "application/vnd.ez.api.Version+json"},
-                        callback
-                    );
-                    
-                } else {
+                if (error) {
                     callback(error, false);
+                    return;
                 }
+
+                if (typeof versionId !== "function") {
+                    url = contentResponse.document.Content.Versions._href + "/" + versionId;
+                } else {
+                    callback = versionId;
+                    url = contentResponse.document.Content.CurrentVersion._href;
+                }
+
+                that._connectionManager.request(
+                    "COPY", url, "",
+                    {"Accept": "application/vnd.ez.api.Version+json"},
+                    callback
+                );
             }
         );
     };
@@ -798,20 +798,20 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
         this.loadContentInfo(
             contentId,
             function (error, contentResponse) {
-                if (!error) {
-                    var locations = contentResponse.document.Content.Locations;
-
-                    that._connectionManager.request(
-                        "POST",
-                        locations._href,
-                        JSON.stringify(locationCreateStruct.body),
-                        locationCreateStruct.headers,
-                        callback
-                    );
-
-                } else {
+                if (error) {
                     callback(error, false);
+                    return;
                 }
+
+                var locations = contentResponse.document.Content.Locations;
+
+                that._connectionManager.request(
+                    "POST",
+                    locations._href,
+                    JSON.stringify(locationCreateStruct.body),
+                    locationCreateStruct.headers,
+                    callback
+                );
             }
         );
     };
@@ -830,20 +830,20 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
         this.loadContentInfo(
             contentId,
             function (error, contentResponse) {
-                if (!error) {
-                    var locations = contentResponse.document.Content.Locations;
-
-                    that._connectionManager.request(
-                        "GET",
-                        locations._href,
-                        "",
-                        {"Accept": "application/vnd.ez.api.LocationList+json"},
-                        callback
-                    );
-
-                } else {
+                if (error) {
                     callback(error, false);
+                    return;
                 }
+
+                var locations = contentResponse.document.Content.Locations;
+
+                that._connectionManager.request(
+                    "GET",
+                    locations._href,
+                    "",
+                    {"Accept": "application/vnd.ez.api.LocationList+json"},
+                    callback
+                );
             }
         );
     };
@@ -944,19 +944,20 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
         this.loadLocation(
             locationId,
             function (error, locationResponse) {
-                if (!error) {
-                    var location = locationResponse.document.Location;
-
-                    that._connectionManager.request(
-                        "GET",
-                        location.Children._href + '?offset=' + offset + '&limit=' + limit,
-                        "",
-                        {"Accept": location.Children["_media-type"]},
-                        callback
-                    );
-                } else {
+                if (error) {
                     callback(error, false);
+                    return;
                 }
+
+                var location = locationResponse.document.Location;
+
+                that._connectionManager.request(
+                    "GET",
+                    location.Children._href + '?offset=' + offset + '&limit=' + limit,
+                    "",
+                    {"Accept": location.Children["_media-type"]},
+                    callback
+                );
             }
         );
     };
@@ -1055,18 +1056,18 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
         this._discoveryService.getInfoObject(
             "views",
             function (error, views) {
-                if (!error) {
-                    that._connectionManager.request(
-                        "POST",
-                        views._href,
-                        JSON.stringify(viewCreateStruct.body),
-                        viewCreateStruct.headers,
-                        callback
-                    );
-
-                } else {
+                if (error) {
                     callback(error, false);
+                    return;
                 }
+
+                that._connectionManager.request(
+                    "POST",
+                    views._href,
+                    JSON.stringify(viewCreateStruct.body),
+                    viewCreateStruct.headers,
+                    callback
+                );
             }
         );
     };
@@ -1111,19 +1112,20 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
             versionedContentId,
             {},
             function (error, versionResponse) {
-                if (!error) {
-                    var version = versionResponse.document.Version;
-
-                    that._connectionManager.request(
-                        "GET",
-                        version.Relations._href + '?offset=' + offset + '&limit=' + limit,
-                        "",
-                        {"Accept": version.Relations["_media-type"]},
-                        callback
-                    );
-                } else {
+                if (error) {
                     callback(error, false);
+                    return;
                 }
+
+                var version = versionResponse.document.Version;
+
+                that._connectionManager.request(
+                    "GET",
+                    version.Relations._href + '?offset=' + offset + '&limit=' + limit,
+                    "",
+                    {"Accept": version.Relations["_media-type"]},
+                    callback
+                );
             }
         );
     };
@@ -1163,20 +1165,20 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
         this.loadCurrentVersion(
             contentId,
             function (error, currentVersionResponse) {
-                if (!error) {
-                    var currentVersion = currentVersionResponse.document.Version;
-
-                    that._connectionManager.request(
-                        "GET",
-                        currentVersion.Relations._href + '?offset=' + offset + '&limit=' + limit,
-                        "",
-                        {"Accept": currentVersion.Relations["_media-type"]},
-                        callback
-                    );
-
-                } else {
+                if (error) {
                     callback(error, false);
+                    return;
                 }
+
+                var currentVersion = currentVersionResponse.document.Version;
+
+                that._connectionManager.request(
+                    "GET",
+                    currentVersion.Relations._href + '?offset=' + offset + '&limit=' + limit,
+                    "",
+                    {"Accept": currentVersion.Relations["_media-type"]},
+                    callback
+                );
             }
         );
     };
@@ -1222,19 +1224,20 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
             versionedContentId,
             {},
             function (error, versionResponse) {
-                if (!error) {
-                    var version = versionResponse.document.Version;
-
-                    that._connectionManager.request(
-                        "POST",
-                        version.Relations._href,
-                        JSON.stringify(relationCreateStruct.body),
-                        relationCreateStruct.headers,
-                        callback
-                    );
-                } else {
+                if (error) {
                     callback(error, false);
+                    return;
                 }
+
+                var version = versionResponse.document.Version;
+
+                that._connectionManager.request(
+                    "POST",
+                    version.Relations._href,
+                    JSON.stringify(relationCreateStruct.body),
+                    relationCreateStruct.headers,
+                    callback
+                );
             }
         );
     };
@@ -1292,18 +1295,18 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
         this._discoveryService.getInfoObject(
             "trash",
             function (error, trash) {
-                if (!error) {
-                    that._connectionManager.request(
-                        "GET",
-                        trash._href + '?offset=' + offset + '&limit=' + limit,
-                        "",
-                        {"Accept": trash["_media-type"]},
-                        callback
-                    );
-
-                } else {
+                if (error) {
                     callback(error, false);
+                    return;
                 }
+
+                that._connectionManager.request(
+                    "GET",
+                    trash._href + '?offset=' + offset + '&limit=' + limit,
+                    "",
+                    {"Accept": trash["_media-type"]},
+                    callback
+                );
             }
         );
     };
@@ -1382,18 +1385,18 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
         this._discoveryService.getInfoObject(
             "trash",
             function (error, trash) {
-                if (!error) {
-                    that._connectionManager.request(
-                        "DELETE",
-                        trash._href,
-                        "",
-                        {},
-                        callback
-                    );
-
-                } else {
+                if (error) {
                     callback(error, false);
+                    return;
                 }
+
+                that._connectionManager.request(
+                    "DELETE",
+                    trash._href,
+                    "",
+                    {},
+                    callback
+                );
             }
         );
     };

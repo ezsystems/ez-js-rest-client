@@ -88,42 +88,42 @@ define(["structures/Response", "structures/Request", "structures/CAPIError"],
             // check if we are already authenticated, make it happen if not
             this._authenticationAgent.ensureAuthentication(
                 function (error, success) {
-                    if (!error) {
-                        that._authInProgress = false;
-
-                        // emptying requests Queue
-                        /*jshint boss:true */
-                        /*jshint -W083 */
-                        while (nextRequest = that._requestsQueue.shift()) {
-                            that._authenticationAgent.authenticateRequest(
-                                nextRequest,
-                                function (error, authenticatedRequest) {
-                                    if (!error) {
-                                        if (that.logRequests) {
-                                            console.dir(request);
-                                        }
-                                        // Main goal
-                                        that._connectionFactory.createConnection().execute(authenticatedRequest, callback);
-                                    } else {
-                                        callback(
-                                            new CAPIError(
-                                                "An error occurred during request authentication.",
-                                                {request: nextRequest}
-                                            ),
-                                            false
-                                        );
-                                    }
-                                }
-                            );
-                        } // while
-                        /*jshint +W083 */
-                        /*jshint boss:false */
-
-                    } else {
+                    if (error) {
                         that._authInProgress = false;
                         callback(error, false);
-
+                        return;
                     }
+
+                    that._authInProgress = false;
+
+                    // emptying requests Queue
+                    /*jshint boss:true */
+                    /*jshint -W083 */
+                    while (nextRequest = that._requestsQueue.shift()) {
+                        that._authenticationAgent.authenticateRequest(
+                            nextRequest,
+                            function (error, authenticatedRequest) {
+                                if (error) {
+                                    callback(
+                                        new CAPIError(
+                                            "An error occurred during request authentication.",
+                                            {request: nextRequest}
+                                        ),
+                                        false
+                                    );
+                                    return;
+                                }
+
+                                if (that.logRequests) {
+                                    console.dir(request);
+                                }
+                                // Main goal
+                                that._connectionFactory.createConnection().execute(authenticatedRequest, callback);
+                            }
+                        );
+                    } // while
+                    /*jshint +W083 */
+                    /*jshint boss:false */
                 }
             );
         }
