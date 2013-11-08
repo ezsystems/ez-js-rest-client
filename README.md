@@ -1,5 +1,7 @@
 # JavaScript client library for the eZ Publish REST API
 
+[![Build Status](https://travis-ci.org/ezsystems/ez-js-rest-client.png)](https://travis-ci.org/ezsystems/ez-js-rest-client)
+
 This repository provides a JavaScript library meant to ease the usage of [the eZ
 Publish REST API](https://confluence.ez.no/display/EZP/eZ+Publish+REST+API).
 
