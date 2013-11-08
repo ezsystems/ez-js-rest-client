@@ -48,20 +48,7 @@ define(["structures/CAPIError"], function (CAPIError) {
                 "/api/ezp/v2/user/sessions",
                 sessionCreateStruct,
                 function (error, sessionResponse) {
-                    if (!error) {
-                        var session = JSON.parse(sessionResponse.body).Session;
-
-                        that.sessionName = session.name;
-                        that.sessionId = session._href;
-                        that.csrfToken = session.csrfToken;
-
-                        sessionStorage.setItem('ezpRestClient.sessionName', that.sessionName);
-                        sessionStorage.setItem('ezpRestClient.sessionId', that.sessionId);
-                        sessionStorage.setItem('ezpRestClient.csrfToken', that.csrfToken);
-
-                        done(false, true);
-
-                    } else {
+                    if (error) {
                         done(
                             new CAPIError(
                                 "Failed to create new session.",
@@ -69,7 +56,20 @@ define(["structures/CAPIError"], function (CAPIError) {
                             ),
                             false
                         );
+                        return;
                     }
+
+                    var session = JSON.parse(sessionResponse.body).Session;
+
+                    that.sessionName = session.name;
+                    that.sessionId = session._href;
+                    that.csrfToken = session.csrfToken;
+
+                    sessionStorage.setItem('ezpRestClient.sessionName', that.sessionName);
+                    sessionStorage.setItem('ezpRestClient.sessionId', that.sessionId);
+                    sessionStorage.setItem('ezpRestClient.csrfToken', that.csrfToken);
+
+                    done(false, true);
                 }
             );
 
@@ -108,20 +108,20 @@ define(["structures/CAPIError"], function (CAPIError) {
         userService.deleteSession(
             this.sessionId,
             function (error, response) {
-                if (!error) {
-                    that.sessionName = null;
-                    that.sessionId = null;
-                    that.csrfToken = null;
-
-                    sessionStorage.removeItem('ezpRestClient.sessionName');
-                    sessionStorage.removeItem('ezpRestClient.sessionId');
-                    sessionStorage.removeItem('ezpRestClient.csrfToken');
-
-                    done(false, true);
-
-                } else {
+                if (error) {
                     done(true, false);
+                    return;
                 }
+
+                that.sessionName = null;
+                that.sessionId = null;
+                that.csrfToken = null;
+
+                sessionStorage.removeItem('ezpRestClient.sessionName');
+                sessionStorage.removeItem('ezpRestClient.sessionId');
+                sessionStorage.removeItem('ezpRestClient.csrfToken');
+
+                done(false, true);
             }
         );
     };

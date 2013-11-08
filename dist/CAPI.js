@@ -501,20 +501,7 @@ define('authAgents/SessionAuthAgent',["structures/CAPIError"], function (CAPIErr
                 "/api/ezp/v2/user/sessions",
                 sessionCreateStruct,
                 function (error, sessionResponse) {
-                    if (!error) {
-                        var session = JSON.parse(sessionResponse.body).Session;
-
-                        that.sessionName = session.name;
-                        that.sessionId = session._href;
-                        that.csrfToken = session.csrfToken;
-
-                        sessionStorage.setItem('ezpRestClient.sessionName', that.sessionName);
-                        sessionStorage.setItem('ezpRestClient.sessionId', that.sessionId);
-                        sessionStorage.setItem('ezpRestClient.csrfToken', that.csrfToken);
-
-                        done(false, true);
-
-                    } else {
+                    if (error) {
                         done(
                             new CAPIError(
                                 "Failed to create new session.",
@@ -522,7 +509,20 @@ define('authAgents/SessionAuthAgent',["structures/CAPIError"], function (CAPIErr
                             ),
                             false
                         );
+                        return;
                     }
+
+                    var session = JSON.parse(sessionResponse.body).Session;
+
+                    that.sessionName = session.name;
+                    that.sessionId = session._href;
+                    that.csrfToken = session.csrfToken;
+
+                    sessionStorage.setItem('ezpRestClient.sessionName', that.sessionName);
+                    sessionStorage.setItem('ezpRestClient.sessionId', that.sessionId);
+                    sessionStorage.setItem('ezpRestClient.csrfToken', that.csrfToken);
+
+                    done(false, true);
                 }
             );
 
@@ -561,20 +561,20 @@ define('authAgents/SessionAuthAgent',["structures/CAPIError"], function (CAPIErr
         userService.deleteSession(
             this.sessionId,
             function (error, response) {
-                if (!error) {
-                    that.sessionName = null;
-                    that.sessionId = null;
-                    that.csrfToken = null;
-
-                    sessionStorage.removeItem('ezpRestClient.sessionName');
-                    sessionStorage.removeItem('ezpRestClient.sessionId');
-                    sessionStorage.removeItem('ezpRestClient.csrfToken');
-
-                    done(false, true);
-
-                } else {
+                if (error) {
                     done(true, false);
+                    return;
                 }
+
+                that.sessionName = null;
+                that.sessionId = null;
+                that.csrfToken = null;
+
+                sessionStorage.removeItem('ezpRestClient.sessionName');
+                sessionStorage.removeItem('ezpRestClient.sessionId');
+                sessionStorage.removeItem('ezpRestClient.csrfToken');
+
+                done(false, true);
             }
         );
     };
@@ -765,8 +765,8 @@ define('ConnectionManager',["structures/Response", "structures/Request", "struct
      * @method request
      * @param [method="GET"] {String} request method ("POST", "GET" etc)
      * @param [url="/"] {String} requested REST resource
-     * @param [body=""] {JSON}
-     * @param [headers={}] {object}
+     * @param [body=""] {String} a string which should be passed in request body to the REST service
+     * @param [headers={}] {object} object literal describing request headers
      * @param callback {function} function, which will be executed on request success
      */
     ConnectionManager.prototype.request = function (method, url, body, headers, callback) {
@@ -824,42 +824,42 @@ define('ConnectionManager',["structures/Response", "structures/Request", "struct
             // check if we are already authenticated, make it happen if not
             this._authenticationAgent.ensureAuthentication(
                 function (error, success) {
-                    if (!error) {
-                        that._authInProgress = false;
-
-                        // emptying requests Queue
-                        /*jshint boss:true */
-                        /*jshint -W083 */
-                        while (nextRequest = that._requestsQueue.shift()) {
-                            that._authenticationAgent.authenticateRequest(
-                                nextRequest,
-                                function (error, authenticatedRequest) {
-                                    if (!error) {
-                                        if (that.logRequests) {
-                                            console.dir(request);
-                                        }
-                                        // Main goal
-                                        that._connectionFactory.createConnection().execute(authenticatedRequest, callback);
-                                    } else {
-                                        callback(
-                                            new CAPIError(
-                                                "An error occurred during request authentication.",
-                                                {request: nextRequest}
-                                            ),
-                                            false
-                                        );
-                                    }
-                                }
-                            );
-                        } // while
-                        /*jshint +W083 */
-                        /*jshint boss:false */
-
-                    } else {
+                    if (error) {
                         that._authInProgress = false;
                         callback(error, false);
-
+                        return;
                     }
+
+                    that._authInProgress = false;
+
+                    // emptying requests Queue
+                    /*jshint boss:true */
+                    /*jshint -W083 */
+                    while (nextRequest = that._requestsQueue.shift()) {
+                        that._authenticationAgent.authenticateRequest(
+                            nextRequest,
+                            function (error, authenticatedRequest) {
+                                if (error) {
+                                    callback(
+                                        new CAPIError(
+                                            "An error occurred during request authentication.",
+                                            {request: nextRequest}
+                                        ),
+                                        false
+                                    );
+                                    return;
+                                }
+
+                                if (that.logRequests) {
+                                    console.dir(request);
+                                }
+                                // Main goal
+                                that._connectionFactory.createConnection().execute(authenticatedRequest, callback);
+                            }
+                        );
+                    } // while
+                    /*jshint +W083 */
+                    /*jshint boss:false */
                 }
             );
         }
@@ -872,8 +872,8 @@ define('ConnectionManager',["structures/Response", "structures/Request", "struct
      * @method notAuthorizedRequest
      * @param [method="GET"] {String} request method ("POST", "GET" etc)
      * @param [url="/"] {String} requested REST resource
-     * @param [body=""] {JSON}
-     * @param [headers={}] {object}
+     * @param [body=""] {String} a string which should be passed in request body to the REST service
+     * @param [headers={}] {object} object literal describing request headers
      * @param callback {function} function, which will be executed on request success
      */
     ConnectionManager.prototype.notAuthorizedRequest = function(method, url, body, headers, callback) {
@@ -929,14 +929,10 @@ define('ConnectionManager',["structures/Response", "structures/Request", "struct
      * Delete - shortcut which handles simple deletion requests in most cases
      *
      * @method delete
-     * @param url
-     * @param callback
+     * @param url {String} target REST resource
+     * @param callback {function} function, which will be executed on request success
      */
     ConnectionManager.prototype.delete = function (url, callback) {
-        // default values for all the parameters
-        url = (typeof url === "undefined") ? "/" : url;
-        callback = (typeof callback === "undefined") ? function () {} : callback;
-
         this.request(
             "DELETE",
             url,
@@ -951,7 +947,7 @@ define('ConnectionManager',["structures/Response", "structures/Request", "struct
      * Kills currently active session and resets localStorage params (sessionId, CSRFToken)
      *
      * @method logOut
-     * @param callback {function}
+     * @param callback {function} function, which will be executed on request success
      */
     ConnectionManager.prototype.logOut = function (callback) {
         this._authenticationAgent.logOut(callback);
@@ -1080,7 +1076,7 @@ define('connections/XmlHttpRequestConnection',["structures/Response", "structure
      *
      * @method isCompatible
      * @static
-     * @returns {boolean} true, if connection is compatible with current environment, false otherwise
+     * @return {boolean} whether the connection is compatible with current environment
      */
     XmlHttpRequestConnection.isCompatible = function () {
         return !!window.XMLHttpRequest;
@@ -1162,7 +1158,7 @@ define('connections/MicrosoftXmlHttpRequestConnection',["structures/Response", "
      *
      * @method isCompatible
      * @static
-     * @returns {boolean} true, if connection is compatible with current environment, false otherwise
+     * @return {boolean} whether the connection is compatible with current environment
      */
     MicrosoftXmlHttpRequestConnection.isCompatible = function () {
         return !!window.ActiveXObject;
@@ -1187,106 +1183,7 @@ define('services/DiscoveryService',["structures/CAPIError"], function (CAPIError
     var DiscoveryService = function (rootPath, connectionManager) {
         this.connectionManager = connectionManager;
         this.rootPath = rootPath;
-
         this.cacheObject = {};
-
-        /**
-         * discover Root object
-         *
-         * @method discoverRoot
-         * @param rootPath {String} path to Root resource
-         * @param callback {Function} callback executed after performing the request
-         * @param callback.error {mixed} false or CAPIError object if an error occurred
-         * @param callback.response {boolean} true if the root was discovered successfully, false otherwise.
-         */
-        this.discoverRoot = function (rootPath, callback) {
-            if (!this.cacheObject.Root) {
-                var that = this;
-                this.connectionManager.request(
-                    "GET",
-                    rootPath,
-                    "",
-                    {"Accept": "application/vnd.ez.api.Root+json"},
-                    function (error, rootJSON) {
-                        if (!error) {
-                            that.copyToCache(rootJSON.document);
-                            callback(false, true);
-
-                        } else {
-                            callback(
-                                new CAPIError(
-                                    "Discover service failed to retrieve root object.",
-                                    {rootPath : rootPath}
-                                ),
-                                false
-                            );
-                        }
-                    }
-                );
-            } else {
-                callback(false, true);
-            }
-        };
-
-        /**
-         * Copy all the properties of a argument object into cache object
-         *
-         * @method addToCache
-         * @param object {Object}
-         */
-        this.copyToCache = function (object) {
-            for (var property in object) {
-                if (object.hasOwnProperty(property)) {
-                    this.cacheObject[property] = object[property];
-                }
-            }
-        };
-
-        /**
-         * Get target object from cacheObject by given 'name' and run the discovery process if it is not available.
-         *
-         * @method getObjectFromCache
-         * @param name {String} name of the target object to be retrived (e.g. "Trash")
-         * @param callback {Function} callback executed after performing the request
-         * @param callback.error {mixed} false or CAPIError object if an error occurred
-         * @param callback.response {mixed} the target object if it was found, false otherwise.
-         */
-        this.getObjectFromCache = function (name, callback) {
-            var object = null,
-                that = this;
-            // Discovering root, if not yet discovered
-            // on discovery running the request for same 'name' again
-            if (!this.cacheObject.Root) {
-                this.discoverRoot(this.rootPath, function () {
-                    that.getObjectFromCache(name, callback);
-                });
-                return;
-            }
-
-            // Checking most obvious places for now
-            // "Root" object (retrieved during root discovery request) and
-            // root of a cache object in case we have cached value from some other request
-            if (this.cacheObject.Root.hasOwnProperty(name)) {
-                object = this.cacheObject.Root[name];
-            } else if (this.cacheObject.hasOwnProperty(name)) {
-                object = this.cacheObject[name];
-            }
-
-            if (object) {
-                callback(
-                    false,
-                    object
-                );
-            } else {
-                callback(
-                    new CAPIError(
-                        "Discover service failed to find cached object with name '" + name + "'.",
-                        {name: name}
-                    ),
-                    false
-                );
-            }
-        };
     };
 
     /**
@@ -1294,35 +1191,20 @@ define('services/DiscoveryService',["structures/CAPIError"], function (CAPIError
      *
      * @method getUrl
      * @param name {String} name of the target object (e.g. "Trash")
-     * @param callback {Function} callback executed after performing the request (see "discoverRoot" call for more info)
+     * @param callback {Function} callback executed after performing the request (see "_discoverRoot" call for more info)
      * @param callback.error {mixed} false or CAPIError object if an error occurred
      * @param callback.response {mixed} the url of the target object if it was found, false otherwise.
      */
     DiscoveryService.prototype.getUrl = function (name, callback) {
-        this.getObjectFromCache(
+        this._getObjectFromCache(
             name,
             function (error, cachedObject) {
-                if (!error) {
-                    if (cachedObject) {
-                        callback(
-                            false,
-                            cachedObject._href
-                        );
-                    } else {
-                        callback(
-                            new CAPIError(
-                                "Broken cached object returned when searching for '" + name + "'.",
-                                {name: name}
-                            ),
-                            false
-                        );
-                    }
-                } else {
-                    callback(
-                        error,
-                        false
-                    );
+                if (error) {
+                    callback(error, false);
+                    return;
                 }
+
+                callback(false, cachedObject._href);
             }
         );
     };
@@ -1332,35 +1214,20 @@ define('services/DiscoveryService',["structures/CAPIError"], function (CAPIError
      *
      * @method getMediaType
      * @param name {String} name of the target object (e.g. "Trash")
-     * @param callback {Function} callback executed after performing the request (see "discoverRoot" call for more info)
+     * @param callback {Function} callback executed after performing the request (see "_discoverRoot" call for more info)
      * @param callback.error {mixed} false or CAPIError object if an error occurred
      * @param callback.response {mixed} the media-type of the target object if it was found, false otherwise.
      */
     DiscoveryService.prototype.getMediaType = function (name, callback) {
-        this.getObjectFromCache(
+        this._getObjectFromCache(
             name,
             function (error, cachedObject) {
-                if (!error) {
-                    if (cachedObject) {
-                        callback(
-                            false,
-                            cachedObject["_media-type"]
-                        );
-                    } else {
-                        callback(
-                            new CAPIError(
-                                "Broken cached object returned when searching for '" + name + "'.",
-                                {name: name}
-                            ),
-                            false
-                        );
-                    }
-                } else {
-                    callback(
-                        error,
-                        false
-                    );
+                if (error) {
+                    callback(error, false);
+                    return;
                 }
+
+                callback(false, cachedObject["_media-type"]);
             }
         );
     };
@@ -1370,37 +1237,118 @@ define('services/DiscoveryService',["structures/CAPIError"], function (CAPIError
      *
      * @method getInfoObject
      * @param name {String} name of the target object (e.g. "Trash")
-     * @param callback {Function} callback executed after performing the request (see "discoverRoot" call for more info)
+     * @param callback {Function} callback executed after performing the request (see "_discoverRoot" call for more info)
      * @param callback.error {mixed} false or CAPIError object if an error occurred
      * @param callback.response {mixed} the target object if it was found, false otherwise.
      */
     DiscoveryService.prototype.getInfoObject = function (name, callback) {
-        this.getObjectFromCache(
+        this._getObjectFromCache(
             name,
             function (error, cachedObject) {
-                if (!error) {
-                    if (cachedObject) {
-                        callback(
-                            false,
-                            cachedObject
-                        );
-                    } else {
-                        callback(
-                            new CAPIError(
-                                "Broken cached object returned when searching for '" + name + "'.",
-                                {name: name}
-                            ),
-                            false
-                        );
-                    }
-                } else {
-                    callback(
-                        error,
-                        false
-                    );
+                if (error) {
+                    callback(error, false);
+                    return;
                 }
+
+                callback(false, cachedObject);
             }
         );
+    };
+
+    /**
+     * discover Root object
+     *
+     * @method _discoverRoot
+     * @param rootPath {String} path to Root resource
+     * @param callback {Function} callback executed after performing the request
+     * @param callback.error {mixed} false or CAPIError object if an error occurred
+     * @param callback.response {boolean} true if the root was discovered successfully, false otherwise.
+     * @protected
+     */
+    DiscoveryService.prototype._discoverRoot = function (rootPath, callback) {
+        if (!this.cacheObject.Root) {
+            var that = this;
+            this.connectionManager.request(
+                "GET",
+                rootPath,
+                "",
+                {"Accept": "application/vnd.ez.api.Root+json"},
+                function (error, rootJSON) {
+                    if (error) {
+                        callback(error, false);
+                        return;
+                    }
+
+                    that._copyToCache(rootJSON.document);
+                    callback(false, true);
+                }
+            );
+        } else {
+            callback(false, true);
+        }
+    };
+
+    /**
+     * Copy all the properties of the target object into the cache object
+     *
+     * @method _copyToCache
+     * @param object {Object} target object
+     * @protected
+     */
+    DiscoveryService.prototype._copyToCache = function (object) {
+        for (var property in object) {
+            if (object.hasOwnProperty(property) && object[property]) {
+                this.cacheObject[property] = object[property];
+            }
+        }
+    };
+
+    /**
+     * Get target object from cacheObject by given 'name' and run the discovery process if it is not available.
+     *
+     * @method _getObjectFromCache
+     * @param name {String} name of the target object to be retrived (e.g. "Trash")
+     * @param callback {Function} callback executed after performing the request
+     * @param callback.error {mixed} false or CAPIError object if an error occurred
+     * @param callback.response {mixed} the target object if it was found, false otherwise.
+     * @protected
+     */
+    DiscoveryService.prototype._getObjectFromCache = function (name, callback) {
+        var object = null,
+            that = this;
+        // Discovering root, if not yet discovered
+        // on discovery running the request for same 'name' again
+        if (!this.cacheObject.Root) {
+            this._discoverRoot(this.rootPath, function (error, success) {
+                if (error) {
+                    callback(error, false);
+                    return;
+                }
+                that._getObjectFromCache(name, callback);
+            });
+            return;
+        }
+
+        // Checking most obvious places for now
+        // "Root" object (retrieved during root discovery request) and
+        // root of a cache object in case we have cached value from some other request
+        if (this.cacheObject.Root.hasOwnProperty(name)) {
+            object = this.cacheObject.Root[name];
+        } else if (this.cacheObject.hasOwnProperty(name)) {
+            object = this.cacheObject[name];
+        }
+
+        if (object) {
+            callback(false, object);
+        } else {
+            callback(
+                new CAPIError(
+                    "Discover service failed to find cached object with name '" + name + "'.",
+                    {name: name}
+                ),
+                false
+            );
+        }
     };
 
     return DiscoveryService;
@@ -2181,18 +2129,18 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
         this._discoveryService.getInfoObject(
             "sections",
             function (error, sections) {
-                if (!error) {
-                    that._connectionManager.request(
-                        "POST",
-                        sections._href,
-                        JSON.stringify(sectionInputStruct.body),
-                        sectionInputStruct.headers,
-                        callback
-                    );
-
-                } else {
+                if (error) {
                     callback(error, false);
+                    return;
                 }
+
+                that._connectionManager.request(
+                    "POST",
+                    sections._href,
+                    JSON.stringify(sectionInputStruct.body),
+                    sectionInputStruct.headers,
+                    callback
+                );
             }
         );
     };
@@ -2229,18 +2177,18 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
         this._discoveryService.getInfoObject(
             "sections",
             function (error, sections) {
-                if (!error) {
-                    that._connectionManager.request(
-                        "GET",
-                        sections._href,
-                        "",
-                        {"Accept": sections["_media-type"]},
-                        callback
-                    );
-
-                } else {
+                if (error) {
                     callback(error, false);
+                    return;
                 }
+
+                that._connectionManager.request(
+                    "GET",
+                    sections._href,
+                    "",
+                    {"Accept": sections["_media-type"]},
+                    callback
+                );
             }
         );
     };
@@ -2296,18 +2244,18 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
         this._discoveryService.getInfoObject(
             "content",
             function (error, contentObjects) {
-                if (!error) {
-                    that._connectionManager.request(
-                        "POST",
-                        contentObjects._href,
-                        JSON.stringify(contentCreateStruct.body),
-                        contentCreateStruct.headers,
-                        callback
-                    );
-
-                } else {
+                if (error) {
                     callback(error, false);
+                    return;
                 }
+
+                that._connectionManager.request(
+                    "POST",
+                    contentObjects._href,
+                    JSON.stringify(contentCreateStruct.body),
+                    contentCreateStruct.headers,
+                    callback
+                );
             }
         );
     };
@@ -2356,17 +2304,18 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
         this._discoveryService.getInfoObject(
             "content",
             function (error, contentObjects) {
-                if (!error) {
-                    that._connectionManager.request(
-                        "GET",
-                        contentObjects._href + '?remoteId=' + remoteId,
-                        "",
-                        {"Accept": contentObjects["_media-type"]},
-                        callback
-                    );
-                } else {
+                if (error) {
                     callback(error, false);
+                    return;
                 }
+
+                that._connectionManager.request(
+                    "GET",
+                    contentObjects._href + '?remoteId=' + remoteId,
+                    "",
+                    {"Accept": contentObjects["_media-type"]},
+                    callback
+                );
             }
         );
     };
@@ -2464,20 +2413,20 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
         this.loadContentInfo(
             contentId,
             function (error, contentResponse) {
-                if (!error) {
-                    var currentVersion = contentResponse.document.Content.CurrentVersion;
-
-                    that._connectionManager.request(
-                        "GET",
-                        currentVersion._href,
-                        "",
-                        {"Accept": currentVersion["_media-type"]},
-                        callback
-                    );
-
-                } else {
+                if (error) {
                     callback(error, false);
+                    return;
                 }
+
+                var currentVersion = contentResponse.document.Content.CurrentVersion;
+
+                that._connectionManager.request(
+                    "GET",
+                    currentVersion._href,
+                    "",
+                    {"Accept": currentVersion["_media-type"]},
+                    callback
+                );
             }
         );
     };
@@ -2559,20 +2508,20 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
         this.loadContentInfo(
             contentId,
             function (error, contentResponse) {
-                if (!error) {
-                    var contentVersions = contentResponse.document.Content.Versions;
-
-                    that._connectionManager.request(
-                        "GET",
-                        contentVersions._href,
-                        "",
-                        {"Accept": contentVersions["_media-type"]},
-                        callback
-                    );
-
-                } else {
+                if (error) {
                     callback(error, false);
+                    return;
                 }
+
+                var contentVersions = contentResponse.document.Content.Versions;
+
+                that._connectionManager.request(
+                    "GET",
+                    contentVersions._href,
+                    "",
+                    {"Accept": contentVersions["_media-type"]},
+                    callback
+                );
             }
         );
     };
@@ -2627,24 +2576,23 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
             function (error, contentResponse) {
                 var url = '';
 
-                if (!error) {
-
-                    if (typeof versionId !== "function") {
-                        url = contentResponse.document.Content.Versions._href + "/" + versionId;
-                    } else {
-                        callback = versionId;
-                        url = contentResponse.document.Content.CurrentVersion._href;
-                    }
-
-                    that._connectionManager.request(
-                        "COPY", url, "",
-                        {"Accept": "application/vnd.ez.api.Version+json"},
-                        callback
-                    );
-                    
-                } else {
+                if (error) {
                     callback(error, false);
+                    return;
                 }
+
+                if (typeof versionId !== "function") {
+                    url = contentResponse.document.Content.Versions._href + "/" + versionId;
+                } else {
+                    callback = versionId;
+                    url = contentResponse.document.Content.CurrentVersion._href;
+                }
+
+                that._connectionManager.request(
+                    "COPY", url, "",
+                    {"Accept": "application/vnd.ez.api.Version+json"},
+                    callback
+                );
             }
         );
     };
@@ -2701,20 +2649,20 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
         this.loadContentInfo(
             contentId,
             function (error, contentResponse) {
-                if (!error) {
-                    var locations = contentResponse.document.Content.Locations;
-
-                    that._connectionManager.request(
-                        "POST",
-                        locations._href,
-                        JSON.stringify(locationCreateStruct.body),
-                        locationCreateStruct.headers,
-                        callback
-                    );
-
-                } else {
+                if (error) {
                     callback(error, false);
+                    return;
                 }
+
+                var locations = contentResponse.document.Content.Locations;
+
+                that._connectionManager.request(
+                    "POST",
+                    locations._href,
+                    JSON.stringify(locationCreateStruct.body),
+                    locationCreateStruct.headers,
+                    callback
+                );
             }
         );
     };
@@ -2733,20 +2681,20 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
         this.loadContentInfo(
             contentId,
             function (error, contentResponse) {
-                if (!error) {
-                    var locations = contentResponse.document.Content.Locations;
-
-                    that._connectionManager.request(
-                        "GET",
-                        locations._href,
-                        "",
-                        {"Accept": "application/vnd.ez.api.LocationList+json"},
-                        callback
-                    );
-
-                } else {
+                if (error) {
                     callback(error, false);
+                    return;
                 }
+
+                var locations = contentResponse.document.Content.Locations;
+
+                that._connectionManager.request(
+                    "GET",
+                    locations._href,
+                    "",
+                    {"Accept": "application/vnd.ez.api.LocationList+json"},
+                    callback
+                );
             }
         );
     };
@@ -2847,19 +2795,20 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
         this.loadLocation(
             locationId,
             function (error, locationResponse) {
-                if (!error) {
-                    var location = locationResponse.document.Location;
-
-                    that._connectionManager.request(
-                        "GET",
-                        location.Children._href + '?offset=' + offset + '&limit=' + limit,
-                        "",
-                        {"Accept": location.Children["_media-type"]},
-                        callback
-                    );
-                } else {
+                if (error) {
                     callback(error, false);
+                    return;
                 }
+
+                var location = locationResponse.document.Location;
+
+                that._connectionManager.request(
+                    "GET",
+                    location.Children._href + '?offset=' + offset + '&limit=' + limit,
+                    "",
+                    {"Accept": location.Children["_media-type"]},
+                    callback
+                );
             }
         );
     };
@@ -2958,18 +2907,18 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
         this._discoveryService.getInfoObject(
             "views",
             function (error, views) {
-                if (!error) {
-                    that._connectionManager.request(
-                        "POST",
-                        views._href,
-                        JSON.stringify(viewCreateStruct.body),
-                        viewCreateStruct.headers,
-                        callback
-                    );
-
-                } else {
+                if (error) {
                     callback(error, false);
+                    return;
                 }
+
+                that._connectionManager.request(
+                    "POST",
+                    views._href,
+                    JSON.stringify(viewCreateStruct.body),
+                    viewCreateStruct.headers,
+                    callback
+                );
             }
         );
     };
@@ -3014,19 +2963,20 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
             versionedContentId,
             {},
             function (error, versionResponse) {
-                if (!error) {
-                    var version = versionResponse.document.Version;
-
-                    that._connectionManager.request(
-                        "GET",
-                        version.Relations._href + '?offset=' + offset + '&limit=' + limit,
-                        "",
-                        {"Accept": version.Relations["_media-type"]},
-                        callback
-                    );
-                } else {
+                if (error) {
                     callback(error, false);
+                    return;
                 }
+
+                var version = versionResponse.document.Version;
+
+                that._connectionManager.request(
+                    "GET",
+                    version.Relations._href + '?offset=' + offset + '&limit=' + limit,
+                    "",
+                    {"Accept": version.Relations["_media-type"]},
+                    callback
+                );
             }
         );
     };
@@ -3066,20 +3016,20 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
         this.loadCurrentVersion(
             contentId,
             function (error, currentVersionResponse) {
-                if (!error) {
-                    var currentVersion = currentVersionResponse.document.Version;
-
-                    that._connectionManager.request(
-                        "GET",
-                        currentVersion.Relations._href + '?offset=' + offset + '&limit=' + limit,
-                        "",
-                        {"Accept": currentVersion.Relations["_media-type"]},
-                        callback
-                    );
-
-                } else {
+                if (error) {
                     callback(error, false);
+                    return;
                 }
+
+                var currentVersion = currentVersionResponse.document.Version;
+
+                that._connectionManager.request(
+                    "GET",
+                    currentVersion.Relations._href + '?offset=' + offset + '&limit=' + limit,
+                    "",
+                    {"Accept": currentVersion.Relations["_media-type"]},
+                    callback
+                );
             }
         );
     };
@@ -3125,19 +3075,20 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
             versionedContentId,
             {},
             function (error, versionResponse) {
-                if (!error) {
-                    var version = versionResponse.document.Version;
-
-                    that._connectionManager.request(
-                        "POST",
-                        version.Relations._href,
-                        JSON.stringify(relationCreateStruct.body),
-                        relationCreateStruct.headers,
-                        callback
-                    );
-                } else {
+                if (error) {
                     callback(error, false);
+                    return;
                 }
+
+                var version = versionResponse.document.Version;
+
+                that._connectionManager.request(
+                    "POST",
+                    version.Relations._href,
+                    JSON.stringify(relationCreateStruct.body),
+                    relationCreateStruct.headers,
+                    callback
+                );
             }
         );
     };
@@ -3195,18 +3146,18 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
         this._discoveryService.getInfoObject(
             "trash",
             function (error, trash) {
-                if (!error) {
-                    that._connectionManager.request(
-                        "GET",
-                        trash._href + '?offset=' + offset + '&limit=' + limit,
-                        "",
-                        {"Accept": trash["_media-type"]},
-                        callback
-                    );
-
-                } else {
+                if (error) {
                     callback(error, false);
+                    return;
                 }
+
+                that._connectionManager.request(
+                    "GET",
+                    trash._href + '?offset=' + offset + '&limit=' + limit,
+                    "",
+                    {"Accept": trash["_media-type"]},
+                    callback
+                );
             }
         );
     };
@@ -3285,18 +3236,18 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
         this._discoveryService.getInfoObject(
             "trash",
             function (error, trash) {
-                if (!error) {
-                    that._connectionManager.request(
-                        "DELETE",
-                        trash._href,
-                        "",
-                        {},
-                        callback
-                    );
-
-                } else {
+                if (error) {
                     callback(error, false);
+                    return;
                 }
+
+                that._connectionManager.request(
+                    "DELETE",
+                    trash._href,
+                    "",
+                    {},
+                    callback
+                );
             }
         );
     };
@@ -4112,20 +4063,20 @@ define('services/ContentTypeService',["structures/ContentTypeGroupInputStruct", 
         this.loadContentTypeGroup(
             contentTypeGroupId,
             function (error, contentTypeGroupResponse) {
-                if (!error) {
-                    var contentTypeGroup = contentTypeGroupResponse.document.ContentTypeGroup;
-
-                    that._connectionManager.request(
-                        "GET",
-                         contentTypeGroup.ContentTypes._href,
-                        "",
-                        {"Accept": contentTypeGroup.ContentTypes["_media-type"]},
-                        callback
-                    );
-
-                } else {
+                if (error) {
                     callback(error, false);
+                    return;
                 }
+
+                var contentTypeGroup = contentTypeGroupResponse.document.ContentTypeGroup;
+
+                that._connectionManager.request(
+                    "GET",
+                     contentTypeGroup.ContentTypes._href,
+                    "",
+                    {"Accept": contentTypeGroup.ContentTypes["_media-type"]},
+                    callback
+                );
             }
         );
     };
@@ -4194,21 +4145,21 @@ define('services/ContentTypeService',["structures/ContentTypeGroupInputStruct", 
         this.loadContentTypeGroup(
             contentTypeGroupId,
             function (error, contentTypeGroupResponse) {
-                if (!error) {
-                    var contentTypeGroup = contentTypeGroupResponse.document.ContentTypeGroup,
-                        parameters = (publish === true) ? "?publish=true": "";
-
-                    that._connectionManager.request(
-                        "POST",
-                        contentTypeGroup.ContentTypes._href + parameters,
-                        JSON.stringify(contentTypeCreateStruct.body),
-                        contentTypeCreateStruct.headers,
-                        callback
-                    );
-
-                } else {
+                if (error) {
                     callback(error, false);
+                    return;
                 }
+
+                var contentTypeGroup = contentTypeGroupResponse.document.ContentTypeGroup,
+                    parameters = (publish === true) ? "?publish=true": "";
+
+                that._connectionManager.request(
+                    "POST",
+                    contentTypeGroup.ContentTypes._href + parameters,
+                    JSON.stringify(contentTypeCreateStruct.body),
+                    contentTypeCreateStruct.headers,
+                    callback
+                );
             }
         );
     };
@@ -4263,18 +4214,18 @@ define('services/ContentTypeService',["structures/ContentTypeGroupInputStruct", 
         this._discoveryService.getInfoObject(
             "contentTypes",
             function (error, contentTypes) {
-                if (!error) {
-                    that._connectionManager.request(
-                        "GET",
-                        contentTypes._href + "?identifier=" + identifier,
-                        "",
-                        {"Accept": contentTypes["_media-type"]},
-                        callback
-                    );
-
-                } else {
+                if (error) {
                     callback(error, false);
+                    return;
                 }
+
+                that._connectionManager.request(
+                    "GET",
+                    contentTypes._href + "?identifier=" + identifier,
+                    "",
+                    {"Accept": contentTypes["_media-type"]},
+                    callback
+                );
             }
         );
     };
@@ -4473,20 +4424,20 @@ define('services/ContentTypeService',["structures/ContentTypeGroupInputStruct", 
         this.loadContentTypeDraft(
             contentTypeId,
             function (error, contentTypeDraftResponse) {
-                if (!error) {
-                    var contentTypeDraftFieldDefinitions = contentTypeDraftResponse.document.ContentType.FieldDefinitions;
-
-                    that._connectionManager.request(
-                        "POST",
-                        contentTypeDraftFieldDefinitions._href,
-                        JSON.stringify(fieldDefinitionCreateStruct.body),
-                        fieldDefinitionCreateStruct.headers,
-                        callback
-                    );
-
-                } else {
+                if (error) {
                     callback(error, false);
+                    return;
                 }
+
+                var contentTypeDraftFieldDefinitions = contentTypeDraftResponse.document.ContentType.FieldDefinitions;
+
+                that._connectionManager.request(
+                    "POST",
+                    contentTypeDraftFieldDefinitions._href,
+                    JSON.stringify(fieldDefinitionCreateStruct.body),
+                    fieldDefinitionCreateStruct.headers,
+                    callback
+                );
             }
         );
     };
@@ -5033,18 +4984,18 @@ define('services/UserService',['structures/SessionCreateStruct', 'structures/Use
         this._discoveryService.getInfoObject(
             "rootUserGroup",
             function (error, rootUserGroup) {
-                if (!error) {
-                    that._connectionManager.request(
-                        "GET",
-                        rootUserGroup._href,
-                        "",
-                        {"Accept": rootUserGroup["_media-type"]},
-                        callback
-                    );
-
-                } else {
+                if (error) {
                     callback(error, false);
+                    return;
                 }
+
+                that._connectionManager.request(
+                    "GET",
+                    rootUserGroup._href,
+                    "",
+                    {"Accept": rootUserGroup["_media-type"]},
+                    callback
+                );
             });
     };
 
@@ -5134,20 +5085,20 @@ define('services/UserService',['structures/SessionCreateStruct', 'structures/Use
         this.loadUserGroup(
             parentGroupId,
             function (error, userGroupResponse) {
-                if (!error) {
-                    var subGroups = userGroupResponse.document.UserGroup.Subgroups;
-
-                    that._connectionManager.request(
-                        "POST",
-                        subGroups._href,
-                        JSON.stringify(userGroupCreateStruct.body),
-                        userGroupCreateStruct.headers,
-                        callback
-                    );
-
-                } else {
+                if (error) {
                     callback(error, false);
+                    return;
                 }
+
+                var subGroups = userGroupResponse.document.UserGroup.Subgroups;
+
+                that._connectionManager.request(
+                    "POST",
+                    subGroups._href,
+                    JSON.stringify(userGroupCreateStruct.body),
+                    userGroupCreateStruct.headers,
+                    callback
+                );
             }
         );
     };
@@ -5185,20 +5136,20 @@ define('services/UserService',['structures/SessionCreateStruct', 'structures/Use
         this.loadUserGroup(
             userGroupId,
             function (error, userGroupResponse) {
-                if (!error) {
-                    var subGroups = userGroupResponse.document.UserGroup.Subgroups;
-
-                    that._connectionManager.request(
-                        "GET",
-                        subGroups._href,
-                        "",
-                        {"Accept": subGroups["_media-type"]},
-                        callback
-                    );
-
-                } else {
+                if (error) {
                     callback(error, false);
+                    return;
                 }
+
+                var subGroups = userGroupResponse.document.UserGroup.Subgroups;
+
+                that._connectionManager.request(
+                    "GET",
+                    subGroups._href,
+                    "",
+                    {"Accept": subGroups["_media-type"]},
+                    callback
+                );
             }
         );
     };
@@ -5217,20 +5168,20 @@ define('services/UserService',['structures/SessionCreateStruct', 'structures/Use
         this.loadUserGroup(
             userGroupId,
             function (error, userGroupResponse) {
-                if (!error) {
-                    var users = userGroupResponse.document.UserGroup.Users;
-
-                    that._connectionManager.request(
-                        "GET",
-                        users._href,
-                        "",
-                        {"Accept": users["_media-type"]},
-                        callback
-                    );
-
-                } else {
+                if (error) {
                     callback(error, false);
+                    return;
                 }
+
+                var users = userGroupResponse.document.UserGroup.Users;
+
+                that._connectionManager.request(
+                    "GET",
+                    users._href,
+                    "",
+                    {"Accept": users["_media-type"]},
+                    callback
+                );
             }
         );
     };
@@ -5272,20 +5223,20 @@ define('services/UserService',['structures/SessionCreateStruct', 'structures/Use
         this.loadUserGroup(
             userGroupId,
             function (error, userGroupResponse) {
-                if (!error) {
-                    var users = userGroupResponse.document.UserGroup.Users;
-
-                    that._connectionManager.request(
-                        "POST",
-                        users._href,
-                        JSON.stringify(userCreateStruct.body),
-                        userCreateStruct.headers,
-                        callback
-                    );
-
-                } else {
+                if (error) {
                     callback(error, false);
+                    return;
                 }
+
+                var users = userGroupResponse.document.UserGroup.Users;
+
+                that._connectionManager.request(
+                    "POST",
+                    users._href,
+                    JSON.stringify(userCreateStruct.body),
+                    userCreateStruct.headers,
+                    callback
+                );
             }
         );
     };
@@ -5388,20 +5339,20 @@ define('services/UserService',['structures/SessionCreateStruct', 'structures/Use
         this.loadUser(
             userId,
             function (error, userResponse) {
-                if (!error) {
-                    var userGroups = userResponse.document.User.UserGroups;
-
-                    that._connectionManager.request(
-                        "POST",
-                        userGroups._href + "?group=" + userGroupId,
-                        "",
-                        {"Accept": userGroups["_media-type"]},
-                        callback
-                    );
-
-                } else {
+                if (error) {
                     callback(error, false);
+                    return;
                 }
+
+                var userGroups = userResponse.document.User.UserGroups;
+
+                that._connectionManager.request(
+                    "POST",
+                    userGroups._href + "?group=" + userGroupId,
+                    "",
+                    {"Accept": userGroups["_media-type"]},
+                    callback
+                );
             }
         );
     };
@@ -5439,18 +5390,18 @@ define('services/UserService',['structures/SessionCreateStruct', 'structures/Use
         this._discoveryService.getInfoObject(
             "roles",
             function (error, roles) {
-                if (!error) {
-                    that._connectionManager.request(
+                if (error) {
+                    callback(error, false);
+                    return;
+                }
+
+                that._connectionManager.request(
                     "POST",
                     roles._href,
                     JSON.stringify(roleCreateStruct.body),
                     roleCreateStruct.headers,
                     callback
-                    );
-
-                } else {
-                    callback(error, false);
-                }
+                );
             }
         );
     };
@@ -5518,18 +5469,18 @@ define('services/UserService',['structures/SessionCreateStruct', 'structures/Use
         this._discoveryService.getInfoObject(
             "roles",
             function (error, roles) {
-                if (!error) {
-                    that._connectionManager.request(
-                        "GET",
-                        roles._href + '?offset=' + offset + '&limit=' + limit + identifierQuery,
-                        "",
-                        {"Accept": roles["_media-type"]},
-                        callback
-                    );
-
-                } else {
+                if (error) {
                     callback(error, false);
+                    return;
                 }
+
+                that._connectionManager.request(
+                    "GET",
+                    roles._href + '?offset=' + offset + '&limit=' + limit + identifierQuery,
+                    "",
+                    {"Accept": roles["_media-type"]},
+                    callback
+                );
             }
         );
     };
@@ -5582,20 +5533,20 @@ define('services/UserService',['structures/SessionCreateStruct', 'structures/Use
         this.loadUser(
             userId,
             function (error, userResponse) {
-                if (!error) {
-                    var userRoles = userResponse.document.User.Roles;
-
-                    that._connectionManager.request(
-                        "GET",
-                        userRoles._href,
-                        "",
-                        {"Accept": userRoles["_media-type"]},
-                        callback
-                    );
-
-                } else {
+                if (error) {
                     callback(error, false);
+                    return;
                 }
+
+                var userRoles = userResponse.document.User.Roles;
+
+                that._connectionManager.request(
+                    "GET",
+                    userRoles._href,
+                    "",
+                    {"Accept": userRoles["_media-type"]},
+                    callback
+                );
             }
         );
     };
@@ -5614,20 +5565,20 @@ define('services/UserService',['structures/SessionCreateStruct', 'structures/Use
         this.loadUserGroup(
             userGroupId,
             function (error, userGroupResponse) {
-                if (!error) {
-                    var userGroupRoles = userGroupResponse.document.UserGroup.Roles;
-
-                    that._connectionManager.request(
-                        "GET",
-                        userGroupRoles._href,
-                        "",
-                        {"Accept": userGroupRoles["_media-type"]},
-                        callback
-                    );
-
-                } else {
+                if (error) {
                     callback(error, false);
+                    return;
                 }
+
+                var userGroupRoles = userGroupResponse.document.UserGroup.Roles;
+
+                that._connectionManager.request(
+                    "GET",
+                    userGroupRoles._href,
+                    "",
+                    {"Accept": userGroupRoles["_media-type"]},
+                    callback
+                );
             }
         );
     };
@@ -5684,19 +5635,20 @@ define('services/UserService',['structures/SessionCreateStruct', 'structures/Use
         this.loadUser(
             userId,
             function (error, userResponse) {
-                if (!error) {
-                    var userRoles = userResponse.document.User.Roles;
-
-                    that._connectionManager.request(
-                        "POST",
-                        userRoles._href,
-                        JSON.stringify(roleAssignInputStruct.body),
-                        roleAssignInputStruct.headers,
-                        callback
-                    );
-                } else {
+                if (error) {
                     callback(error, false);
+                    return;
                 }
+
+                var userRoles = userResponse.document.User.Roles;
+
+                that._connectionManager.request(
+                    "POST",
+                    userRoles._href,
+                    JSON.stringify(roleAssignInputStruct.body),
+                    roleAssignInputStruct.headers,
+                    callback
+                );
             }
         );
     };
@@ -5716,19 +5668,20 @@ define('services/UserService',['structures/SessionCreateStruct', 'structures/Use
         this.loadUserGroup(
             userGroupId,
             function (error, userGroupResponse) {
-                if (!error) {
-                    var userGroupRoles = userGroupResponse.document.UserGroup.Roles;
-
-                    that._connectionManager.request(
-                        "POST",
-                        userGroupRoles._href,
-                        JSON.stringify(roleAssignInputStruct.body),
-                        roleAssignInputStruct.headers,
-                        callback
-                    );
-                } else {
+                if (error) {
                     callback(error, false);
+                    return;
                 }
+
+                var userGroupRoles = userGroupResponse.document.UserGroup.Roles;
+
+                that._connectionManager.request(
+                    "POST",
+                    userGroupRoles._href,
+                    JSON.stringify(roleAssignInputStruct.body),
+                    roleAssignInputStruct.headers,
+                    callback
+                );
             }
         );
     };
@@ -5798,19 +5751,20 @@ define('services/UserService',['structures/SessionCreateStruct', 'structures/Use
         this.loadRole(
             roleId,
             function (error, roleResponse) {
-                if (!error) {
-                    var rolePolicies = roleResponse.document.Role.Policies;
-
-                    that._connectionManager.request(
-                        "POST",
-                        rolePolicies._href,
-                        JSON.stringify(policyCreateStruct.body),
-                        policyCreateStruct.headers,
-                        callback
-                    );
-                } else {
+                if (error) {
                     callback(error, false);
+                    return;
                 }
+
+                var rolePolicies = roleResponse.document.Role.Policies;
+
+                that._connectionManager.request(
+                    "POST",
+                    rolePolicies._href,
+                    JSON.stringify(policyCreateStruct.body),
+                    policyCreateStruct.headers,
+                    callback
+                );
             }
         );
     };
@@ -5829,19 +5783,20 @@ define('services/UserService',['structures/SessionCreateStruct', 'structures/Use
         this.loadRole(
             roleId,
             function (error, roleResponse) {
-                if (!error) {
-                    var rolePolicies = roleResponse.document.Role.Policies;
-
-                    that._connectionManager.request(
-                        "GET",
-                        rolePolicies._href,
-                        "",
-                        {"Accept": rolePolicies["_media-type"]},
-                        callback
-                    );
-                } else {
+                if (error) {
                     callback(error, false);
+                    return;
                 }
+
+                var rolePolicies = roleResponse.document.Role.Policies;
+
+                that._connectionManager.request(
+                    "GET",
+                    rolePolicies._href,
+                    "",
+                    {"Accept": rolePolicies["_media-type"]},
+                    callback
+                );
             }
         );
     };

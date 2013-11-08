@@ -212,18 +212,18 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
         this._discoveryService.getInfoObject(
             "rootUserGroup",
             function (error, rootUserGroup) {
-                if (!error) {
-                    that._connectionManager.request(
-                        "GET",
-                        rootUserGroup._href,
-                        "",
-                        {"Accept": rootUserGroup["_media-type"]},
-                        callback
-                    );
-
-                } else {
+                if (error) {
                     callback(error, false);
+                    return;
                 }
+
+                that._connectionManager.request(
+                    "GET",
+                    rootUserGroup._href,
+                    "",
+                    {"Accept": rootUserGroup["_media-type"]},
+                    callback
+                );
             });
     };
 
@@ -313,20 +313,20 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
         this.loadUserGroup(
             parentGroupId,
             function (error, userGroupResponse) {
-                if (!error) {
-                    var subGroups = userGroupResponse.document.UserGroup.Subgroups;
-
-                    that._connectionManager.request(
-                        "POST",
-                        subGroups._href,
-                        JSON.stringify(userGroupCreateStruct.body),
-                        userGroupCreateStruct.headers,
-                        callback
-                    );
-
-                } else {
+                if (error) {
                     callback(error, false);
+                    return;
                 }
+
+                var subGroups = userGroupResponse.document.UserGroup.Subgroups;
+
+                that._connectionManager.request(
+                    "POST",
+                    subGroups._href,
+                    JSON.stringify(userGroupCreateStruct.body),
+                    userGroupCreateStruct.headers,
+                    callback
+                );
             }
         );
     };
@@ -364,20 +364,20 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
         this.loadUserGroup(
             userGroupId,
             function (error, userGroupResponse) {
-                if (!error) {
-                    var subGroups = userGroupResponse.document.UserGroup.Subgroups;
-
-                    that._connectionManager.request(
-                        "GET",
-                        subGroups._href,
-                        "",
-                        {"Accept": subGroups["_media-type"]},
-                        callback
-                    );
-
-                } else {
+                if (error) {
                     callback(error, false);
+                    return;
                 }
+
+                var subGroups = userGroupResponse.document.UserGroup.Subgroups;
+
+                that._connectionManager.request(
+                    "GET",
+                    subGroups._href,
+                    "",
+                    {"Accept": subGroups["_media-type"]},
+                    callback
+                );
             }
         );
     };
@@ -396,20 +396,20 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
         this.loadUserGroup(
             userGroupId,
             function (error, userGroupResponse) {
-                if (!error) {
-                    var users = userGroupResponse.document.UserGroup.Users;
-
-                    that._connectionManager.request(
-                        "GET",
-                        users._href,
-                        "",
-                        {"Accept": users["_media-type"]},
-                        callback
-                    );
-
-                } else {
+                if (error) {
                     callback(error, false);
+                    return;
                 }
+
+                var users = userGroupResponse.document.UserGroup.Users;
+
+                that._connectionManager.request(
+                    "GET",
+                    users._href,
+                    "",
+                    {"Accept": users["_media-type"]},
+                    callback
+                );
             }
         );
     };
@@ -451,20 +451,20 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
         this.loadUserGroup(
             userGroupId,
             function (error, userGroupResponse) {
-                if (!error) {
-                    var users = userGroupResponse.document.UserGroup.Users;
-
-                    that._connectionManager.request(
-                        "POST",
-                        users._href,
-                        JSON.stringify(userCreateStruct.body),
-                        userCreateStruct.headers,
-                        callback
-                    );
-
-                } else {
+                if (error) {
                     callback(error, false);
+                    return;
                 }
+
+                var users = userGroupResponse.document.UserGroup.Users;
+
+                that._connectionManager.request(
+                    "POST",
+                    users._href,
+                    JSON.stringify(userCreateStruct.body),
+                    userCreateStruct.headers,
+                    callback
+                );
             }
         );
     };
@@ -567,20 +567,20 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
         this.loadUser(
             userId,
             function (error, userResponse) {
-                if (!error) {
-                    var userGroups = userResponse.document.User.UserGroups;
-
-                    that._connectionManager.request(
-                        "POST",
-                        userGroups._href + "?group=" + userGroupId,
-                        "",
-                        {"Accept": userGroups["_media-type"]},
-                        callback
-                    );
-
-                } else {
+                if (error) {
                     callback(error, false);
+                    return;
                 }
+
+                var userGroups = userResponse.document.User.UserGroups;
+
+                that._connectionManager.request(
+                    "POST",
+                    userGroups._href + "?group=" + userGroupId,
+                    "",
+                    {"Accept": userGroups["_media-type"]},
+                    callback
+                );
             }
         );
     };
@@ -618,18 +618,18 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
         this._discoveryService.getInfoObject(
             "roles",
             function (error, roles) {
-                if (!error) {
-                    that._connectionManager.request(
+                if (error) {
+                    callback(error, false);
+                    return;
+                }
+
+                that._connectionManager.request(
                     "POST",
                     roles._href,
                     JSON.stringify(roleCreateStruct.body),
                     roleCreateStruct.headers,
                     callback
-                    );
-
-                } else {
-                    callback(error, false);
-                }
+                );
             }
         );
     };
@@ -697,18 +697,18 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
         this._discoveryService.getInfoObject(
             "roles",
             function (error, roles) {
-                if (!error) {
-                    that._connectionManager.request(
-                        "GET",
-                        roles._href + '?offset=' + offset + '&limit=' + limit + identifierQuery,
-                        "",
-                        {"Accept": roles["_media-type"]},
-                        callback
-                    );
-
-                } else {
+                if (error) {
                     callback(error, false);
+                    return;
                 }
+
+                that._connectionManager.request(
+                    "GET",
+                    roles._href + '?offset=' + offset + '&limit=' + limit + identifierQuery,
+                    "",
+                    {"Accept": roles["_media-type"]},
+                    callback
+                );
             }
         );
     };
@@ -761,20 +761,20 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
         this.loadUser(
             userId,
             function (error, userResponse) {
-                if (!error) {
-                    var userRoles = userResponse.document.User.Roles;
-
-                    that._connectionManager.request(
-                        "GET",
-                        userRoles._href,
-                        "",
-                        {"Accept": userRoles["_media-type"]},
-                        callback
-                    );
-
-                } else {
+                if (error) {
                     callback(error, false);
+                    return;
                 }
+
+                var userRoles = userResponse.document.User.Roles;
+
+                that._connectionManager.request(
+                    "GET",
+                    userRoles._href,
+                    "",
+                    {"Accept": userRoles["_media-type"]},
+                    callback
+                );
             }
         );
     };
@@ -793,20 +793,20 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
         this.loadUserGroup(
             userGroupId,
             function (error, userGroupResponse) {
-                if (!error) {
-                    var userGroupRoles = userGroupResponse.document.UserGroup.Roles;
-
-                    that._connectionManager.request(
-                        "GET",
-                        userGroupRoles._href,
-                        "",
-                        {"Accept": userGroupRoles["_media-type"]},
-                        callback
-                    );
-
-                } else {
+                if (error) {
                     callback(error, false);
+                    return;
                 }
+
+                var userGroupRoles = userGroupResponse.document.UserGroup.Roles;
+
+                that._connectionManager.request(
+                    "GET",
+                    userGroupRoles._href,
+                    "",
+                    {"Accept": userGroupRoles["_media-type"]},
+                    callback
+                );
             }
         );
     };
@@ -863,19 +863,20 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
         this.loadUser(
             userId,
             function (error, userResponse) {
-                if (!error) {
-                    var userRoles = userResponse.document.User.Roles;
-
-                    that._connectionManager.request(
-                        "POST",
-                        userRoles._href,
-                        JSON.stringify(roleAssignInputStruct.body),
-                        roleAssignInputStruct.headers,
-                        callback
-                    );
-                } else {
+                if (error) {
                     callback(error, false);
+                    return;
                 }
+
+                var userRoles = userResponse.document.User.Roles;
+
+                that._connectionManager.request(
+                    "POST",
+                    userRoles._href,
+                    JSON.stringify(roleAssignInputStruct.body),
+                    roleAssignInputStruct.headers,
+                    callback
+                );
             }
         );
     };
@@ -895,19 +896,20 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
         this.loadUserGroup(
             userGroupId,
             function (error, userGroupResponse) {
-                if (!error) {
-                    var userGroupRoles = userGroupResponse.document.UserGroup.Roles;
-
-                    that._connectionManager.request(
-                        "POST",
-                        userGroupRoles._href,
-                        JSON.stringify(roleAssignInputStruct.body),
-                        roleAssignInputStruct.headers,
-                        callback
-                    );
-                } else {
+                if (error) {
                     callback(error, false);
+                    return;
                 }
+
+                var userGroupRoles = userGroupResponse.document.UserGroup.Roles;
+
+                that._connectionManager.request(
+                    "POST",
+                    userGroupRoles._href,
+                    JSON.stringify(roleAssignInputStruct.body),
+                    roleAssignInputStruct.headers,
+                    callback
+                );
             }
         );
     };
@@ -977,19 +979,20 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
         this.loadRole(
             roleId,
             function (error, roleResponse) {
-                if (!error) {
-                    var rolePolicies = roleResponse.document.Role.Policies;
-
-                    that._connectionManager.request(
-                        "POST",
-                        rolePolicies._href,
-                        JSON.stringify(policyCreateStruct.body),
-                        policyCreateStruct.headers,
-                        callback
-                    );
-                } else {
+                if (error) {
                     callback(error, false);
+                    return;
                 }
+
+                var rolePolicies = roleResponse.document.Role.Policies;
+
+                that._connectionManager.request(
+                    "POST",
+                    rolePolicies._href,
+                    JSON.stringify(policyCreateStruct.body),
+                    policyCreateStruct.headers,
+                    callback
+                );
             }
         );
     };
@@ -1008,19 +1011,20 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
         this.loadRole(
             roleId,
             function (error, roleResponse) {
-                if (!error) {
-                    var rolePolicies = roleResponse.document.Role.Policies;
-
-                    that._connectionManager.request(
-                        "GET",
-                        rolePolicies._href,
-                        "",
-                        {"Accept": rolePolicies["_media-type"]},
-                        callback
-                    );
-                } else {
+                if (error) {
                     callback(error, false);
+                    return;
                 }
+
+                var rolePolicies = roleResponse.document.Role.Policies;
+
+                that._connectionManager.request(
+                    "GET",
+                    rolePolicies._href,
+                    "",
+                    {"Accept": rolePolicies["_media-type"]},
+                    callback
+                );
             }
         );
     };

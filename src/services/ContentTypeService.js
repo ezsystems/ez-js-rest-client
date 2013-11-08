@@ -233,20 +233,20 @@ define(["structures/ContentTypeGroupInputStruct", "structures/ContentTypeCreateS
         this.loadContentTypeGroup(
             contentTypeGroupId,
             function (error, contentTypeGroupResponse) {
-                if (!error) {
-                    var contentTypeGroup = contentTypeGroupResponse.document.ContentTypeGroup;
-
-                    that._connectionManager.request(
-                        "GET",
-                         contentTypeGroup.ContentTypes._href,
-                        "",
-                        {"Accept": contentTypeGroup.ContentTypes["_media-type"]},
-                        callback
-                    );
-
-                } else {
+                if (error) {
                     callback(error, false);
+                    return;
                 }
+
+                var contentTypeGroup = contentTypeGroupResponse.document.ContentTypeGroup;
+
+                that._connectionManager.request(
+                    "GET",
+                     contentTypeGroup.ContentTypes._href,
+                    "",
+                    {"Accept": contentTypeGroup.ContentTypes["_media-type"]},
+                    callback
+                );
             }
         );
     };
@@ -315,21 +315,21 @@ define(["structures/ContentTypeGroupInputStruct", "structures/ContentTypeCreateS
         this.loadContentTypeGroup(
             contentTypeGroupId,
             function (error, contentTypeGroupResponse) {
-                if (!error) {
-                    var contentTypeGroup = contentTypeGroupResponse.document.ContentTypeGroup,
-                        parameters = (publish === true) ? "?publish=true": "";
-
-                    that._connectionManager.request(
-                        "POST",
-                        contentTypeGroup.ContentTypes._href + parameters,
-                        JSON.stringify(contentTypeCreateStruct.body),
-                        contentTypeCreateStruct.headers,
-                        callback
-                    );
-
-                } else {
+                if (error) {
                     callback(error, false);
+                    return;
                 }
+
+                var contentTypeGroup = contentTypeGroupResponse.document.ContentTypeGroup,
+                    parameters = (publish === true) ? "?publish=true": "";
+
+                that._connectionManager.request(
+                    "POST",
+                    contentTypeGroup.ContentTypes._href + parameters,
+                    JSON.stringify(contentTypeCreateStruct.body),
+                    contentTypeCreateStruct.headers,
+                    callback
+                );
             }
         );
     };
@@ -384,18 +384,18 @@ define(["structures/ContentTypeGroupInputStruct", "structures/ContentTypeCreateS
         this._discoveryService.getInfoObject(
             "contentTypes",
             function (error, contentTypes) {
-                if (!error) {
-                    that._connectionManager.request(
-                        "GET",
-                        contentTypes._href + "?identifier=" + identifier,
-                        "",
-                        {"Accept": contentTypes["_media-type"]},
-                        callback
-                    );
-
-                } else {
+                if (error) {
                     callback(error, false);
+                    return;
                 }
+
+                that._connectionManager.request(
+                    "GET",
+                    contentTypes._href + "?identifier=" + identifier,
+                    "",
+                    {"Accept": contentTypes["_media-type"]},
+                    callback
+                );
             }
         );
     };
@@ -594,20 +594,20 @@ define(["structures/ContentTypeGroupInputStruct", "structures/ContentTypeCreateS
         this.loadContentTypeDraft(
             contentTypeId,
             function (error, contentTypeDraftResponse) {
-                if (!error) {
-                    var contentTypeDraftFieldDefinitions = contentTypeDraftResponse.document.ContentType.FieldDefinitions;
-
-                    that._connectionManager.request(
-                        "POST",
-                        contentTypeDraftFieldDefinitions._href,
-                        JSON.stringify(fieldDefinitionCreateStruct.body),
-                        fieldDefinitionCreateStruct.headers,
-                        callback
-                    );
-
-                } else {
+                if (error) {
                     callback(error, false);
+                    return;
                 }
+
+                var contentTypeDraftFieldDefinitions = contentTypeDraftResponse.document.ContentType.FieldDefinitions;
+
+                that._connectionManager.request(
+                    "POST",
+                    contentTypeDraftFieldDefinitions._href,
+                    JSON.stringify(fieldDefinitionCreateStruct.body),
+                    fieldDefinitionCreateStruct.headers,
+                    callback
+                );
             }
         );
     };
