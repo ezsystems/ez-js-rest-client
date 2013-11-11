@@ -1,9 +1,6 @@
 /* global define */
-define(["../../node_modules/q/q","structures/CAPIError"], function (q, CAPIError) {
+define(["../../node_modules/q/q", "structures/CAPIError"], function (q, CAPIError) {
     "use strict";
-
-    // Silencing false positive according to http://stackoverflow.com/a/18112535/125264
-    q.stopUnhandledRejectionTracking();
 
     /**
      * Creates an instance of promise-based service object based on original service
@@ -43,7 +40,7 @@ define(["../../node_modules/q/q","structures/CAPIError"], function (q, CAPIError
         // Auto-generating promise-based functions based on every existing service function
         // taking into account all the functions with signature different from "new....Struct"
         for(key in originalService) {
-            if ( (typeof originalService[key] === "function") && !(/^function\s*(new[^\s(]+Struct)/).test(originalService[key].toString()) ) {
+            if ( (typeof originalService[key] === "function") && !(/^(new[^\s(]+Struct)/).test(key) ) {
                 this[key] = this._generatePromiseFunction(originalService[key]);
             }
         }
