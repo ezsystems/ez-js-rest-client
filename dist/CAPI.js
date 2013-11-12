@@ -4072,8 +4072,7 @@ define('services/ContentTypeService',["structures/ContentTypeGroupInputStruct", 
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentTypeService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentTypeService.prototype.updateContentTypeGroup = function (
-        contentTypeGroupId, contentTypeGroupUpdateStruct, callback) {
+    ContentTypeService.prototype.updateContentTypeGroup = function (contentTypeGroupId, contentTypeGroupUpdateStruct, callback) {
         this._connectionManager.request(
             "PATCH",
             contentTypeGroupId,
@@ -4137,8 +4136,7 @@ define('services/ContentTypeService',["structures/ContentTypeGroupInputStruct", 
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentTypeService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentTypeService.prototype.loadContentTypeGroupByIdentifier = function (
-        contentTypeGroups, identifier, callback) {
+    ContentTypeService.prototype.loadContentTypeGroupByIdentifier = function (contentTypeGroups, identifier, callback) {
         this._connectionManager.request(
             "GET",
             contentTypeGroups + "?identifier=" + identifier,
@@ -4410,8 +4408,7 @@ define('services/ContentTypeService',["structures/ContentTypeGroupInputStruct", 
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentTypeService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentTypeService.prototype.updateContentTypeDraftMetadata = function (
-        contentTypeDraftId, contentTypeUpdateStruct, callback) {
+    ContentTypeService.prototype.updateContentTypeDraftMetadata = function (contentTypeDraftId, contentTypeUpdateStruct, callback) {
         this._connectionManager.request(
             "PATCH",
             contentTypeDraftId,
@@ -8147,7 +8144,6 @@ define('PromiseCAPI',["CAPI", "services/PromiseService"], function (CAPI, Promis
         // taking into account only functions with "get....Service" signature
         for (key in CAPI) {
             if ( (typeof CAPI[key] === "function") && (/^(get[^\s(]+Service)/).test(key) ) {
-                console.log(key);
                 this[key] = this._getPromiseService(key);
             }
         }

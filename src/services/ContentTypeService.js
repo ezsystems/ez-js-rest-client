@@ -193,8 +193,7 @@ define(["structures/ContentTypeGroupInputStruct", "structures/ContentTypeCreateS
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentTypeService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentTypeService.prototype.updateContentTypeGroup = function (
-        contentTypeGroupId, contentTypeGroupUpdateStruct, callback) {
+    ContentTypeService.prototype.updateContentTypeGroup = function (contentTypeGroupId, contentTypeGroupUpdateStruct, callback) {
         this._connectionManager.request(
             "PATCH",
             contentTypeGroupId,
@@ -258,8 +257,7 @@ define(["structures/ContentTypeGroupInputStruct", "structures/ContentTypeCreateS
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentTypeService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentTypeService.prototype.loadContentTypeGroupByIdentifier = function (
-        contentTypeGroups, identifier, callback) {
+    ContentTypeService.prototype.loadContentTypeGroupByIdentifier = function (contentTypeGroups, identifier, callback) {
         this._connectionManager.request(
             "GET",
             contentTypeGroups + "?identifier=" + identifier,
@@ -531,8 +529,7 @@ define(["structures/ContentTypeGroupInputStruct", "structures/ContentTypeCreateS
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentTypeService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentTypeService.prototype.updateContentTypeDraftMetadata = function (
-        contentTypeDraftId, contentTypeUpdateStruct, callback) {
+    ContentTypeService.prototype.updateContentTypeDraftMetadata = function (contentTypeDraftId, contentTypeUpdateStruct, callback) {
         this._connectionManager.request(
             "PATCH",
             contentTypeDraftId,
