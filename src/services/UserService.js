@@ -52,7 +52,7 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
      * @param password {String} password for a user, which wants to start a session
      * @return {SessionCreateStruct}
      */
-    UserService.prototype.newSessionCreateStruct = function newSessionCreateStruct(login, password) {
+    UserService.prototype.newSessionCreateStruct = function (login, password) {
         return new SessionCreateStruct(login, password);
     };
 
@@ -76,7 +76,7 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
      *         }]
      *     );
      */
-    UserService.prototype.newUserGroupCreateStruct = function newUserGroupCreateStruct(language, fields) {
+    UserService.prototype.newUserGroupCreateStruct = function (language, fields) {
         return new UserGroupCreateStruct(language, fields);
     };
 
@@ -86,7 +86,7 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
      * @method newUserGroupUpdateStruct
      * @return {UserGroupCreateStruct}
      */
-    UserService.prototype.newUserGroupUpdateStruct = function newUserGroupUpdateStruct() {
+    UserService.prototype.newUserGroupUpdateStruct = function () {
         return new UserGroupUpdateStruct();
     };
 
@@ -101,7 +101,7 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
      * @param fields {Array} fields array (see example for "newUserGroupCreateStruct")
      * @return {UserCreateStruct}
      */
-    UserService.prototype.newUserCreateStruct = function newUserCreateStruct(languageCode, login, email, password, fields) {
+    UserService.prototype.newUserCreateStruct = function (languageCode, login, email, password, fields) {
         return new UserCreateStruct(languageCode, login, email, password, fields);
     };
 
@@ -111,7 +111,7 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
      * @method newUserUpdateStruct
      * @return {UserUpdateStruct}
      */
-    UserService.prototype.newUserUpdateStruct = function newUserUpdateStruct() {
+    UserService.prototype.newUserUpdateStruct = function () {
         return new UserUpdateStruct();
     };
 
@@ -122,7 +122,7 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
      * @param identifier {String} unique identifier for the new role (e.g. "editor")
      * @return {RoleInputStruct}
      */
-    UserService.prototype.newRoleInputStruct = function newRoleInputStruct(identifier) {
+    UserService.prototype.newRoleInputStruct = function (identifier) {
         return new RoleInputStruct(identifier);
     };
 
@@ -152,7 +152,7 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
      *         });
      *
      */
-    UserService.prototype.newRoleAssignInputStruct = function newRoleAssignInputStruct(role, limitation) {
+    UserService.prototype.newRoleAssignInputStruct = function (role, limitation) {
         return new RoleAssignInputStruct(role, limitation);
     };
 
@@ -180,7 +180,7 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
      *         }]
      *     );
      */
-    UserService.prototype.newPolicyCreateStruct = function newPolicyCreateStruct(module, theFunction, limitations) {
+    UserService.prototype.newPolicyCreateStruct = function (module, theFunction, limitations) {
         return new PolicyCreateStruct(module, theFunction, limitations);
     };
 
@@ -191,7 +191,7 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
      * @param limitations {Object} object describing limitations change for the policy (see "newPolicyCreateStruct" example)
      * @return {PolicyUpdateStruct}
      */
-    UserService.prototype.newPolicyUpdateStruct = function newPolicyUpdateStruct(limitations) {
+    UserService.prototype.newPolicyUpdateStruct = function (limitations) {
         return new PolicyUpdateStruct(limitations);
     };
 
@@ -206,7 +206,7 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "UserService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    UserService.prototype.loadRootUserGroup = function loadRootUserGroup(callback) {
+    UserService.prototype.loadRootUserGroup = function (callback) {
         var that = this;
 
         this._discoveryService.getInfoObject(
@@ -235,7 +235,7 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "UserService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    UserService.prototype.loadUserGroup = function loadUserGroup(userGroupId, callback) {
+    UserService.prototype.loadUserGroup = function (userGroupId, callback) {
         this._connectionManager.request(
             "GET",
             userGroupId,
@@ -254,7 +254,7 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "UserService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    UserService.prototype.loadUserGroupByRemoteId = function loadUserGroupByRemoteId(userGroups, remoteId, callback) {
+    UserService.prototype.loadUserGroupByRemoteId = function (userGroups, remoteId, callback) {
         this._connectionManager.request(
             "GET",
             userGroups + '?remoteId=' + remoteId,
@@ -272,7 +272,7 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "UserService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    UserService.prototype.deleteUserGroup = function deleteUserGroup(userGroupId, callback) {
+    UserService.prototype.deleteUserGroup = function (userGroupId, callback) {
         this._connectionManager.delete(
             userGroupId,
             callback
@@ -288,7 +288,7 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "UserService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    UserService.prototype.moveUserGroup = function moveUserGroup(userGroupId, destination, callback) {
+    UserService.prototype.moveUserGroup = function (userGroupId, destination, callback) {
         this._connectionManager.request(
             "MOVE",
             userGroupId,
@@ -307,7 +307,7 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "UserService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    UserService.prototype.createUserGroup = function createUserGroup(parentGroupId, userGroupCreateStruct, callback) {
+    UserService.prototype.createUserGroup = function (parentGroupId, userGroupCreateStruct, callback) {
         var that = this;
 
         this.loadUserGroup(
@@ -340,7 +340,7 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "UserService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    UserService.prototype.updateUserGroup = function updateUserGroup(userGroupId, userGroupUpdateStruct, callback) {
+    UserService.prototype.updateUserGroup = function (userGroupId, userGroupUpdateStruct, callback) {
         this._connectionManager.request(
             "PATCH",
             userGroupId,
@@ -358,7 +358,7 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "UserService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    UserService.prototype.loadSubUserGroups = function loadSubUserGroups(userGroupId, callback) {
+    UserService.prototype.loadSubUserGroups = function (userGroupId, callback) {
         var that = this;
 
         this.loadUserGroup(
@@ -390,7 +390,7 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "UserService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    UserService.prototype.loadUsersOfUserGroup = function loadUsersOfUserGroup(userGroupId, callback) {
+    UserService.prototype.loadUsersOfUserGroup = function (userGroupId, callback) {
         var that = this;
 
         this.loadUserGroup(
@@ -422,7 +422,7 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "UserService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    UserService.prototype.loadUserGroupsOfUser = function loadUserGroupsOfUser(userId, callback) {
+    UserService.prototype.loadUserGroupsOfUser = function (userId, callback) {
         this._connectionManager.request(
             "GET",
             userId + '/groups',
@@ -445,7 +445,7 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "UserService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    UserService.prototype.createUser = function createUser(userGroupId, userCreateStruct, callback) {
+    UserService.prototype.createUser = function (userGroupId, userCreateStruct, callback) {
         var that = this;
 
         this.loadUserGroup(
@@ -478,7 +478,7 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "UserService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    UserService.prototype.getRoleAssignments = function getRoleAssignments(userList, roleId, callback) {
+    UserService.prototype.getRoleAssignments = function (userList, roleId, callback) {
         this._connectionManager.request(
             "GET",
             userList + '?roleId=' + roleId,
@@ -496,7 +496,7 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "UserService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    UserService.prototype.loadUser = function loadUser(userId, callback) {
+    UserService.prototype.loadUser = function (userId, callback) {
         this._connectionManager.request(
             "GET",
             userId,
@@ -523,7 +523,7 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
      *         callback
      *     );
      */
-    UserService.prototype.updateUser = function updateUser(userId, userUpdateStruct, callback) {
+    UserService.prototype.updateUser = function (userId, userUpdateStruct, callback) {
         this._connectionManager.request(
             "PATCH",
             userId,
@@ -541,7 +541,7 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "UserService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    UserService.prototype.deleteUser = function deleteUser(userId, callback) {
+    UserService.prototype.deleteUser = function (userId, callback) {
         this._connectionManager.delete(
             userId,
             callback
@@ -561,7 +561,7 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "UserService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    UserService.prototype.assignUserToUserGroup = function assignUserToUserGroup(userId, userGroupId, callback) {
+    UserService.prototype.assignUserToUserGroup = function (userId, userGroupId, callback) {
         var that = this;
 
         this.loadUser(
@@ -593,7 +593,7 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "UserService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    UserService.prototype.unassignUserFromUserGroup = function unassignUserFromUserGroup(userAssignedGroupId, callback) {
+    UserService.prototype.unassignUserFromUserGroup = function (userAssignedGroupId, callback) {
         this._connectionManager.delete(
             userAssignedGroupId,
             callback
@@ -612,7 +612,7 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "UserService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    UserService.prototype.createRole = function createRole(roleCreateStruct, callback) {
+    UserService.prototype.createRole = function (roleCreateStruct, callback) {
         var that = this;
 
         this._discoveryService.getInfoObject(
@@ -642,7 +642,7 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "UserService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    UserService.prototype.loadRole = function loadRole(roleId, callback) {
+    UserService.prototype.loadRole = function (roleId, callback) {
         this._connectionManager.request(
             "GET",
             roleId,
@@ -664,7 +664,7 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
      * @example
      *     userService.loadRoles("admin", 5, 5, callback);
      */
-    UserService.prototype.loadRoles = function loadRoles(identifier, limit, offset, callback) {
+    UserService.prototype.loadRoles = function (identifier, limit, offset, callback) {
 
         var that = this,
             identifierQuery,
@@ -722,7 +722,7 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "UserService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    UserService.prototype.updateRole = function updateRole(roleId, roleUpdateStruct, callback) {
+    UserService.prototype.updateRole = function (roleId, roleUpdateStruct, callback) {
         this._connectionManager.request(
             "PATCH",
             roleId,
@@ -740,7 +740,7 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "UserService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    UserService.prototype.deleteRole = function deleteRole(roleId, callback) {
+    UserService.prototype.deleteRole = function (roleId, callback) {
         this._connectionManager.delete(
             roleId,
             callback
@@ -755,7 +755,7 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "UserService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    UserService.prototype.getRoleAssignmentsForUser = function getRoleAssignmentsForUser(userId, callback) {
+    UserService.prototype.getRoleAssignmentsForUser = function (userId, callback) {
         var that = this;
 
         this.loadUser(
@@ -787,7 +787,7 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "UserService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    UserService.prototype.getRoleAssignmentsForUserGroup = function getRoleAssignmentsForUserGroup(userGroupId, callback) {
+    UserService.prototype.getRoleAssignmentsForUserGroup = function (userGroupId, callback) {
         var that = this;
 
         this.loadUserGroup(
@@ -819,7 +819,7 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "UserService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    UserService.prototype.getUserAssignmentObject = function getUserAssignmentObject(userAssignmentId, callback) {
+    UserService.prototype.getUserAssignmentObject = function (userAssignmentId, callback) {
         this._connectionManager.request(
             "GET",
             userAssignmentId,
@@ -837,7 +837,7 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "UserService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    UserService.prototype.getUserGroupAssignmentObject = function getUserGroupAssignmentObject(userGroupAssignmentId, callback) {
+    UserService.prototype.getUserGroupAssignmentObject = function (userGroupAssignmentId, callback) {
         this._connectionManager.request(
             "GET",
             userGroupAssignmentId,
@@ -857,7 +857,7 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
      *  {{#crossLink "UserService"}}Note on the callbacks usage{{/crossLink}} for more info)
      *
      */
-    UserService.prototype.assignRoleToUser = function assignRoleToUser(userId, roleAssignInputStruct, callback) {
+    UserService.prototype.assignRoleToUser = function (userId, roleAssignInputStruct, callback) {
         var that = this;
 
         this.loadUser(
@@ -889,7 +889,7 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "UserService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    UserService.prototype.assignRoleToUserGroup = function assignRoleToUserGroup(userGroupId, roleAssignInputStruct, callback) {
+    UserService.prototype.assignRoleToUserGroup = function (userGroupId, roleAssignInputStruct, callback) {
         var that = this;
 
         this.loadUserGroup(
@@ -920,7 +920,7 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "UserService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    UserService.prototype.unassignRoleFromUser = function unassignRoleFromUser(userRoleId, callback) {
+    UserService.prototype.unassignRoleFromUser = function (userRoleId, callback) {
         this._connectionManager.delete(
             userRoleId,
             callback
@@ -935,7 +935,7 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "UserService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    UserService.prototype.unassignRoleFromUserGroup = function unassignRoleFromUserGroup(userGroupRoleId, callback) {
+    UserService.prototype.unassignRoleFromUserGroup = function (userGroupRoleId, callback) {
         this._connectionManager.delete(
             userGroupRoleId,
             callback
@@ -971,7 +971,7 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
      *     policyCreateStruct,
      *     callback);
      */
-    UserService.prototype.addPolicy = function addPolicy(roleId, policyCreateStruct, callback) {
+    UserService.prototype.addPolicy = function (roleId, policyCreateStruct, callback) {
         var that = this;
 
         this.loadRole(
@@ -1002,7 +1002,7 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "UserService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    UserService.prototype.loadPolicies = function loadPolicies(roleId, callback) {
+    UserService.prototype.loadPolicies = function (roleId, callback) {
         var that = this;
 
         this.loadRole(
@@ -1033,7 +1033,7 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "UserService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    UserService.prototype.loadPolicy = function loadPolicy(policyId, callback) {
+    UserService.prototype.loadPolicy = function (policyId, callback) {
         this._connectionManager.request(
             "GET",
             policyId,
@@ -1052,7 +1052,7 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "UserService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    UserService.prototype.updatePolicy = function updatePolicy(policyId, policyUpdateStruct, callback) {
+    UserService.prototype.updatePolicy = function (policyId, policyUpdateStruct, callback) {
         this._connectionManager.request(
             "PATCH",
             policyId,
@@ -1070,7 +1070,7 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "UserService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    UserService.prototype.deletePolicy = function deletePolicy(policyId, callback) {
+    UserService.prototype.deletePolicy = function (policyId, callback) {
         this._connectionManager.delete(
             policyId,
             callback
@@ -1086,7 +1086,7 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "UserService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    UserService.prototype.loadPoliciesByUserId = function loadPoliciesByUserId(userPolicies, userId, callback) {
+    UserService.prototype.loadPoliciesByUserId = function (userPolicies, userId, callback) {
         this._connectionManager.request(
             "GET",
             userPolicies + "?userId=" + userId,
@@ -1109,7 +1109,7 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "UserService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    UserService.prototype.createSession = function createSession(sessions, sessionCreateStruct, callback) {
+    UserService.prototype.createSession = function (sessions, sessionCreateStruct, callback) {
         this._connectionManager.notAuthorizedRequest(
             "POST",
             sessions,
@@ -1127,7 +1127,7 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "UserService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    UserService.prototype.deleteSession = function deleteSession(sessionId, callback) {
+    UserService.prototype.deleteSession = function (sessionId, callback) {
         this._connectionManager.delete(
             sessionId,
             callback
@@ -1143,7 +1143,7 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "UserService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    UserService.prototype.logOut = function logOut(callback) {
+    UserService.prototype.logOut = function (callback) {
         this._connectionManager.logOut(callback);
     };
 

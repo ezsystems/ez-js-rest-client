@@ -56,7 +56,7 @@ define(["structures/ContentTypeGroupInputStruct", "structures/ContentTypeCreateS
      * @param identifier {String} unique content type group identifer (e.g. "my-group")
      * @return {ContentTypeGroupInputStruct}
      */
-    ContentTypeService.prototype.newContentTypeGroupInputStruct = function newContentTypeGroupInputStruct(identifier) {
+    ContentTypeService.prototype.newContentTypeGroupInputStruct = function (identifier) {
         return new ContentTypeGroupInputStruct(identifier);
     };
 
@@ -74,7 +74,7 @@ define(["structures/ContentTypeGroupInputStruct", "structures/ContentTypeCreateS
      *          }]
      *      );
      */
-    ContentTypeService.prototype.newContentTypeCreateStruct = function newContentTypeCreateStruct(identifier, languageCode, names) {
+    ContentTypeService.prototype.newContentTypeCreateStruct = function (identifier, languageCode, names) {
         return new ContentTypeCreateStruct(identifier, languageCode, names);
     };
 
@@ -82,7 +82,7 @@ define(["structures/ContentTypeGroupInputStruct", "structures/ContentTypeCreateS
      * @method newContentTypeUpdateStruct
      * @return {ContentTypeUpdateStruct}
      */
-    ContentTypeService.prototype.newContentTypeUpdateStruct = function newContentTypeUpdateStruct() {
+    ContentTypeService.prototype.newContentTypeUpdateStruct = function () {
         return new ContentTypeUpdateStruct();
     };
 
@@ -101,7 +101,7 @@ define(["structures/ContentTypeGroupInputStruct", "structures/ContentTypeCreateS
      *         }]
      *     );
      */
-    ContentTypeService.prototype.newFieldDefinitionCreateStruct = function newFieldDefinitionCreateStruct(identifier, fieldType, fieldGroup, names) {
+    ContentTypeService.prototype.newFieldDefinitionCreateStruct = function (identifier, fieldType, fieldGroup, names) {
         return new FieldDefinitionCreateStruct(identifier, fieldType, fieldGroup, names);
     };
 
@@ -109,7 +109,7 @@ define(["structures/ContentTypeGroupInputStruct", "structures/ContentTypeCreateS
      * @method newFieldDefinitionUpdateStruct
      * @return {FieldDefinitionUpdateStruct}
      */
-    ContentTypeService.prototype.newFieldDefinitionUpdateStruct = function newFieldDefinitionUpdateStruct() {
+    ContentTypeService.prototype.newFieldDefinitionUpdateStruct = function () {
         return new FieldDefinitionUpdateStruct();
     };
 
@@ -138,7 +138,7 @@ define(["structures/ContentTypeGroupInputStruct", "structures/ContentTypeCreateS
      *         callback
      *     );
      */
-    ContentTypeService.prototype.createContentTypeGroup = function createContentTypeGroup(contentTypeGroups, contentTypeGroupCreateStruct, callback) {
+    ContentTypeService.prototype.createContentTypeGroup = function (contentTypeGroups, contentTypeGroupCreateStruct, callback) {
         this._connectionManager.request(
             "POST",
             contentTypeGroups,
@@ -156,7 +156,7 @@ define(["structures/ContentTypeGroupInputStruct", "structures/ContentTypeCreateS
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentTypeService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentTypeService.prototype.loadContentTypeGroups = function loadContentTypeGroups(contentTypeGroups, callback) {
+    ContentTypeService.prototype.loadContentTypeGroups = function (contentTypeGroups, callback) {
         this._connectionManager.request(
             "GET",
             contentTypeGroups,
@@ -174,7 +174,7 @@ define(["structures/ContentTypeGroupInputStruct", "structures/ContentTypeCreateS
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentTypeService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentTypeService.prototype.loadContentTypeGroup = function loadContentTypeGroup(contentTypeGroupId, callback) {
+    ContentTypeService.prototype.loadContentTypeGroup = function (contentTypeGroupId, callback) {
         this._connectionManager.request(
             "GET",
             contentTypeGroupId,
@@ -193,7 +193,7 @@ define(["structures/ContentTypeGroupInputStruct", "structures/ContentTypeCreateS
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentTypeService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentTypeService.prototype.updateContentTypeGroup = function updateContentTypeGroup(
+    ContentTypeService.prototype.updateContentTypeGroup = function (
         contentTypeGroupId, contentTypeGroupUpdateStruct, callback) {
         this._connectionManager.request(
             "PATCH",
@@ -212,7 +212,7 @@ define(["structures/ContentTypeGroupInputStruct", "structures/ContentTypeCreateS
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentTypeService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentTypeService.prototype.deleteContentTypeGroup = function deleteContentTypeGroup(contentTypeGroupId, callback) {
+    ContentTypeService.prototype.deleteContentTypeGroup = function (contentTypeGroupId, callback) {
         this._connectionManager.delete(
             contentTypeGroupId,
             callback
@@ -227,7 +227,7 @@ define(["structures/ContentTypeGroupInputStruct", "structures/ContentTypeCreateS
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentTypeService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentTypeService.prototype.loadContentTypes = function loadContentTypes(contentTypeGroupId, callback) {
+    ContentTypeService.prototype.loadContentTypes = function (contentTypeGroupId, callback) {
         var that = this;
 
         this.loadContentTypeGroup(
@@ -258,7 +258,7 @@ define(["structures/ContentTypeGroupInputStruct", "structures/ContentTypeCreateS
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentTypeService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentTypeService.prototype.loadContentTypeGroupByIdentifier = function loadContentTypeGroupByIdentifier(
+    ContentTypeService.prototype.loadContentTypeGroupByIdentifier = function (
         contentTypeGroups, identifier, callback) {
         this._connectionManager.request(
             "GET",
@@ -309,7 +309,7 @@ define(["structures/ContentTypeGroupInputStruct", "structures/ContentTypeCreateS
      *         callback
      *     );
      */
-    ContentTypeService.prototype.createContentType = function createContentType(contentTypeGroupId, contentTypeCreateStruct, publish, callback) {
+    ContentTypeService.prototype.createContentType = function (contentTypeGroupId, contentTypeCreateStruct, publish, callback) {
         var that = this;
 
         this.loadContentTypeGroup(
@@ -342,7 +342,7 @@ define(["structures/ContentTypeGroupInputStruct", "structures/ContentTypeCreateS
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentTypeService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentTypeService.prototype.copyContentType = function copyContentType(contentTypeId, callback) {
+    ContentTypeService.prototype.copyContentType = function (contentTypeId, callback) {
         this._connectionManager.request(
             "COPY",
             contentTypeId,
@@ -360,7 +360,7 @@ define(["structures/ContentTypeGroupInputStruct", "structures/ContentTypeCreateS
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentTypeService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentTypeService.prototype.loadContentType = function loadContentType(contentTypeId, callback) {
+    ContentTypeService.prototype.loadContentType = function (contentTypeId, callback) {
         this._connectionManager.request(
             "GET",
             contentTypeId,
@@ -378,7 +378,7 @@ define(["structures/ContentTypeGroupInputStruct", "structures/ContentTypeCreateS
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentTypeService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentTypeService.prototype.loadContentTypeByIdentifier = function loadContentTypeByIdentifier(identifier, callback) {
+    ContentTypeService.prototype.loadContentTypeByIdentifier = function (identifier, callback) {
         var that = this;
 
         this._discoveryService.getInfoObject(
@@ -408,7 +408,7 @@ define(["structures/ContentTypeGroupInputStruct", "structures/ContentTypeCreateS
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentTypeService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentTypeService.prototype.deleteContentType = function deleteContentType(contentTypeId, callback) {
+    ContentTypeService.prototype.deleteContentType = function (contentTypeId, callback) {
         this._connectionManager.delete(
             contentTypeId,
             callback
@@ -423,7 +423,7 @@ define(["structures/ContentTypeGroupInputStruct", "structures/ContentTypeCreateS
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentTypeService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentTypeService.prototype.loadGroupsOfContentType = function loadGroupsOfContentType(contentTypeId, callback) {
+    ContentTypeService.prototype.loadGroupsOfContentType = function (contentTypeId, callback) {
         this._connectionManager.request(
             "GET",
             contentTypeId + '/groups',
@@ -442,7 +442,7 @@ define(["structures/ContentTypeGroupInputStruct", "structures/ContentTypeCreateS
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentTypeService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentTypeService.prototype.assignContentTypeGroup = function assignContentTypeGroup(contentTypeId, groupId, callback) {
+    ContentTypeService.prototype.assignContentTypeGroup = function (contentTypeId, groupId, callback) {
         this._connectionManager.request(
             "POST",
             contentTypeId + "/groups" + "?group=" + groupId,
@@ -460,7 +460,7 @@ define(["structures/ContentTypeGroupInputStruct", "structures/ContentTypeCreateS
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentTypeService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentTypeService.prototype.unassignContentTypeGroup = function unassignContentTypeGroup(contentTypeAssignedGroupId, callback) {
+    ContentTypeService.prototype.unassignContentTypeGroup = function (contentTypeAssignedGroupId, callback) {
         this._connectionManager.delete(
             contentTypeAssignedGroupId,
             callback
@@ -494,7 +494,7 @@ define(["structures/ContentTypeGroupInputStruct", "structures/ContentTypeCreateS
      *         callback
      *     );
      */
-    ContentTypeService.prototype.createContentTypeDraft = function createContentTypeDraft(contentTypeId, contentTypeUpdateStruct, callback) {
+    ContentTypeService.prototype.createContentTypeDraft = function (contentTypeId, contentTypeUpdateStruct, callback) {
         this._connectionManager.request(
             "POST",
             contentTypeId,
@@ -512,7 +512,7 @@ define(["structures/ContentTypeGroupInputStruct", "structures/ContentTypeCreateS
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentTypeService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentTypeService.prototype.loadContentTypeDraft = function loadContentTypeDraft(contentTypeId, callback) {
+    ContentTypeService.prototype.loadContentTypeDraft = function (contentTypeId, callback) {
         this._connectionManager.request(
             "GET",
             contentTypeId + "/draft",
@@ -531,7 +531,7 @@ define(["structures/ContentTypeGroupInputStruct", "structures/ContentTypeCreateS
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentTypeService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentTypeService.prototype.updateContentTypeDraftMetadata = function updateContentTypeDraftMetadata(
+    ContentTypeService.prototype.updateContentTypeDraftMetadata = function (
         contentTypeDraftId, contentTypeUpdateStruct, callback) {
         this._connectionManager.request(
             "PATCH",
@@ -550,7 +550,7 @@ define(["structures/ContentTypeGroupInputStruct", "structures/ContentTypeCreateS
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentTypeService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentTypeService.prototype.publishContentTypeDraft = function publishContentTypeDraft(contentTypeDraftId, callback) {
+    ContentTypeService.prototype.publishContentTypeDraft = function (contentTypeDraftId, callback) {
         this._connectionManager.request(
             "PUBLISH",
             contentTypeDraftId,
@@ -568,7 +568,7 @@ define(["structures/ContentTypeGroupInputStruct", "structures/ContentTypeCreateS
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentTypeService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentTypeService.prototype.deleteContentTypeDraft = function deleteContentTypeDraft(contentTypeDraftId, callback) {
+    ContentTypeService.prototype.deleteContentTypeDraft = function (contentTypeDraftId, callback) {
         this._connectionManager.delete(
             contentTypeDraftId,
             callback
@@ -588,7 +588,7 @@ define(["structures/ContentTypeGroupInputStruct", "structures/ContentTypeCreateS
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentTypeService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentTypeService.prototype.addFieldDefinition = function addFieldDefinition(contentTypeId, fieldDefinitionCreateStruct, callback) {
+    ContentTypeService.prototype.addFieldDefinition = function (contentTypeId, fieldDefinitionCreateStruct, callback) {
         var that = this;
 
         this.loadContentTypeDraft(
@@ -620,7 +620,7 @@ define(["structures/ContentTypeGroupInputStruct", "structures/ContentTypeCreateS
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentTypeService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentTypeService.prototype.loadFieldDefinition = function loadFieldDefinition(fieldDefinitionId, callback) {
+    ContentTypeService.prototype.loadFieldDefinition = function (fieldDefinitionId, callback) {
         this._connectionManager.request(
             "GET",
             fieldDefinitionId,
@@ -639,7 +639,7 @@ define(["structures/ContentTypeGroupInputStruct", "structures/ContentTypeCreateS
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentTypeService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentTypeService.prototype.updateFieldDefinition = function updateFieldDefinition(fieldDefinitionId, fieldDefinitionUpdateStruct, callback) {
+    ContentTypeService.prototype.updateFieldDefinition = function (fieldDefinitionId, fieldDefinitionUpdateStruct, callback) {
         this._connectionManager.request(
             "PATCH",
             fieldDefinitionId,
@@ -657,7 +657,7 @@ define(["structures/ContentTypeGroupInputStruct", "structures/ContentTypeCreateS
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentTypeService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentTypeService.prototype.deleteFieldDefinition = function deleteFieldDefinition(fieldDefinitionId, callback) {
+    ContentTypeService.prototype.deleteFieldDefinition = function (fieldDefinitionId, callback) {
         this._connectionManager.delete(
             fieldDefinitionId,
             callback
