@@ -5,11 +5,11 @@ module.exports = function(grunt) {
         },
         testPaths = {
             "q": "../node_modules/q/q",
-            "jasmineCAPIMatchers": "../test/jasmine/CAPImatchers"
+            "jasmineCAPIMatchers": "../test/jasmine/CAPIMatchers"
         },
         coveragePaths = {
             "q": "../node_modules/q/q",
-            "jasmineCAPIMatchers": "../../../test/jasmine/CAPImatchers"
+            "jasmineCAPIMatchers": "../../../test/jasmine/CAPIMatchers"
         };
 
     grunt.initConfig({
