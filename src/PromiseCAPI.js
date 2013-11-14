@@ -29,7 +29,7 @@ define(["CAPI", "services/PromiseService"], function (CAPI, PromiseService) {
          * @return {function} function which returns instance of the PromiseService - promise-based wrapper around any of the CAPI services
          * @protected
          */
-        this.generatePromiseService = function (serviceFactory) {
+        this._getPromiseService = function (serviceFactoryName) {
             return function () {
                 if (!this._services[serviceFactoryName]) {
                     this._services[serviceFactoryName] = new PromiseService(CAPI[serviceFactoryName].call(CAPI));

@@ -8,7 +8,21 @@ define(function (require) {
         var promiseService,
             mockService,
             promise,
-            testRootPath = '/testrootpath/';
+            testRootPath = '/testrootpath/',
+            promiseSuccess = false,
+            promiseError = false,
+            handlePromise = function (promise) {
+                runs(function() {
+                    promise.then(
+                        function (result) {
+                            promiseSuccess = result;
+                        },
+                        function (error) {
+                            promiseError = error;
+                        }
+                    );
+                });
+            };
 
 
         beforeEach(function () {
@@ -22,6 +36,9 @@ define(function (require) {
             mockService.newContentUpdateStruct = function newContentUpdateStruct() {};
 
             promiseService = new PromiseService(mockService);
+
+            promiseSuccess = false;
+            promiseError = false;
         });
 
         it("is running constructor correctly (auto-generating promise-based calls and ignoring structure constructors)", function () {
@@ -31,31 +48,20 @@ define(function (require) {
         });
 
         it("is running generated promise-based calls correctly when promise is fulfilled", function () {
-            var success = false,
-                errorReason = false;
             promise = promiseService.loadRoot(testRootPath);
 
             expect(promise).toBeDefined();
             expect(promise.then).toBeDefined();
 
-            runs(function() {
-                promise.then(
-                    function (result) {
-                        success = result;
-                    },
-                    function (error) {
-                        errorReason = error;
-                    }
-                );
-            });
+            handlePromise(promise);
 
             waitsFor(function() {
-                return success;
-            }, "Waiting for promise to be fulfilled", 1000);
+                return promiseSuccess;
+            }, "Waiting for promise to be fulfilled", 100);
 
             runs(function() {
-                expect(success).toBeTruthy();
-                expect(errorReason).toBeFalsy();
+                expect(promiseSuccess).toBeTruthy();
+                expect(promiseError).toBeFalsy();
             });
 
         });
@@ -67,37 +73,25 @@ define(function (require) {
         });
 
         it("is running generated promise-based calls correctly when promise is rejected", function () {
-            var success = false,
-                errorReason = false;
-
             mockService = {};
             // mock call
             mockService.loadRoot = function loadRoot(rootPath, callback) {
-                // callback is returning true for error
-                callback(true, false);
+                // callback is returning error
+                callback(new Error("Test Error"), false);
             };
 
             promiseService = new PromiseService(mockService);
             promise = promiseService.loadRoot(testRootPath);
 
-            runs(function() {
-                promise.then(
-                    function (result) {
-                        success = result;
-                    },
-                    function (error) {
-                        errorReason = error;
-                    }
-                );
-            });
+            handlePromise(promise);
 
             waitsFor(function() {
-                return errorReason;
+                return promiseError;
             }, "Waiting for promise to be rejected", 1000);
 
             runs(function() {
-                expect(errorReason).toBeTruthy();
-                expect(success).toBeFalsy();
+                expect(promiseSuccess).toBeFalsy();
+                expect(promiseError).toBeTruthy();
             });
 
         });

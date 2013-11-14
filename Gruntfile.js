@@ -1,9 +1,7 @@
 module.exports = function(grunt) {
 
-    var mapQ = {
-        "services/PromiseService": {
-            "q": "../node_modules/q/q"
-        }
+    var qPath = {
+        "q": "../node_modules/q/q"
     };
 
     grunt.initConfig({
@@ -14,7 +12,7 @@ module.exports = function(grunt) {
                     name : 'PromiseCAPI',
                     optimize: "none",
                     baseUrl: "src/",
-                    map: mapQ,
+                    paths: qPath,
                     out: "dist/CAPI.js",
                     wrap: {
                         startFile: 'wrap/wrap.start.js',
@@ -28,7 +26,7 @@ module.exports = function(grunt) {
                     name : 'PromiseCAPI',
                     optimize: "uglify",
                     baseUrl: "src/",
-                    map: mapQ,
+                    paths: qPath,
                     out: "dist/CAPI-min.js",
                     wrap: {
                         startFile: 'wrap/wrap.start.js',
@@ -42,7 +40,7 @@ module.exports = function(grunt) {
                     name : 'PromiseCAPI',
                     optimize: "none",
                     baseUrl: "src/",
-                    map: mapQ,
+                    paths: qPath,
                     out: "test/manual/jsRestClientBundle/Resources/public/js/CAPI.js",
                     wrap: {
                         startFile: 'wrap/wrap.start.js',
@@ -70,7 +68,7 @@ module.exports = function(grunt) {
                 templateOptions: {
                     requireConfig: {
                         baseUrl: 'src/',
-                        map: mapQ
+                        paths: qPath
                     }
                 }
             },
@@ -94,7 +92,7 @@ module.exports = function(grunt) {
                         templateOptions: {
                             requireConfig: {
                                 baseUrl: 'test/instrument/src/',
-                                map: mapQ
+                                paths: qPath
                             }
                         }
                     }
