@@ -1,8 +1,16 @@
 module.exports = function(grunt) {
 
     var qPath = {
-        "q": "../node_modules/q/q"
-    };
+            "q": "../node_modules/q/q"
+        },
+        testPaths = {
+            "q": "../node_modules/q/q",
+            "jasmineCAPIMatchers": "../test/jasmine/CAPImatchers"
+        },
+        coveragePaths = {
+            "q": "../node_modules/q/q",
+            "jasmineCAPIMatchers": "../../../test/jasmine/CAPImatchers"
+        };
 
     grunt.initConfig({
         requirejs: {
@@ -53,7 +61,7 @@ module.exports = function(grunt) {
             options: {
                 jshintrc: 'jshint.json'
             },
-            all: ['src/*.js', 'src/*/*.js', 'test/*.tests.js']
+            all: ['src/*.js', 'src/*/*.js', 'test/*.tests.js', 'test/jasmine/*.js']
         },
         instrument : {
             files : ['src/*.js','src/*/*.js'],
@@ -68,7 +76,7 @@ module.exports = function(grunt) {
                 templateOptions: {
                     requireConfig: {
                         baseUrl: 'src/',
-                        paths: qPath
+                        paths: testPaths
                     }
                 }
             },
@@ -92,7 +100,7 @@ module.exports = function(grunt) {
                         templateOptions: {
                             requireConfig: {
                                 baseUrl: 'test/instrument/src/',
-                                paths: qPath
+                                paths: coveragePaths
                             }
                         }
                     }

@@ -1,7 +1,9 @@
-/* global define, describe, it, expect, beforeEach, runs, waitsFor */
+/* global define, describe, it, expect, beforeEach, runs, waitsFor, eZ */
 define(function (require) {
 
     var PromiseService = require("services/PromiseService");
+
+    require("jasmineCAPIMatchers");
 
     describe("PromiseService", function () {
 
@@ -26,6 +28,9 @@ define(function (require) {
 
 
         beforeEach(function () {
+
+            eZ.addJasmineCAPIMatchers.call(this);
+
             mockService = {};
 
             // mock call
@@ -69,7 +74,7 @@ define(function (require) {
         // *****************
         // Cases with errors
         it("is throwing exception when supplied number of arguments is incorrect", function () {
-            expect(function () {promiseService.loadRoot();}).toThrow();
+            expect(promiseService.loadRoot).toThrowCAPIError();
         });
 
         it("is running generated promise-based calls correctly when promise is rejected", function () {
