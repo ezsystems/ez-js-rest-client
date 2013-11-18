@@ -3,7 +3,8 @@ define(function () {
     "use strict";
 
     /**
-     * Returns a structure used to create a new Content object. See ContentService.createContent() call
+     * Returns a structure used to create a new Content object. See
+     * {{#crossLink "ContentService/createContent"}}ContentService.createContent{{/crossLink}}
      *
      * @class ContentCreateStruct
      * @constructor

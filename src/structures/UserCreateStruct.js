@@ -3,7 +3,8 @@ define(function () {
     "use strict";
 
     /**
-     * Returns a structure used to create a new User. See UserService.createUser() call
+     * Returns a structure used to create a new User. See
+     * {{#crossLink "UserService/createUser"}}UserService.createUser{{/crossLink}}
      *
      * @class UserCreateStruct
      * @constructor
@@ -11,7 +12,8 @@ define(function () {
      * @param login {String} login for a new user
      * @param email {String} email for a new user
      * @param password {String} password for a new user
-     * @param fields {Array} fields array (see example for "newUserGroupCreateStruct")
+     * @param fields {Array} fields array (see example in
+     * {{#crossLink "UserService/newUserGroupCreateStruct"}}UserService.newUserGroupCreateStruct{{/crossLink}})
      */
     var UserCreateStruct = function (languageCode, login, email, password, fields) {
         this.body = {};

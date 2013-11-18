@@ -98,7 +98,8 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
      * @param login {String} login for a new user
      * @param email {String} email for a new user
      * @param password {String} password for a new user
-     * @param fields {Array} fields array (see example for "newUserGroupCreateStruct")
+     * @param fields {Array} fields array (see example for
+     * {{#crossLink "UserService/newUserGroupCreateStruct"}}UserService.newUserGroupCreateStruct{{/crossLink}})
      * @return {UserCreateStruct}
      */
     UserService.prototype.newUserCreateStruct = function (languageCode, login, email, password, fields) {

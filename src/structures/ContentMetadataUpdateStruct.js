@@ -3,7 +3,8 @@ define(function () {
     "use strict";
 
     /**
-     * Returns a structure used to update a Content's metadata. See ContentService.updateContentMetadata() call
+     * Returns a structure used to update a Content's metadata. See
+     * {{#crossLink "ContentService/updateContentMetadata"}}ContentService.updateContentMetadata{{/crossLink}}
      *
      * @class ContentMetadataUpdateStruct
      * @constructor

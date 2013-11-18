@@ -3,7 +3,8 @@ define(function () {
     "use strict";
 
     /**
-     * Returns a structure used to create and update a Content Type group. See ContentTypeService.createContentTypeGroup() call
+     * Returns a structure used to create and update a Content Type group. See
+     * {{#crossLink "ContentTypeService/createContentTypeGroup"}}ContentTypeService.createContentTypeGroup{{/crossLink}}
      *
      * @class ContentTypeGroupInputStruct
      * @constructor

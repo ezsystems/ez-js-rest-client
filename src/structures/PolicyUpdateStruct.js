@@ -3,7 +3,8 @@ define(function () {
     "use strict";
 
     /**
-     * Returns a structure used to update a Policy. See UserService.updatePolicy() call
+     * Returns a structure used to update a Policy. See
+     * {{#crossLink "UserService/updatePolicy"}}UserService.updatePolicy{{/crossLink}}
      *
      * @class PolicyUpdateStruct
      * @constructor

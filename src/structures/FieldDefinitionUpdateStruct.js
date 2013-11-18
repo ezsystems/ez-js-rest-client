@@ -3,7 +3,8 @@ define(function () {
     "use strict";
 
     /**
-     * Returns a structure used to update a Field Definition. See ContentTypeService.updateFieldDefinition() call
+     * Returns a structure used to update a Field Definition. See
+     * {{#crossLink "ContentTypeService/updateFieldDefinition"}}ContentTypeService.updateFieldDefinition{{/crossLink}}
      *
      * @class FieldDefinitionUpdateStruct
      * @constructor

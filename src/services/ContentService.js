@@ -1043,12 +1043,21 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
 // ******************************
 
     /**
-     * Creates a new view
+     * Creates a new view. Views are used to perform content queries by certain criteria.
      *
      * @method createView
      * @param viewCreateStruct {ViewCreateStruct} object describing new view to be created
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
+     * @example
+     *     var viewCreateStruct = contentService.newViewCreateStruct('some-test-id');
+     *     viewCreateStruct.body.ViewInput.Query.Criteria = {
+     *         FullTextCriterion : "title"
+     *     };
+     *     contentService.createView(
+     *         viewCreateStruct,
+     *         callback
+     *     );
      */
     ContentService.prototype.createView = function (viewCreateStruct, callback) {
         var that = this;

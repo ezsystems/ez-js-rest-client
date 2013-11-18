@@ -3,7 +3,8 @@ define(function () {
     "use strict";
 
     /**
-     * Returns a structure used to create and update a Section. See for ex. ContentService.createSection() call
+     * Returns a structure used to create and update a Section. See for ex.
+     * {{#crossLink "ContentService/createSection"}}ContentService.createSection{{/crossLink}}
      *
      * @class SectionInputStruct
      * @constructor

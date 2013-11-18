@@ -3,7 +3,8 @@ define(function () {
     "use strict";
 
     /**
-     * Returns a structure used to create a new Url Wildcard object. See ContentService.createUrlWildcard() call
+     * Returns a structure used to create a new Url Wildcard object. See
+     * {{#crossLink "ContentService/createUrlWildcard"}}ContentService.createUrlWildcard{{/crossLink}}
      *
      * @class UrlWildcardCreateStruct
      * @constructor

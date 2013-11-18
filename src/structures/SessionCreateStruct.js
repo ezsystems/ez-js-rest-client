@@ -3,7 +3,8 @@ define(function () {
     "use strict";
 
     /**
-     * Returns a structure used to create a new Session. See UserService.createSession() call
+     * Returns a structure used to create a new Session. See
+     * {{#crossLink "UserService/createSession"}}UserService.createSession{{/crossLink}}
      *
      * @class SessionCreateStruct
      * @constructor

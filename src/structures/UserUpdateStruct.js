@@ -3,7 +3,8 @@ define(function () {
     "use strict";
 
     /**
-     * Returns a structure used to update a User. See UserService.updateUser() call
+     * Returns a structure used to update a User. See
+     * {{#crossLink "UserService/updateUser"}}UserService.updateUser{{/crossLink}}
      *
      * @class UserUpdateStruct
      * @constructor

@@ -3,7 +3,8 @@ define(function () {
     "use strict";
 
     /**
-     * Returns a structure used to create a new View. See ContentService.createView() call
+     * Returns a structure used to create a new View. See
+     * {{#crossLink "ContentService/createView"}}ContentService.createView{{/crossLink}}
      *
      * @class ViewCreateStruct
      * @constructor

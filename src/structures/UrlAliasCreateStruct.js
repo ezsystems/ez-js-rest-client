@@ -3,7 +3,8 @@ define(function () {
     "use strict";
 
     /**
-     * Returns a structure used to create a new UrlAlias object. See ContentService.createUrlAlias() call
+     * Returns a structure used to create a new UrlAlias object. See
+     * {{#crossLink "ContentService/createUrlAlias"}}ContentService.createUrlAlias{{/crossLink}}
      *
      * @class UrlAliasCreateStruct
      * @constructor
