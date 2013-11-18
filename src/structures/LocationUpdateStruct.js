@@ -3,7 +3,8 @@ define(function () {
     "use strict";
 
     /**
-     * Returns a structure used to update a Location. See ContentService.updateLocation() call
+     * Returns a structure used to update a Location. See
+     * {{#crossLink "ContentService/updateLocation"}}ContentService.updateLocation{{/crossLink}}
      *
      * @class LocationUpdateStruct
      * @constructor

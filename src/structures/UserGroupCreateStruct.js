@@ -3,12 +3,14 @@ define(function () {
     "use strict";
 
     /**
-     * Returns a structure used to create a new User group. See UserService.createUserGroup() call
+     * Returns a structure used to create a new User group. See
+     * {{#crossLink "UserService/createUserGroup"}}UserService.createUserGroup{{/crossLink}}
      *
      * @class UserGroupCreateStruct
      * @constructor
      * @param languageCode {String} The language code (eng-GB, fre-FR, ...)
-     * @param fields {Array} fields array (see example in UserService.newUserGroupCreateStruct() doc)
+     * @param fields {Array} fields array (see example in
+     * {{#crossLink "UserService/newUserGroupCreateStruct"}}UserService.newUserGroupCreateStruct{{/crossLink}})
      */
     var UserGroupCreateStruct = function (languageCode, fields) {
         this.body = {};

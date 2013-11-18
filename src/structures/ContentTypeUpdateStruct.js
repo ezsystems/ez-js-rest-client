@@ -3,7 +3,8 @@ define(function () {
     "use strict";
 
     /**
-     * Returns a structure used to update a Content Type object. See ContentTypeService.updateContentType() call
+     * Returns a structure used to update a Content Type object. See for ex.
+     * {{#crossLink "ContentTypeService/createContentTypeDraft"}}ContentTypeService.createContentTypeDraft{{/crossLink}}
      *
      * @class ContentTypeUpdateStruct
      * @constructor

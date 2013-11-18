@@ -3,13 +3,14 @@ define(function () {
     "use strict";
 
     /**
-     * Returns a structure used to create a new Object State group. See ContentService.createObjectStateGroup() call
+     * Returns a structure used to create a new Object State group. See
+     * {{#crossLink "ContentService/createObjectStateGroup"}}ContentService.createObjectStateGroup{{/crossLink}}
      *
      * @class ObjectStateGroupCreateStruct
      * @constructor
      * @param identifier {String} unique ObjectStateGroup identifier
      * @param languageCode {String} The language code (eng-GB, fre-FR, ...)
-     * @param names {Array} multiLanguageValuesType in JSON format
+     * @param names {Array} Multi language value (see the example)
      * @example
      *      var objectStateGroupCreateStruct = contentService.newObjectStateGroupCreateStruct(
      *          "some-id",

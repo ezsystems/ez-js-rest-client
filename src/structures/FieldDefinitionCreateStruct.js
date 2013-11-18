@@ -3,14 +3,16 @@ define(function () {
     "use strict";
 
     /**
-     * Returns a structure used to create a new Field Definition. See ContentTypeService.addFieldDefinition() call
+     * Returns a structure used to create a new Field Definition. See
+     * {{#crossLink "ContentTypeService/addFieldDefinition"}}ContentTypeService.addFieldDefinition{{/crossLink}}
      *
      * @class FieldDefinitionCreateStruct
      * @constructor
      * @param identifier {String} unique field definiton identifer (e.g. "my-field")
      * @param fieldType {String} identifier of existing field type (e.g. "ezstring", "ezdate")
      * @param fieldGroup {String} identifier of existing field group (e.g. "content", "meta")
-     * @param names {Array} Multi language value (see example in ContentTypeService.newFieldDefintionCreateStruct() doc)
+     * @param names {Array} Multi language value (see example in
+     * {{#crossLink "ContentTypeService/newFieldDefinitionCreateStruct"}}ContentTypeService.newFieldDefintionCreateStruct{{/crossLink}})
      */
     var FieldDefinitionCreateStruct = function (identifier, fieldType, fieldGroup, names) {
         this.body = {};

@@ -3,12 +3,14 @@ define(function () {
     "use strict";
 
     /**
-     * Returns a structure used to create and update a Role Assign object. See for ex. UserService.assignRoleToUser() call
+     * Returns a structure used to create and update a Role Assign object. See for ex.
+     * {{#crossLink "UserService/assignRoleToUser"}}UserService.assignRoleToUser{{/crossLink}}
      *
      * @class RoleAssignInputStruct
      * @constructor
-     * @param role {Object} object representing the target role (see example)
-     * @param limitation {Object} object representing limitations for assignment (see example in UserService.newRoleAssignInputStruct() doc)
+     * @param role {Object} object representing the target role
+     * @param limitation {Object} object representing limitations for assignment (see example in
+     * {{#crossLink "UserService/newRoleAssignInputStruct"}}UserService.newRoleAssignInputStruct{{/crossLink}})
      */
     var RoleAssignInputStruct = function (role, limitation) {
         this.body = {};

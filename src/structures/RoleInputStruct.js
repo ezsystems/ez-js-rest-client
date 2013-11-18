@@ -3,7 +3,8 @@ define(function () {
     "use strict";
 
     /**
-     * Returns a structure used to create and update a Role. See UserService.createRole() call
+     * Returns a structure used to create and update a Role. See
+     * {{#crossLink "UserService/createRole"}}UserService.createRole{{/crossLink}}
      *
      * @class RoleInputStruct
      * @constructor

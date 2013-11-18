@@ -3,7 +3,8 @@ define(function () {
     "use strict";
 
     /**
-     * Returns a structure used to create a new Content object. See ContentService.createRelation() call
+     * Returns a structure used to create a new Content object. See
+     * {{#crossLink "ContentService/addRelation"}}ContentService.addRelation{{/crossLink}}
      *
      * @class RelationCreateStruct
      * @constructor

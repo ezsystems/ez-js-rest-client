@@ -3,7 +3,8 @@ define(function () {
     "use strict";
 
     /**
-     * Returns a structure used to create a new Policy. See UserService.createPolicy() call
+     * Returns a structure used to create a new Policy. See
+     * {{#crossLink "UserService/addPolicy"}}UserService.addPolicy{{/crossLink}}
      *
      * @class PolicyCreateStruct
      * @constructor

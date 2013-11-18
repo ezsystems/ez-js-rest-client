@@ -3,7 +3,8 @@ define(function () {
     "use strict";
 
     /**
-     * Returns a structure used to update an Object State group. See ContentService.updateObjectStateGroup() call
+     * Returns a structure used to update an Object State group. See
+     * {{#crossLink "ContentService/updateObjectStateGroup"}}ContentService.updateObjectStateGroup{{/crossLink}}
      *
      * @class ObjectStateGroupUpdateStruct
      * @constructor
