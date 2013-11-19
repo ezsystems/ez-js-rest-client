@@ -121,3 +121,7 @@ After these steps you may access `/js-rest-client-test/` path where you will fin
 testing html page.  Most of requests can be configured a little bit before
 executing them by changing input values.  See details of tests implementation in
 Resources/public/js/cookbook-*.js files.
+
+To test promise-based version of the CAPI you can use `/js-rest-client-promise-test/` path.
+This setup includes Q library as a downloaded file. See details of (rather basic) tests implementation
+in Resources/public/js/cookbook-PromiseCAPI.js.
