@@ -212,8 +212,11 @@ define(["structures/ContentTypeGroupInputStruct", "structures/ContentTypeCreateS
      *  {{#crossLink "ContentTypeService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     ContentTypeService.prototype.deleteContentTypeGroup = function (contentTypeGroupId, callback) {
-        this._connectionManager.delete(
+        this._connectionManager.request(
+            "DELETE",
             contentTypeGroupId,
+            "",
+            {},
             callback
         );
     };
@@ -407,8 +410,11 @@ define(["structures/ContentTypeGroupInputStruct", "structures/ContentTypeCreateS
      *  {{#crossLink "ContentTypeService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     ContentTypeService.prototype.deleteContentType = function (contentTypeId, callback) {
-        this._connectionManager.delete(
+        this._connectionManager.request(
+            "DELETE",
             contentTypeId,
+            "",
+            {},
             callback
         );
     };
@@ -459,8 +465,11 @@ define(["structures/ContentTypeGroupInputStruct", "structures/ContentTypeCreateS
      *  {{#crossLink "ContentTypeService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     ContentTypeService.prototype.unassignContentTypeGroup = function (contentTypeAssignedGroupId, callback) {
-        this._connectionManager.delete(
+        this._connectionManager.request(
+            "DELETE",
             contentTypeAssignedGroupId,
+            "",
+            {},
             callback
         );
     };
@@ -566,8 +575,11 @@ define(["structures/ContentTypeGroupInputStruct", "structures/ContentTypeCreateS
      *  {{#crossLink "ContentTypeService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     ContentTypeService.prototype.deleteContentTypeDraft = function (contentTypeDraftId, callback) {
-        this._connectionManager.delete(
+        this._connectionManager.request(
+            "DELETE",
             contentTypeDraftId,
+            "",
+            {},
             callback
         );
     };
@@ -655,8 +667,11 @@ define(["structures/ContentTypeGroupInputStruct", "structures/ContentTypeCreateS
      *  {{#crossLink "ContentTypeService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     ContentTypeService.prototype.deleteFieldDefinition = function (fieldDefinitionId, callback) {
-        this._connectionManager.delete(
+        this._connectionManager.request(
+            "DELETE",
             fieldDefinitionId,
+            "",
+            {},
             callback
         );
     };

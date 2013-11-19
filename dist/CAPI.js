@@ -926,23 +926,6 @@ define('ConnectionManager',["structures/Response", "structures/Request", "struct
     };
 
     /**
-     * Delete - shortcut which handles simple deletion requests in most cases
-     *
-     * @method delete
-     * @param url {String} target REST resource
-     * @param callback {function} function, which will be executed on request success
-     */
-    ConnectionManager.prototype.delete = function (url, callback) {
-        this.request(
-            "DELETE",
-            url,
-            "",
-            {},
-            callback
-        );
-    };
-
-    /**
      * logOut - logout workflow
      * Kills currently active session and resets localStorage params (sessionId, CSRFToken)
      *
@@ -1359,7 +1342,8 @@ define('structures/ContentCreateStruct',[],function () {
     
 
     /**
-     * Returns a structure used to create a new Content object. See ContentService.createContent() call
+     * Returns a structure used to create a new Content object. See
+     * {{#crossLink "ContentService/createContent"}}ContentService.createContent{{/crossLink}}
      *
      * @class ContentCreateStruct
      * @constructor
@@ -1404,7 +1388,8 @@ define('structures/ContentUpdateStruct',[],function () {
     
 
     /**
-     * Returns a structure used to update a Content object. See ContentService.updateContent() call
+     * Returns a structure used to update a Content object. See
+     * {{#crossLink "ContentService/updateContent"}}ContentService.updateContent{{/crossLink}}
      *
      * @class ContentUpdateStruct
      * @constructor
@@ -1439,7 +1424,8 @@ define('structures/SectionInputStruct',[],function () {
     
 
     /**
-     * Returns a structure used to create and update a Section. See for ex. ContentService.createSection() call
+     * Returns a structure used to create and update a Section. See for ex.
+     * {{#crossLink "ContentService/createSection"}}ContentService.createSection{{/crossLink}}
      *
      * @class SectionInputStruct
      * @constructor
@@ -1469,7 +1455,8 @@ define('structures/LocationCreateStruct',[],function () {
     
 
     /**
-     * Returns a structure used to create a new Location. See ContentService.createLocation() call
+     * Returns a structure used to create a new Location. See
+     * {{#crossLink "ContentService/createLocation"}}ContentService.createLocation{{/crossLink}}
      *
      * @class LocationCreateStruct
      * @constructor
@@ -1503,7 +1490,8 @@ define('structures/LocationUpdateStruct',[],function () {
     
 
     /**
-     * Returns a structure used to update a Location. See ContentService.updateLocation() call
+     * Returns a structure used to update a Location. See
+     * {{#crossLink "ContentService/updateLocation"}}ContentService.updateLocation{{/crossLink}}
      *
      * @class LocationUpdateStruct
      * @constructor
@@ -1531,7 +1519,8 @@ define('structures/ContentMetadataUpdateStruct',[],function () {
     
 
     /**
-     * Returns a structure used to update a Content's metadata. See ContentService.updateContentMetadata() call
+     * Returns a structure used to update a Content's metadata. See
+     * {{#crossLink "ContentService/updateContentMetadata"}}ContentService.updateContentMetadata{{/crossLink}}
      *
      * @class ContentMetadataUpdateStruct
      * @constructor
@@ -1567,13 +1556,14 @@ define('structures/ObjectStateGroupCreateStruct',[],function () {
     
 
     /**
-     * Returns a structure used to create a new Object State group. See ContentService.createObjectStateGroup() call
+     * Returns a structure used to create a new Object State group. See
+     * {{#crossLink "ContentService/createObjectStateGroup"}}ContentService.createObjectStateGroup{{/crossLink}}
      *
      * @class ObjectStateGroupCreateStruct
      * @constructor
      * @param identifier {String} unique ObjectStateGroup identifier
      * @param languageCode {String} The language code (eng-GB, fre-FR, ...)
-     * @param names {Array} multiLanguageValuesType in JSON format
+     * @param names {Array} Multi language value (see the example)
      * @example
      *      var objectStateGroupCreateStruct = contentService.newObjectStateGroupCreateStruct(
      *          "some-id",
@@ -1614,7 +1604,8 @@ define('structures/ObjectStateGroupUpdateStruct',[],function () {
     
 
     /**
-     * Returns a structure used to update an Object State group. See ContentService.updateObjectStateGroup() call
+     * Returns a structure used to update an Object State group. See
+     * {{#crossLink "ContentService/updateObjectStateGroup"}}ContentService.updateObjectStateGroup{{/crossLink}}
      *
      * @class ObjectStateGroupUpdateStruct
      * @constructor
@@ -1638,7 +1629,8 @@ define('structures/ObjectStateCreateStruct',[],function () {
     
 
     /**
-     * Returns a structure used to create a new Object State. See ContentService.createObjectState() call
+     * Returns a structure used to create a new Object State. See
+     * {{#crossLink "ContentService/createObjectState"}}ContentService.createObjectState{{/crossLink}}
      *
      * @class ObjectStateCreateStruct
      * @constructor
@@ -1693,7 +1685,8 @@ define('structures/ObjectStateUpdateStruct',[],function () {
     
 
     /**
-     * Returns a structure used to update an Object State. See ContentService.updateObjectState() call
+     * Returns a structure used to update an Object State. See
+     * {{#crossLink "ContentService/updateObjectState"}}ContentService.updateObjectState{{/crossLink}}
      *
      * @class ObjectStateUpdateStruct
      * @constructor
@@ -1717,7 +1710,8 @@ define('structures/ViewCreateStruct',[],function () {
     
 
     /**
-     * Returns a structure used to create a new View. See ContentService.createView() call
+     * Returns a structure used to create a new View. See
+     * {{#crossLink "ContentService/createView"}}ContentService.createView{{/crossLink}}
      *
      * @class ViewCreateStruct
      * @constructor
@@ -1753,7 +1747,8 @@ define('structures/UrlAliasCreateStruct',[],function () {
     
 
     /**
-     * Returns a structure used to create a new UrlAlias object. See ContentService.createUrlAlias() call
+     * Returns a structure used to create a new UrlAlias object. See
+     * {{#crossLink "ContentService/createUrlAlias"}}ContentService.createUrlAlias{{/crossLink}}
      *
      * @class UrlAliasCreateStruct
      * @constructor
@@ -1795,7 +1790,8 @@ define('structures/UrlWildcardCreateStruct',[],function () {
     
 
     /**
-     * Returns a structure used to create a new Url Wildcard object. See ContentService.createUrlWildcard() call
+     * Returns a structure used to create a new Url Wildcard object. See
+     * {{#crossLink "ContentService/createUrlWildcard"}}ContentService.createUrlWildcard{{/crossLink}}
      *
      * @class UrlWildcardCreateStruct
      * @constructor
@@ -1826,7 +1822,8 @@ define('structures/RelationCreateStruct',[],function () {
     
 
     /**
-     * Returns a structure used to create a new Content object. See ContentService.createRelation() call
+     * Returns a structure used to create a new Content object. See
+     * {{#crossLink "ContentService/addRelation"}}ContentService.addRelation{{/crossLink}}
      *
      * @class RelationCreateStruct
      * @constructor
@@ -2220,8 +2217,11 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     ContentService.prototype.deleteSection = function (sectionId, callback) {
-        this._connectionManager.delete(
+        this._connectionManager.request(
+            "DELETE",
             sectionId,
+            "",
+            {},
             callback
         );
     };
@@ -2370,8 +2370,11 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
      *      );
      */
     ContentService.prototype.deleteContent = function (contentId, callback) {
-        this._connectionManager.delete(
+        this._connectionManager.request(
+            "DELETE",
             contentId,
+            "",
+            {},
             callback
         );
     };
@@ -2606,8 +2609,11 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     ContentService.prototype.deleteVersion = function (versionedContentId, callback) {
-        this._connectionManager.delete(
+        this._connectionManager.request(
+            "DELETE",
             versionedContentId,
+            "",
+            {},
             callback
         );
     };
@@ -2883,8 +2889,11 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     ContentService.prototype.deleteLocation = function (locationId, callback) {
-        this._connectionManager.delete(
+        this._connectionManager.request(
+            "DELETE",
             locationId,
+            "",
+            {},
             callback
         );
     };
@@ -2894,12 +2903,21 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
 // ******************************
 
     /**
-     * Creates a new view
+     * Creates a new view. Views are used to perform content queries by certain criteria.
      *
      * @method createView
      * @param viewCreateStruct {ViewCreateStruct} object describing new view to be created
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
+     * @example
+     *     var viewCreateStruct = contentService.newViewCreateStruct('some-test-id');
+     *     viewCreateStruct.body.ViewInput.Query.Criteria = {
+     *         FullTextCriterion : "title"
+     *     };
+     *     contentService.createView(
+     *         viewCreateStruct,
+     *         callback
+     *     );
      */
     ContentService.prototype.createView = function (viewCreateStruct, callback) {
         var that = this;
@@ -3102,8 +3120,11 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     ContentService.prototype.deleteRelation = function (relationId, callback) {
-        this._connectionManager.delete(
+        this._connectionManager.request(
+            "DELETE",
             relationId,
+            "",
+            {},
             callback
         );
     };
@@ -3217,8 +3238,11 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     ContentService.prototype.deleteTrashItem = function (trashItemId, callback) {
-        this._connectionManager.delete(
+        this._connectionManager.request(
+            "DELETE",
             trashItemId,
+            "",
+            {},
             callback
         );
     };
@@ -3339,8 +3363,11 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     ContentService.prototype.deleteObjectStateGroup = function (objectStateGroupId, callback) {
-        this._connectionManager.delete(
+        this._connectionManager.request(
+            "DELETE",
             objectStateGroupId,
+            "",
+            {},
             callback
         );
     };
@@ -3410,8 +3437,11 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     ContentService.prototype.deleteObjectState = function (objectStateId, callback) {
-        this._connectionManager.delete(
+        this._connectionManager.request(
+            "DELETE",
             objectStateId,
+            "",
+            {},
             callback
         );
     };
@@ -3573,8 +3603,11 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     ContentService.prototype.deleteUrlAlias = function (urlAliasId, callback) {
-        this._connectionManager.delete(
+        this._connectionManager.request(
+            "DELETE",
             urlAliasId,
+            "",
+            {},
             callback
         );
     };
@@ -3647,8 +3680,11 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     ContentService.prototype.deleteUrlWildcard = function (urlWildcardId, callback) {
-        this._connectionManager.delete(
+        this._connectionManager.request(
+            "DELETE",
             urlWildcardId,
+            "",
+            {},
             callback
         );
     };
@@ -3662,7 +3698,8 @@ define('structures/ContentTypeGroupInputStruct',[],function () {
     
 
     /**
-     * Returns a structure used to create and update a Content Type group. See ContentTypeService.createContentTypeGroup() call
+     * Returns a structure used to create and update a Content Type group. See
+     * {{#crossLink "ContentTypeService/createContentTypeGroup"}}ContentTypeService.createContentTypeGroup{{/crossLink}}
      *
      * @class ContentTypeGroupInputStruct
      * @constructor
@@ -3689,13 +3726,15 @@ define('structures/ContentTypeCreateStruct',[],function () {
     
 
     /**
-     * Returns a structure used to create a new Content Type object. See ContentTypeService.createContentType() call
+     * Returns a structure used to create a new Content Type object. See
+     * {{#crossLink "ContentTypeService/createContentType"}}ContentTypeService.createContentType{{/crossLink}}
      *
      * @class ContentTypeCreateStruct
      * @constructor
      * @param identifier {String} Unique identifier for the target Content Type (e.g. "my_new_content_type")
      * @param languageCode {String} The language code (e.g. "eng-GB")
-     * @param names {Array} Multi language value (see example in ContentTypeService.newContentTypeCreateStruct() doc)
+     * @param names {Array} Multi language value (see example in
+     * {{#crossLink "ContentTypeService/newContentTypeCreateStruct"}}ContentTypeService:newContentTypeCreateStruct{{/crossLink}})
      */
     var ContentTypeCreateStruct = function (identifier, languageCode, names) {
         var now = JSON.parse(JSON.stringify(new Date()));
@@ -3738,7 +3777,8 @@ define('structures/ContentTypeUpdateStruct',[],function () {
     
 
     /**
-     * Returns a structure used to update a Content Type object. See ContentTypeService.updateContentType() call
+     * Returns a structure used to update a Content Type object. See for ex.
+     * {{#crossLink "ContentTypeService/createContentTypeDraft"}}ContentTypeService.createContentTypeDraft{{/crossLink}}
      *
      * @class ContentTypeUpdateStruct
      * @constructor
@@ -3762,14 +3802,16 @@ define('structures/FieldDefinitionCreateStruct',[],function () {
     
 
     /**
-     * Returns a structure used to create a new Field Definition. See ContentTypeService.addFieldDefinition() call
+     * Returns a structure used to create a new Field Definition. See
+     * {{#crossLink "ContentTypeService/addFieldDefinition"}}ContentTypeService.addFieldDefinition{{/crossLink}}
      *
      * @class FieldDefinitionCreateStruct
      * @constructor
      * @param identifier {String} unique field definiton identifer (e.g. "my-field")
      * @param fieldType {String} identifier of existing field type (e.g. "ezstring", "ezdate")
      * @param fieldGroup {String} identifier of existing field group (e.g. "content", "meta")
-     * @param names {Array} Multi language value (see example in ContentTypeService.newFieldDefintionCreateStruct() doc)
+     * @param names {Array} Multi language value (see example in
+     * {{#crossLink "ContentTypeService/newFieldDefinitionCreateStruct"}}ContentTypeService.newFieldDefintionCreateStruct{{/crossLink}})
      */
     var FieldDefinitionCreateStruct = function (identifier, fieldType, fieldGroup, names) {
         this.body = {};
@@ -3809,7 +3851,8 @@ define('structures/FieldDefinitionUpdateStruct',[],function () {
     
 
     /**
-     * Returns a structure used to update a Field Definition. See ContentTypeService.updateFieldDefinition() call
+     * Returns a structure used to update a Field Definition. See
+     * {{#crossLink "ContentTypeService/updateFieldDefinition"}}ContentTypeService.updateFieldDefinition{{/crossLink}}
      *
      * @class FieldDefinitionUpdateStruct
      * @constructor
@@ -4042,8 +4085,11 @@ define('services/ContentTypeService',["structures/ContentTypeGroupInputStruct", 
      *  {{#crossLink "ContentTypeService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     ContentTypeService.prototype.deleteContentTypeGroup = function (contentTypeGroupId, callback) {
-        this._connectionManager.delete(
+        this._connectionManager.request(
+            "DELETE",
             contentTypeGroupId,
+            "",
+            {},
             callback
         );
     };
@@ -4237,8 +4283,11 @@ define('services/ContentTypeService',["structures/ContentTypeGroupInputStruct", 
      *  {{#crossLink "ContentTypeService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     ContentTypeService.prototype.deleteContentType = function (contentTypeId, callback) {
-        this._connectionManager.delete(
+        this._connectionManager.request(
+            "DELETE",
             contentTypeId,
+            "",
+            {},
             callback
         );
     };
@@ -4289,8 +4338,11 @@ define('services/ContentTypeService',["structures/ContentTypeGroupInputStruct", 
      *  {{#crossLink "ContentTypeService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     ContentTypeService.prototype.unassignContentTypeGroup = function (contentTypeAssignedGroupId, callback) {
-        this._connectionManager.delete(
+        this._connectionManager.request(
+            "DELETE",
             contentTypeAssignedGroupId,
+            "",
+            {},
             callback
         );
     };
@@ -4396,8 +4448,11 @@ define('services/ContentTypeService',["structures/ContentTypeGroupInputStruct", 
      *  {{#crossLink "ContentTypeService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     ContentTypeService.prototype.deleteContentTypeDraft = function (contentTypeDraftId, callback) {
-        this._connectionManager.delete(
+        this._connectionManager.request(
+            "DELETE",
             contentTypeDraftId,
+            "",
+            {},
             callback
         );
     };
@@ -4485,8 +4540,11 @@ define('services/ContentTypeService',["structures/ContentTypeGroupInputStruct", 
      *  {{#crossLink "ContentTypeService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     ContentTypeService.prototype.deleteFieldDefinition = function (fieldDefinitionId, callback) {
-        this._connectionManager.delete(
+        this._connectionManager.request(
+            "DELETE",
             fieldDefinitionId,
+            "",
+            {},
             callback
         );
     };
@@ -4500,7 +4558,8 @@ define('structures/SessionCreateStruct',[],function () {
     
 
     /**
-     * Returns a structure used to create a new Session. See UserService.createSession() call
+     * Returns a structure used to create a new Session. See
+     * {{#crossLink "UserService/createSession"}}UserService.createSession{{/crossLink}}
      *
      * @class SessionCreateStruct
      * @constructor
@@ -4530,7 +4589,8 @@ define('structures/UserCreateStruct',[],function () {
     
 
     /**
-     * Returns a structure used to create a new User. See UserService.createUser() call
+     * Returns a structure used to create a new User. See
+     * {{#crossLink "UserService/createUser"}}UserService.createUser{{/crossLink}}
      *
      * @class UserCreateStruct
      * @constructor
@@ -4538,7 +4598,8 @@ define('structures/UserCreateStruct',[],function () {
      * @param login {String} login for a new user
      * @param email {String} email for a new user
      * @param password {String} password for a new user
-     * @param fields {Array} fields array (see example for "newUserGroupCreateStruct")
+     * @param fields {Array} fields array (see example in
+     * {{#crossLink "UserService/newUserGroupCreateStruct"}}UserService.newUserGroupCreateStruct{{/crossLink}})
      */
     var UserCreateStruct = function (languageCode, login, email, password, fields) {
         this.body = {};
@@ -4567,7 +4628,8 @@ define('structures/UserUpdateStruct',[],function () {
     
 
     /**
-     * Returns a structure used to update a User. See UserService.updateUser() call
+     * Returns a structure used to update a User. See
+     * {{#crossLink "UserService/updateUser"}}UserService.updateUser{{/crossLink}}
      *
      * @class UserUpdateStruct
      * @constructor
@@ -4594,12 +4656,14 @@ define('structures/UserGroupCreateStruct',[],function () {
     
 
     /**
-     * Returns a structure used to create a new User group. See UserService.createUserGroup() call
+     * Returns a structure used to create a new User group. See
+     * {{#crossLink "UserService/createUserGroup"}}UserService.createUserGroup{{/crossLink}}
      *
      * @class UserGroupCreateStruct
      * @constructor
      * @param languageCode {String} The language code (eng-GB, fre-FR, ...)
-     * @param fields {Array} fields array (see example in UserService.newUserGroupCreateStruct() doc)
+     * @param fields {Array} fields array (see example in
+     * {{#crossLink "UserService/newUserGroupCreateStruct"}}UserService.newUserGroupCreateStruct{{/crossLink}})
      */
     var UserGroupCreateStruct = function (languageCode, fields) {
         this.body = {};
@@ -4625,12 +4689,14 @@ define('structures/UserGroupUpdateStruct',[],function () {
     
 
     /**
-     * Returns a structure used to update a User group. See UserService.updateUserGroup() call
+     * Returns a structure used to update a User group. See
+     * {{#crossLink "UserService/updateUserGroup"}}UserService.updateUserGroup{{/crossLink}}
      *
      * @class UserGroupUpdateStruct
      * @constructor
      * @param languageCode {String} The language code (eng-GB, fre-FR, ...)
-     * @param fields {Array} fields array (see example in UserService.newUserGroupCreateStruct() doc)
+     * @param fields {Array} fields array (see example in
+     * {{#crossLink "UserService/newUserGroupCreateStruct"}}UserService.newUserGroupCreateStruct{{/crossLink}})
      */
     var UserGroupUpdateStruct = function (languageCode, fields) {
         this.body = {};
@@ -4654,7 +4720,8 @@ define('structures/PolicyCreateStruct',[],function () {
     
 
     /**
-     * Returns a structure used to create a new Policy. See UserService.createPolicy() call
+     * Returns a structure used to create a new Policy. See
+     * {{#crossLink "UserService/addPolicy"}}UserService.addPolicy{{/crossLink}}
      *
      * @class PolicyCreateStruct
      * @constructor
@@ -4687,7 +4754,8 @@ define('structures/PolicyUpdateStruct',[],function () {
     
 
     /**
-     * Returns a structure used to update a Policy. See UserService.updatePolicy() call
+     * Returns a structure used to update a Policy. See
+     * {{#crossLink "UserService/updatePolicy"}}UserService.updatePolicy{{/crossLink}}
      *
      * @class PolicyUpdateStruct
      * @constructor
@@ -4715,7 +4783,8 @@ define('structures/RoleInputStruct',[],function () {
     
 
     /**
-     * Returns a structure used to create and update a Role. See UserService.createRole() call
+     * Returns a structure used to create and update a Role. See
+     * {{#crossLink "UserService/createRole"}}UserService.createRole{{/crossLink}}
      *
      * @class RoleInputStruct
      * @constructor
@@ -4742,12 +4811,14 @@ define('structures/RoleAssignInputStruct',[],function () {
     
 
     /**
-     * Returns a structure used to create and update a Role Assign object. See for ex. UserService.assignRoleToUser() call
+     * Returns a structure used to create and update a Role Assign object. See for ex.
+     * {{#crossLink "UserService/assignRoleToUser"}}UserService.assignRoleToUser{{/crossLink}}
      *
      * @class RoleAssignInputStruct
      * @constructor
-     * @param role {Object} object representing the target role (see example)
-     * @param limitation {Object} object representing limitations for assignment (see example in UserService.newRoleAssignInputStruct() doc)
+     * @param role {Object} object representing the target role
+     * @param limitation {Object} object representing limitations for assignment (see example in
+     * {{#crossLink "UserService/newRoleAssignInputStruct"}}UserService.newRoleAssignInputStruct{{/crossLink}})
      */
     var RoleAssignInputStruct = function (role, limitation) {
         this.body = {};
@@ -4867,7 +4938,8 @@ define('services/UserService',['structures/SessionCreateStruct', 'structures/Use
      * @param login {String} login for a new user
      * @param email {String} email for a new user
      * @param password {String} password for a new user
-     * @param fields {Array} fields array (see example for "newUserGroupCreateStruct")
+     * @param fields {Array} fields array (see example for
+     * {{#crossLink "UserService/newUserGroupCreateStruct"}}UserService.newUserGroupCreateStruct{{/crossLink}})
      * @return {UserCreateStruct}
      */
     UserService.prototype.newUserCreateStruct = function (languageCode, login, email, password, fields) {
@@ -5042,8 +5114,11 @@ define('services/UserService',['structures/SessionCreateStruct', 'structures/Use
      *  {{#crossLink "UserService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     UserService.prototype.deleteUserGroup = function (userGroupId, callback) {
-        this._connectionManager.delete(
+        this._connectionManager.request(
+            "DELETE",
             userGroupId,
+            "",
+            {},
             callback
         );
     };
@@ -5311,8 +5386,11 @@ define('services/UserService',['structures/SessionCreateStruct', 'structures/Use
      *  {{#crossLink "UserService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     UserService.prototype.deleteUser = function (userId, callback) {
-        this._connectionManager.delete(
+        this._connectionManager.request(
+            "DELETE",
             userId,
+            "",
+            {},
             callback
         );
     };
@@ -5363,8 +5441,11 @@ define('services/UserService',['structures/SessionCreateStruct', 'structures/Use
      *  {{#crossLink "UserService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     UserService.prototype.unassignUserFromUserGroup = function (userAssignedGroupId, callback) {
-        this._connectionManager.delete(
+        this._connectionManager.request(
+            "DELETE",
             userAssignedGroupId,
+            "",
+            {},
             callback
         );
     };
@@ -5510,8 +5591,11 @@ define('services/UserService',['structures/SessionCreateStruct', 'structures/Use
      *  {{#crossLink "UserService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     UserService.prototype.deleteRole = function (roleId, callback) {
-        this._connectionManager.delete(
+        this._connectionManager.request(
+            "DELETE",
             roleId,
+            "",
+            {},
             callback
         );
     };
@@ -5692,8 +5776,11 @@ define('services/UserService',['structures/SessionCreateStruct', 'structures/Use
      *  {{#crossLink "UserService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     UserService.prototype.unassignRoleFromUser = function (userRoleId, callback) {
-        this._connectionManager.delete(
+        this._connectionManager.request(
+            "DELETE",
             userRoleId,
+            "",
+            {},
             callback
         );
     };
@@ -5707,8 +5794,11 @@ define('services/UserService',['structures/SessionCreateStruct', 'structures/Use
      *  {{#crossLink "UserService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     UserService.prototype.unassignRoleFromUserGroup = function (userGroupRoleId, callback) {
-        this._connectionManager.delete(
+        this._connectionManager.request(
+            "DELETE",
             userGroupRoleId,
+            "",
+            {},
             callback
         );
     };
@@ -5844,8 +5934,11 @@ define('services/UserService',['structures/SessionCreateStruct', 'structures/Use
      *  {{#crossLink "UserService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     UserService.prototype.deletePolicy = function (policyId, callback) {
-        this._connectionManager.delete(
+        this._connectionManager.request(
+            "DELETE",
             policyId,
+            "",
+            {},
             callback
         );
     };
@@ -5901,8 +5994,11 @@ define('services/UserService',['structures/SessionCreateStruct', 'structures/Use
      *  {{#crossLink "UserService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     UserService.prototype.deleteSession = function (sessionId, callback) {
-        this._connectionManager.delete(
+        this._connectionManager.request(
+            "DELETE",
             sessionId,
+            "",
+            {},
             callback
         );
     };
@@ -8068,6 +8164,98 @@ define('PromiseCAPI',["CAPI", "services/PromiseService"], function (CAPI, Promis
      */
     var PromiseCAPI = function (CAPI) {
         var key;
+
+        // Documentation for dynamically created methods
+
+        /**
+         * Dynamically generated method which returns promise-based version of the ContentService.
+         * Resulting service provides set of methods named the same as the regular
+         * {{#crossLink "ContentService"}}ContentService{{/crossLink}} methods.
+         * The only exception are structure constructors (new...Struct methods) which are not implemented in promise-based services.
+         * These promise-based methods should be used without the callback parameter and according to promises approach.
+         * Basic usage of a promise-based method is provided in the following example.
+         * Read more about promises at https://github.com/kriskowal/q
+         *
+         * @method getContentService
+         * @return {PromiseService}
+         * @example
+         *     var jsCAPI = new eZ.CAPI(
+         *         'http://ez.git.local',
+         *         new eZ.SessionAuthAgent({login: "admin", password: "ezpublish"}),
+         *         {logRequests: true},
+         *     ),
+         *     jsPromiseCAPI = new eZ.PromiseCAPI(jsCAPI),
+         *     promiseContentService = jsPromiseCAPI.getContentService(),
+         *     promise = promiseContentService.loadSection("/api/ezp/v2/content/sections/1");
+         *
+         *     promise.then(
+         *         function (result) {
+         *             console.log(result);
+         *         }, function (error) {
+         *             console.log(error);
+         *         }
+         *     );
+         */
+
+        /**
+         * Dynamically generated method which returns promise-based version of the ContentTypeService.
+         * Resulting service provides set of methods named the same as the regular
+         * {{#crossLink "ContentTypeService"}}ContentTypeService{{/crossLink}} methods.
+         * The only exception are structure constructors (new...Struct methods) which are not implemented in promise-based services.
+         * These promise-based methods should be used without the callback parameter and according to promises approach.
+         * Basic usage of a promise-based method is provided in the following example.
+         * Read more about promises at https://github.com/kriskowal/q
+         *
+         * @method getContentTypeService
+         * @return {PromiseService}
+         * @example
+         *     var jsCAPI = new eZ.CAPI(
+         *         'http://ez.git.local',
+         *         new eZ.SessionAuthAgent({login: "admin", password: "ezpublish"}),
+         *         {logRequests: true},
+         *     ),
+         *     jsPromiseCAPI = new eZ.PromiseCAPI(jsCAPI),
+         *     promiseContentTypeService = jsPromiseCAPI.getContentTypeService(),
+         *     promise = promiseContentTypeService.loadContentTypeGroup("/api/ezp/v2/content/typegroups/1");
+         *
+         *     promise.then(
+         *         function (result) {
+         *             console.log(result);
+         *         }, function (error) {
+         *             console.log(error);
+         *         }
+         *     );
+         */
+
+        /**
+         * Dynamically generated method which returns promise-based version of the UserService.
+         * Resulting service provides set of methods named the same as the regular
+         * {{#crossLink "UserService"}}UserService{{/crossLink}} methods.
+         * The only exception are structure constructors (new...Struct methods) which are not implemented in promise-based services.
+         * These promise-based methods should be used without the callback parameter and according to promises approach.
+         * Basic usage of a promise-based method is provided in the following example.
+         * Read more about promises at https://github.com/kriskowal/q
+         *
+         * @method getUserService
+         * @return {PromiseService}
+         * @example
+         *     var jsCAPI = new eZ.CAPI(
+         *         'http://ez.git.local',
+         *         new eZ.SessionAuthAgent({login: "admin", password: "ezpublish"}),
+         *         {logRequests: true},
+         *     ),
+         *     jsPromiseCAPI = new eZ.PromiseCAPI(jsCAPI),
+         *     promiseUserService = jsPromiseCAPI.getUserService(),
+         *     promise = promiseUserService.loadUserGroup("/api/ezp/v2/user/groups/1/5");
+         *
+         *     promise.then(
+         *         function (result) {
+         *             console.log(result);
+         *         }, function (error) {
+         *             console.log(error);
+         *         }
+         *     );
+         */
 
         /**
          * Array of promise-based services instances (needed to implement singletons approach)

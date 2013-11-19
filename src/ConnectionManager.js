@@ -190,23 +190,6 @@ define(["structures/Response", "structures/Request", "structures/CAPIError"],
     };
 
     /**
-     * Delete - shortcut which handles simple deletion requests in most cases
-     *
-     * @method delete
-     * @param url {String} target REST resource
-     * @param callback {function} function, which will be executed on request success
-     */
-    ConnectionManager.prototype.delete = function (url, callback) {
-        this.request(
-            "DELETE",
-            url,
-            "",
-            {},
-            callback
-        );
-    };
-
-    /**
      * logOut - logout workflow
      * Kills currently active session and resets localStorage params (sessionId, CSRFToken)
      *

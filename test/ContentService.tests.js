@@ -343,9 +343,13 @@ define(function (require) {
                         mockCallback
                     );
 
-                    expect(mockConnectionManager.delete).toHaveBeenCalled();
-                    expect(mockConnectionManager.delete.mostRecentCall.args[0]).toEqual(testContentId); //url
-                    expect(mockConnectionManager.delete.mostRecentCall.args[1]).toBe(mockCallback); // callback
+                    expect(mockConnectionManager.request).toHaveBeenCalledWith(
+                        "DELETE",
+                        testContentId,
+                        "",
+                        {},
+                        mockCallback
+                    );
                 });
 
                 it("copyContent", function () {
@@ -567,9 +571,13 @@ define(function (require) {
                         mockCallback
                     );
 
-                    expect(mockConnectionManager.delete).toHaveBeenCalled();
-                    expect(mockConnectionManager.delete.mostRecentCall.args[0]).toEqual(testVersionedContentId); //url
-                    expect(mockConnectionManager.delete.mostRecentCall.args[1]).toBe(mockCallback); // callback
+                    expect(mockConnectionManager.request).toHaveBeenCalledWith(
+                        "DELETE",
+                        testVersionedContentId,
+                        "",
+                        {},
+                        mockCallback
+                    );
                 });
 
                 it("publishVersion", function () {
@@ -751,9 +759,13 @@ define(function (require) {
                         mockCallback
                     );
 
-                    expect(mockConnectionManager.delete).toHaveBeenCalled();
-                    expect(mockConnectionManager.delete.mostRecentCall.args[0]).toEqual(testRelationId); //url
-                    expect(mockConnectionManager.delete.mostRecentCall.args[1]).toBe(mockCallback); // callback
+                    expect(mockConnectionManager.request).toHaveBeenCalledWith(
+                        "DELETE",
+                        testRelationId,
+                        "",
+                        {},
+                        mockCallback
+                    );
                 });
 
             });
@@ -963,9 +975,13 @@ define(function (require) {
                         mockCallback
                     );
 
-                    expect(mockConnectionManager.delete).toHaveBeenCalled();
-                    expect(mockConnectionManager.delete.mostRecentCall.args[0]).toEqual(testLocation); //url
-                    expect(mockConnectionManager.delete.mostRecentCall.args[1]).toBe(mockCallback); // callback
+                    expect(mockConnectionManager.request).toHaveBeenCalledWith(
+                        "DELETE",
+                        testLocation,
+                        "",
+                        {},
+                        mockCallback
+                    );
                 });
 
 
@@ -1057,9 +1073,13 @@ define(function (require) {
                         mockCallback
                     );
 
-                    expect(mockConnectionManager.delete).toHaveBeenCalled();
-                    expect(mockConnectionManager.delete.mostRecentCall.args[0]).toEqual(testSection); //url
-                    expect(mockConnectionManager.delete.mostRecentCall.args[1]).toBe(mockCallback); // callback
+                    expect(mockConnectionManager.request).toHaveBeenCalledWith(
+                        "DELETE",
+                        testSection,
+                        "",
+                        {},
+                        mockCallback
+                    );
                 });
 
             });
@@ -1173,10 +1193,13 @@ define(function (require) {
                         mockCallback
                     );
 
-                    expect(mockConnectionManager.delete).toHaveBeenCalled();
-                    expect(mockConnectionManager.delete.mostRecentCall.args[0]).toEqual(testTrashItem); //url
-                    expect(mockConnectionManager.delete.mostRecentCall.args[1]).toBe(mockCallback); // callback
-
+                    expect(mockConnectionManager.request).toHaveBeenCalledWith(
+                        "DELETE",
+                        testTrashItem,
+                        "",
+                        {},
+                        mockCallback
+                    );
                 });
 
                 it("emptyTrash", function () {
@@ -1288,9 +1311,13 @@ define(function (require) {
                         mockCallback
                     );
 
-                    expect(mockConnectionManager.delete).toHaveBeenCalled();
-                    expect(mockConnectionManager.delete.mostRecentCall.args[0]).toEqual(testObjectStateGroup); //url
-                    expect(mockConnectionManager.delete.mostRecentCall.args[1]).toBe(mockCallback); // callback
+                    expect(mockConnectionManager.request).toHaveBeenCalledWith(
+                        "DELETE",
+                        testObjectStateGroup,
+                        "",
+                        {},
+                        mockCallback
+                    );
                 });
 
             });
@@ -1370,9 +1397,13 @@ define(function (require) {
                         mockCallback
                     );
 
-                    expect(mockConnectionManager.delete).toHaveBeenCalled();
-                    expect(mockConnectionManager.delete.mostRecentCall.args[0]).toEqual(testObjectState); //url
-                    expect(mockConnectionManager.delete.mostRecentCall.args[1]).toBe(mockCallback); // callback
+                    expect(mockConnectionManager.request).toHaveBeenCalledWith(
+                        "DELETE",
+                        testObjectState,
+                        "",
+                        {},
+                        mockCallback
+                    );
                 });
 
                 it("getContentState", function () {
@@ -1523,10 +1554,13 @@ define(function (require) {
                         mockCallback
                     );
 
-                    expect(mockConnectionManager.delete).toHaveBeenCalled();
-                    expect(mockConnectionManager.delete.mostRecentCall.args[0]).toEqual(testUrlAlias); //url
-                    expect(mockConnectionManager.delete.mostRecentCall.args[1]).toBe(mockCallback); // callback
-
+                    expect(mockConnectionManager.request).toHaveBeenCalledWith(
+                        "DELETE",
+                        testUrlAlias,
+                        "",
+                        {},
+                        mockCallback
+                    );
                 });
 
             });
@@ -1594,9 +1628,13 @@ define(function (require) {
                         mockCallback
                     );
 
-                    expect(mockConnectionManager.delete).toHaveBeenCalled();
-                    expect(mockConnectionManager.delete.mostRecentCall.args[0]).toEqual(testUrlWildcard); //url
-                    expect(mockConnectionManager.delete.mostRecentCall.args[1]).toBe(mockCallback); // callback
+                    expect(mockConnectionManager.request).toHaveBeenCalledWith(
+                        "DELETE",
+                        testUrlWildcard,
+                        "",
+                        {},
+                        mockCallback
+                    );
                 });
 
             });
@@ -1761,7 +1799,7 @@ define(function (require) {
             // beforeEach for discovery service errors
             // ******************************
             beforeEach(function (){
-                mockConnectionManager = jasmine.createSpyObj('mockConnectionManager', ['request', 'delete']);
+                mockConnectionManager = jasmine.createSpyObj('mockConnectionManager', ['request']);
                 mockCallback = jasmine.createSpy('mockCallback');
 
                 mockFaultyDiscoveryService = {

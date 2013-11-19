@@ -369,8 +369,11 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     ContentService.prototype.deleteSection = function (sectionId, callback) {
-        this._connectionManager.delete(
+        this._connectionManager.request(
+            "DELETE",
             sectionId,
+            "",
+            {},
             callback
         );
     };
@@ -519,8 +522,11 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
      *      );
      */
     ContentService.prototype.deleteContent = function (contentId, callback) {
-        this._connectionManager.delete(
+        this._connectionManager.request(
+            "DELETE",
             contentId,
+            "",
+            {},
             callback
         );
     };
@@ -755,8 +761,11 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     ContentService.prototype.deleteVersion = function (versionedContentId, callback) {
-        this._connectionManager.delete(
+        this._connectionManager.request(
+            "DELETE",
             versionedContentId,
+            "",
+            {},
             callback
         );
     };
@@ -1032,8 +1041,11 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     ContentService.prototype.deleteLocation = function (locationId, callback) {
-        this._connectionManager.delete(
+        this._connectionManager.request(
+            "DELETE",
             locationId,
+            "",
+            {},
             callback
         );
     };
@@ -1260,8 +1272,11 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     ContentService.prototype.deleteRelation = function (relationId, callback) {
-        this._connectionManager.delete(
+        this._connectionManager.request(
+            "DELETE",
             relationId,
+            "",
+            {},
             callback
         );
     };
@@ -1375,8 +1390,11 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     ContentService.prototype.deleteTrashItem = function (trashItemId, callback) {
-        this._connectionManager.delete(
+        this._connectionManager.request(
+            "DELETE",
             trashItemId,
+            "",
+            {},
             callback
         );
     };
@@ -1497,8 +1515,11 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     ContentService.prototype.deleteObjectStateGroup = function (objectStateGroupId, callback) {
-        this._connectionManager.delete(
+        this._connectionManager.request(
+            "DELETE",
             objectStateGroupId,
+            "",
+            {},
             callback
         );
     };
@@ -1568,8 +1589,11 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     ContentService.prototype.deleteObjectState = function (objectStateId, callback) {
-        this._connectionManager.delete(
+        this._connectionManager.request(
+            "DELETE",
             objectStateId,
+            "",
+            {},
             callback
         );
     };
@@ -1731,8 +1755,11 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     ContentService.prototype.deleteUrlAlias = function (urlAliasId, callback) {
-        this._connectionManager.delete(
+        this._connectionManager.request(
+            "DELETE",
             urlAliasId,
+            "",
+            {},
             callback
         );
     };
@@ -1805,8 +1832,11 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     ContentService.prototype.deleteUrlWildcard = function (urlWildcardId, callback) {
-        this._connectionManager.delete(
+        this._connectionManager.request(
+            "DELETE",
             urlWildcardId,
+            "",
+            {},
             callback
         );
     };

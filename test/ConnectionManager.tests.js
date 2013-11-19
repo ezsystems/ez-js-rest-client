@@ -18,7 +18,6 @@ define(function (require) {
 
             endPointUrl = 'http://ez.git.local',
             rootId = '/api/ezp/v2/',
-            testContentId = '/api/ezp/v2/content/objects/173',
             testTrue = true,
             testFalse = false;
 
@@ -330,22 +329,6 @@ define(function (require) {
                     body: "",
                     headers: {}
                 });
-            });
-
-
-            it("delete", function(){
-
-                connectionManager.delete(
-                    testContentId,
-                    mockCallback
-                );
-
-                expect(mockAuthenticationAgent.ensureAuthentication).toHaveBeenCalled();
-                expect(mockAuthenticationAgent.authenticateRequest).toHaveBeenCalled();
-                expect(mockConnection.execute).toHaveBeenCalledWith(
-                    jasmine.any(Request),
-                    mockCallback
-                );
             });
 
             it("logOut", function(){

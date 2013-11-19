@@ -274,8 +274,11 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
      *  {{#crossLink "UserService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     UserService.prototype.deleteUserGroup = function (userGroupId, callback) {
-        this._connectionManager.delete(
+        this._connectionManager.request(
+            "DELETE",
             userGroupId,
+            "",
+            {},
             callback
         );
     };
@@ -543,8 +546,11 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
      *  {{#crossLink "UserService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     UserService.prototype.deleteUser = function (userId, callback) {
-        this._connectionManager.delete(
+        this._connectionManager.request(
+            "DELETE",
             userId,
+            "",
+            {},
             callback
         );
     };
@@ -595,8 +601,11 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
      *  {{#crossLink "UserService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     UserService.prototype.unassignUserFromUserGroup = function (userAssignedGroupId, callback) {
-        this._connectionManager.delete(
+        this._connectionManager.request(
+            "DELETE",
             userAssignedGroupId,
+            "",
+            {},
             callback
         );
     };
@@ -742,8 +751,11 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
      *  {{#crossLink "UserService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     UserService.prototype.deleteRole = function (roleId, callback) {
-        this._connectionManager.delete(
+        this._connectionManager.request(
+            "DELETE",
             roleId,
+            "",
+            {},
             callback
         );
     };
@@ -924,8 +936,11 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
      *  {{#crossLink "UserService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     UserService.prototype.unassignRoleFromUser = function (userRoleId, callback) {
-        this._connectionManager.delete(
+        this._connectionManager.request(
+            "DELETE",
             userRoleId,
+            "",
+            {},
             callback
         );
     };
@@ -939,8 +954,11 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
      *  {{#crossLink "UserService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     UserService.prototype.unassignRoleFromUserGroup = function (userGroupRoleId, callback) {
-        this._connectionManager.delete(
+        this._connectionManager.request(
+            "DELETE",
             userGroupRoleId,
+            "",
+            {},
             callback
         );
     };
@@ -1076,8 +1094,11 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
      *  {{#crossLink "UserService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     UserService.prototype.deletePolicy = function (policyId, callback) {
-        this._connectionManager.delete(
+        this._connectionManager.request(
+            "DELETE",
             policyId,
+            "",
+            {},
             callback
         );
     };
@@ -1133,8 +1154,11 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
      *  {{#crossLink "UserService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
     UserService.prototype.deleteSession = function (sessionId, callback) {
-        this._connectionManager.delete(
+        this._connectionManager.request(
+            "DELETE",
             sessionId,
+            "",
+            {},
             callback
         );
     };

@@ -61,7 +61,7 @@ define(function (require) {
 
         beforeEach(function (){
 
-            mockConnectionManager = jasmine.createSpyObj('mockConnectionManager', ['request', 'delete', 'notAuthorizedRequest', 'logOut']);
+            mockConnectionManager = jasmine.createSpyObj('mockConnectionManager', ['request', 'notAuthorizedRequest', 'logOut']);
             mockCallback = jasmine.createSpy('mockCallback');
 
         });
@@ -227,9 +227,13 @@ define(function (require) {
                     mockCallback
                 );
 
-                expect(mockConnectionManager.delete).toHaveBeenCalled();
-                expect(mockConnectionManager.delete.mostRecentCall.args[0]).toEqual(testUserGroupId); //url
-                expect(mockConnectionManager.delete.mostRecentCall.args[1]).toBe(mockCallback); // callback
+                expect(mockConnectionManager.request).toHaveBeenCalledWith(
+                    "DELETE",
+                    testUserGroupId,
+                    "",
+                    {},
+                    mockCallback
+                );
             });
 
             it("moveUserGroup", function () {
@@ -463,9 +467,13 @@ define(function (require) {
                     mockCallback
                 );
 
-                expect(mockConnectionManager.delete).toHaveBeenCalled();
-                expect(mockConnectionManager.delete.mostRecentCall.args[0]).toEqual(testUserId); //url
-                expect(mockConnectionManager.delete.mostRecentCall.args[1]).toBe(mockCallback); // callback
+                expect(mockConnectionManager.request).toHaveBeenCalledWith(
+                    "DELETE",
+                    testUserId,
+                    "",
+                    {},
+                    mockCallback
+                );
             });
 
             // ******************************
@@ -497,9 +505,13 @@ define(function (require) {
                     mockCallback
                 );
 
-                expect(mockConnectionManager.delete).toHaveBeenCalled();
-                expect(mockConnectionManager.delete.mostRecentCall.args[0]).toEqual(testUserAssignedGroupId); //url
-                expect(mockConnectionManager.delete.mostRecentCall.args[1]).toBe(mockCallback); // callback
+                expect(mockConnectionManager.request).toHaveBeenCalledWith(
+                    "DELETE",
+                    testUserAssignedGroupId,
+                    "",
+                    {},
+                    mockCallback
+                );
             });
 
             // ******************************
@@ -655,9 +667,13 @@ define(function (require) {
                     mockCallback
                 );
 
-                expect(mockConnectionManager.delete).toHaveBeenCalled();
-                expect(mockConnectionManager.delete.mostRecentCall.args[0]).toEqual(testRoleId); //url
-                expect(mockConnectionManager.delete.mostRecentCall.args[1]).toBe(mockCallback); // callback
+                expect(mockConnectionManager.request).toHaveBeenCalledWith(
+                    "DELETE",
+                    testRoleId,
+                    "",
+                    {},
+                    mockCallback
+                );
             });
 
             // ******************************
@@ -816,9 +832,13 @@ define(function (require) {
                     mockCallback
                 );
 
-                expect(mockConnectionManager.delete).toHaveBeenCalled();
-                expect(mockConnectionManager.delete.mostRecentCall.args[0]).toEqual(testUserRoleId); //url
-                expect(mockConnectionManager.delete.mostRecentCall.args[1]).toBe(mockCallback); // callback
+                expect(mockConnectionManager.request).toHaveBeenCalledWith(
+                    "DELETE",
+                    testUserRoleId,
+                    "",
+                    {},
+                    mockCallback
+                );
             });
 
             it("unassignRoleFromUserGroup", function () {
@@ -827,9 +847,13 @@ define(function (require) {
                     mockCallback
                 );
 
-                expect(mockConnectionManager.delete).toHaveBeenCalled();
-                expect(mockConnectionManager.delete.mostRecentCall.args[0]).toEqual(testUserGroupRoleId); //url
-                expect(mockConnectionManager.delete.mostRecentCall.args[1]).toBe(mockCallback); // callback
+                expect(mockConnectionManager.request).toHaveBeenCalledWith(
+                    "DELETE",
+                    testUserGroupRoleId,
+                    "",
+                    {},
+                    mockCallback
+                );
             });
 
             // ******************************
@@ -930,9 +954,13 @@ define(function (require) {
                     mockCallback
                 );
 
-                expect(mockConnectionManager.delete).toHaveBeenCalled();
-                expect(mockConnectionManager.delete.mostRecentCall.args[0]).toEqual(testPolicyId); //url
-                expect(mockConnectionManager.delete.mostRecentCall.args[1]).toBe(mockCallback); // callback
+                expect(mockConnectionManager.request).toHaveBeenCalledWith(
+                    "DELETE",
+                    testPolicyId,
+                    "",
+                    {},
+                    mockCallback
+                );
             });
 
             it("loadPoliciesByUserId", function () {
@@ -983,9 +1011,13 @@ define(function (require) {
                     mockCallback
                 );
 
-                expect(mockConnectionManager.delete).toHaveBeenCalled();
-                expect(mockConnectionManager.delete.mostRecentCall.args[0]).toEqual(testSessionId); //url
-                expect(mockConnectionManager.delete.mostRecentCall.args[1]).toBe(mockCallback); // callback
+                expect(mockConnectionManager.request).toHaveBeenCalledWith(
+                    "DELETE",
+                    testSessionId,
+                    "",
+                    {},
+                    mockCallback
+                );
             });
 
             it("logOut", function () {

@@ -42,7 +42,7 @@ define(function (require) {
 
         beforeEach(function (){
 
-            mockConnectionManager = jasmine.createSpyObj('mockConnectionManager', ['request', 'delete']);
+            mockConnectionManager = jasmine.createSpyObj('mockConnectionManager', ['request']);
             mockCallback = jasmine.createSpy('mockCallback');
 
         });
@@ -210,9 +210,13 @@ define(function (require) {
                     mockCallback
                 );
 
-                expect(mockConnectionManager.delete).toHaveBeenCalled();
-                expect(mockConnectionManager.delete.mostRecentCall.args[0]).toEqual(testContentTypeGroupId); //url
-                expect(mockConnectionManager.delete.mostRecentCall.args[1]).toBe(mockCallback); // callback
+                expect(mockConnectionManager.request).toHaveBeenCalledWith(
+                    "DELETE",
+                    testContentTypeGroupId,
+                    "",
+                    {},
+                    mockCallback
+                );
             });
 
             it("loadContentTypes", function () {
@@ -388,9 +392,13 @@ define(function (require) {
                     mockCallback
                 );
 
-                expect(mockConnectionManager.delete).toHaveBeenCalled();
-                expect(mockConnectionManager.delete.mostRecentCall.args[0]).toEqual(testContentTypeId); //url
-                expect(mockConnectionManager.delete.mostRecentCall.args[1]).toBe(mockCallback); // callback
+                expect(mockConnectionManager.request).toHaveBeenCalledWith(
+                    "DELETE",
+                    testContentTypeId,
+                    "",
+                    {},
+                    mockCallback
+                );
             });
 
             it("loadGroupsOfContentType", function () {
@@ -430,9 +438,13 @@ define(function (require) {
                     mockCallback
                 );
 
-                expect(mockConnectionManager.delete).toHaveBeenCalled();
-                expect(mockConnectionManager.delete.mostRecentCall.args[0]).toEqual(testContentTypeAssignedGroupId); //url
-                expect(mockConnectionManager.delete.mostRecentCall.args[1]).toBe(mockCallback); // callback
+                expect(mockConnectionManager.request).toHaveBeenCalledWith(
+                    "DELETE",
+                    testContentTypeAssignedGroupId,
+                    "",
+                    {},
+                    mockCallback
+                );
             });
 
             // ******************************
@@ -528,9 +540,13 @@ define(function (require) {
                     mockCallback
                 );
 
-                expect(mockConnectionManager.delete).toHaveBeenCalled();
-                expect(mockConnectionManager.delete.mostRecentCall.args[0]).toEqual(testContentTypeDraftId); //url
-                expect(mockConnectionManager.delete.mostRecentCall.args[1]).toBe(mockCallback); // callback
+                expect(mockConnectionManager.request).toHaveBeenCalledWith(
+                    "DELETE",
+                    testContentTypeDraftId,
+                    "",
+                    {},
+                    mockCallback
+                );
             });
 
             // ******************************
@@ -613,9 +629,13 @@ define(function (require) {
                     mockCallback
                 );
 
-                expect(mockConnectionManager.delete).toHaveBeenCalled();
-                expect(mockConnectionManager.delete.mostRecentCall.args[0]).toEqual(testFieldDefintionId); //url
-                expect(mockConnectionManager.delete.mostRecentCall.args[1]).toBe(mockCallback); // callback
+                expect(mockConnectionManager.request).toHaveBeenCalledWith(
+                    "DELETE",
+                    testFieldDefintionId,
+                    "",
+                    {},
+                    mockCallback
+                );
             });
 
             // ******************************
