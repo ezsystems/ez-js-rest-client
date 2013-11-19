@@ -61,11 +61,14 @@ The library can be built with:
 $ grunt build
 ```
 
-This command will (re)generate the files `dist/CAPI.js`, `dist/CAPI-min.js` and `dist/PromiseCAPI.js`.
+ This command will (re)generate the files `dist/CAPI.js`, `dist/CAPI-min.js` and `dist/PromiseCAPI.js`.
 First 2 files are full and minified versions of the regular client library wich doesn't have any dependencies and
-is intended for general use. The `PromiseCAPI.js` is a promise-based version of the library
+is intended for general use.
+
+ The `PromiseCAPI.js` is a promise-based version of the library
 which has a dependency on the Q library. While using this version a developer himself is responsible for inclusion of Q library into the project.
 It can be done by using preferred dependency management system or by simply downloading and including Q library file into scripts.
+For example see source file from manual testing bundle: `test/manual/jsRestClientBundle/Resources/views/promise.test.html.twig`
 More info on Q and promises: https://github.com/kriskowal/q.
 
 
@@ -120,8 +123,8 @@ using following instruction:
 After these steps you may access `/js-rest-client-test/` path where you will find
 testing html page.  Most of requests can be configured a little bit before
 executing them by changing input values.  See details of tests implementation in
-Resources/public/js/cookbook-*.js files.
+`Resources/public/js/cookbook-*.js` files.
 
 To test promise-based version of the CAPI you can use `/js-rest-client-promise-test/` path.
 This setup includes Q library as a downloaded file. See details of (rather basic) tests implementation
-in Resources/public/js/cookbook-PromiseCAPI.js.
+in `Resources/public/js/cookbook-PromiseCAPI.js`.
