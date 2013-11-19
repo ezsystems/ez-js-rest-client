@@ -68,7 +68,8 @@ is intended for general use.
  The `PromiseCAPI.js` is a promise-based version of the library
 which has a dependency on the Q library. While using this version a developer himself is responsible for inclusion of Q library into the project.
 It can be done by using preferred dependency management system or by simply downloading and including Q library file into scripts.
-For example see source file from manual testing bundle: `test/manual/jsRestClientBundle/Resources/views/promise.test.html.twig`
+For example see the source file from manual testing bundle: `test/manual/jsRestClientBundle/Resources/views/promise.test.html.twig`.
+
 More info on Q and promises: https://github.com/kriskowal/q.
 
 
