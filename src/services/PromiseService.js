@@ -1,5 +1,5 @@
-/* global define */
-define(["../../node_modules/q/q", "structures/CAPIError"], function (q, CAPIError) {
+/* global define, Q */
+define(["structures/CAPIError"], function (CAPIError) {
     "use strict";
 
     /**
@@ -16,7 +16,7 @@ define(["../../node_modules/q/q", "structures/CAPIError"], function (q, CAPIErro
 
             return function () {
                 var toBeCalledArguments = Array.prototype.slice.call(arguments),
-                    deferred = q.defer();
+                    deferred = Q.defer();
 
                 if (originalFunction.length - 1 !== arguments.length) {
                     throw new CAPIError("Wrong number of arguments provided for promise-based function.");

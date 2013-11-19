@@ -2,3 +2,8 @@
 ezpublish_js_rest_client_test:
     pattern:  /js-rest-client-test/
     defaults: { _controller: jsRestClientBundle:Client:test }
+
+# Promise Test
+ezpublish_js_rest_client_promise_test:
+    pattern:  /js-rest-client-promise-test/
+    defaults: { _controller: jsRestClientBundle:Client:promiseTest }

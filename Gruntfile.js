@@ -1,14 +1,9 @@
 module.exports = function(grunt) {
 
-    var qPath = {
-            "q": "../node_modules/q/q"
-        },
-        testPaths = {
-            "q": "../node_modules/q/q",
+    var testPaths = {
             "jasmineCAPIMatchers": "../test/jasmine/CAPIMatchers"
         },
         coveragePaths = {
-            "q": "../node_modules/q/q",
             "jasmineCAPIMatchers": "../../../test/jasmine/CAPIMatchers"
         };
 
@@ -17,10 +12,9 @@ module.exports = function(grunt) {
             dist: {
                 options: {
                     almond: true,
-                    name : 'PromiseCAPI',
+                    name : 'CAPI',
                     optimize: "none",
                     baseUrl: "src/",
-                    paths: qPath,
                     out: "dist/CAPI.js",
                     wrap: {
                         startFile: 'wrap/wrap.start.js',
@@ -28,13 +22,12 @@ module.exports = function(grunt) {
                     }
                 }
             },
-            distmin: {
+            distMin: {
                 options: {
                     almond: true,
-                    name : 'PromiseCAPI',
+                    name : 'CAPI',
                     optimize: "uglify",
                     baseUrl: "src/",
-                    paths: qPath,
                     out: "dist/CAPI-min.js",
                     wrap: {
                         startFile: 'wrap/wrap.start.js',
@@ -42,17 +35,42 @@ module.exports = function(grunt) {
                     }
                 }
             },
-            testBundle: {
+            distPromise: {
                 options: {
                     almond: true,
                     name : 'PromiseCAPI',
                     optimize: "none",
                     baseUrl: "src/",
-                    paths: qPath,
+                    out: "dist/PromiseCAPI.js",
+                    wrap: {
+                        startFile: 'wrap/wrap.start.js',
+                        endFile: 'wrap/wrap.promise.end.js'
+                    }
+                }
+            },
+            testBundle: {
+                options: {
+                    almond: true,
+                    name : 'CAPI',
+                    optimize: "none",
+                    baseUrl: "src/",
                     out: "test/manual/jsRestClientBundle/Resources/public/js/CAPI.js",
                     wrap: {
                         startFile: 'wrap/wrap.start.js',
                         endFile: 'wrap/wrap.end.js'
+                    }
+                }
+            },
+            testBundlePromise: {
+                options: {
+                    almond: true,
+                    name : 'PromiseCAPI',
+                    optimize: "none",
+                    baseUrl: "src/",
+                    out: "test/manual/jsRestClientBundle/Resources/public/js/PromiseCAPI.js",
+                    wrap: {
+                        startFile: 'wrap/wrap.start.js',
+                        endFile: 'wrap/wrap.promise.end.js'
                     }
                 }
             }

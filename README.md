@@ -61,7 +61,13 @@ The library can be built with:
 $ grunt build
 ```
 
-This command will (re)generate the files `dist/CAPI.js` and `dist/CAPI-min.js`.
+This command will (re)generate the files `dist/CAPI.js`, `dist/CAPI-min.js` and `dist/PromiseCAPI.js`.
+First 2 files are full and minified versions of the regular client library wich doesn't have any dependencies and
+is intended for general use. The `PromiseCAPI.js` is a promise-based version of the library
+which has a dependency on the Q library. While using this version a developer himself is responsible for inclusion of Q library into the project.
+It can be done by using preferred dependency management system or by simply downloading and including Q library file into scripts.
+More info on Q and promises: https://github.com/kriskowal/q.
+
 
 ### Tests
 

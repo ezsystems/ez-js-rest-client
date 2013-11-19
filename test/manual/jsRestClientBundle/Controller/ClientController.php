@@ -20,6 +20,12 @@ class ClientController extends Controller
         return $this->render( "jsRestClientBundle::test.html.twig" );
     }
 
+    public function promiseTestAction()
+    {
+        return $this->render( "jsRestClientBundle::promise.test.html.twig" );
+    }
+
+
     /**
      * Useful for session authorization testing
      */
