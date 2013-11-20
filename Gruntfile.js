@@ -48,6 +48,19 @@ module.exports = function(grunt) {
                     }
                 }
             },
+            distPromiseMin: {
+                options: {
+                    almond: true,
+                    name : 'PromiseCAPI',
+                    optimize: "uglify",
+                    baseUrl: "src/",
+                    out: "dist/PromiseCAPI-min.js",
+                    wrap: {
+                        startFile: 'wrap/wrap.start.js',
+                        endFile: 'wrap/wrap.promise.end.js'
+                    }
+                }
+            },
             testBundle: {
                 options: {
                     almond: true,

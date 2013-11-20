@@ -18,5 +18,8 @@
     "Gruntfile.js",
     "README.md",
     "logo-ez.png"
-  ]
+  ],
+  "dependencies": {
+      "q": ""
+  }
 }

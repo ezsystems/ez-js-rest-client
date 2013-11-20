@@ -16,8 +16,18 @@ $ bower install --save ezsystems/ez-js-rest-client
 
 Then you can include in your project the file
 `bower\_components/ez-js-rest-client/dist/CAPI-min.js` (or the non minified
-version). It's also possible to directly take `dist/CAPI.js` or
-`dist/CAPI-min.js` in a clone of this repository.
+version).
+
+There is also an option to use promise-based version of the client (file
+`bower\_components/ez-js-rest-client/dist/PromiseCAPI.js` or
+`bower\_components/ez-js-rest-client/dist/PromiseCAPI-min.js`).
+It provides the same functional but all asynchronous methods are
+promise-wrapped which helps to make code more clean and readable.
+
+Read more about promise-based version in the **Build** section of this manual.
+
+It's also possible to directly take any of the mentioned files in a clone
+of this repository.
 
 ## Development
 
@@ -34,7 +44,7 @@ environment with a help of Grunt task runner.
   ```
 * Install the global dependencies (usually you need to be root)
   ```
-  # npm install -g grunt-cli yuidoc
+  # npm install -g grunt-cli yuidoc bower
   ```
 
 ### API Documentation
@@ -118,7 +128,11 @@ using following instruction:
     jsRestClientBundle:
         resource: "@jsRestClientBundle/Resources/config/routing.yml"
     ```
-
+* If you intend to test promise-based version of the CAPI, additionally install
+Q library by running
+```
+$ bower install
+```
 * Clear the Symfony 2 caches with ezpublish/console.
 
 After these steps you may access `/js-rest-client-test/` path where you will find
@@ -126,6 +140,7 @@ testing html page.  Most of requests can be configured a little bit before
 executing them by changing input values.  See details of tests implementation in
 `Resources/public/js/cookbook-*.js` files.
 
-To test promise-based version of the CAPI you can use `/js-rest-client-promise-test/` path.
-This setup includes Q library as a downloaded file. See details of (rather basic) tests implementation
-in `Resources/public/js/cookbook-PromiseCAPI.js`.
+To test promise-based version of the CAPI you can use
+`/js-rest-client-promise-test/` path.
+This setup includes Q library as a bower package. See details of (rather basic)
+tests implementation in `Resources/public/js/cookbook-PromiseCAPI.js`.
