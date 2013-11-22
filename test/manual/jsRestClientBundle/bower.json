@@ -1,0 +1,7 @@
+{
+  "name": "eZ Publish JavaScript REST Client Manual Testing Bundle",
+  "version": "0.1.0",
+  "dependencies": {
+      "q": "0.9.7"
+  }
+}
