@@ -201,13 +201,12 @@ define(function (require) {
 
                 spyOn(mockDiscoveryService, 'getInfoObject').andCallThrough();
 
-                contentService = new ContentService(mockConnectionManager, mockDiscoveryService);
+                contentService = new ContentService(mockConnectionManager, mockDiscoveryService, rootId);
             });
 
             it("loadRoot", function () {
 
                 contentService.loadRoot(
-                    rootId,
                     mockCallback
                 );
 
@@ -1816,7 +1815,7 @@ define(function (require) {
 
                 spyOn(mockFaultyDiscoveryService, 'getInfoObject').andCallThrough();
 
-                contentService = new ContentService(mockConnectionManager, mockFaultyDiscoveryService);
+                contentService = new ContentService(mockConnectionManager, mockFaultyDiscoveryService, rootId);
             });
 
             it("createSection", function () {
@@ -1961,7 +1960,7 @@ define(function (require) {
                 mockDiscoveryService = jasmine.createSpy('mockDiscoveryService');
                 mockCallback = jasmine.createSpy('mockCallback');
 
-                contentService = new ContentService(mockConnectionManager, mockDiscoveryService);
+                contentService = new ContentService(mockConnectionManager, mockDiscoveryService, rootId);
             });
 
             it("loadCurrentVersion", function () {

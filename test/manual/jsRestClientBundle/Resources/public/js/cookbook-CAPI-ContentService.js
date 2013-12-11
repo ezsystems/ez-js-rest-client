@@ -25,7 +25,6 @@ rootAnchor.onclick = function(e){
     e.preventDefault();
 
     contentService.loadRoot(
-        '/api/ezp/v2/',
         function(error, response){
             clientOutput.innerHTML =    "Errors : " + JSON.stringify(error) + "</br>" +
                                         "Status : " + response.status + "</br>" +

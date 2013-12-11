@@ -1872,7 +1872,7 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
      *
      * Example:
      *
-     *     contentService.loadRoot("/api/ezp/v2/", function (error, response) {
+     *     contentService.loadRoot(function (error, response) {
      *            if (error) {
      *                console.log('An error occurred', error);
      *            } else {
@@ -1884,12 +1884,14 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
      * @constructor
      * @param connectionManager {ConnectionManager} connection manager that will be used to send requests to REST service
      * @param discoveryService {DiscoveryService} is handling REST paths auto-discovery
+     * @param rootPath {String} path to Root resource
      * @example
      *     var contentService = jsCAPI.getContentService();
      */
-    var ContentService = function (connectionManager, discoveryService) {
+    var ContentService = function (connectionManager, discoveryService, rootPath) {
         this._connectionManager = connectionManager;
         this._discoveryService = discoveryService;
+        this._rootPath = rootPath;
     };
 
     /**
@@ -1897,14 +1899,13 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
      * This call is used by DiscoveryService automatically, whenever needed.
      *
      * @method loadRoot
-     * @param rootPath {String} path to Root resource
      * @param callback {Function} callback executed after performing the request (see
      * {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentService.prototype.loadRoot = function (rootPath, callback) {
+    ContentService.prototype.loadRoot = function (callback) {
         this._connectionManager.request(
             "GET",
-            rootPath,
+            this._rootPath,
             "",
             {"Accept": "application/vnd.ez.api.Root+json"},
             callback
@@ -6098,7 +6099,6 @@ define('CAPI',['authAgents/SessionAuthAgent', 'authAgents/HttpBasicAuthAgent', '
          * @example
          *      var contentService = jsCAPI.getContentService();
          *      contentService.loadRoot(
-         *          '/api/ezp/v2/',
          *          callback
          *      );
          */
@@ -6106,7 +6106,8 @@ define('CAPI',['authAgents/SessionAuthAgent', 'authAgents/HttpBasicAuthAgent', '
             if  (!this._contentService)  {
                 this._contentService  =  new ContentService(
                     connectionManager,
-                    discoveryService
+                    discoveryService,
+                    mergedOptions.rootPath
                 );
             }
             return  this._contentService;

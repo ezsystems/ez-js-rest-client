@@ -24,7 +24,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
      *
      * Example:
      *
-     *     contentService.loadRoot("/api/ezp/v2/", function (error, response) {
+     *     contentService.loadRoot(function (error, response) {
      *            if (error) {
      *                console.log('An error occurred', error);
      *            } else {
@@ -36,12 +36,14 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
      * @constructor
      * @param connectionManager {ConnectionManager} connection manager that will be used to send requests to REST service
      * @param discoveryService {DiscoveryService} is handling REST paths auto-discovery
+     * @param rootPath {String} path to Root resource
      * @example
      *     var contentService = jsCAPI.getContentService();
      */
-    var ContentService = function (connectionManager, discoveryService) {
+    var ContentService = function (connectionManager, discoveryService, rootPath) {
         this._connectionManager = connectionManager;
         this._discoveryService = discoveryService;
+        this._rootPath = rootPath;
     };
 
     /**
@@ -49,14 +51,13 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
      * This call is used by DiscoveryService automatically, whenever needed.
      *
      * @method loadRoot
-     * @param rootPath {String} path to Root resource
      * @param callback {Function} callback executed after performing the request (see
      * {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentService.prototype.loadRoot = function (rootPath, callback) {
+    ContentService.prototype.loadRoot = function (callback) {
         this._connectionManager.request(
             "GET",
-            rootPath,
+            this._rootPath,
             "",
             {"Accept": "application/vnd.ez.api.Root+json"},
             callback

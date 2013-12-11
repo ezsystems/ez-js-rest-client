@@ -76,7 +76,6 @@ define(['authAgents/SessionAuthAgent', 'authAgents/HttpBasicAuthAgent', 'Connect
          * @example
          *      var contentService = jsCAPI.getContentService();
          *      contentService.loadRoot(
-         *          '/api/ezp/v2/',
          *          callback
          *      );
          */
@@ -84,7 +83,8 @@ define(['authAgents/SessionAuthAgent', 'authAgents/HttpBasicAuthAgent', 'Connect
             if  (!this._contentService)  {
                 this._contentService  =  new ContentService(
                     connectionManager,
-                    discoveryService
+                    discoveryService,
+                    mergedOptions.rootPath
                 );
             }
             return  this._contentService;
