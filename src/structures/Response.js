@@ -33,7 +33,11 @@ define(function () {
         }
 
         if ( this.body ) {
-            this.document = JSON.parse(this.body);
+            try {
+                this.document = JSON.parse(this.body);
+            } catch(e) {
+                this.document = null;
+            }
         }
 
         return this;

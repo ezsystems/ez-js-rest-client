@@ -33,6 +33,16 @@ define(function (require) {
             expect(response.document).toBeNull();
         });
 
+        it("is handling broken JSON as body properly", function(){
+
+            var data = new TestWrapperObject();
+
+            // Cut of the last character to create invalid json
+            data.body = data.body.substring(0,-1);
+
+            response = new Response(data);
+            expect(response.document).toBeNull();
+        });
 
     });
 
