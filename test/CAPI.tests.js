@@ -68,7 +68,7 @@ define(function (require) {
 
                 expect(contentService._connectionManager.logRequests).toBe(testOptions.logRequests);
                 expect(contentService._connectionManager._connectionFactory.connectionList).toBe(testOptions.connectionStack);
-                expect(contentService._discoveryService.rootPath).toBe(testOptions.rootPath);
+                expect(contentService._discoveryService._rootPath).toBe(testOptions.rootPath);
 
             });
 

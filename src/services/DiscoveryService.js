@@ -12,9 +12,9 @@ define(["structures/CAPIError"], function (CAPIError) {
      * @param connectionManager {ConnectionManager}
      */
     var DiscoveryService = function (rootPath, connectionManager) {
-        this.connectionManager = connectionManager;
-        this.rootPath = rootPath;
-        this.cacheObject = {};
+        this._connectionManager = connectionManager;
+        this._rootPath = rootPath;
+        this._cacheObject = {};
     };
 
     /**
@@ -97,9 +97,9 @@ define(["structures/CAPIError"], function (CAPIError) {
      * @protected
      */
     DiscoveryService.prototype._discoverRoot = function (rootPath, callback) {
-        if (!this.cacheObject.Root) {
+        if (!this._cacheObject.Root) {
             var that = this;
-            this.connectionManager.request(
+            this._connectionManager.request(
                 "GET",
                 rootPath,
                 "",
@@ -129,13 +129,13 @@ define(["structures/CAPIError"], function (CAPIError) {
     DiscoveryService.prototype._copyToCache = function (object) {
         for (var property in object) {
             if (object.hasOwnProperty(property) && object[property]) {
-                this.cacheObject[property] = object[property];
+                this._cacheObject[property] = object[property];
             }
         }
     };
 
     /**
-     * Get target object from cacheObject by given 'name' and run the discovery process if it is not available.
+     * Get target object from _cacheObject by given 'name' and run the discovery process if it is not available.
      *
      * @method _getObjectFromCache
      * @param name {String} name of the target object to be retrived (e.g. "Trash")
@@ -149,8 +149,8 @@ define(["structures/CAPIError"], function (CAPIError) {
             that = this;
         // Discovering root, if not yet discovered
         // on discovery running the request for same 'name' again
-        if (!this.cacheObject.Root) {
-            this._discoverRoot(this.rootPath, function (error, success) {
+        if (!this._cacheObject.Root) {
+            this._discoverRoot(this._rootPath, function (error, success) {
                 if (error) {
                     callback(error, false);
                     return;
@@ -163,10 +163,10 @@ define(["structures/CAPIError"], function (CAPIError) {
         // Checking most obvious places for now
         // "Root" object (retrieved during root discovery request) and
         // root of a cache object in case we have cached value from some other request
-        if (this.cacheObject.Root.hasOwnProperty(name)) {
-            object = this.cacheObject.Root[name];
-        } else if (this.cacheObject.hasOwnProperty(name)) {
-            object = this.cacheObject[name];
+        if (this._cacheObject.Root.hasOwnProperty(name)) {
+            object = this._cacheObject.Root[name];
+        } else if (this._cacheObject.hasOwnProperty(name)) {
+            object = this._cacheObject[name];
         }
 
         if (object) {

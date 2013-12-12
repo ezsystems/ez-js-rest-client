@@ -93,15 +93,15 @@ define(function (require) {
 
                 discoveryService._copyToCache(new TestObject());
 
-                expect(discoveryService.cacheObject.trash).toEqual(testTrashObject);
-                expect(discoveryService.cacheObject.dummyProperty).toBeUndefined();
+                expect(discoveryService._cacheObject.trash).toEqual(testTrashObject);
+                expect(discoveryService._cacheObject.dummyProperty).toBeUndefined();
             });
 
             it("copyToCache with faulty object", function () {
 
                 discoveryService._copyToCache({"trash": null});
 
-                expect(discoveryService.cacheObject.trash).toBeUndefined();
+                expect(discoveryService._cacheObject.trash).toBeUndefined();
             });
 
 
@@ -126,7 +126,7 @@ define(function (require) {
 
                 spyOn(discoveryService, '_discoverRoot').andCallThrough();
 
-                discoveryService.cacheObject.trashNotInRoot = testTrashObject;
+                discoveryService._cacheObject.trashNotInRoot = testTrashObject;
 
                 discoveryService._getObjectFromCache(
                     "trashNotInRoot",
