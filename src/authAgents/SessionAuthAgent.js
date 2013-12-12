@@ -35,47 +35,47 @@ define(["structures/CAPIError"], function (CAPIError) {
      * @param done {Function} Callback function, which is to be called by the implementation to signal the authentication has been completed.
      */
     SessionAuthAgent.prototype.ensureAuthentication = function (done) {
-        if (this.sessionId === null) {
-            var that = this,
-                userService = this._CAPI.getUserService(),
-                sessionCreateStruct = userService.newSessionCreateStruct(
-                    this._login,
-                    this._password
-                );
+        if (this.sessionId !== null) {
+            done(false, true);
+            return;
+        }
 
-            // TODO: change hardcoded "sessions" path to discovered
-            userService.createSession(
-                "/api/ezp/v2/user/sessions",
-                sessionCreateStruct,
-                function (error, sessionResponse) {
-                    if (error) {
-                        done(
-                            new CAPIError(
-                                "Failed to create new session.",
-                                {sessionCreateStruct: sessionCreateStruct}
-                            ),
-                            false
-                        );
-                        return;
-                    }
-
-                    var session = JSON.parse(sessionResponse.body).Session;
-
-                    that.sessionName = session.name;
-                    that.sessionId = session._href;
-                    that.csrfToken = session.csrfToken;
-
-                    sessionStorage.setItem('ezpRestClient.sessionName', that.sessionName);
-                    sessionStorage.setItem('ezpRestClient.sessionId', that.sessionId);
-                    sessionStorage.setItem('ezpRestClient.csrfToken', that.csrfToken);
-
-                    done(false, true);
-                }
+        var that = this,
+            userService = this._CAPI.getUserService(),
+            sessionCreateStruct = userService.newSessionCreateStruct(
+                this._login,
+                this._password
             );
 
-        } else {
-            done(false, true);
-        }
+        // TODO: change hardcoded "sessions" path to discovered
+        userService.createSession(
+            "/api/ezp/v2/user/sessions",
+            sessionCreateStruct,
+            function (error, sessionResponse) {
+                if (error) {
+                    done(
+                        new CAPIError(
+                            "Failed to create new session.",
+                            {sessionCreateStruct: sessionCreateStruct}
+                        ),
+                        false
+                    );
+                    return;
+                }
+
+                var session = JSON.parse(sessionResponse.body).Session;
+
+                that.sessionName = session.name;
+                that.sessionId = session._href;
+                that.csrfToken = session.csrfToken;
+
+                sessionStorage.setItem('ezpRestClient.sessionName', that.sessionName);
+                sessionStorage.setItem('ezpRestClient.sessionId', that.sessionId);
+                sessionStorage.setItem('ezpRestClient.csrfToken', that.csrfToken);
+
+                done(false, true);
+            }
+        );
     };
 
     /**
