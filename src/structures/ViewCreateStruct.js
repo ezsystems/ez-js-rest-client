@@ -15,7 +15,7 @@ define(function () {
         this.body.ViewInput = {};
 
         this.body.ViewInput.identifier = identifier;
-        this.body.ViewInput.public = false;
+        this.body.ViewInput["public"] = false;
         this.body.ViewInput.Query = {};
 
         this.body.ViewInput.Query.Criteria = {};
