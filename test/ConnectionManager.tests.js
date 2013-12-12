@@ -101,7 +101,9 @@ define(function (require) {
             it("request (with calls logging and minimum arguments set)", function(){
 
                 connectionManager.logRequests = testTrue;
-                spyOn(console, 'dir').andCallThrough();
+
+                // Spy on console.dir AND stop it from really logging something
+                spyOn(console, 'dir');
 
                 connectionManager.request(
                     mockCallback
@@ -247,7 +249,9 @@ define(function (require) {
             it("notAuthorizedRequest (with calls logging and minimum arguments set)", function(){
 
                 connectionManager.logRequests = testTrue;
-                spyOn(console, 'dir').andCallThrough();
+
+                // Spy on console.dir AND prevent it from really outputting something
+                spyOn(console, 'dir');
 
                 connectionManager.notAuthorizedRequest(
                     mockCallback
