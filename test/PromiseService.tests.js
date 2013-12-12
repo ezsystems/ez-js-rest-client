@@ -1,4 +1,4 @@
-/* global define, describe, it, expect, beforeEach, runs, waitsFor, eZ */
+/* global define, describe, it, expect, beforeEach, runs, waitsFor, spyOn, eZ */
 define(function (require) {
 
     var PromiseService = require("services/PromiseService");
@@ -22,7 +22,7 @@ define(function (require) {
                         function (error) {
                             promiseError = error;
                         }
-                    );
+                    ).done();
                 });
             };
 
@@ -78,6 +78,9 @@ define(function (require) {
         });
 
         it("is running generated promise-based calls correctly when promise is rejected", function () {
+            // Do not output Q related warning about rejection handling
+            spyOn(console, "warn");
+
             mockService = {};
             // mock call
             mockService.loadRoot = function loadRoot(rootPath, callback) {
@@ -97,6 +100,7 @@ define(function (require) {
             runs(function() {
                 expect(promiseSuccess).toBeFalsy();
                 expect(promiseError).toBeTruthy();
+                expect(console.warn.callCount).toBe(1);
             });
 
         });
