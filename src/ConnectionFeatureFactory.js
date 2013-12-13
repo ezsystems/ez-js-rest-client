@@ -25,7 +25,7 @@ define(function () {
      */
     ConnectionFeatureFactory.prototype.createConnection = function () {
         var connection = null,
-            index = 0;
+            index;
 
         // Choosing and creating first compatible connection from connection list
         for (index = 0; index < this.connectionList.length; ++index) {
