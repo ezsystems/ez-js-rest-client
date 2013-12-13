@@ -46,10 +46,10 @@ define(function (require) {
             promiseError = false;
         });
 
-        it("is running constructor correctly (auto-generating promise-based calls and ignoring structure constructors)", function () {
+        it("is running constructor correctly (auto-generating promise-based calls and structure constructors)", function () {
             expect(promiseService).toBeDefined();
             expect(promiseService.loadRoot).toBeDefined();
-            expect(promiseService.newContentUpdateStruct).not.toBeDefined();
+            expect(promiseService.newContentUpdateStruct).toBeDefined();
         });
 
         it("is running generated promise-based calls correctly when promise is fulfilled", function () {

@@ -10,10 +10,39 @@ define(["../../node_modules/q/q", "structures/CAPIError"], function (q, CAPIErro
      * @param originalService {object} the service which should be converted into promise-based version (e.g. ContentService)
      */
     var PromiseService = function (originalService) {
-        var key;
+        var key,
+            _generateMappedFunction,
+            _generatePromiseFunction;
 
-        this._generatePromiseFunction = function (originalFunction) {
+        /**
+         * Generate a new function, that if called assured `this` is mapped to
+         * the original service.
+         *
+         * @method _generateMappedFunction
+         * @private
+         *
+         * @param {Function} originalFunction
+         * @return {Function}
+         */
+        _generateMappedFunction = function(originalFunction) {
+            return function() {
+                return originalFunction.apply(originalService, Array.prototype.slice(arguments));
+            };
+        };
 
+        /**
+         * Generate a promise version of the given function
+         *
+         * The execution is mapped to the originalService in order to preserve all
+         * internal state manipulations.
+         *
+         * @method _generatePromiseFunction
+         * @private
+         *
+         * @param originalFunction
+         * @returns {Function}
+         */
+        _generatePromiseFunction = function (originalFunction) {
             return function () {
                 var toBeCalledArguments = Array.prototype.slice.call(arguments),
                     deferred = q.defer();
@@ -39,14 +68,32 @@ define(["../../node_modules/q/q", "structures/CAPIError"], function (q, CAPIErro
 
         // Auto-generating promise-based functions based on every existing service function
         // taking into account all the functions with signature different from "new....Struct"
+        /* Disabling hasOwnProperty wrapper check here, as we explicitly WANT to copy
+         * over potentially inherited functions */
+        /* jshint -W089 */
         for(key in originalService) {
-            if ( (typeof originalService[key] === "function") && !(/^(new[^\s(]+Struct)/).test(key) ) {
-                this[key] = this._generatePromiseFunction(originalService[key]);
+            if (typeof originalService[key] !== "function") {
+                continue;
+            }
+
+            switch(true) {
+            case (/^_/).test(key):
+                // Skip all private methods
+                break;
+            case (/^(new[^\s(]+Struct)/).test(key):
+                // Simply cover over newXXXStruct functions, as they are synchronous.
+                // Still make sure the method is called on the original service ;)
+                this[key] = _generateMappedFunction(originalService[key]);
+                break;
+            default:
+                // Map all other functions using the promise system, as they are supposed to be
+                // asynchronous
+                this[key] = _generatePromiseFunction(originalService[key]);
             }
         }
     };
+    /* jshint +W089 */
 
     return PromiseService;
-
 });
 
