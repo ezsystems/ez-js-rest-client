@@ -1,21 +1,5 @@
 /* global define, describe, it, expect, beforeEach, jasmine, spyOn */
-define(function (require) {
-
-    // Declaring dependencies
-    var SessionAuthAgent = require("authAgents/SessionAuthAgent"),
-        CAPIError = require("structures/CAPIError"),
-        sessionStorage = {
-            getItem: function(identifier){
-                return null;
-            },
-            setItem: function(identifier){
-                return;
-            },
-            removeItem: function(identifier){
-                return;
-            }
-        };
-
+define(["authAgents/SessionAuthAgent", "structures/CAPIError"], function (SessionAuthAgent, CAPIError) {
     describe("Session Authorization Agent", function () {
 
         var testLogin = "login",
@@ -30,13 +14,27 @@ define(function (require) {
             mockCallback,
             mockSessionResponse,
             mockRequest,
+            mockStorage,
+            mockStorageData,
             sessionAuthAgent;
 
-        beforeEach(function (){
+        // Mocked storage injected into the authagent for testing
+        mockStorage = {
+            getItem: function(key) {
+                return (mockStorageData[key] !== undefined) ? JSON.parse(mockStorageData[key]) : null;
+            },
+            setItem: function(key, value) {
+                mockStorageData[key] = JSON.stringify(value);
+            },
+            removeItem: function(key) {
+                if (mockStorageData[key] !== undefined) {
+                    delete mockStorageData[key];
+                }
+            }
+        };
 
-            spyOn(sessionStorage, 'getItem').andCallThrough();
-            spyOn(sessionStorage, 'setItem').andCallThrough();
-            spyOn(sessionStorage, 'removeItem').andCallThrough();
+        beforeEach(function (){
+            mockStorageData = {};
 
             mockUserService = {
                 newSessionCreateStruct: function(login, password){
@@ -87,13 +85,11 @@ define(function (require) {
         describe("is correctly performing", function(){
 
             beforeEach(function (){
-
                 sessionAuthAgent = new SessionAuthAgent({
                     login : testLogin,
                     password : testPassword
-                });
+                }, mockStorage);
                 sessionAuthAgent.setCAPI(mockCAPI);
-
             });
 
             it("ensureAuthentication", function(){
@@ -106,24 +102,18 @@ define(function (require) {
                     jasmine.any(Function)
                 );
 
-                expect(sessionAuthAgent.sessionName).toEqual(testSessionName);
-                expect(sessionAuthAgent.csrfToken).toEqual(testCsrfToken);
-                expect(sessionAuthAgent.sessionId).toEqual(testSessionId);
+                expect(mockStorage.getItem(SessionAuthAgent.KEY_SESSION_NAME)).toEqual(testSessionName);
+                expect(mockStorage.getItem(SessionAuthAgent.KEY_SESSION_ID)).toEqual(testSessionId);
+                expect(mockStorage.getItem(SessionAuthAgent.KEY_CSRF_TOKEN)).toEqual(testCsrfToken);
 
                 expect(mockCallback).toHaveBeenCalledWith(false, true);
             });
 
-            it("ensureAuthentication when already authenticated (sessionStorage is storing sessionId)", function(){
-
-                sessionStorage.getItem = function(identifier){
-                    return "i-am-a-real-session-id-no-doubt-about-that";
-                };
-
-                sessionAuthAgent = new SessionAuthAgent({
-                    login : testLogin,
-                    password : testPassword
-                });
-                sessionAuthAgent.setCAPI(mockCAPI);
+            it("ensureAuthentication when already authenticated", function(){
+                mockStorage.setItem(
+                    SessionAuthAgent.KEY_SESSION_ID,
+                    "i-am-a-real-session-id-no-doubt-about-that"
+                );
 
                 sessionAuthAgent.ensureAuthentication(mockCallback);
 
@@ -191,7 +181,7 @@ define(function (require) {
                     method : "POST"
                 };
 
-                sessionAuthAgent.csrfToken = testCsrfToken;
+                mockStorage.setItem(SessionAuthAgent.KEY_CSRF_TOKEN, testCsrfToken);
 
                 sessionAuthAgent.authenticateRequest(mockRequest, mockCallback);
 
@@ -201,7 +191,8 @@ define(function (require) {
 
             it("logOut", function(){
 
-                sessionAuthAgent.sessionId = testSessionId;
+                mockStorage.setItem(SessionAuthAgent.KEY_SESSION_ID, testSessionId);
+
                 sessionAuthAgent.logOut(mockCallback);
 
                 expect(mockUserService.deleteSession).toHaveBeenCalledWith(
@@ -262,9 +253,8 @@ define(function (require) {
                 sessionAuthAgent = new SessionAuthAgent({
                     login : testLogin,
                     password : testPassword
-                });
+                }, mockStorage);
                 sessionAuthAgent.setCAPI(mockFaultyCAPI);
-
             });
 
             it("ensureAuthentication", function(){
@@ -278,7 +268,7 @@ define(function (require) {
 
             it("logOut", function(){
 
-                sessionAuthAgent.sessionId = testSessionId;
+                mockStorage.setItem(SessionAuthAgent.KEY_SESSION_ID, testSessionId);
                 sessionAuthAgent.logOut(mockCallback);
 
                 expect(mockFaultyUserService.deleteSession).toHaveBeenCalledWith(
