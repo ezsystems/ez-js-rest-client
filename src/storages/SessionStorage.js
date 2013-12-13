@@ -11,6 +11,7 @@ define(["structures/CAPIError"], function(CAPIError) {
      * object and string representation to allow the storage of arbitrary datastructures
      *
      * @class SessionStorage
+     * @implements {StorageAbstraction}
      * @constructor
      */
     var SessionStorage = function() {
