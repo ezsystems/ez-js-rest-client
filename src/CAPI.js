@@ -2,11 +2,11 @@
 define(['authAgents/SessionAuthAgent', 'authAgents/HttpBasicAuthAgent', 'ConnectionManager',
         'ConnectionFeatureFactory', 'connections/XmlHttpRequestConnection', 'connections/MicrosoftXmlHttpRequestConnection',
         'services/DiscoveryService', 'services/ContentService', 'services/ContentTypeService',
-        'services/UserService'],
+        'services/UserService', "utils/extend"],
     function (SessionAuthAgent, HttpBasicAuthAgent, ConnectionManager,
               ConnectionFeatureFactory, XmlHttpRequestConnection, MicrosoftXmlHttpRequestConnection,
               DiscoveryService, ContentService, ContentTypeService,
-              UserService) {
+              UserService, extend) {
     "use strict";
 
     /**
@@ -42,8 +42,7 @@ define(['authAgents/SessionAuthAgent', 'authAgents/HttpBasicAuthAgent', 'Connect
                     {connection: MicrosoftXmlHttpRequestConnection}
                 ]
             },
-            mergedOptions = defaultOptions,
-            option,
+            mergedOptions,
             connectionFactory,
             connectionManager,
             discoveryService;
@@ -55,13 +54,7 @@ define(['authAgents/SessionAuthAgent', 'authAgents/HttpBasicAuthAgent', 'Connect
         authenticationAgent.setCAPI(this);
 
         // Merging provided options (if any) with defaults
-        if (typeof options == "object") {
-            for (option in options) {
-                if (options.hasOwnProperty(option)) {
-                    mergedOptions[option] = options[option];
-                }
-            }
-        }
+        mergedOptions = extend({}, defaultOptions, options);
 
         connectionFactory = new ConnectionFeatureFactory(mergedOptions.connectionStack);
         connectionManager = new ConnectionManager(endPointUrl, authenticationAgent, connectionFactory);
