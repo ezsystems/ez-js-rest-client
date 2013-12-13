@@ -7,10 +7,13 @@ define(["CAPI", "services/PromiseService"], function (CAPI, PromiseService) {
      *
      * @class PromiseCAPI
      * @constructor
-     * @param CAPI {CAPI} main REST client object
+     * @param originalCapi {CAPI} main REST client object
      */
-    var PromiseCAPI = function (CAPI) {
-        var key;
+    var PromiseCAPI = function (originalCapi) {
+        var key,
+            _services,
+            _generatePromiseServiceFactory,
+            _generateMappedFunction;
 
         // Documentation for dynamically created methods
 
@@ -108,37 +111,68 @@ define(["CAPI", "services/PromiseService"], function (CAPI, PromiseService) {
          * Array of promise-based services instances (needed to implement singletons approach)
          *
          * @attribute _services
-         * @type {Array}
+         * @type {Object}
          * @protected
          */
-        this._services = [];
+        _services = {};
 
         /**
-         * Convert any CAPI service into Promise-based service (if needed).
+         * Convert any CAPI service factory into Promise-based service factory.
          *
-         * @method _getPromiseService
+         * The factory will cache once created instances inside the _services object
+         * to not create new service wrappers each time they are requested
+         *
+         * @method _createPromiseServiceFactory
          * @param serviceFactoryName {String} name of the function which returns one of the CAPI services
-         * @return {function} function which returns instance of the PromiseService - promise-based wrapper around any of the CAPI services
-         * @protected
+         * @return {Function} function which returns instance of the PromiseService - promise-based wrapper around any of the CAPI services
+         * @private
          */
-        this._getPromiseService = function (serviceFactoryName) {
+        _generatePromiseServiceFactory = function (serviceFactoryName) {
             return function () {
-                if (!this._services[serviceFactoryName]) {
-                    this._services[serviceFactoryName] = new PromiseService(CAPI[serviceFactoryName].call(CAPI));
+                if (!_services[serviceFactoryName]) {
+                    _services[serviceFactoryName] = new PromiseService(
+                        originalCapi[serviceFactoryName].call(originalCapi)
+                    );
                 }
-                return this._services[serviceFactoryName];
+                return _services[serviceFactoryName];
+            };
+        };
+
+        _generateMappedFunction = function(originalMethodName) {
+            return function() {
+                return originalCapi[originalMethodName].apply(
+                    originalCapi,
+                    Array.prototype.slice.call(arguments)
+                );
             };
         };
 
         // Auto-generating promise-based services based on every existing CAPI service
         // taking into account only functions with "get....Service" signature
-        for (key in CAPI) {
-            if ( (typeof CAPI[key] === "function") && (/^(get[^\s(]+Service)/).test(key) ) {
-                this[key] = this._getPromiseService(key);
+        /* Disabling hasOwnProperty wrapper check here, as we explicitly WANT to copy
+         * over potentially inherited functions */
+        /* jshint -W089 */
+        for(key in originalCapi) {
+            if (typeof originalCapi[key] !== "function") {
+                continue;
+            }
+
+            switch(true) {
+            case (/^_/).test(key):
+                // Skip all private methods
+                break;
+            case (/^(get[^\s(]+Service)/).test(key):
+                // Wrap all services to return a PromiseService Wrapper
+                this[key] = _generatePromiseServiceFactory(key);
+                break;
+            default:
+                // Map all other functions by simply copying them, while
+                // retaining their calling context
+                this[key] = _generateMappedFunction(key);
             }
         }
     };
+    /* jshint +W089 */
 
     return PromiseCAPI;
-
 });

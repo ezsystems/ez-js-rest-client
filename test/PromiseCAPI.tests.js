@@ -31,7 +31,7 @@ define(function (require) {
         it("is running constructor correctly (auto-generating promise-based services based on every existing CAPI service)", function () {
             expect(promiseCAPI).toBeDefined();
             expect(promiseCAPI.getContentService).toBeDefined();
-            expect(promiseCAPI.somethingElse).not.toBeDefined();
+            expect(promiseCAPI.somethingElse).toBeDefined();
             expect(promiseCAPI.andSomethingElse).not.toBeDefined();
         });
 
