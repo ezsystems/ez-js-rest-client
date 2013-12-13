@@ -38,7 +38,10 @@ define(['authAgents/SessionAuthAgent', 'authAgents/HttpBasicAuthAgent', 'Connect
             mergedOptions,
             connectionFactory,
             connectionManager,
-            discoveryService;
+            discoveryService,
+            contentService,
+            contentTypeService,
+            userService;
 
         // Options used if not overwritten from the outside
         defaultOptions =  {
@@ -49,10 +52,6 @@ define(['authAgents/SessionAuthAgent', 'authAgents/HttpBasicAuthAgent', 'Connect
                 {connection: MicrosoftXmlHttpRequestConnection}
             ]
         };
-
-        this._contentService = null;
-        this._contentTypeService = null;
-        this._userService = null;
 
         authenticationAgent.setCAPI(this);
 
@@ -76,14 +75,14 @@ define(['authAgents/SessionAuthAgent', 'authAgents/HttpBasicAuthAgent', 'Connect
          *      );
          */
         this.getContentService = function () {
-            if  (!this._contentService)  {
-                this._contentService  =  new ContentService(
+            if (!contentService)  {
+                contentService = new ContentService(
                     connectionManager,
                     discoveryService,
                     mergedOptions.rootPath
                 );
             }
-            return  this._contentService;
+            return contentService;
         };
 
         /**
@@ -99,13 +98,13 @@ define(['authAgents/SessionAuthAgent', 'authAgents/HttpBasicAuthAgent', 'Connect
          *      );
          */
         this.getContentTypeService = function () {
-            if  (!this._contentTypeService)  {
-                this._contentTypeService  =  new ContentTypeService(
+            if (!contentTypeService) {
+                contentTypeService = new ContentTypeService(
                     connectionManager,
                     discoveryService
                 );
             }
-            return  this._contentTypeService;
+            return contentTypeService;
         };
 
         /**
@@ -120,16 +119,15 @@ define(['authAgents/SessionAuthAgent', 'authAgents/HttpBasicAuthAgent', 'Connect
          *      );
          */
         this.getUserService = function () {
-            if  (!this._userService)  {
-                this._userService  =  new UserService(
+            if (!userService)  {
+                userService = new UserService(
                     connectionManager,
                     discoveryService
                 );
             }
-            return  this._userService;
+            return userService;
         };
     };
 
     return CAPI;
-
 });
