@@ -9,92 +9,100 @@ define(function (require) {
     describe("CAPI", function () {
 
         var endPointUrl = 'http://ez.git.local',
+            capi,
+            MockAuthenticationAgent,
             mockAuthenticationAgent,
-            jsCAPI,
-            contentService,
-            contentTypeService,
-            userService,
-            anotherContentService,
-            anotherContentTypeService,
-            anotherUserService,
-            testOptions,
-            TestOptionsObject = function () {
-                this.logRequests = true;
-                this.rootPath = '/testrootpath/';
-                this.connectionStack = [];
-            };
+            TestOptions,
+            testOptions;
 
-        TestOptionsObject.prototype.dummyProperty = "dummy prototype property";
-        testOptions = new TestOptionsObject();
+        TestOptions = function () {
+            this.logRequests = true;
+            this.rootPath = '/testrootpath/';
+            this.connectionStack = [];
+        };
+        TestOptions.prototype.dummyProperty = "dummy prototype property";
+
+        MockAuthenticationAgent = function() {
+            this._CAPI = null;
+            this.setCAPI = function (capi) {
+                this._CAPI = capi;
+            };
+        };
 
         beforeEach(function () {
-            mockAuthenticationAgent = {
-                _CAPI: null,
-                setCAPI: function (CAPI) {
-                    this._CAPI = CAPI;
-                }
-            };
-        });
+            testOptions = new TestOptions();
+            mockAuthenticationAgent = new MockAuthenticationAgent();
 
-        it("is running constructor correctly", function () {
-
-            jsCAPI = new CAPI(
+            capi = new CAPI(
                 endPointUrl,
-                mockAuthenticationAgent
+                mockAuthenticationAgent,
+                testOptions
             );
-
-            expect(jsCAPI).toBeDefined();
-            expect(mockAuthenticationAgent._CAPI).toBe(jsCAPI);
         });
 
-        describe("is calling services correctly (and they are singletons):", function () {
-
-            beforeEach(function () {
-                jsCAPI = new CAPI(
-                    endPointUrl,
-                    mockAuthenticationAgent,
-                    testOptions
-                );
+        describe("Construction", function() {
+            it("should be constructable", function () {
+                expect(capi).toBeDefined();
+                expect(capi instanceof CAPI).toBeTruthy();
             });
 
-            it("ContentService", function () {
-
-                contentService = jsCAPI.getContentService();
-                anotherContentService = jsCAPI.getContentService();
+            it("should update authenticationAgent with a reference to CAPI", function () {
+                expect(mockAuthenticationAgent._CAPI).toBe(capi);
+            });
+        });
+        describe("Service API", function () {
+            it("should provide ContentService", function () {
+                var contentService = capi.getContentService();
 
                 expect(contentService).toBeDefined();
                 expect(contentService instanceof ContentService).toBeTruthy();
-                expect(anotherContentService).toBe(contentService);
-
-                expect(contentService._connectionManager.logRequests).toBe(testOptions.logRequests);
-                expect(contentService._connectionManager._connectionFactory.connectionList).toBe(testOptions.connectionStack);
-                expect(contentService._discoveryService._rootPath).toBe(testOptions.rootPath);
-
             });
 
-            it("ContentTypeService", function () {
-
-                contentTypeService = jsCAPI.getContentTypeService();
-                anotherContentTypeService = jsCAPI.getContentTypeService();
+            it("should provide ContentTypeService", function () {
+                var contentTypeService = capi.getContentTypeService();
 
                 expect(contentTypeService).toBeDefined();
                 expect(contentTypeService instanceof ContentTypeService).toBeTruthy();
-                expect(anotherContentTypeService).toBe(contentTypeService);
             });
 
-            it("UserService", function () {
-
-                userService = jsCAPI.getUserService();
-                anotherUserService = jsCAPI.getUserService();
+            it("should provide UserService", function () {
+                var userService = capi.getUserService();
 
                 expect(userService).toBeDefined();
                 expect(userService instanceof UserService).toBeTruthy();
-                expect(anotherUserService).toBe(userService);
             });
-
         });
 
+        describe("Singleton Behaviour", function () {
+            it("should only create one ContentService", function () {
+                var contentService,
+                    anotherContentService;
 
+                contentService = capi.getContentService();
+                anotherContentService = capi.getContentService();
+
+                expect(anotherContentService).toBe(contentService);
+            });
+
+            it("should only create one ContentTypeService", function () {
+                var contentTypeService,
+                    anotherContentTypeService;
+
+                contentTypeService = capi.getContentTypeService();
+                anotherContentTypeService = capi.getContentTypeService();
+
+                expect(anotherContentTypeService).toBe(contentTypeService);
+            });
+
+            it("should only create one UserService", function () {
+                var anotherUserService,
+                    userService;
+
+                userService = capi.getUserService();
+                anotherUserService = capi.getUserService();
+
+                expect(anotherUserService).toBe(userService);
+            });
+        });
     });
-
 });
