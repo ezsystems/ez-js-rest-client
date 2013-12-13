@@ -81,6 +81,17 @@ $ grunt coverage
 After this command, the report is available in
 `test/coverage/lcov-report/index.html`.
 
+#### Continuous execution
+
+During development it may be quite handy to automatically rerun unit-tests and/or
+lint checks, once any project related file has changed.
+
+Using so called `watch` tasks this can easily be achieved. Currently the following
+of those tasks exist:
+
+- `watch:lint`: On each file change execute a linting run
+- `watch:test`: Execute a unit-test run on each file change
+
 #### Manual tests
 
 The library can be manually tested by installing the Symfony2 bundle
