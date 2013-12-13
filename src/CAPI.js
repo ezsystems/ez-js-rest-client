@@ -34,18 +34,21 @@ define(['authAgents/SessionAuthAgent', 'authAgents/HttpBasicAuthAgent', 'Connect
            });
      */
     var CAPI = function (endPointUrl, authenticationAgent, options) {
-        var defaultOptions = {
-                logRequests: false, // Whether we should log each request to the js console or not
-                rootPath: '/api/ezp/v2/', // Path to the REST root
-                connectionStack: [ // Array of connections, should be filled-in in preferred order
-                    {connection: XmlHttpRequestConnection},
-                    {connection: MicrosoftXmlHttpRequestConnection}
-                ]
-            },
+        var defaultOptions,
             mergedOptions,
             connectionFactory,
             connectionManager,
             discoveryService;
+
+        // Options used if not overwritten from the outside
+        defaultOptions =  {
+            logRequests: false, // Whether we should log each request to the js console or not
+            rootPath: '/api/ezp/v2/', // Path to the REST root
+            connectionStack: [ // Array of connections, should be filled-in in preferred order
+                {connection: XmlHttpRequestConnection},
+                {connection: MicrosoftXmlHttpRequestConnection}
+            ]
+        };
 
         this._contentService = null;
         this._contentTypeService = null;
