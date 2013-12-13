@@ -82,6 +82,19 @@ define(["authAgents/SessionAuthAgent", "structures/CAPIError"], function (Sessio
             mockCallback = jasmine.createSpy('mockCallback');
         });
 
+        it("should create some sort of Storage if none is given", function() {
+            var sessionAuthAgent = new SessionAuthAgent({
+                login: testLogin,
+                password: testPassword
+            });
+
+            // Evil hack to access private member, but this is the easiest way
+            // to do this check here. Anything else would involve other units of code
+            expect(sessionAuthAgent._storage).not.toBeUndefined();
+            expect(sessionAuthAgent._storage).not.toBeNull();
+            expect(sessionAuthAgent._storage.setItem).not.toBeUndefined();
+        });
+
         describe("is correctly performing", function(){
 
             beforeEach(function (){
