@@ -1,10 +1,12 @@
 module.exports = function(grunt) {
 
     var testPaths = {
-            "jasmineCAPIMatchers": "../test/jasmine/CAPIMatchers"
+            "jasmineCAPIMatchers": "../test/jasmine/CAPIMatchers",
+            "libs/q": "../node_modules/q/q"
         },
         coveragePaths = {
-            "jasmineCAPIMatchers": "../../../test/jasmine/CAPIMatchers"
+            "jasmineCAPIMatchers": "../../../test/jasmine/CAPIMatchers",
+            "libs/q": "../../../node_modules/q/q"
         };
 
     grunt.initConfig({

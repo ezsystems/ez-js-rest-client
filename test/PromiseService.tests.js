@@ -3,8 +3,6 @@ define(function (require) {
 
     var PromiseService = require("services/PromiseService");
 
-    window.Q = require("../../node_modules/q/q");
-
     require("jasmineCAPIMatchers");
 
     describe("PromiseService", function () {

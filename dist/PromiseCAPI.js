@@ -6108,8 +6108,13 @@ define('CAPI',['authAgents/SessionAuthAgent', 'authAgents/HttpBasicAuthAgent', '
 
 });
 
-/* global define, Q */
-define('services/PromiseService',["structures/CAPIError"], function (CAPIError) {
+/* global define */
+define('libs/q',[],function() {
+    return window.Q;
+});
+
+/* global define */
+define('services/PromiseService',["structures/CAPIError", "libs/q"], function (CAPIError, q) {
     
 
     /**
@@ -6126,7 +6131,7 @@ define('services/PromiseService',["structures/CAPIError"], function (CAPIError) 
 
             return function () {
                 var toBeCalledArguments = Array.prototype.slice.call(arguments),
-                    deferred = Q.defer();
+                    deferred = q.defer();
 
                 if (originalFunction.length - 1 !== arguments.length) {
                     throw new CAPIError("Wrong number of arguments provided for promise-based function.");
