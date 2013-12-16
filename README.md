@@ -98,7 +98,7 @@ using following instruction:
   return statement of the method registerBundles:
 
     ```php
-    $bundles[] = new EzSystems\jsRestClientBundle\jsRectClientBundle();
+    $bundles[] = new EzSystems\jsRestClientBundle\jsRestClientBundle();
     ```
 
 * Import routing.yml file of the bundle into main routing file by adding the
