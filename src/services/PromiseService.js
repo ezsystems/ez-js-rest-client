@@ -40,7 +40,7 @@ define(["../../node_modules/q/q", "structures/CAPIError"], function (q, CAPIErro
          * @private
          *
          * @param originalFunction
-         * @returns {Function}
+         * @return {Function}
          */
         _generatePromiseFunction = function (originalFunction) {
             return function () {
