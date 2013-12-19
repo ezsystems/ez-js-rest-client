@@ -27,7 +27,7 @@ define(function () {
      * @param done {Function} Callback function, which is to be called by the implementation
      * to signal the authentication has been completed.
      */
-    HttpBasicAuthAgent.prototype.ensureAuthentication = function(done) {
+    HttpBasicAuthAgent.prototype.ensureAuthentication = function (done) {
         // ... empty for basic auth?
         done(false, true);
     };

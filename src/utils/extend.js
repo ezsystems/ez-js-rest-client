@@ -1,5 +1,5 @@
 /* globals define */
-define([], function() {
+define([], function () {
     /**
      * Provides only the `extend` function.
      *
@@ -22,9 +22,9 @@ define([], function() {
      * @param [obj]* Arbitrary amount of objects which will extend the first one
      * @return {Object} the extended object
      */
-    var extend = function(target /*, obj, ... */) {
+    var extend = function (target /*, obj, ... */) {
         var extensions = Array.prototype.slice.call(arguments, 1);
-        extensions.forEach(function(extension) {
+        extensions.forEach(function (extension) {
             var key;
 
             if (typeof extension !== "object") {
@@ -32,7 +32,7 @@ define([], function() {
                 return;
             }
 
-            for(key in extension) {
+            for (key in extension) {
                 if (extension.hasOwnProperty(key) && extension[key] !== undefined) {
                     target[key] = extension[key];
                 }

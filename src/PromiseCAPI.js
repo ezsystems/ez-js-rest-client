@@ -138,8 +138,8 @@ define(["CAPI", "services/PromiseService"], function (CAPI, PromiseService) {
             };
         };
 
-        _generateMappedFunction = function(originalMethodName) {
-            return function() {
+        _generateMappedFunction = function (originalMethodName) {
+            return function () {
                 return originalCapi[originalMethodName].apply(
                     originalCapi,
                     Array.prototype.slice.call(arguments)
@@ -152,7 +152,7 @@ define(["CAPI", "services/PromiseService"], function (CAPI, PromiseService) {
         /* Disabling hasOwnProperty wrapper check here, as we explicitly WANT to copy
          * over potentially inherited functions */
         /* jshint -W089 */
-        for(key in originalCapi) {
+        for (key in originalCapi) {
             if (typeof originalCapi[key] !== "function") {
                 continue;
             }

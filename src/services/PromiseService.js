@@ -24,8 +24,8 @@ define(["../../node_modules/q/q", "structures/CAPIError"], function (q, CAPIErro
          * @param {Function} originalFunction
          * @return {Function}
          */
-        _generateMappedFunction = function(originalFunction) {
-            return function() {
+        _generateMappedFunction = function (originalFunction) {
+            return function () {
                 return originalFunction.apply(originalService, Array.prototype.slice(arguments));
             };
         };
@@ -71,7 +71,7 @@ define(["../../node_modules/q/q", "structures/CAPIError"], function (q, CAPIErro
         /* Disabling hasOwnProperty wrapper check here, as we explicitly WANT to copy
          * over potentially inherited functions */
         /* jshint -W089 */
-        for(key in originalService) {
+        for (key in originalService) {
             if (typeof originalService[key] !== "function") {
                 continue;
             }

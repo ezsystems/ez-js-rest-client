@@ -140,7 +140,7 @@ define(["structures/Response", "structures/Request", "structures/CAPIError"],
      * @param [headers={}] {object} object literal describing request headers
      * @param callback {function} function, which will be executed on request success
      */
-    ConnectionManager.prototype.notAuthorizedRequest = function(method, url, body, headers, callback) {
+    ConnectionManager.prototype.notAuthorizedRequest = function (method, url, body, headers, callback) {
         var request,
             defaultMethod = "GET",
             defaultUrl = "/",
