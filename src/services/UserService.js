@@ -35,9 +35,10 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
      * @example
      *     var userService = jsCAPI.getUserService();
      */
-    var UserService = function (connectionManager, discoveryService) {
+    var UserService = function (connectionManager, discoveryService, rootPath) {
         this._connectionManager = connectionManager;
         this._discoveryService = discoveryService;
+        this._rootPath = rootPath;
     };
 
 // ******************************
@@ -1130,18 +1131,31 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
      * Create a session (login a user)
      *
      * @method createSession
-     * @param sessions {String} link to root Sessions resource (should be auto-discovered)
      * @param sessionCreateStruct {SessionCreateStruct} object describing new session to be created (see "newSessionCreateStruct")
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "UserService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    UserService.prototype.createSession = function (sessions, sessionCreateStruct, callback) {
+    UserService.prototype.createSession = function (sessionCreateStruct, callback) {
+        var that = this;
+
         this._connectionManager.notAuthorizedRequest(
-            "POST",
-            sessions,
-            JSON.stringify(sessionCreateStruct.body),
-            sessionCreateStruct.headers,
-            callback
+            "GET",
+            this._rootPath,
+            "",
+            {"Accept": "application/vnd.ez.api.Root+json"},
+            function (error, rootResource) {
+                if (error) {
+                    callback(error, false);
+                    return;
+                }
+                that._connectionManager.notAuthorizedRequest(
+                    "POST",
+                    rootResource.document.Root.createSession._href,
+                    JSON.stringify(sessionCreateStruct.body),
+                    sessionCreateStruct.headers,
+                    callback
+                );
+            }
         );
     };
 

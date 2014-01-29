@@ -498,7 +498,6 @@ define('authAgents/SessionAuthAgent',["structures/CAPIError"], function (CAPIErr
 
             // TODO: change hardcoded "sessions" path to discovered
             userService.createSession(
-                "/api/ezp/v2/user/sessions",
                 sessionCreateStruct,
                 function (error, sessionResponse) {
                     if (error) {
@@ -4876,9 +4875,10 @@ define('services/UserService',['structures/SessionCreateStruct', 'structures/Use
      * @example
      *     var userService = jsCAPI.getUserService();
      */
-    var UserService = function (connectionManager, discoveryService) {
+    var UserService = function (connectionManager, discoveryService, rootPath) {
         this._connectionManager = connectionManager;
         this._discoveryService = discoveryService;
+        this._rootPath = rootPath;
     };
 
 // ******************************
@@ -5971,18 +5971,31 @@ define('services/UserService',['structures/SessionCreateStruct', 'structures/Use
      * Create a session (login a user)
      *
      * @method createSession
-     * @param sessions {String} link to root Sessions resource (should be auto-discovered)
      * @param sessionCreateStruct {SessionCreateStruct} object describing new session to be created (see "newSessionCreateStruct")
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "UserService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    UserService.prototype.createSession = function (sessions, sessionCreateStruct, callback) {
+    UserService.prototype.createSession = function (sessionCreateStruct, callback) {
+        var that = this;
+
         this._connectionManager.notAuthorizedRequest(
-            "POST",
-            sessions,
-            JSON.stringify(sessionCreateStruct.body),
-            sessionCreateStruct.headers,
-            callback
+            "GET",
+            this._rootPath,
+            "",
+            {"Accept": "application/vnd.ez.api.Root+json"},
+            function (error, rootResource) {
+                if (error) {
+                    callback(error, false);
+                    return;
+                }
+                that._connectionManager.notAuthorizedRequest(
+                    "POST",
+                    rootResource.document.Root.createSession._href,
+                    JSON.stringify(sessionCreateStruct.body),
+                    sessionCreateStruct.headers,
+                    callback
+                );
+            }
         );
     };
 
@@ -6150,7 +6163,8 @@ define('CAPI',['authAgents/SessionAuthAgent', 'authAgents/HttpBasicAuthAgent', '
             if  (!this._userService)  {
                 this._userService  =  new UserService(
                     connectionManager,
-                    discoveryService
+                    discoveryService,
+                    mergedOptions.rootPath
                 );
             }
             return  this._userService;

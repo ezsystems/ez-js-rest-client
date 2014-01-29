@@ -44,8 +44,8 @@ define(function (require) {
             testRolePolicies = "/api/ezp/v2/user/roles/7/policies",
             testPolicyId = "/api/ezp/v2/user/roles/7/policies/1",
             testPolicies = "/api/ezp/v2/user/policies",
-            testSessions = "/api/ezp/v2/user/sessions",
             testSessionId = "/api/ezp/v2/user/sessions/o7i8r1sapfc9r84ae53bgq8gp4",
+            testRootId = "/api/ezp/v2/",
             testLogin = "login",
             testPass = "pass",
 
@@ -116,7 +116,7 @@ define(function (require) {
                     };
                     callback(false, mockUserResponse);
                 },
-                fakedLoadRole = function(roleId, callback){
+                fakedLoadRole = function(roleId, callback) {
                     var mockRoleResponse = {};
                     mockRoleResponse.document = {
                         "Role" : {
@@ -129,6 +129,17 @@ define(function (require) {
                         }
                     };
                     callback(false, mockRoleResponse);
+                },
+                fakedNotAuthorizedRequest = function (method, url, body, headers, callback) {
+                    var mockRootResponse = {};
+                    mockRootResponse.document = {
+                        "Root": {
+                            "createSession": {
+                                _href : testRootId
+                            }
+                        }
+                    };
+                    callback(false, mockRootResponse);
                 };
 
             // ******************************
@@ -164,7 +175,7 @@ define(function (require) {
 
                 spyOn(mockDiscoveryService, 'getInfoObject').andCallThrough();
 
-                userService = new UserService(mockConnectionManager, mockDiscoveryService);
+                userService = new UserService(mockConnectionManager, mockDiscoveryService, testRootId);
 
             });
 
@@ -984,21 +995,21 @@ define(function (require) {
             // Sessions management
             // ******************************
             it("createSession", function () {
-
                 var sessionCreateStruct = userService.newSessionCreateStruct(
                     "admin",
                     "admin"
                 );
 
+                mockConnectionManager.notAuthorizedRequest.andCallFake(fakedNotAuthorizedRequest);
+
                 userService.createSession(
-                    testSessions,
                     sessionCreateStruct,
                     mockCallback
                 );
 
                 expect(mockConnectionManager.notAuthorizedRequest).toHaveBeenCalledWith(
                     "POST",
-                    testSessions,
+                    testRootId,
                     JSON.stringify(sessionCreateStruct.body),
                     sessionCreateStruct.headers,
                     mockCallback
@@ -1165,7 +1176,7 @@ define(function (require) {
                     );
                 };
 
-            describe("dealing with faulty Discovery Service and performing", function(){
+            describe("dealing with faulty Discovery Service and performing", function() {
 
                 beforeEach(function(){
 
@@ -1182,7 +1193,8 @@ define(function (require) {
 
                     userService = new UserService(
                         mockConnectionManager,
-                        mockFaultyDiscoveryService
+                        mockFaultyDiscoveryService,
+                        testRootId
                     );
 
                 });
@@ -1238,6 +1250,44 @@ define(function (require) {
 
             });
 
+            describe("dealing with faulty Connection Manager and performing", function() {
+
+                it("createSession", function () {
+                    var mockFaultyConnectionManager = {
+                            notAuthorizedRequest : function (method, url, body, headers, callback) {
+                                callback(
+                                    new CAPIError("Connection manager failed for some reason"),
+                                    false
+                                );
+                            }
+                        },
+                        sessionCreateStruct;
+
+                    spyOn(mockFaultyConnectionManager, 'notAuthorizedRequest').andCallThrough();
+
+                    userService = new UserService(
+                        mockFaultyConnectionManager,
+                        mockDiscoveryService,
+                        testRootId
+                    );
+
+                    sessionCreateStruct = userService.newSessionCreateStruct(
+                        "admin",
+                        "admin"
+                    );
+
+
+                    userService.createSession(
+                        sessionCreateStruct,
+                        mockCallback
+                    );
+
+                    expect(mockCallback).toHaveBeenCalledWith(
+                        jasmine.any(CAPIError),
+                        false
+                    );
+                });
+            });
 
             describe("dealing with faulty inner calls and performing", function(){
 

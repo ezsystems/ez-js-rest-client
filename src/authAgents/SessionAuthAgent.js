@@ -47,9 +47,7 @@ define(["structures/CAPIError"], function (CAPIError) {
                 this._password
             );
 
-        // TODO: change hardcoded "sessions" path to discovered
         userService.createSession(
-            "/api/ezp/v2/user/sessions",
             sessionCreateStruct,
             function (error, sessionResponse) {
                 if (error) {

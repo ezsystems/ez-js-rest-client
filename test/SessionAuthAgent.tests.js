@@ -18,8 +18,7 @@ define(function (require) {
 
     describe("Session Authorization Agent", function () {
 
-        var sessions = "/api/ezp/v2/user/sessions",
-            testLogin = "login",
+        var testLogin = "login",
             testPassword = "password",
             testSessionId = "/api/ezp/v2/user/sessions/o7i8r1sapfc9r84ae53bgq8gp4",
             testSessionName = "EZSESSID",
@@ -50,7 +49,7 @@ define(function (require) {
                         }
                     };
                 },
-                createSession: function(sessions, sessionCreateStruct, callback){
+                createSession: function(sessionCreateStruct, callback){
                     mockSessionResponse = {};
                     mockSessionResponse.body = JSON.stringify({
                         "Session" : {
@@ -103,7 +102,6 @@ define(function (require) {
 
                 expect(mockUserService.newSessionCreateStruct).toHaveBeenCalled();
                 expect(mockUserService.createSession).toHaveBeenCalledWith(
-                    sessions,
                     jasmine.any(Object),
                     jasmine.any(Function)
                 );
@@ -234,7 +232,7 @@ define(function (require) {
                             false
                         );
                     },
-                    createSession: function(sessions, sessionCreateStruct, callback){
+                    createSession: function(sessionCreateStruct, callback){
                         callback(
                             true,
                             false

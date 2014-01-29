@@ -122,7 +122,8 @@ define(['authAgents/SessionAuthAgent', 'authAgents/HttpBasicAuthAgent', 'Connect
             if (!userService)  {
                 userService = new UserService(
                     connectionManager,
-                    discoveryService
+                    discoveryService,
+                    mergedOptions.rootPath
                 );
             }
             return userService;

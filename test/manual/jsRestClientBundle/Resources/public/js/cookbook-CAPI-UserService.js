@@ -869,11 +869,10 @@ CreateSessionAnchor.onclick = function(e){
 
     var sessionCreate = userService.newSessionCreateStruct(
         "admin",
-        "admin"
+        "ezpublish"
     );
 
     userService.createSession(
-        "/api/ezp/v2/user/sessions",
         sessionCreate,
         function(error, response){
             clientOutput.innerHTML =    "Errors : " + JSON.stringify(error) + "</br>" +
