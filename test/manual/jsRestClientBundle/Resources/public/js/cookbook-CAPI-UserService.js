@@ -282,7 +282,6 @@ GetRoleAssignmentsAnchor.onclick = function(e){
 
     var GetRoleAssignmentsInput = document.getElementById('get-role-assignments-input');
     userService.getRoleAssignments(
-        "/api/ezp/v2/user/users",
         GetRoleAssignmentsInput.value,
         function(error, response){
             clientOutput.innerHTML =    "Errors : " + JSON.stringify(error) + "</br>" +

@@ -29,7 +29,10 @@ define(function (require) {
 
             rootId = '/api/ezp/v2/',
             testContentObjects = '/api/ezp/v2/content/objects',
+            testContentObjectsTemplate = '/api/ezp/v2/content/objects{?remoteId}',
             testContentId = '/api/ezp/v2/content/objects/173',
+            testLocationByRemoteId = '/api/ezp/v2/content/locations',
+            testLocationByRemoteIdTemplate = '/api/ezp/v2/content/locations{?remoteId}',
             testRemoteId = '30847bec12a8a398777493a4bdb10398',
             testVersionedContentId = '/api/ezp/v2/content/objects/173/version/1',
             testVersionsList = '/api/ezp/v2/content/objects/173/versions',
@@ -196,6 +199,23 @@ define(function (require) {
                             );
                         }
 
+                        if (name === "contentByRemoteId"){
+                            callback(
+                                false,
+                                {
+                                    "_href" : testContentObjectsTemplate
+                                }
+                            );
+                        }
+
+                        if (name === "locationByRemoteId"){
+                            callback(
+                                false,
+                                {
+                                    "_href" : testLocationByRemoteIdTemplate
+                                }
+                            );
+                        }
                     }
                 };
 
@@ -373,13 +393,13 @@ define(function (require) {
                         mockCallback
                     );
 
-                    expect(mockDiscoveryService.getInfoObject).toHaveBeenCalledWith("content", jasmine.any(Function));
+                    expect(mockDiscoveryService.getInfoObject).toHaveBeenCalledWith("contentByRemoteId", jasmine.any(Function));
 
                     expect(mockConnectionManager.request).toHaveBeenCalledWith(
                         "GET",
                         testContentObjects + "?remoteId=" + testRemoteId,
                         "",
-                        {Accept: ""},
+                        {Accept: "application/vnd.ez.api.ContentInfo+json"},
                         mockCallback
                     );
                 });
@@ -906,14 +926,13 @@ define(function (require) {
 
                 it("loadLocationByRemoteId", function () {
                     contentService.loadLocationByRemoteId(
-                        "/api/ezp/v2/content/locations",
-                        "0bae96bd419e141ff3200ccbf2822e4f",
+                        testRemoteId,
                         mockCallback
                     );
 
                     expect(mockConnectionManager.request).toHaveBeenCalledWith(
                         "GET",
-                        "/api/ezp/v2/content/locations" + '?remoteId=' + "0bae96bd419e141ff3200ccbf2822e4f",
+                        testLocationByRemoteId + '?remoteId=' + testRemoteId,
                         "",
                         {Accept: "application/vnd.ez.api.Location+json"},
                         mockCallback
@@ -1874,7 +1893,17 @@ define(function (require) {
                     mockCallback
                 );
 
-                expect(mockFaultyDiscoveryService.getInfoObject).toHaveBeenCalledWith("content", jasmine.any(Function));
+                expect(mockFaultyDiscoveryService.getInfoObject).toHaveBeenCalledWith("contentByRemoteId", jasmine.any(Function));
+                expect(mockCallback).toHaveBeenCalledWith(jasmine.any(CAPIError), false);
+            });
+
+            it("loadLocationByRemoteId", function () {
+                contentService.loadLocationByRemoteId(
+                    testRemoteId,
+                    mockCallback
+                );
+
+                expect(mockFaultyDiscoveryService.getInfoObject).toHaveBeenCalledWith("locationByRemoteId", jasmine.any(Function));
                 expect(mockCallback).toHaveBeenCalledWith(jasmine.any(CAPIError), false);
             });
 

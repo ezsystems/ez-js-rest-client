@@ -785,7 +785,6 @@ LoadLocationByRemoteAnchor.onclick = function(e){
 
     var LoadLocationByRemoteInput = document.getElementById('load-location-by-remote-input');
     contentService.loadLocationByRemoteId(
-        "/api/ezp/v2/content/locations",
         LoadLocationByRemoteInput.value,
         function(error, response){
             clientOutput.innerHTML =    "Errors : " + JSON.stringify(error) + "</br>" +

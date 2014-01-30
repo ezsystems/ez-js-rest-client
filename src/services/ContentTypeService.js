@@ -1,8 +1,8 @@
 /* global define */
 define(["structures/ContentTypeGroupInputStruct", "structures/ContentTypeCreateStruct", "structures/ContentTypeUpdateStruct",
-        "structures/FieldDefinitionCreateStruct", "structures/FieldDefinitionUpdateStruct"],
+        "structures/FieldDefinitionCreateStruct", "structures/FieldDefinitionUpdateStruct", "utils/uriparse"],
     function (ContentTypeGroupInputStruct, ContentTypeCreateStruct, ContentTypeUpdateStruct,
-              FieldDefinitionCreateStruct, FieldDefinitionUpdateStruct) {
+              FieldDefinitionCreateStruct, FieldDefinitionUpdateStruct, parseUriTemplate) {
     "use strict";
 
     /**
@@ -383,18 +383,17 @@ define(["structures/ContentTypeGroupInputStruct", "structures/ContentTypeCreateS
         var that = this;
 
         this._discoveryService.getInfoObject(
-            "contentTypes",
-            function (error, contentTypes) {
+            "contentTypeByIdentifier",
+            function (error, contentTypeByIdentifier) {
                 if (error) {
                     callback(error, false);
                     return;
                 }
-
                 that._connectionManager.request(
                     "GET",
-                    contentTypes._href + "?identifier=" + identifier,
+                    parseUriTemplate(contentTypeByIdentifier._href, {identifier: identifier}),
                     "",
-                    {"Accept": contentTypes["_media-type"]},
+                    {"Accept": "application/vnd.ez.api.ContentTypeInfoList+json"},
                     callback
                 );
             }

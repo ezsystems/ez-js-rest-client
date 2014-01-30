@@ -26,6 +26,7 @@ define(function (require) {
             testContentTypeGroupIdentifier = "Media",
             testContentTypeId = "/api/ezp/v2/content/types/18",
             testContentTypes = "/api/ezp/v2/content/types",
+            testContentTypeByIdentifierTemplate = "/api/ezp/v2/content/types{?identifier}",
             testContentTypeIdentifier = "blog_post",
             testContentTypeAssignedGroupId = "/api/ezp/v2/content/types/101/groups/1",
             testContentTypeDraftId = "/api/ezp/v2/content/types/18/draft",
@@ -93,16 +94,14 @@ define(function (require) {
                 mockDiscoveryService = {
                     getInfoObject : function(name, callback){
 
-                        if (name === "contentTypes"){
+                        if (name === "contentTypeByIdentifier") {
                             callback(
                                 false,
                                 {
-                                    "_href" : testContentTypes,
-                                    "_media-type" : "application/vnd.ez.api.ContentTypeInfoList+json"
+                                    "_href" : testContentTypeByIdentifierTemplate
                                 }
                             );
                         }
-
                     }
                 };
 
@@ -373,9 +372,10 @@ define(function (require) {
                     mockCallback
                 );
 
-                expect(mockDiscoveryService.getInfoObject).toHaveBeenCalled();
-                expect(mockDiscoveryService.getInfoObject.mostRecentCall.args[0]).toEqual("contentTypes"); //name
-                expect(mockDiscoveryService.getInfoObject.mostRecentCall.args[1]).toEqual(jasmine.any(Function)); //callback
+                expect(mockDiscoveryService.getInfoObject).toHaveBeenCalledWith(
+                    "contentTypeByIdentifier",
+                    jasmine.any(Function)
+                );
 
                 expect(mockConnectionManager.request).toHaveBeenCalledWith(
                     "GET",

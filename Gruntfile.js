@@ -1,15 +1,18 @@
 module.exports = function(grunt) {
 
-    var qPath = {
-            "q": "../node_modules/q/q"
+    var dependenciesPaths = {
+            "q": "../node_modules/q/q",
+            "uritemplate": "../node_modules/uritemplate/bin/uritemplate"
         },
         testPaths = {
             "q": "../node_modules/q/q",
-            "jasmineCAPIMatchers": "../test/jasmine/CAPIMatchers"
+            "jasmineCAPIMatchers": "../test/jasmine/CAPIMatchers",
+            "uritemplate": "../node_modules/uritemplate/bin/uritemplate"
         },
         coveragePaths = {
-            "q": "../node_modules/q/q",
-            "jasmineCAPIMatchers": "../../../test/jasmine/CAPIMatchers"
+            "q": "../../../node_modules/q/q",
+            "jasmineCAPIMatchers": "../../../test/jasmine/CAPIMatchers",
+            "uritemplate": "../../../node_modules/uritemplate/bin/uritemplate"
         };
 
     grunt.initConfig({
@@ -20,7 +23,7 @@ module.exports = function(grunt) {
                     name : 'PromiseCAPI',
                     optimize: "none",
                     baseUrl: "src/",
-                    paths: qPath,
+                    paths: dependenciesPaths,
                     out: "dist/CAPI.js",
                     wrap: {
                         startFile: 'wrap/wrap.start.js',
@@ -34,7 +37,7 @@ module.exports = function(grunt) {
                     name : 'PromiseCAPI',
                     optimize: "uglify",
                     baseUrl: "src/",
-                    paths: qPath,
+                    paths: dependenciesPaths,
                     out: "dist/CAPI-min.js",
                     wrap: {
                         startFile: 'wrap/wrap.start.js',
@@ -48,7 +51,7 @@ module.exports = function(grunt) {
                     name : 'PromiseCAPI',
                     optimize: "none",
                     baseUrl: "src/",
-                    paths: qPath,
+                    paths: dependenciesPaths,
                     out: "test/manual/jsRestClientBundle/Resources/public/js/CAPI.js",
                     wrap: {
                         startFile: 'wrap/wrap.start.js',

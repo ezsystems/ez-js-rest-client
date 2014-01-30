@@ -488,46 +488,45 @@ define('authAgents/SessionAuthAgent',["structures/CAPIError"], function (CAPIErr
      * @param done {Function} Callback function, which is to be called by the implementation to signal the authentication has been completed.
      */
     SessionAuthAgent.prototype.ensureAuthentication = function (done) {
-        if (this.sessionId === null) {
-            var that = this,
-                userService = this._CAPI.getUserService(),
-                sessionCreateStruct = userService.newSessionCreateStruct(
-                    this._login,
-                    this._password
-                );
+        if (this.sessionId !== null) {
+            done(false, true);
+            return;
+        }
 
-            // TODO: change hardcoded "sessions" path to discovered
-            userService.createSession(
-                sessionCreateStruct,
-                function (error, sessionResponse) {
-                    if (error) {
-                        done(
-                            new CAPIError(
-                                "Failed to create new session.",
-                                {sessionCreateStruct: sessionCreateStruct}
-                            ),
-                            false
-                        );
-                        return;
-                    }
-
-                    var session = JSON.parse(sessionResponse.body).Session;
-
-                    that.sessionName = session.name;
-                    that.sessionId = session._href;
-                    that.csrfToken = session.csrfToken;
-
-                    sessionStorage.setItem('ezpRestClient.sessionName', that.sessionName);
-                    sessionStorage.setItem('ezpRestClient.sessionId', that.sessionId);
-                    sessionStorage.setItem('ezpRestClient.csrfToken', that.csrfToken);
-
-                    done(false, true);
-                }
+        var that = this,
+            userService = this._CAPI.getUserService(),
+            sessionCreateStruct = userService.newSessionCreateStruct(
+                this._login,
+                this._password
             );
 
-        } else {
-            done(false, true);
-        }
+        userService.createSession(
+            sessionCreateStruct,
+            function (error, sessionResponse) {
+                if (error) {
+                    done(
+                        new CAPIError(
+                            "Failed to create new session.",
+                            {sessionCreateStruct: sessionCreateStruct}
+                        ),
+                        false
+                    );
+                    return;
+                }
+
+                var session = JSON.parse(sessionResponse.body).Session;
+
+                that.sessionName = session.name;
+                that.sessionId = session._href;
+                that.csrfToken = session.csrfToken;
+
+                sessionStorage.setItem('ezpRestClient.sessionName', that.sessionName);
+                sessionStorage.setItem('ezpRestClient.sessionId', that.sessionId);
+                sessionStorage.setItem('ezpRestClient.csrfToken', that.csrfToken);
+
+                done(false, true);
+            }
+        );
     };
 
     /**
@@ -620,7 +619,7 @@ define('authAgents/HttpBasicAuthAgent',[],function () {
      * @param done {Function} Callback function, which is to be called by the implementation
      * to signal the authentication has been completed.
      */
-    HttpBasicAuthAgent.prototype.ensureAuthentication = function(done) {
+    HttpBasicAuthAgent.prototype.ensureAuthentication = function (done) {
         // ... empty for basic auth?
         done(false, true);
     };
@@ -700,7 +699,11 @@ define('structures/Response',[],function () {
         }
 
         if ( this.body ) {
-            this.document = JSON.parse(this.body);
+            try {
+                this.document = JSON.parse(this.body);
+            } catch(e) {
+                this.document = null;
+            }
         }
 
         return this;
@@ -875,7 +878,7 @@ define('ConnectionManager',["structures/Response", "structures/Request", "struct
      * @param [headers={}] {object} object literal describing request headers
      * @param callback {function} function, which will be executed on request success
      */
-    ConnectionManager.prototype.notAuthorizedRequest = function(method, url, body, headers, callback) {
+    ConnectionManager.prototype.notAuthorizedRequest = function (method, url, body, headers, callback) {
         var request,
             defaultMethod = "GET",
             defaultUrl = "/",
@@ -966,7 +969,7 @@ define('ConnectionFeatureFactory',[],function () {
      */
     ConnectionFeatureFactory.prototype.createConnection = function () {
         var connection = null,
-            index = 0;
+            index;
 
         // Choosing and creating first compatible connection from connection list
         for (index = 0; index < this.connectionList.length; ++index) {
@@ -999,58 +1002,58 @@ define('connections/XmlHttpRequestConnection',["structures/Response", "structure
      */
     var XmlHttpRequestConnection = function () {
         this._xhr = new XMLHttpRequest();
+    };
 
-        /**
-         * Basic request implemented via XHR technique
-         *
-         * @method execute
-         * @param request {Request} structure containing all needed params and data
-         * @param callback {function} function, which will be executed on request success
-         */
-        this.execute = function (request, callback) {
-            var XHR = this._xhr,
-                headerType;
+    /**
+     * Basic request implemented via XHR technique
+     *
+     * @method execute
+     * @param request {Request} structure containing all needed params and data
+     * @param callback {function} function, which will be executed on request success
+     */
+    XmlHttpRequestConnection.prototype.execute = function (request, callback) {
+        var XHR = this._xhr,
+            headerType;
 
-            // Create the state change handler:
-            XHR.onreadystatechange = function () {
-                if (XHR.readyState != 4) {return;} // Not ready yet
-                if (XHR.status >= 400) {
-                    callback(
-                        new CAPIError("Connection error : " + XHR.status + ".", {
-                            errorCode : XHR.status,
-                            xhr: XHR
-                        }),
-                        false
-                    );
-                    return;
-                }
-                // Request successful
+        // Create the state change handler:
+        XHR.onreadystatechange = function () {
+            if (XHR.readyState != 4) {return;} // Not ready yet
+            if (XHR.status >= 400) {
                 callback(
-                    false,
-                    new Response({
-                        status: XHR.status,
-                        headers: XHR.getAllResponseHeaders(),
-                        body: XHR.responseText
-                    })
+                    new CAPIError("Connection error : " + XHR.status + ".", {
+                        errorCode : XHR.status,
+                        xhr: XHR
+                    }),
+                    false
                 );
-            };
-
-            if (request.httpBasicAuth) {
-                XHR.open(request.method, request.url, true, request.login, request.password);
-            } else {
-                XHR.open(request.method, request.url, true);
+                return;
             }
-
-            for (headerType in request.headers) {
-                if (request.headers.hasOwnProperty(headerType)) {
-                    XHR.setRequestHeader(
-                        headerType,
-                        request.headers[headerType]
-                    );
-                }
-            }
-            XHR.send(request.body);
+            // Request successful
+            callback(
+                false,
+                new Response({
+                    status: XHR.status,
+                    headers: XHR.getAllResponseHeaders(),
+                    body: XHR.responseText
+                })
+            );
         };
+
+        if (request.httpBasicAuth) {
+            XHR.open(request.method, request.url, true, request.login, request.password);
+        } else {
+            XHR.open(request.method, request.url, true);
+        }
+
+        for (headerType in request.headers) {
+            if (request.headers.hasOwnProperty(headerType)) {
+                XHR.setRequestHeader(
+                    headerType,
+                    request.headers[headerType]
+                );
+            }
+        }
+        XHR.send(request.body);
     };
 
     /**
@@ -1065,7 +1068,6 @@ define('connections/XmlHttpRequestConnection',["structures/Response", "structure
     };
 
     return XmlHttpRequestConnection;
-
 });
 /* global define */
 /* global ActiveXObject */
@@ -1081,58 +1083,58 @@ define('connections/MicrosoftXmlHttpRequestConnection',["structures/Response", "
      */
     var MicrosoftXmlHttpRequestConnection = function () {
         this._xhr = new ActiveXObject("Microsoft.XMLHTTP");
+    };
 
-        /**
-         * Basic request implemented via XHR technique
-         *
-         * @method execute
-         * @param request {Request} structure containing all needed params and data
-         * @param callback {function} function, which will be executed on request success
-         */
-        this.execute = function (request, callback) {
-            var XHR = this._xhr,
-                headerType;
+    /**
+     * Basic request implemented via XHR technique
+     *
+     * @method execute
+     * @param request {Request} structure containing all needed params and data
+     * @param callback {function} function, which will be executed on request success
+     */
+    MicrosoftXmlHttpRequestConnection.prototype.execute = function (request, callback) {
+        var XHR = this._xhr,
+            headerType;
 
-            // Create the state change handler:
-            XHR.onreadystatechange = function () {
-                if (XHR.readyState != 4) {return;} // Not ready yet
-                if (XHR.status >= 400) {
-                    callback(
-                        new CAPIError("Connection error : " + XHR.status + ".", {
-                            errorCode : XHR.status,
-                            xhr: XHR
-                        }),
-                        false
-                    );
-                    return;
-                }
-                // Request successful
+        // Create the state change handler:
+        XHR.onreadystatechange = function () {
+            if (XHR.readyState != 4) {return;} // Not ready yet
+            if (XHR.status >= 400) {
                 callback(
-                    false,
-                    new Response({
-                        status: XHR.status,
-                        headers: XHR.getAllResponseHeaders(),
-                        body: XHR.responseText
-                    })
+                    new CAPIError("Connection error : " + XHR.status + ".", {
+                        errorCode : XHR.status,
+                        xhr: XHR
+                    }),
+                    false
                 );
-            };
-
-            if (request.httpBasicAuth) {
-                XHR.open(request.method, request.url, true, request.login, request.password);
-            } else {
-                XHR.open(request.method, request.url, true);
+                return;
             }
-
-            for (headerType in request.headers) {
-                if (request.headers.hasOwnProperty(headerType)) {
-                    XHR.setRequestHeader(
-                        headerType,
-                        request.headers[headerType]
-                    );
-                }
-            }
-            XHR.send(request.body);
+            // Request successful
+            callback(
+                false,
+                new Response({
+                    status: XHR.status,
+                    headers: XHR.getAllResponseHeaders(),
+                    body: XHR.responseText
+                })
+            );
         };
+
+        if (request.httpBasicAuth) {
+            XHR.open(request.method, request.url, true, request.login, request.password);
+        } else {
+            XHR.open(request.method, request.url, true);
+        }
+
+        for (headerType in request.headers) {
+            if (request.headers.hasOwnProperty(headerType)) {
+                XHR.setRequestHeader(
+                    headerType,
+                    request.headers[headerType]
+                );
+            }
+        }
+        XHR.send(request.body);
     };
 
     /**
@@ -1147,7 +1149,6 @@ define('connections/MicrosoftXmlHttpRequestConnection',["structures/Response", "
     };
 
     return MicrosoftXmlHttpRequestConnection;
-
 });
 /* global define */
 define('services/DiscoveryService',["structures/CAPIError"], function (CAPIError) {
@@ -1163,9 +1164,9 @@ define('services/DiscoveryService',["structures/CAPIError"], function (CAPIError
      * @param connectionManager {ConnectionManager}
      */
     var DiscoveryService = function (rootPath, connectionManager) {
-        this.connectionManager = connectionManager;
-        this.rootPath = rootPath;
-        this.cacheObject = {};
+        this._connectionManager = connectionManager;
+        this._rootPath = rootPath;
+        this._cacheObject = {};
     };
 
     /**
@@ -1248,9 +1249,9 @@ define('services/DiscoveryService',["structures/CAPIError"], function (CAPIError
      * @protected
      */
     DiscoveryService.prototype._discoverRoot = function (rootPath, callback) {
-        if (!this.cacheObject.Root) {
+        if (!this._cacheObject.Root) {
             var that = this;
-            this.connectionManager.request(
+            this._connectionManager.request(
                 "GET",
                 rootPath,
                 "",
@@ -1280,13 +1281,13 @@ define('services/DiscoveryService',["structures/CAPIError"], function (CAPIError
     DiscoveryService.prototype._copyToCache = function (object) {
         for (var property in object) {
             if (object.hasOwnProperty(property) && object[property]) {
-                this.cacheObject[property] = object[property];
+                this._cacheObject[property] = object[property];
             }
         }
     };
 
     /**
-     * Get target object from cacheObject by given 'name' and run the discovery process if it is not available.
+     * Get target object from _cacheObject by given 'name' and run the discovery process if it is not available.
      *
      * @method _getObjectFromCache
      * @param name {String} name of the target object to be retrived (e.g. "Trash")
@@ -1300,8 +1301,8 @@ define('services/DiscoveryService',["structures/CAPIError"], function (CAPIError
             that = this;
         // Discovering root, if not yet discovered
         // on discovery running the request for same 'name' again
-        if (!this.cacheObject.Root) {
-            this._discoverRoot(this.rootPath, function (error, success) {
+        if (!this._cacheObject.Root) {
+            this._discoverRoot(this._rootPath, function (error, success) {
                 if (error) {
                     callback(error, false);
                     return;
@@ -1314,10 +1315,10 @@ define('services/DiscoveryService',["structures/CAPIError"], function (CAPIError
         // Checking most obvious places for now
         // "Root" object (retrieved during root discovery request) and
         // root of a cache object in case we have cached value from some other request
-        if (this.cacheObject.Root.hasOwnProperty(name)) {
-            object = this.cacheObject.Root[name];
-        } else if (this.cacheObject.hasOwnProperty(name)) {
-            object = this.cacheObject[name];
+        if (this._cacheObject.Root.hasOwnProperty(name)) {
+            object = this._cacheObject.Root[name];
+        } else if (this._cacheObject.hasOwnProperty(name)) {
+            object = this._cacheObject[name];
         }
 
         if (object) {
@@ -1721,7 +1722,7 @@ define('structures/ViewCreateStruct',[],function () {
         this.body.ViewInput = {};
 
         this.body.ViewInput.identifier = identifier;
-        this.body.ViewInput.public = false;
+        this.body.ViewInput["public"] = false;
         this.body.ViewInput.Query = {};
 
         this.body.ViewInput.Query.Criteria = {};
@@ -1741,6 +1742,7 @@ define('structures/ViewCreateStruct',[],function () {
     return ViewCreateStruct;
 
 });
+
 /* global define */
 define('structures/UrlAliasCreateStruct',[],function () {
     
@@ -1845,17 +1847,929 @@ define('structures/RelationCreateStruct',[],function () {
     return RelationCreateStruct;
 
 });
+/*global unescape, module, define, window, global*/
+
+/*
+ UriTemplate Copyright (c) 2012-2013 Franz Antesberger. All Rights Reserved.
+ Available via the MIT license.
+*/
+
+(function (exportCallback) {
+    
+
+var UriTemplateError = (function () {
+
+    function UriTemplateError (options) {
+        this.options = options;
+    }
+
+    UriTemplateError.prototype.toString = function () {
+        if (JSON && JSON.stringify) {
+            return JSON.stringify(this.options);
+        }
+        else {
+            return this.options;
+        }
+    };
+
+    return UriTemplateError;
+}());
+
+var objectHelper = (function () {
+    function isArray (value) {
+        return Object.prototype.toString.apply(value) === '[object Array]';
+    }
+
+    function isString (value) {
+        return Object.prototype.toString.apply(value) === '[object String]';
+    }
+    
+    function isNumber (value) {
+        return Object.prototype.toString.apply(value) === '[object Number]';
+    }
+    
+    function isBoolean (value) {
+        return Object.prototype.toString.apply(value) === '[object Boolean]';
+    }
+    
+    function join (arr, separator) {
+        var
+            result = '',
+            first = true,
+            index;
+        for (index = 0; index < arr.length; index += 1) {
+            if (first) {
+                first = false;
+            }
+            else {
+                result += separator;
+            }
+            result += arr[index];
+        }
+        return result;
+    }
+
+    function map (arr, mapper) {
+        var
+            result = [],
+            index = 0;
+        for (; index < arr.length; index += 1) {
+            result.push(mapper(arr[index]));
+        }
+        return result;
+    }
+
+    function filter (arr, predicate) {
+        var
+            result = [],
+            index = 0;
+        for (; index < arr.length; index += 1) {
+            if (predicate(arr[index])) {
+                result.push(arr[index]);
+            }
+        }
+        return result;
+    }
+
+    function deepFreezeUsingObjectFreeze (object) {
+        if (typeof object !== "object" || object === null) {
+            return object;
+        }
+        Object.freeze(object);
+        var property, propertyName;
+        for (propertyName in object) {
+            if (object.hasOwnProperty(propertyName)) {
+                property = object[propertyName];
+                // be aware, arrays are 'object', too
+                if (typeof property === "object") {
+                    deepFreeze(property);
+                }
+            }
+        }
+        return object;
+    }
+
+    function deepFreeze (object) {
+        if (typeof Object.freeze === 'function') {
+            return deepFreezeUsingObjectFreeze(object);
+        }
+        return object;
+    }
+
+
+    return {
+        isArray: isArray,
+        isString: isString,
+        isNumber: isNumber,
+        isBoolean: isBoolean,
+        join: join,
+        map: map,
+        filter: filter,
+        deepFreeze: deepFreeze
+    };
+}());
+
+var charHelper = (function () {
+
+    function isAlpha (chr) {
+        return (chr >= 'a' && chr <= 'z') || ((chr >= 'A' && chr <= 'Z'));
+    }
+
+    function isDigit (chr) {
+        return chr >= '0' && chr <= '9';
+    }
+
+    function isHexDigit (chr) {
+        return isDigit(chr) || (chr >= 'a' && chr <= 'f') || (chr >= 'A' && chr <= 'F');
+    }
+
+    return {
+        isAlpha: isAlpha,
+        isDigit: isDigit,
+        isHexDigit: isHexDigit
+    };
+}());
+
+var pctEncoder = (function () {
+    var utf8 = {
+        encode: function (chr) {
+            // see http://ecmanaut.blogspot.de/2006/07/encoding-decoding-utf8-in-javascript.html
+            return unescape(encodeURIComponent(chr));
+        },
+        numBytes: function (firstCharCode) {
+            if (firstCharCode <= 0x7F) {
+                return 1;
+            }
+            else if (0xC2 <= firstCharCode && firstCharCode <= 0xDF) {
+                return 2;
+            }
+            else if (0xE0 <= firstCharCode && firstCharCode <= 0xEF) {
+                return 3;
+            }
+            else if (0xF0 <= firstCharCode && firstCharCode <= 0xF4) {
+                return 4;
+            }
+            // no valid first octet
+            return 0;
+        },
+        isValidFollowingCharCode: function (charCode) {
+            return 0x80 <= charCode && charCode <= 0xBF;
+        }
+    };
+
+    /**
+     * encodes a character, if needed or not.
+     * @param chr
+     * @return pct-encoded character
+     */
+    function encodeCharacter (chr) {
+        var
+            result = '',
+            octets = utf8.encode(chr),
+            octet,
+            index;
+        for (index = 0; index < octets.length; index += 1) {
+            octet = octets.charCodeAt(index);
+            result += '%' + (octet < 0x10 ? '0' : '') + octet.toString(16).toUpperCase();
+        }
+        return result;
+    }
+
+    /**
+     * Returns, whether the given text at start is in the form 'percent hex-digit hex-digit', like '%3F'
+     * @param text
+     * @param start
+     * @return {boolean|*|*}
+     */
+    function isPercentDigitDigit (text, start) {
+        return text.charAt(start) === '%' && charHelper.isHexDigit(text.charAt(start + 1)) && charHelper.isHexDigit(text.charAt(start + 2));
+    }
+
+    /**
+     * Parses a hex number from start with length 2.
+     * @param text a string
+     * @param start the start index of the 2-digit hex number
+     * @return {Number}
+     */
+    function parseHex2 (text, start) {
+        return parseInt(text.substr(start, 2), 16);
+    }
+
+    /**
+     * Returns whether or not the given char sequence is a correctly pct-encoded sequence.
+     * @param chr
+     * @return {boolean}
+     */
+    function isPctEncoded (chr) {
+        if (!isPercentDigitDigit(chr, 0)) {
+            return false;
+        }
+        var firstCharCode = parseHex2(chr, 1);
+        var numBytes = utf8.numBytes(firstCharCode);
+        if (numBytes === 0) {
+            return false;
+        }
+        for (var byteNumber = 1; byteNumber < numBytes; byteNumber += 1) {
+            if (!isPercentDigitDigit(chr, 3*byteNumber) || !utf8.isValidFollowingCharCode(parseHex2(chr, 3*byteNumber + 1))) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * Reads as much as needed from the text, e.g. '%20' or '%C3%B6'. It does not decode!
+     * @param text
+     * @param startIndex
+     * @return the character or pct-string of the text at startIndex
+     */
+    function pctCharAt(text, startIndex) {
+        var chr = text.charAt(startIndex);
+        if (!isPercentDigitDigit(text, startIndex)) {
+            return chr;
+        }
+        var utf8CharCode = parseHex2(text, startIndex + 1);
+        var numBytes = utf8.numBytes(utf8CharCode);
+        if (numBytes === 0) {
+            return chr;
+        }
+        for (var byteNumber = 1; byteNumber < numBytes; byteNumber += 1) {
+            if (!isPercentDigitDigit(text, startIndex + 3 * byteNumber) || !utf8.isValidFollowingCharCode(parseHex2(text, startIndex + 3 * byteNumber + 1))) {
+                return chr;
+            }
+        }
+        return text.substr(startIndex, 3 * numBytes);
+    }
+
+    return {
+        encodeCharacter: encodeCharacter,
+        isPctEncoded: isPctEncoded,
+        pctCharAt: pctCharAt
+    };
+}());
+
+var rfcCharHelper = (function () {
+
+    /**
+     * Returns if an character is an varchar character according 2.3 of rfc 6570
+     * @param chr
+     * @return (Boolean)
+     */
+    function isVarchar (chr) {
+        return charHelper.isAlpha(chr) || charHelper.isDigit(chr) || chr === '_' || pctEncoder.isPctEncoded(chr);
+    }
+
+    /**
+     * Returns if chr is an unreserved character according 1.5 of rfc 6570
+     * @param chr
+     * @return {Boolean}
+     */
+    function isUnreserved (chr) {
+        return charHelper.isAlpha(chr) || charHelper.isDigit(chr) || chr === '-' || chr === '.' || chr === '_' || chr === '~';
+    }
+
+    /**
+     * Returns if chr is an reserved character according 1.5 of rfc 6570
+     * or the percent character mentioned in 3.2.1.
+     * @param chr
+     * @return {Boolean}
+     */
+    function isReserved (chr) {
+        return chr === ':' || chr === '/' || chr === '?' || chr === '#' || chr === '[' || chr === ']' || chr === '@' || chr === '!' || chr === '$' || chr === '&' || chr === '(' ||
+            chr === ')' || chr === '*' || chr === '+' || chr === ',' || chr === ';' || chr === '=' || chr === "'";
+    }
+
+    return {
+        isVarchar: isVarchar,
+        isUnreserved: isUnreserved,
+        isReserved: isReserved
+    };
+
+}());
+
+/**
+ * encoding of rfc 6570
+ */
+var encodingHelper = (function () {
+
+    function encode (text, passReserved) {
+        var
+            result = '',
+            index,
+            chr = '';
+        if (typeof text === "number" || typeof text === "boolean") {
+            text = text.toString();
+        }
+        for (index = 0; index < text.length; index += chr.length) {
+            chr = text.charAt(index);
+            result += rfcCharHelper.isUnreserved(chr) || (passReserved && rfcCharHelper.isReserved(chr)) ? chr : pctEncoder.encodeCharacter(chr);
+        }
+        return result;
+    }
+
+    function encodePassReserved (text) {
+        return encode(text, true);
+    }
+
+    function encodeLiteralCharacter (literal, index) {
+        var chr = pctEncoder.pctCharAt(literal, index);
+        if (chr.length > 1) {
+            return chr;
+        }
+        else {
+            return rfcCharHelper.isReserved(chr) || rfcCharHelper.isUnreserved(chr) ? chr : pctEncoder.encodeCharacter(chr);
+        }
+    }
+
+    function encodeLiteral (literal) {
+        var
+            result = '',
+            index,
+            chr = '';
+        for (index = 0; index < literal.length; index += chr.length) {
+            chr = pctEncoder.pctCharAt(literal, index);
+            if (chr.length > 1) {
+                result += chr;
+            }
+            else {
+                result += rfcCharHelper.isReserved(chr) || rfcCharHelper.isUnreserved(chr) ? chr : pctEncoder.encodeCharacter(chr);
+            }
+        }
+        return result;
+    }
+
+    return {
+        encode: encode,
+        encodePassReserved: encodePassReserved,
+        encodeLiteral: encodeLiteral,
+        encodeLiteralCharacter: encodeLiteralCharacter
+    };
+
+}());
+
+
+// the operators defined by rfc 6570
+var operators = (function () {
+
+    var
+        bySymbol = {};
+
+    function create (symbol) {
+        bySymbol[symbol] = {
+            symbol: symbol,
+            separator: (symbol === '?') ? '&' : (symbol === '' || symbol === '+' || symbol === '#') ? ',' : symbol,
+            named: symbol === ';' || symbol === '&' || symbol === '?',
+            ifEmpty: (symbol === '&' || symbol === '?') ? '=' : '',
+            first: (symbol === '+' ) ? '' : symbol,
+            encode: (symbol === '+' || symbol === '#') ? encodingHelper.encodePassReserved : encodingHelper.encode,
+            toString: function () {
+                return this.symbol;
+            }
+        };
+    }
+
+    create('');
+    create('+');
+    create('#');
+    create('.');
+    create('/');
+    create(';');
+    create('?');
+    create('&');
+    return {
+        valueOf: function (chr) {
+            if (bySymbol[chr]) {
+                return bySymbol[chr];
+            }
+            if ("=,!@|".indexOf(chr) >= 0) {
+                return null;
+            }
+            return bySymbol[''];
+        }
+    };
+}());
+
+
+/**
+ * Detects, whether a given element is defined in the sense of rfc 6570
+ * Section 2.3 of the RFC makes clear defintions:
+ * * undefined and null are not defined.
+ * * the empty string is defined
+ * * an array ("list") is defined, if it is not empty (even if all elements are not defined)
+ * * an object ("map") is defined, if it contains at least one property with defined value
+ * @param object
+ * @return {Boolean}
+ */
+function isDefined (object) {
+    var
+        propertyName;
+    if (object === null || object === undefined) {
+        return false;
+    }
+    if (objectHelper.isArray(object)) {
+        // Section 2.3: A variable defined as a list value is considered undefined if the list contains zero members
+        return object.length > 0;
+    }
+    if (typeof object === "string" || typeof object === "number" || typeof object === "boolean") {
+        // falsy values like empty strings, false or 0 are "defined"
+        return true;
+    }
+    // else Object
+    for (propertyName in object) {
+        if (object.hasOwnProperty(propertyName) && isDefined(object[propertyName])) {
+            return true;
+        }
+    }
+    return false;
+}
+
+var LiteralExpression = (function () {
+    function LiteralExpression (literal) {
+        this.literal = encodingHelper.encodeLiteral(literal);
+    }
+
+    LiteralExpression.prototype.expand = function () {
+        return this.literal;
+    };
+
+    LiteralExpression.prototype.toString = LiteralExpression.prototype.expand;
+
+    return LiteralExpression;
+}());
+
+var parse = (function () {
+
+    function parseExpression (expressionText) {
+        var
+            operator,
+            varspecs = [],
+            varspec = null,
+            varnameStart = null,
+            maxLengthStart = null,
+            index,
+            chr = '';
+
+        function closeVarname () {
+            var varname = expressionText.substring(varnameStart, index);
+            if (varname.length === 0) {
+                throw new UriTemplateError({expressionText: expressionText, message: "a varname must be specified", position: index});
+            }
+            varspec = {varname: varname, exploded: false, maxLength: null};
+            varnameStart = null;
+        }
+
+        function closeMaxLength () {
+            if (maxLengthStart === index) {
+                throw new UriTemplateError({expressionText: expressionText, message: "after a ':' you have to specify the length", position: index});
+            }
+            varspec.maxLength = parseInt(expressionText.substring(maxLengthStart, index), 10);
+            maxLengthStart = null;
+        }
+
+        operator = (function (operatorText) {
+            var op = operators.valueOf(operatorText);
+            if (op === null) {
+                throw new UriTemplateError({expressionText: expressionText, message: "illegal use of reserved operator", position: index, operator: operatorText});
+            }
+            return op;
+        }(expressionText.charAt(0)));
+        index = operator.symbol.length;
+
+        varnameStart = index;
+
+        for (; index < expressionText.length; index += chr.length) {
+            chr = pctEncoder.pctCharAt(expressionText, index);
+
+            if (varnameStart !== null) {
+                // the spec says: varname =  varchar *( ["."] varchar )
+                // so a dot is allowed except for the first char
+                if (chr === '.') {
+                    if (varnameStart === index) {
+                        throw new UriTemplateError({expressionText: expressionText, message: "a varname MUST NOT start with a dot", position: index});
+                    }
+                    continue;
+                }
+                if (rfcCharHelper.isVarchar(chr)) {
+                    continue;
+                }
+                closeVarname();
+            }
+            if (maxLengthStart !== null) {
+                if (index === maxLengthStart && chr === '0') {
+                    throw new UriTemplateError({expressionText: expressionText, message: "A :prefix must not start with digit 0", position: index});
+                }
+                if (charHelper.isDigit(chr)) {
+                    if (index - maxLengthStart >= 4) {
+                        throw new UriTemplateError({expressionText: expressionText, message: "A :prefix must have max 4 digits", position: index});
+                    }
+                    continue;
+                }
+                closeMaxLength();
+            }
+            if (chr === ':') {
+                if (varspec.maxLength !== null) {
+                    throw new UriTemplateError({expressionText: expressionText, message: "only one :maxLength is allowed per varspec", position: index});
+                }
+                if (varspec.exploded) {
+                    throw new UriTemplateError({expressionText: expressionText, message: "an exploeded varspec MUST NOT be varspeced", position: index});
+                }
+                maxLengthStart = index + 1;
+                continue;
+            }
+            if (chr === '*') {
+                if (varspec === null) {
+                    throw new UriTemplateError({expressionText: expressionText, message: "exploded without varspec", position: index});
+                }
+                if (varspec.exploded) {
+                    throw new UriTemplateError({expressionText: expressionText, message: "exploded twice", position: index});
+                }
+                if (varspec.maxLength) {
+                    throw new UriTemplateError({expressionText: expressionText, message: "an explode (*) MUST NOT follow to a prefix", position: index});
+                }
+                varspec.exploded = true;
+                continue;
+            }
+            // the only legal character now is the comma
+            if (chr === ',') {
+                varspecs.push(varspec);
+                varspec = null;
+                varnameStart = index + 1;
+                continue;
+            }
+            throw new UriTemplateError({expressionText: expressionText, message: "illegal character", character: chr, position: index});
+        } // for chr
+        if (varnameStart !== null) {
+            closeVarname();
+        }
+        if (maxLengthStart !== null) {
+            closeMaxLength();
+        }
+        varspecs.push(varspec);
+        return new VariableExpression(expressionText, operator, varspecs);
+    }
+
+    function parse (uriTemplateText) {
+        // assert filled string
+        var
+            index,
+            chr,
+            expressions = [],
+            braceOpenIndex = null,
+            literalStart = 0;
+        for (index = 0; index < uriTemplateText.length; index += 1) {
+            chr = uriTemplateText.charAt(index);
+            if (literalStart !== null) {
+                if (chr === '}') {
+                    throw new UriTemplateError({templateText: uriTemplateText, message: "unopened brace closed", position: index});
+                }
+                if (chr === '{') {
+                    if (literalStart < index) {
+                        expressions.push(new LiteralExpression(uriTemplateText.substring(literalStart, index)));
+                    }
+                    literalStart = null;
+                    braceOpenIndex = index;
+                }
+                continue;
+            }
+
+            if (braceOpenIndex !== null) {
+                // here just { is forbidden
+                if (chr === '{') {
+                    throw new UriTemplateError({templateText: uriTemplateText, message: "brace already opened", position: index});
+                }
+                if (chr === '}') {
+                    if (braceOpenIndex + 1 === index) {
+                        throw new UriTemplateError({templateText: uriTemplateText, message: "empty braces", position: braceOpenIndex});
+                    }
+                    try {
+                        expressions.push(parseExpression(uriTemplateText.substring(braceOpenIndex + 1, index)));
+                    }
+                    catch (error) {
+                        if (error.prototype === UriTemplateError.prototype) {
+                            throw new UriTemplateError({templateText: uriTemplateText, message: error.options.message, position: braceOpenIndex + error.options.position, details: error.options});
+                        }
+                        throw error;
+                    }
+                    braceOpenIndex = null;
+                    literalStart = index + 1;
+                }
+                continue;
+            }
+            throw new Error('reached unreachable code');
+        }
+        if (braceOpenIndex !== null) {
+            throw new UriTemplateError({templateText: uriTemplateText, message: "unclosed brace", position: braceOpenIndex});
+        }
+        if (literalStart < uriTemplateText.length) {
+            expressions.push(new LiteralExpression(uriTemplateText.substr(literalStart)));
+        }
+        return new UriTemplate(uriTemplateText, expressions);
+    }
+
+    return parse;
+}());
+
+var VariableExpression = (function () {
+    // helper function if JSON is not available
+    function prettyPrint (value) {
+        return (JSON && JSON.stringify) ? JSON.stringify(value) : value;
+    }
+
+    function isEmpty (value) {
+        if (!isDefined(value)) {
+            return true;
+        }
+        if (objectHelper.isString(value)) {
+            return value === '';
+        }
+        if (objectHelper.isNumber(value) || objectHelper.isBoolean(value)) {
+            return false;
+        }
+        if (objectHelper.isArray(value)) {
+            return value.length === 0;
+        }
+        for (var propertyName in value) {
+            if (value.hasOwnProperty(propertyName)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    function propertyArray (object) {
+        var
+            result = [],
+            propertyName;
+        for (propertyName in object) {
+            if (object.hasOwnProperty(propertyName)) {
+                result.push({name: propertyName, value: object[propertyName]});
+            }
+        }
+        return result;
+    }
+
+    function VariableExpression (templateText, operator, varspecs) {
+        this.templateText = templateText;
+        this.operator = operator;
+        this.varspecs = varspecs;
+    }
+
+    VariableExpression.prototype.toString = function () {
+        return this.templateText;
+    };
+
+    function expandSimpleValue(varspec, operator, value) {
+        var result = '';
+        value = value.toString();
+        if (operator.named) {
+            result += encodingHelper.encodeLiteral(varspec.varname);
+            if (value === '') {
+                result += operator.ifEmpty;
+                return result;
+            }
+            result += '=';
+        }
+        if (varspec.maxLength !== null) {
+            value = value.substr(0, varspec.maxLength);
+        }
+        result += operator.encode(value);
+        return result;
+    }
+
+    function valueDefined (nameValue) {
+        return isDefined(nameValue.value);
+    }
+
+    function expandNotExploded(varspec, operator, value) {
+        var
+            arr = [],
+            result = '';
+        if (operator.named) {
+            result += encodingHelper.encodeLiteral(varspec.varname);
+            if (isEmpty(value)) {
+                result += operator.ifEmpty;
+                return result;
+            }
+            result += '=';
+        }
+        if (objectHelper.isArray(value)) {
+            arr = value;
+            arr = objectHelper.filter(arr, isDefined);
+            arr = objectHelper.map(arr, operator.encode);
+            result += objectHelper.join(arr, ',');
+        }
+        else {
+            arr = propertyArray(value);
+            arr = objectHelper.filter(arr, valueDefined);
+            arr = objectHelper.map(arr, function (nameValue) {
+                return operator.encode(nameValue.name) + ',' + operator.encode(nameValue.value);
+            });
+            result += objectHelper.join(arr, ',');
+        }
+        return result;
+    }
+
+    function expandExplodedNamed (varspec, operator, value) {
+        var
+            isArray = objectHelper.isArray(value),
+            arr = [];
+        if (isArray) {
+            arr = value;
+            arr = objectHelper.filter(arr, isDefined);
+            arr = objectHelper.map(arr, function (listElement) {
+                var tmp = encodingHelper.encodeLiteral(varspec.varname);
+                if (isEmpty(listElement)) {
+                    tmp += operator.ifEmpty;
+                }
+                else {
+                    tmp += '=' + operator.encode(listElement);
+                }
+                return tmp;
+            });
+        }
+        else {
+            arr = propertyArray(value);
+            arr = objectHelper.filter(arr, valueDefined);
+            arr = objectHelper.map(arr, function (nameValue) {
+                var tmp = encodingHelper.encodeLiteral(nameValue.name);
+                if (isEmpty(nameValue.value)) {
+                    tmp += operator.ifEmpty;
+                }
+                else {
+                    tmp += '=' + operator.encode(nameValue.value);
+                }
+                return tmp;
+            });
+        }
+        return objectHelper.join(arr, operator.separator);
+    }
+
+    function expandExplodedUnnamed (operator, value) {
+        var
+            arr = [],
+            result = '';
+        if (objectHelper.isArray(value)) {
+            arr = value;
+            arr = objectHelper.filter(arr, isDefined);
+            arr = objectHelper.map(arr, operator.encode);
+            result += objectHelper.join(arr, operator.separator);
+        }
+        else {
+            arr = propertyArray(value);
+            arr = objectHelper.filter(arr, function (nameValue) {
+                return isDefined(nameValue.value);
+            });
+            arr = objectHelper.map(arr, function (nameValue) {
+                return operator.encode(nameValue.name) + '=' + operator.encode(nameValue.value);
+            });
+            result += objectHelper.join(arr, operator.separator);
+        }
+        return result;
+    }
+
+
+    VariableExpression.prototype.expand = function (variables) {
+        var
+            expanded = [],
+            index,
+            varspec,
+            value,
+            valueIsArr,
+            oneExploded = false,
+            operator = this.operator;
+
+        // expand each varspec and join with operator's separator
+        for (index = 0; index < this.varspecs.length; index += 1) {
+            varspec = this.varspecs[index];
+            value = variables[varspec.varname];
+            // if (!isDefined(value)) {
+            // if (variables.hasOwnProperty(varspec.name)) {
+            if (value === null || value === undefined) {
+                continue;
+            }
+            if (varspec.exploded) {
+                oneExploded = true;
+            }
+            valueIsArr = objectHelper.isArray(value);
+            if (typeof value === "string" || typeof value === "number" || typeof value === "boolean") {
+                expanded.push(expandSimpleValue(varspec, operator, value));
+            }
+            else if (varspec.maxLength && isDefined(value)) {
+                // 2.4.1 of the spec says: "Prefix modifiers are not applicable to variables that have composite values."
+                throw new Error('Prefix modifiers are not applicable to variables that have composite values. You tried to expand ' + this + " with " + prettyPrint(value));
+            }
+            else if (!varspec.exploded) {
+                if (operator.named || !isEmpty(value)) {
+                    expanded.push(expandNotExploded(varspec, operator, value));
+                }
+            }
+            else if (isDefined(value)) {
+                if (operator.named) {
+                    expanded.push(expandExplodedNamed(varspec, operator, value));
+                }
+                else {
+                    expanded.push(expandExplodedUnnamed(operator, value));
+                }
+            }
+        }
+
+        if (expanded.length === 0) {
+            return "";
+        }
+        else {
+            return operator.first + objectHelper.join(expanded, operator.separator);
+        }
+    };
+
+    return VariableExpression;
+}());
+
+var UriTemplate = (function () {
+    function UriTemplate (templateText, expressions) {
+        this.templateText = templateText;
+        this.expressions = expressions;
+        objectHelper.deepFreeze(this);
+    }
+
+    UriTemplate.prototype.toString = function () {
+        return this.templateText;
+    };
+
+    UriTemplate.prototype.expand = function (variables) {
+        // this.expressions.map(function (expression) {return expression.expand(variables);}).join('');
+        var
+            index,
+            result = '';
+        for (index = 0; index < this.expressions.length; index += 1) {
+            result += this.expressions[index].expand(variables);
+        }
+        return result;
+    };
+
+    UriTemplate.parse = parse;
+    UriTemplate.UriTemplateError = UriTemplateError;
+    return UriTemplate;
+}());
+
+    exportCallback(UriTemplate);
+
+}(function (UriTemplate) {
+        
+        // export UriTemplate, when module is present, or pass it to window or global
+        if (typeof module !== "undefined") {
+            module.exports = UriTemplate;
+        }
+        else if (typeof define === "function") {
+            define('uritemplate',[],function() {
+                return UriTemplate;
+            });
+        }
+        else if (typeof window !== "undefined") {
+            window.UriTemplate = UriTemplate;
+        }
+        else {
+            global.UriTemplate = UriTemplate;
+        }
+    }
+));
+
+/* global define */
+define('utils/uriparse',["uritemplate"], function (uriTemplateLib) {
+    
+    /**
+     * Provides the parseUriTemplate function
+     *
+     * @class parseUriTemplate
+     * @static
+     */
+
+    /**
+     * Parses an URI Template according to the RFC 6570.
+     *
+     * @method parse
+     * @static
+     * @params {String} template the template to interpret
+     * @params {Object} the parameters
+     * @return {String}
+     */
+    var parseUriTemplate = function (template, params) {
+        return uriTemplateLib.parse(template).expand(params);
+    };
+
+    return parseUriTemplate;
+});
+
 /* global define */
 define('services/ContentService',["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "structures/SectionInputStruct",
         "structures/LocationCreateStruct", "structures/LocationUpdateStruct", "structures/ContentMetadataUpdateStruct",
         "structures/ObjectStateGroupCreateStruct", "structures/ObjectStateGroupUpdateStruct", "structures/ObjectStateCreateStruct",
         "structures/ObjectStateUpdateStruct", "structures/ViewCreateStruct", "structures/UrlAliasCreateStruct",
-        "structures/UrlWildcardCreateStruct", "structures/RelationCreateStruct"],
+        "structures/UrlWildcardCreateStruct", "structures/RelationCreateStruct", "utils/uriparse"],
     function (ContentCreateStruct, ContentUpdateStruct, SectionInputStruct,
               LocationCreateStruct, LocationUpdateStruct, ContentMetadataUpdateStruct,
               ObjectStateGroupCreateStruct, ObjectStateGroupUpdateStruct, ObjectStateCreateStruct,
               ObjectStateUpdateStruct, ViewCreateStruct, UrlAliasCreateStruct,
-              UrlWildcardCreateStruct, RelationCreateStruct) {
+              UrlWildcardCreateStruct, RelationCreateStruct, parseUriTemplate) {
     
 
     /**
@@ -2302,18 +3216,17 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
         var that = this;
 
         this._discoveryService.getInfoObject(
-            "content",
-            function (error, contentObjects) {
+            "contentByRemoteId",
+            function (error, contentByRemoteId) {
                 if (error) {
                     callback(error, false);
                     return;
                 }
-
                 that._connectionManager.request(
                     "GET",
-                    contentObjects._href + '?remoteId=' + remoteId,
+                    parseUriTemplate(contentByRemoteId._href, {remoteId: remoteId}),
                     "",
-                    {"Accept": contentObjects["_media-type"]},
+                    {"Accept": "application/vnd.ez.api.ContentInfo+json"},
                     callback
                 );
             }
@@ -2727,18 +3640,27 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
      *  Loads target location by remote Id
      *
      * @method loadLocationByRemoteId
-     * @param locations {String} root locations (will be auto-discovered in near future)
      * @param remoteId {String} remote id of target location (e.g. "0bae96bd419e141ff3200ccbf2822e4f")
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentService.prototype.loadLocationByRemoteId = function (locations, remoteId, callback) {
-        this._connectionManager.request(
-            "GET",
-            locations + '?remoteId=' + remoteId,
-            "",
-            {Accept: "application/vnd.ez.api.Location+json"},
-            callback
+    ContentService.prototype.loadLocationByRemoteId = function (remoteId, callback) {
+        var that = this;
+        this._discoveryService.getInfoObject(
+            "locationByRemoteId",
+            function (error, locationByRemoteId) {
+                if (error) {
+                    callback(error, false);
+                    return;
+                }
+                that._connectionManager.request(
+                    "GET",
+                    parseUriTemplate(locationByRemoteId._href, {remoteId: remoteId}),
+                    "",
+                    {"Accept": "application/vnd.ez.api.Location+json"},
+                    callback
+                );
+            }
         );
     };
 
@@ -3873,9 +4795,9 @@ define('structures/FieldDefinitionUpdateStruct',[],function () {
 });
 /* global define */
 define('services/ContentTypeService',["structures/ContentTypeGroupInputStruct", "structures/ContentTypeCreateStruct", "structures/ContentTypeUpdateStruct",
-        "structures/FieldDefinitionCreateStruct", "structures/FieldDefinitionUpdateStruct"],
+        "structures/FieldDefinitionCreateStruct", "structures/FieldDefinitionUpdateStruct", "utils/uriparse"],
     function (ContentTypeGroupInputStruct, ContentTypeCreateStruct, ContentTypeUpdateStruct,
-              FieldDefinitionCreateStruct, FieldDefinitionUpdateStruct) {
+              FieldDefinitionCreateStruct, FieldDefinitionUpdateStruct, parseUriTemplate) {
     
 
     /**
@@ -4256,18 +5178,17 @@ define('services/ContentTypeService',["structures/ContentTypeGroupInputStruct", 
         var that = this;
 
         this._discoveryService.getInfoObject(
-            "contentTypes",
-            function (error, contentTypes) {
+            "contentTypeByIdentifier",
+            function (error, contentTypeByIdentifier) {
                 if (error) {
                     callback(error, false);
                     return;
                 }
-
                 that._connectionManager.request(
                     "GET",
-                    contentTypes._href + "?identifier=" + identifier,
+                    parseUriTemplate(contentTypeByIdentifier._href, {identifier: identifier}),
                     "",
-                    {"Accept": contentTypes["_media-type"]},
+                    {"Accept": "application/vnd.ez.api.ContentTypeInfoList+json"},
                     callback
                 );
             }
@@ -5318,18 +6239,27 @@ define('services/UserService',['structures/SessionCreateStruct', 'structures/Use
      * Load users and usergroups for the target roleId
      *
      * @method getRoleAssignments
-     * @param userList {String} link to root UserList resource (should be auto-discovered)
      * @param roleId {String} target role identifier (e.g. "/api/ezp/v2/user/roles/5")
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "UserService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    UserService.prototype.getRoleAssignments = function (userList, roleId, callback) {
-        this._connectionManager.request(
-            "GET",
-            userList + '?roleId=' + roleId,
-            "",
-            {"Accept": "application/vnd.ez.api.UserList+json"},
-            callback
+    UserService.prototype.getRoleAssignments = function (roleId, callback) {
+        var that = this;
+        this._discoveryService.getInfoObject(
+            "users",
+            function (error, users) {
+                if (error) {
+                    callback(error, false);
+                    return;
+                }
+                that._connectionManager.request(
+                    "GET",
+                    users._href + '?roleId=' + roleId,
+                    "",
+                    {"Accept": "application/vnd.ez.api.UserList+json"},
+                    callback
+                );
+            }
         );
     };
 
@@ -6034,15 +6964,62 @@ define('services/UserService',['structures/SessionCreateStruct', 'structures/Use
 
 });
 
+/* globals define */
+define('utils/extend',[], function () {
+    /**
+     * Provides only the `extend` function.
+     *
+     * @class extend
+     * @static
+     */
+
+    /**
+     * Extend the given object with properties of an arbitrary amount of other objects
+     *
+     * Override priority is determined using the order the objects are given in
+     * Each further object has a higher priority then the one before it.
+     *
+     * Only actual properties of the given objects will be used not the ones bubbling up
+     * through the prototype chain.
+     *
+     * @method extend
+     * @static
+     * @param target
+     * @param [obj]* Arbitrary amount of objects which will extend the first one
+     * @return {Object} the extended object
+     */
+    var extend = function (target /*, obj, ... */) {
+        var extensions = Array.prototype.slice.call(arguments, 1);
+        extensions.forEach(function (extension) {
+            var key;
+
+            if (typeof extension !== "object") {
+                // Skip everything that is not an object
+                return;
+            }
+
+            for (key in extension) {
+                if (extension.hasOwnProperty(key) && extension[key] !== undefined) {
+                    target[key] = extension[key];
+                }
+            }
+        });
+
+        return target;
+    };
+
+    return extend;
+});
+
 /* global define */
 define('CAPI',['authAgents/SessionAuthAgent', 'authAgents/HttpBasicAuthAgent', 'ConnectionManager',
         'ConnectionFeatureFactory', 'connections/XmlHttpRequestConnection', 'connections/MicrosoftXmlHttpRequestConnection',
         'services/DiscoveryService', 'services/ContentService', 'services/ContentTypeService',
-        'services/UserService'],
+        'services/UserService', "utils/extend"],
     function (SessionAuthAgent, HttpBasicAuthAgent, ConnectionManager,
               ConnectionFeatureFactory, XmlHttpRequestConnection, MicrosoftXmlHttpRequestConnection,
               DiscoveryService, ContentService, ContentTypeService,
-              UserService) {
+              UserService, extend) {
     
 
     /**
@@ -6070,34 +7047,29 @@ define('CAPI',['authAgents/SessionAuthAgent', 'authAgents/HttpBasicAuthAgent', '
            });
      */
     var CAPI = function (endPointUrl, authenticationAgent, options) {
-        var defaultOptions = {
-                logRequests: false, // Whether we should log each request to the js console or not
-                rootPath: '/api/ezp/v2/', // Path to the REST root
-                connectionStack: [ // Array of connections, should be filled-in in preferred order
-                    {connection: XmlHttpRequestConnection},
-                    {connection: MicrosoftXmlHttpRequestConnection}
-                ]
-            },
-            mergedOptions = defaultOptions,
-            option,
+        var defaultOptions,
+            mergedOptions,
             connectionFactory,
             connectionManager,
-            discoveryService;
+            discoveryService,
+            contentService,
+            contentTypeService,
+            userService;
 
-        this._contentService = null;
-        this._contentTypeService = null;
-        this._userService = null;
+        // Options used if not overwritten from the outside
+        defaultOptions =  {
+            logRequests: false, // Whether we should log each request to the js console or not
+            rootPath: '/api/ezp/v2/', // Path to the REST root
+            connectionStack: [ // Array of connections, should be filled-in in preferred order
+                {connection: XmlHttpRequestConnection},
+                {connection: MicrosoftXmlHttpRequestConnection}
+            ]
+        };
 
         authenticationAgent.setCAPI(this);
 
         // Merging provided options (if any) with defaults
-        if (typeof options == "object") {
-            for (option in options) {
-                if (options.hasOwnProperty(option)) {
-                    mergedOptions[option] = options[option];
-                }
-            }
-        }
+        mergedOptions = extend({}, defaultOptions, options);
 
         connectionFactory = new ConnectionFeatureFactory(mergedOptions.connectionStack);
         connectionManager = new ConnectionManager(endPointUrl, authenticationAgent, connectionFactory);
@@ -6116,14 +7088,14 @@ define('CAPI',['authAgents/SessionAuthAgent', 'authAgents/HttpBasicAuthAgent', '
          *      );
          */
         this.getContentService = function () {
-            if  (!this._contentService)  {
-                this._contentService  =  new ContentService(
+            if (!contentService)  {
+                contentService = new ContentService(
                     connectionManager,
                     discoveryService,
                     mergedOptions.rootPath
                 );
             }
-            return  this._contentService;
+            return contentService;
         };
 
         /**
@@ -6139,13 +7111,13 @@ define('CAPI',['authAgents/SessionAuthAgent', 'authAgents/HttpBasicAuthAgent', '
          *      );
          */
         this.getContentTypeService = function () {
-            if  (!this._contentTypeService)  {
-                this._contentTypeService  =  new ContentTypeService(
+            if (!contentTypeService) {
+                contentTypeService = new ContentTypeService(
                     connectionManager,
                     discoveryService
                 );
             }
-            return  this._contentTypeService;
+            return contentTypeService;
         };
 
         /**
@@ -6160,19 +7132,18 @@ define('CAPI',['authAgents/SessionAuthAgent', 'authAgents/HttpBasicAuthAgent', '
          *      );
          */
         this.getUserService = function () {
-            if  (!this._userService)  {
-                this._userService  =  new UserService(
+            if (!userService)  {
+                userService = new UserService(
                     connectionManager,
                     discoveryService,
                     mergedOptions.rootPath
                 );
             }
-            return  this._userService;
+            return userService;
         };
     };
 
     return CAPI;
-
 });
 
 // vim:ts=4:sts=4:sw=4:
@@ -8125,10 +9096,39 @@ define('services/PromiseService',["../../node_modules/q/q", "structures/CAPIErro
      * @param originalService {object} the service which should be converted into promise-based version (e.g. ContentService)
      */
     var PromiseService = function (originalService) {
-        var key;
+        var key,
+            _generateMappedFunction,
+            _generatePromiseFunction;
 
-        this._generatePromiseFunction = function (originalFunction) {
+        /**
+         * Generate a new function, that if called assured `this` is mapped to
+         * the original service.
+         *
+         * @method _generateMappedFunction
+         * @private
+         *
+         * @param {Function} originalFunction
+         * @return {Function}
+         */
+        _generateMappedFunction = function (originalFunction) {
+            return function () {
+                return originalFunction.apply(originalService, Array.prototype.slice(arguments));
+            };
+        };
 
+        /**
+         * Generate a promise version of the given function
+         *
+         * The execution is mapped to the originalService in order to preserve all
+         * internal state manipulations.
+         *
+         * @method _generatePromiseFunction
+         * @private
+         *
+         * @param originalFunction
+         * @return {Function}
+         */
+        _generatePromiseFunction = function (originalFunction) {
             return function () {
                 var toBeCalledArguments = Array.prototype.slice.call(arguments),
                     deferred = q.defer();
@@ -8154,15 +9154,33 @@ define('services/PromiseService',["../../node_modules/q/q", "structures/CAPIErro
 
         // Auto-generating promise-based functions based on every existing service function
         // taking into account all the functions with signature different from "new....Struct"
-        for(key in originalService) {
-            if ( (typeof originalService[key] === "function") && !(/^(new[^\s(]+Struct)/).test(key) ) {
-                this[key] = this._generatePromiseFunction(originalService[key]);
+        /* Disabling hasOwnProperty wrapper check here, as we explicitly WANT to copy
+         * over potentially inherited functions */
+        /* jshint -W089 */
+        for (key in originalService) {
+            if (typeof originalService[key] !== "function") {
+                continue;
+            }
+
+            switch(true) {
+            case (/^_/).test(key):
+                // Skip all private methods
+                break;
+            case (/^(new[^\s(]+Struct)/).test(key):
+                // Simply cover over newXXXStruct functions, as they are synchronous.
+                // Still make sure the method is called on the original service ;)
+                this[key] = _generateMappedFunction(originalService[key]);
+                break;
+            default:
+                // Map all other functions using the promise system, as they are supposed to be
+                // asynchronous
+                this[key] = _generatePromiseFunction(originalService[key]);
             }
         }
     };
+    /* jshint +W089 */
 
     return PromiseService;
-
 });
 
 
@@ -8175,10 +9193,13 @@ define('PromiseCAPI',["CAPI", "services/PromiseService"], function (CAPI, Promis
      *
      * @class PromiseCAPI
      * @constructor
-     * @param CAPI {CAPI} main REST client object
+     * @param originalCapi {CAPI} main REST client object
      */
-    var PromiseCAPI = function (CAPI) {
-        var key;
+    var PromiseCAPI = function (originalCapi) {
+        var key,
+            _services,
+            _generatePromiseServiceFactory,
+            _generateMappedFunction;
 
         // Documentation for dynamically created methods
 
@@ -8276,39 +9297,70 @@ define('PromiseCAPI',["CAPI", "services/PromiseService"], function (CAPI, Promis
          * Array of promise-based services instances (needed to implement singletons approach)
          *
          * @attribute _services
-         * @type {Array}
+         * @type {Object}
          * @protected
          */
-        this._services = [];
+        _services = {};
 
         /**
-         * Convert any CAPI service into Promise-based service (if needed).
+         * Convert any CAPI service factory into Promise-based service factory.
          *
-         * @method _getPromiseService
+         * The factory will cache once created instances inside the _services object
+         * to not create new service wrappers each time they are requested
+         *
+         * @method _createPromiseServiceFactory
          * @param serviceFactoryName {String} name of the function which returns one of the CAPI services
-         * @return {function} function which returns instance of the PromiseService - promise-based wrapper around any of the CAPI services
-         * @protected
+         * @return {Function} function which returns instance of the PromiseService - promise-based wrapper around any of the CAPI services
+         * @private
          */
-        this._getPromiseService = function (serviceFactoryName) {
+        _generatePromiseServiceFactory = function (serviceFactoryName) {
             return function () {
-                if (!this._services[serviceFactoryName]) {
-                    this._services[serviceFactoryName] = new PromiseService(CAPI[serviceFactoryName].call(CAPI));
+                if (!_services[serviceFactoryName]) {
+                    _services[serviceFactoryName] = new PromiseService(
+                        originalCapi[serviceFactoryName].call(originalCapi)
+                    );
                 }
-                return this._services[serviceFactoryName];
+                return _services[serviceFactoryName];
+            };
+        };
+
+        _generateMappedFunction = function (originalMethodName) {
+            return function () {
+                return originalCapi[originalMethodName].apply(
+                    originalCapi,
+                    Array.prototype.slice.call(arguments)
+                );
             };
         };
 
         // Auto-generating promise-based services based on every existing CAPI service
         // taking into account only functions with "get....Service" signature
-        for (key in CAPI) {
-            if ( (typeof CAPI[key] === "function") && (/^(get[^\s(]+Service)/).test(key) ) {
-                this[key] = this._getPromiseService(key);
+        /* Disabling hasOwnProperty wrapper check here, as we explicitly WANT to copy
+         * over potentially inherited functions */
+        /* jshint -W089 */
+        for (key in originalCapi) {
+            if (typeof originalCapi[key] !== "function") {
+                continue;
+            }
+
+            switch(true) {
+            case (/^_/).test(key):
+                // Skip all private methods
+                break;
+            case (/^(get[^\s(]+Service)/).test(key):
+                // Wrap all services to return a PromiseService Wrapper
+                this[key] = _generatePromiseServiceFactory(key);
+                break;
+            default:
+                // Map all other functions by simply copying them, while
+                // retaining their calling context
+                this[key] = _generateMappedFunction(key);
             }
         }
     };
+    /* jshint +W089 */
 
     return PromiseCAPI;
-
 });    // Exporting needed parts of the CAPI to public
 
     window.eZ = window.eZ || {};

@@ -3,12 +3,12 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
         "structures/LocationCreateStruct", "structures/LocationUpdateStruct", "structures/ContentMetadataUpdateStruct",
         "structures/ObjectStateGroupCreateStruct", "structures/ObjectStateGroupUpdateStruct", "structures/ObjectStateCreateStruct",
         "structures/ObjectStateUpdateStruct", "structures/ViewCreateStruct", "structures/UrlAliasCreateStruct",
-        "structures/UrlWildcardCreateStruct", "structures/RelationCreateStruct"],
+        "structures/UrlWildcardCreateStruct", "structures/RelationCreateStruct", "utils/uriparse"],
     function (ContentCreateStruct, ContentUpdateStruct, SectionInputStruct,
               LocationCreateStruct, LocationUpdateStruct, ContentMetadataUpdateStruct,
               ObjectStateGroupCreateStruct, ObjectStateGroupUpdateStruct, ObjectStateCreateStruct,
               ObjectStateUpdateStruct, ViewCreateStruct, UrlAliasCreateStruct,
-              UrlWildcardCreateStruct, RelationCreateStruct) {
+              UrlWildcardCreateStruct, RelationCreateStruct, parseUriTemplate) {
     "use strict";
 
     /**
@@ -455,18 +455,17 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
         var that = this;
 
         this._discoveryService.getInfoObject(
-            "content",
-            function (error, contentObjects) {
+            "contentByRemoteId",
+            function (error, contentByRemoteId) {
                 if (error) {
                     callback(error, false);
                     return;
                 }
-
                 that._connectionManager.request(
                     "GET",
-                    contentObjects._href + '?remoteId=' + remoteId,
+                    parseUriTemplate(contentByRemoteId._href, {remoteId: remoteId}),
                     "",
-                    {"Accept": contentObjects["_media-type"]},
+                    {"Accept": "application/vnd.ez.api.ContentInfo+json"},
                     callback
                 );
             }
@@ -880,18 +879,27 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
      *  Loads target location by remote Id
      *
      * @method loadLocationByRemoteId
-     * @param locations {String} root locations (will be auto-discovered in near future)
      * @param remoteId {String} remote id of target location (e.g. "0bae96bd419e141ff3200ccbf2822e4f")
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentService.prototype.loadLocationByRemoteId = function (locations, remoteId, callback) {
-        this._connectionManager.request(
-            "GET",
-            locations + '?remoteId=' + remoteId,
-            "",
-            {Accept: "application/vnd.ez.api.Location+json"},
-            callback
+    ContentService.prototype.loadLocationByRemoteId = function (remoteId, callback) {
+        var that = this;
+        this._discoveryService.getInfoObject(
+            "locationByRemoteId",
+            function (error, locationByRemoteId) {
+                if (error) {
+                    callback(error, false);
+                    return;
+                }
+                that._connectionManager.request(
+                    "GET",
+                    parseUriTemplate(locationByRemoteId._href, {remoteId: remoteId}),
+                    "",
+                    {"Accept": "application/vnd.ez.api.Location+json"},
+                    callback
+                );
+            }
         );
     };
 

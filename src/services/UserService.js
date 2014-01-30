@@ -478,18 +478,27 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
      * Load users and usergroups for the target roleId
      *
      * @method getRoleAssignments
-     * @param userList {String} link to root UserList resource (should be auto-discovered)
      * @param roleId {String} target role identifier (e.g. "/api/ezp/v2/user/roles/5")
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "UserService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    UserService.prototype.getRoleAssignments = function (userList, roleId, callback) {
-        this._connectionManager.request(
-            "GET",
-            userList + '?roleId=' + roleId,
-            "",
-            {"Accept": "application/vnd.ez.api.UserList+json"},
-            callback
+    UserService.prototype.getRoleAssignments = function (roleId, callback) {
+        var that = this;
+        this._discoveryService.getInfoObject(
+            "users",
+            function (error, users) {
+                if (error) {
+                    callback(error, false);
+                    return;
+                }
+                that._connectionManager.request(
+                    "GET",
+                    users._href + '?roleId=' + roleId,
+                    "",
+                    {"Accept": "application/vnd.ez.api.UserList+json"},
+                    callback
+                );
+            }
         );
     };
 
