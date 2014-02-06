@@ -6966,6 +6966,7 @@ define('services/UserService',['structures/SessionCreateStruct', 'structures/Use
 
 /* globals define */
 define('utils/extend',[], function () {
+    
     /**
      * Provides only the `extend` function.
      *
