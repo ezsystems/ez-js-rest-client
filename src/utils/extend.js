@@ -1,5 +1,6 @@
 /* globals define */
 define([], function () {
+    "use strict";
     /**
      * Provides only the `extend` function.
      *

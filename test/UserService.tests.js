@@ -48,6 +48,7 @@ define(function (require) {
             testRootId = "/api/ezp/v2/",
             testLogin = "login",
             testPass = "pass",
+            testUsers = "/api/ezp/v2/user/users",
 
             testOffset = 0,
             testLimit = -1,
@@ -166,6 +167,16 @@ define(function (require) {
                                 {
                                     "_href" : testRoles,
                                     "_media-type" : "application/vnd.ez.api.RoleList+json"
+                                }
+                            );
+                        }
+
+                        if (name === "users"){
+                            callback(
+                                false,
+                                {
+                                    "_href" : testUsers,
+                                    "_media-type" : "application/vnd.ez.api.UserList+json"
                                 }
                             );
                         }
@@ -420,16 +431,14 @@ define(function (require) {
             });
 
             it("getRoleAssignments", function () {
-
                 userService.getRoleAssignments(
-                    testUserGroups,
                     testRoleId,
                     mockCallback
                 );
 
                 expect(mockConnectionManager.request).toHaveBeenCalledWith(
                     "GET",
-                    testUserGroups + "?roleId=" + testRoleId,
+                    testUsers + "?roleId=" + testRoleId,
                     "",
                     {Accept: "application/vnd.ez.api.UserList+json"},
                     mockCallback
@@ -1242,6 +1251,21 @@ define(function (require) {
 
                     expect(mockFaultyDiscoveryService.getInfoObject).toHaveBeenCalled();
                     expect(mockFaultyDiscoveryService.getInfoObject.mostRecentCall.args[0]).toEqual("roles"); //name
+                    expect(mockFaultyDiscoveryService.getInfoObject.mostRecentCall.args[1]).toEqual(jasmine.any(Function)); //callback
+
+                    expect(mockCallback.mostRecentCall.args[0]).toEqual(jasmine.any(CAPIError)); //error
+                    expect(mockCallback.mostRecentCall.args[1]).toEqual(false); //response
+                });
+
+                it("loadRoles", function () {
+
+                    userService.getRoleAssignments(
+                        testRoleIdentifier,
+                        mockCallback
+                    );
+
+                    expect(mockFaultyDiscoveryService.getInfoObject).toHaveBeenCalled();
+                    expect(mockFaultyDiscoveryService.getInfoObject.mostRecentCall.args[0]).toEqual("users"); //name
                     expect(mockFaultyDiscoveryService.getInfoObject.mostRecentCall.args[1]).toEqual(jasmine.any(Function)); //callback
 
                     expect(mockCallback.mostRecentCall.args[0]).toEqual(jasmine.any(CAPIError)); //error

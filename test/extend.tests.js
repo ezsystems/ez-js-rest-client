@@ -1,6 +1,6 @@
 /* globals define, describe, beforeEach, it, expect */
-define(["utils/extend"], function(extend) {
-    describe("Extend", function() {
+define(["utils/extend"], function (extend) {
+    describe("Extend", function () {
         var emptyObj,
             firstObj,
             secondObj,
@@ -8,7 +8,7 @@ define(["utils/extend"], function(extend) {
             fourthObj,
             fifthObj;
 
-        beforeEach(function() {
+        beforeEach(function () {
             // We are initializing the object structures before every run to ensure
             // no one unintentionally changed their data. They are references!
             emptyObj = {};
@@ -39,7 +39,7 @@ define(["utils/extend"], function(extend) {
             };
         });
 
-        it("should return the input if only one object is given", function() {
+        it("should return the input if only one object is given", function () {
             // As the reference might be used to change the data, we do a "string" comparison
             var original = JSON.stringify(firstObj),
                 result = extend(firstObj);
@@ -47,17 +47,17 @@ define(["utils/extend"], function(extend) {
             expect(result).toEqual(JSON.parse(original));
         });
 
-        it("should return a reference to the input", function() {
+        it("should return a reference to the input", function () {
             var result = extend(firstObj);
             expect(result).toBe(firstObj);
         });
 
-        it("should return a reference to the input", function() {
+        it("should return a reference to the input", function () {
             var result = extend(firstObj);
             expect(result).toBe(firstObj);
         });
 
-        it("should extend first object with second one", function() {
+        it("should extend first object with second one", function () {
             var result = extend(firstObj, secondObj);
             expect(result).toEqual({
                 "foo": "second foo",
@@ -66,12 +66,12 @@ define(["utils/extend"], function(extend) {
             });
         });
 
-        it("should return reference to first object after extension", function() {
+        it("should return reference to first object after extension", function () {
             var result = extend(firstObj, secondObj);
             expect(result).toBe(firstObj);
         });
 
-        it("should extend multiple objects in given order", function() {
+        it("should extend multiple objects in given order", function () {
             var result = extend(firstObj, secondObj, thirdObj);
             expect(result).toEqual({
                 "foo": "third foo",
@@ -80,7 +80,7 @@ define(["utils/extend"], function(extend) {
             });
         });
 
-        it("should extend multiple objects in given order (2)", function() {
+        it("should extend multiple objects in given order (2)", function () {
             var result = extend(firstObj, thirdObj, secondObj);
             expect(result).toEqual({
                 "foo": "second foo",
@@ -89,7 +89,7 @@ define(["utils/extend"], function(extend) {
             });
         });
 
-        it("should work if first object is empty", function() {
+        it("should work if first object is empty", function () {
             var result = extend(emptyObj, firstObj);
             expect(result).toEqual({
                 "foo": "first foo",
@@ -97,7 +97,7 @@ define(["utils/extend"], function(extend) {
             });
         });
 
-        it("should work if second object is empty", function() {
+        it("should work if second object is empty", function () {
             var result = extend(firstObj, emptyObj);
             expect(result).toEqual({
                 "foo": "first foo",
@@ -105,7 +105,7 @@ define(["utils/extend"], function(extend) {
             });
         });
 
-        it("should only operate on own values not inherited ones", function() {
+        it("should only operate on own values not inherited ones", function () {
             var result = extend(firstObj, fourthObj);
             expect(result).toEqual({
                 "foo": "fourth foo",
@@ -113,7 +113,7 @@ define(["utils/extend"], function(extend) {
             });
         });
 
-        it("should ignore non objects", function() {
+        it("should ignore non objects", function () {
             var result = extend(firstObj, null, undefined, "foo", 23, true, secondObj);
             expect(result).toEqual({
                 "foo": "second foo",
@@ -122,7 +122,7 @@ define(["utils/extend"], function(extend) {
             });
         });
 
-        it("should ignore empty properties", function() {
+        it("should ignore empty properties", function () {
             var result = extend(firstObj, fifthObj);
             expect(result).toEqual({
                 "foo": "first foo",
