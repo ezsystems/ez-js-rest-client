@@ -8,7 +8,7 @@ define(["structures/CAPIError"], function(CAPIError) {
      * which are available for more than one request.
      *
      * @class InMemoryStorage
-     * @implements {StorageAbstraction}
+     * @extends {StorageAbstraction}
      * @constructor
      */
     var InMemoryStorage = function () {

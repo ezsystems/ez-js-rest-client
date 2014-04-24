@@ -11,7 +11,7 @@ define(["structures/CAPIError"], function(CAPIError) {
      * object and string representation to allow the storage of arbitrary datastructures
      *
      * @class LocalStorage
-     * @implements {StorageAbstraction}
+     * @extends {StorageAbstraction}
      * @constructor
      */
     var LocalStorage = function () {
