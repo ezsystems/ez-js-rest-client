@@ -452,31 +452,152 @@ define('structures/CAPIError',[],function () {
 
 });
 /* global define */
-define('authAgents/SessionAuthAgent',["structures/CAPIError"], function (CAPIError) {
+define('storages/LocalStorage',["structures/CAPIError"], function(CAPIError) {
+    /**
+     * Implementation of the storage abstraction utilizing a window.localStorage
+     *
+     * If the localStorage is not available an error is thrown during construction
+     *
+     * Usability of this storage can be checked using the static isCompatible method.
+     *
+     * In addition of providing compatibility checking stored data will automatically be converted between
+     * object and string representation to allow the storage of arbitrary datastructures
+     *
+     * @class LocalStorage
+     * @extends {StorageAbstraction}
+     * @constructor
+     */
+    var LocalStorage = function () {
+        if (!LocalStorage.isCompatible()) {
+            throw new CAPIError("LocalStorage abstraction can not be used: window.localStorage is not available.");
+        }
+
+        /**
+         * Session storage which is internally used to store and retrieve data
+         *
+         * @property _storage
+         * @type {Storage}
+         * @private
+         */
+        this._storage = window.localStorage;
+    };
+
+    /**
+     * Retrieve an item from the storage
+     *
+     * @method getItem
+     * @param {string} key
+     * @return {*}
+     */
+    LocalStorage.prototype.getItem = function(key) {
+        return JSON.parse(this._storage.getItem(key));
+    };
+
+    /**
+     * Store an item in storage
+     *
+     * @method setItem
+     * @param {string} key
+     * @param {*} value
+     */
+    LocalStorage.prototype.setItem = function(key, value) {
+        this._storage.setItem(key, JSON.stringify(value));
+    };
+
+    /**
+     * Remove an item from storage
+     *
+     * @method removeItem
+     * @param {string} key
+     */
+    LocalStorage.prototype.removeItem = function(key) {
+        this._storage.removeItem(key);
+    };
+
+    /**
+     * Check whether this storage implementation is compatible with the current environment.
+     *
+     * @method isComaptible
+     * @static
+     * @return {boolean}
+     */
+    LocalStorage.isCompatible = function () {
+        var t = "__featuredetection__";
+
+        if (!window.localStorage || !window.localStorage.setItem) {
+            return false;
+        }
+
+        // Unfortunately some browsers have a localStorage object but don't have a working localStorage ;)
+        try {
+            window.localStorage.setItem(t, t);
+            window.localStorage.removeItem(t);
+            // localStorage is available everything is fine
+            return true;
+        } catch(e) {
+            // localStorage does not work
+            return false;
+        }
+    };
+
+    return LocalStorage;
+});
+
+/* global define */
+define('authAgents/SessionAuthAgent',["structures/CAPIError", "storages/LocalStorage"], function (CAPIError, LocalStorage) {
     
 
     /**
      * Creates an instance of SessionAuthAgent object
-     * * Auth agent handles low level implementation of authorization workflow
+     *
+     * Auth agent handles low level implementation of authorization workflow
      *
      * @class SessionAuthAgent
      * @constructor
      * @param credentials {Object} object literal containg credentials for the REST service access
      * @param credentials.login {String} user login
      * @param credentials.password {String} user password
+     * @param storage {StorageAbstraction?} storage to be used. By default a LocalStorage will be utilized
      */
-    var SessionAuthAgent = function (credentials) {
+    var SessionAuthAgent = function (credentials, storage) {
         // is initiated inside CAPI constructor by using setCAPI() method
         this._CAPI = null;
 
         this._login = credentials.login;
         this._password = credentials.password;
 
-        //TODO: implement storage selection mechanism
-        this.sessionName = sessionStorage.getItem('ezpRestClient.sessionName');
-        this.sessionId = sessionStorage.getItem('ezpRestClient.sessionId');
-        this.csrfToken = sessionStorage.getItem('ezpRestClient.csrfToken');
+
+        // StorageAbstraction is optional. Use a LocalStorage by default if nothing else
+        // is provided
+        this._storage = storage || new LocalStorage();
     };
+
+    /**
+     * Constant to be used as storage key for the sessionName
+     *
+     * @static
+     * @const
+     * @type {string}
+     */
+    SessionAuthAgent.KEY_SESSION_NAME = 'ezpRestClient.sessionName';
+
+    /**
+     * Constant to be used as storage key for the sessionId
+     *
+     * @static
+     * @const
+     * @type {string}
+     */
+    SessionAuthAgent.KEY_SESSION_ID = 'ezpRestClient.sessionId';
+
+    /**
+     * Constant to be used as storage key for the csrfToken
+     *
+     * @static
+     * @const
+     * @type {string}
+     */
+    SessionAuthAgent.KEY_CSRF_TOKEN = 'ezpRestClient.csrfToken';
 
     /**
      * Called every time a new request cycle is started,
@@ -488,7 +609,7 @@ define('authAgents/SessionAuthAgent',["structures/CAPIError"], function (CAPIErr
      * @param done {Function} Callback function, which is to be called by the implementation to signal the authentication has been completed.
      */
     SessionAuthAgent.prototype.ensureAuthentication = function (done) {
-        if (this.sessionId !== null) {
+        if (this._storage.getItem(SessionAuthAgent.KEY_SESSION_ID) !== null) {
             done(false, true);
             return;
         }
@@ -516,13 +637,9 @@ define('authAgents/SessionAuthAgent',["structures/CAPIError"], function (CAPIErr
 
                 var session = JSON.parse(sessionResponse.body).Session;
 
-                that.sessionName = session.name;
-                that.sessionId = session._href;
-                that.csrfToken = session.csrfToken;
-
-                sessionStorage.setItem('ezpRestClient.sessionName', that.sessionName);
-                sessionStorage.setItem('ezpRestClient.sessionId', that.sessionId);
-                sessionStorage.setItem('ezpRestClient.csrfToken', that.csrfToken);
+                that._storage.setItem(SessionAuthAgent.KEY_SESSION_NAME, session.name);
+                that._storage.setItem(SessionAuthAgent.KEY_SESSION_ID, session._href);
+                that._storage.setItem(SessionAuthAgent.KEY_CSRF_TOKEN, session.csrfToken);
 
                 done(false, true);
             }
@@ -539,7 +656,7 @@ define('authAgents/SessionAuthAgent',["structures/CAPIError"], function (CAPIErr
      */
     SessionAuthAgent.prototype.authenticateRequest = function (request, done) {
         if (request.method !== "GET" && request.method !== "HEAD" && request.method !== "OPTIONS" && request.method !== "TRACE" ) {
-            request.headers["X-CSRF-Token"] = this.csrfToken;
+            request.headers["X-CSRF-Token"] = this._storage.getItem(SessionAuthAgent.KEY_CSRF_TOKEN);
         }
 
         done(false, request);
@@ -547,7 +664,7 @@ define('authAgents/SessionAuthAgent',["structures/CAPIError"], function (CAPIErr
 
     /**
      * Log out workflow
-     * Kills currently active session and resets sessionStorage params (sessionId, CSRFToken)
+     * Kills currently active session and resets Storage params (sessionId, CSRFToken)
      *
      * @method logOut
      * @param done {function}
@@ -557,20 +674,16 @@ define('authAgents/SessionAuthAgent',["structures/CAPIError"], function (CAPIErr
             that = this;
 
         userService.deleteSession(
-            this.sessionId,
+            this._storage.getItem(SessionAuthAgent.KEY_SESSION_ID),
             function (error, response) {
                 if (error) {
                     done(true, false);
                     return;
                 }
 
-                that.sessionName = null;
-                that.sessionId = null;
-                that.csrfToken = null;
-
-                sessionStorage.removeItem('ezpRestClient.sessionName');
-                sessionStorage.removeItem('ezpRestClient.sessionId');
-                sessionStorage.removeItem('ezpRestClient.csrfToken');
+                that._storage.removeItem(SessionAuthAgent.KEY_SESSION_NAME);
+                that._storage.removeItem(SessionAuthAgent.KEY_SESSION_ID);
+                that._storage.removeItem(SessionAuthAgent.KEY_CSRF_TOKEN);
 
                 done(false, true);
             }
@@ -590,6 +703,7 @@ define('authAgents/SessionAuthAgent',["structures/CAPIError"], function (CAPIErr
     return SessionAuthAgent;
 
 });
+
 /* global define */
 define('authAgents/HttpBasicAuthAgent',[],function () {
     
@@ -2748,8 +2862,8 @@ define('utils/uriparse',["uritemplate"], function (uriTemplateLib) {
      *
      * @method parse
      * @static
-     * @params {String} template the template to interpret
-     * @params {Object} the parameters
+     * @param {String} template the template to interpret
+     * @param {Object} the parameters
      * @return {String}
      */
     var parseUriTemplate = function (template, params) {
