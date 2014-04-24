@@ -14,7 +14,7 @@ define(["structures/CAPIError"], function(CAPIError) {
      * @implements {StorageAbstraction}
      * @constructor
      */
-    var LocalStorage = function() {
+    var LocalStorage = function () {
         if (!LocalStorage.isCompatible()) {
             throw new CAPIError("LocalStorage abstraction can not be used: window.localStorage is not available.");
         }
@@ -68,7 +68,7 @@ define(["structures/CAPIError"], function(CAPIError) {
      * @static
      * @return {boolean}
      */
-    LocalStorage.isCompatible = function() {
+    LocalStorage.isCompatible = function () {
         var t = "__featuredetection__";
 
         if (!window.localStorage || !window.localStorage.setItem) {

@@ -14,18 +14,18 @@ define(function (require) {
 
         beforeEach(function (){
 
-            mockCompatibleConnection = (function(){
+            mockCompatibleConnection = (function (){
                 var connection = function () {};
-                connection.isCompatible = function(){
+                connection.isCompatible = function (){
                     return true;
                 };
                 return connection;
             }());
             spyOn(mockCompatibleConnection, 'isCompatible').andCallThrough();
 
-            mockIncompatibleConnection = (function(){
-                var connection = function(){};
-                connection.isCompatible = function(){
+            mockIncompatibleConnection = (function (){
+                var connection = function (){};
+                connection.isCompatible = function (){
                     return false;
                 };
                 return connection;
@@ -34,7 +34,7 @@ define(function (require) {
 
         });
 
-        it("is selecting compatible connection", function(){
+        it("is selecting compatible connection", function (){
 
             testConnectionStack = [
                 {
@@ -57,7 +57,7 @@ define(function (require) {
             expect(connection instanceof mockCompatibleConnection).toBeTruthy();
         });
 
-        it("is using connection factory if it is provided", function(){
+        it("is using connection factory if it is provided", function (){
 
             mockFactory = jasmine.createSpy('mockFactory').andCallFake(
                 function(Connection){

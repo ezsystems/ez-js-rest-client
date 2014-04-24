@@ -35,17 +35,17 @@ define(function (require) {
 
             mockCallback = jasmine.createSpy('mockCallback');
 
-            mockXMLHttpRequest = function(){};
+            mockXMLHttpRequest = function (){};
             mockXMLHttpRequest.prototype.open = function(method, url, async, user, password){};
             mockXMLHttpRequest.prototype.setRequestHeader = function(headerType, header){};
-            mockXMLHttpRequest.prototype.getAllResponseHeaders = function(){};
+            mockXMLHttpRequest.prototype.getAllResponseHeaders = function (){};
 
             spyOn(mockXMLHttpRequest.prototype, 'open').andCallThrough();
             spyOn(mockXMLHttpRequest.prototype, 'setRequestHeader').andCallThrough();
             spyOn(mockXMLHttpRequest.prototype, 'getAllResponseHeaders').andCallThrough();
         });
 
-        it("is checking compatibility correctly when window.XMLHttpRequest is present", function(){
+        it("is checking compatibility correctly when window.XMLHttpRequest is present", function (){
 
             window.XMLHttpRequest = {};
 
@@ -53,7 +53,7 @@ define(function (require) {
 
         });
 
-        it("is checking compatibility correctly when window.XMLHttpRequest is absent", function(){
+        it("is checking compatibility correctly when window.XMLHttpRequest is absent", function (){
 
             window.XMLHttpRequest = null;
 
@@ -62,7 +62,7 @@ define(function (require) {
         });
 
 
-        describe("is correctly using XmlHttpRequest while performing:", function(){
+        describe("is correctly using XmlHttpRequest while performing:", function (){
 
             beforeEach(function (){
 
@@ -80,7 +80,7 @@ define(function (require) {
                 connection = new XmlHttpRequestConnection();
             });
 
-            it("execute call", function(){
+            it("execute call", function (){
 
                 connection.execute(
                     mockRequest,
@@ -107,7 +107,7 @@ define(function (require) {
 
             });
 
-            it("execute call with BasicHttp Authorization", function(){
+            it("execute call with BasicHttp Authorization", function (){
 
                 mockRequest.httpBasicAuth = true;
                 mockRequest.login = testLogin;
@@ -141,9 +141,9 @@ define(function (require) {
 
         });
 
-        describe("is returning errors and retrying correctly, when ", function(){
+        describe("is returning errors and retrying correctly, when ", function (){
 
-            it("request is not finished yet", function(){
+            it("request is not finished yet", function (){
 
                 mockXMLHttpRequest.prototype.send = function(body){
                     this.readyState = 3;
@@ -187,7 +187,7 @@ define(function (require) {
                 expect(mockCallback.mostRecentCall.args[1]).toEqual(jasmine.any(Response)); // response
             });
 
-            it("request have failed", function(){
+            it("request have failed", function (){
 
                 mockXMLHttpRequest.prototype.send = function(body){
                     this.readyState = 4;

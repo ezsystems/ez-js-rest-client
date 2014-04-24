@@ -1662,7 +1662,7 @@ define(function (require) {
             // ******************************
             describe("structures creation", function () {
 
-                it("newContentUpdateStruct", function(){
+                it("newContentUpdateStruct", function (){
 
                     testStructure = contentService.newContentUpdateStruct(
                         testLanguage
@@ -1672,7 +1672,7 @@ define(function (require) {
                     expect(testStructure.body.VersionUpdate.initialLanguageCode).toEqual(testLanguage);
                 });
 
-                it("newContentMetadataUpdateStruct", function(){
+                it("newContentMetadataUpdateStruct", function (){
 
                     testStructure = contentService.newContentMetadataUpdateStruct(
                         testLanguage
@@ -1682,7 +1682,7 @@ define(function (require) {
                     expect(testStructure.body.ContentUpdate.MainLanguageCode).toEqual(testLanguage);
                 });
 
-                it("newContentCreateStruct", function(){
+                it("newContentCreateStruct", function (){
 
                     testStructure = contentService.newContentCreateStruct(
                         testContentTypeId,
@@ -1696,7 +1696,7 @@ define(function (require) {
                     expect(testStructure.body.ContentCreate.mainLanguageCode).toEqual(testLanguage);
                 });
 
-                it("newSectionInputStruct", function(){
+                it("newSectionInputStruct", function (){
 
                     testStructure = contentService.newSectionInputStruct(
                         testIdentifier,
@@ -1709,7 +1709,7 @@ define(function (require) {
                 });
 
 
-                it("newLocationCreateStruct", function(){
+                it("newLocationCreateStruct", function (){
 
                     testStructure = contentService.newLocationCreateStruct(
                         testLocation
@@ -1719,14 +1719,14 @@ define(function (require) {
                     expect(testStructure.body.LocationCreate.ParentLocation._href).toEqual(testLocation);
                 });
 
-                it("newLocationUpdateStruct", function(){
+                it("newLocationUpdateStruct", function (){
 
                     testStructure = contentService.newLocationUpdateStruct();
 
                     expect(testStructure).toEqual(jasmine.any(LocationUpdateStruct));
                 });
 
-                it("newViewCreateStruct", function(){
+                it("newViewCreateStruct", function (){
 
                     testStructure = contentService.newViewCreateStruct(
                         testIdentifier
@@ -1736,7 +1736,7 @@ define(function (require) {
                     expect(testStructure.body.ViewInput.identifier).toEqual(testIdentifier);
                 });
 
-                it("newRelationCreateStruct", function(){
+                it("newRelationCreateStruct", function (){
 
                     testStructure = contentService.newRelationCreateStruct(
                         testVersionedContentId
@@ -1746,7 +1746,7 @@ define(function (require) {
                     expect(testStructure.body.RelationCreate.Destination._href).toEqual(testVersionedContentId);
                 });
 
-                it("newObjectStateGroupCreateStruct", function(){
+                it("newObjectStateGroupCreateStruct", function (){
 
                     testStructure = contentService.newObjectStateGroupCreateStruct(
                         testIdentifier,
@@ -1760,7 +1760,7 @@ define(function (require) {
                     expect(testStructure.body.ObjectStateGroupCreate.names.value).toEqual(testArray);
                 });
 
-                it("newObjectStateGroupUpdateStruct", function(){
+                it("newObjectStateGroupUpdateStruct", function (){
 
                     testStructure = contentService.newObjectStateGroupUpdateStruct(
                         testLanguage,
@@ -1770,7 +1770,7 @@ define(function (require) {
                     expect(testStructure).toEqual(jasmine.any(ObjectStateGroupUpdateStruct));
                 });
 
-                it("newUrlAliasCreateStruct", function(){
+                it("newUrlAliasCreateStruct", function (){
 
                     testStructure = contentService.newUrlAliasCreateStruct(
                         testLanguage,
@@ -1785,7 +1785,7 @@ define(function (require) {
 
                 });
 
-                it("newUrlWildcardCreateStruct", function(){
+                it("newUrlWildcardCreateStruct", function (){
 
                     testStructure = contentService.newUrlWildcardCreateStruct(
                         testUrl,

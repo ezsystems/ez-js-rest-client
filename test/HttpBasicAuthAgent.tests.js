@@ -17,7 +17,7 @@ define(function (require) {
             mockCallback = jasmine.createSpy('mockCallback');
         });
 
-        describe("is correctly performing", function(){
+        describe("is correctly performing", function (){
 
             beforeEach(function (){
 
@@ -28,13 +28,13 @@ define(function (require) {
 
             });
 
-            it("ensureAuthentication", function(){
+            it("ensureAuthentication", function (){
 
                 httpBasicAuthAgent.ensureAuthentication(mockCallback);
                 expect(mockCallback).toHaveBeenCalledWith(false, true);
             });
 
-            it("authenticateRequest", function(){
+            it("authenticateRequest", function (){
 
                 mockRequest = {};
 
@@ -47,11 +47,11 @@ define(function (require) {
                 expect(mockRequest.password).toEqual(testPassword);
             });
 
-            it("setCAPI (which does exactly nothing for this very agent, but should be present for uniformity)", function(){
+            it("setCAPI (which does exactly nothing for this very agent, but should be present for uniformity)", function (){
                 httpBasicAuthAgent.setCAPI(mockCAPI);
             });
 
-            it("logOut", function(){
+            it("logOut", function (){
 
                 httpBasicAuthAgent.logOut(mockCallback);
                 expect(mockCallback).toHaveBeenCalledWith(false, true);

@@ -14,7 +14,7 @@ define(function (require) {
             promiseSuccess = false,
             promiseError = false,
             handlePromise = function (promise) {
-                runs(function() {
+                runs(function () {
                     promise.then(
                         function (result) {
                             promiseSuccess = result;
@@ -60,11 +60,11 @@ define(function (require) {
 
             handlePromise(promise);
 
-            waitsFor(function() {
+            waitsFor(function () {
                 return promiseSuccess;
             }, "Waiting for promise to be fulfilled", 100);
 
-            runs(function() {
+            runs(function () {
                 expect(promiseSuccess).toBeTruthy();
                 expect(promiseError).toBeFalsy();
             });
@@ -93,11 +93,11 @@ define(function (require) {
 
             handlePromise(promise);
 
-            waitsFor(function() {
+            waitsFor(function () {
                 return promiseError;
             }, "Waiting for promise to be rejected", 1000);
 
-            runs(function() {
+            runs(function () {
                 expect(promiseSuccess).toBeFalsy();
                 expect(promiseError).toBeTruthy();
                 expect(console.warn.callCount).toBe(1);

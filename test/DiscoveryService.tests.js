@@ -84,7 +84,7 @@ define(function (require) {
 
             });
 
-            it("copyToCache", function(){
+            it("copyToCache", function (){
                 var TestObject = function () {
                     this.trash = testTrashObject;
                 };

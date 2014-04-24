@@ -74,7 +74,7 @@ define(["authAgents/SessionAuthAgent", "structures/CAPIError"], function (Sessio
             spyOn(mockUserService, 'deleteSession').andCallThrough();
 
             mockCAPI = {
-                getUserService: function(){
+                getUserService: function (){
                     return mockUserService;
                 }
             };
@@ -82,7 +82,7 @@ define(["authAgents/SessionAuthAgent", "structures/CAPIError"], function (Sessio
             mockCallback = jasmine.createSpy('mockCallback');
         });
 
-        it("should create some sort of Storage if none is given", function() {
+        it("should create some sort of Storage if none is given", function () {
             var sessionAuthAgent = new SessionAuthAgent({
                 login: testLogin,
                 password: testPassword
@@ -95,7 +95,7 @@ define(["authAgents/SessionAuthAgent", "structures/CAPIError"], function (Sessio
             expect(sessionAuthAgent._storage.setItem).not.toBeUndefined();
         });
 
-        describe("is correctly performing", function(){
+        describe("is correctly performing", function (){
 
             beforeEach(function (){
                 sessionAuthAgent = new SessionAuthAgent({
@@ -105,7 +105,7 @@ define(["authAgents/SessionAuthAgent", "structures/CAPIError"], function (Sessio
                 sessionAuthAgent.setCAPI(mockCAPI);
             });
 
-            it("ensureAuthentication", function(){
+            it("ensureAuthentication", function (){
 
                 sessionAuthAgent.ensureAuthentication(mockCallback);
 
@@ -122,7 +122,7 @@ define(["authAgents/SessionAuthAgent", "structures/CAPIError"], function (Sessio
                 expect(mockCallback).toHaveBeenCalledWith(false, true);
             });
 
-            it("ensureAuthentication when already authenticated", function(){
+            it("ensureAuthentication when already authenticated", function (){
                 mockStorage.setItem(
                     SessionAuthAgent.KEY_SESSION_ID,
                     "i-am-a-real-session-id-no-doubt-about-that"
@@ -135,7 +135,7 @@ define(["authAgents/SessionAuthAgent", "structures/CAPIError"], function (Sessio
 
             });
 
-            it("authenticateRequest for a request using safe ('GET') method", function(){
+            it("authenticateRequest for a request using safe ('GET') method", function (){
 
                 mockRequest = {
                     headers : {},
@@ -148,7 +148,7 @@ define(["authAgents/SessionAuthAgent", "structures/CAPIError"], function (Sessio
                 expect(mockRequest.headers["X-CSRF-Token"]).not.toBeDefined();
             });
 
-            it("authenticateRequest for a request using safe ('HEAD') method", function(){
+            it("authenticateRequest for a request using safe ('HEAD') method", function (){
 
                 mockRequest = {
                     headers : {},
@@ -161,7 +161,7 @@ define(["authAgents/SessionAuthAgent", "structures/CAPIError"], function (Sessio
                 expect(mockRequest.headers["X-CSRF-Token"]).not.toBeDefined();
             });
 
-            it("authenticateRequest for a request using safe ('OPTIONS') method", function(){
+            it("authenticateRequest for a request using safe ('OPTIONS') method", function (){
 
                 mockRequest = {
                     headers : {},
@@ -174,7 +174,7 @@ define(["authAgents/SessionAuthAgent", "structures/CAPIError"], function (Sessio
                 expect(mockRequest.headers["X-CSRF-Token"]).not.toBeDefined();
             });
 
-            it("authenticateRequest for a request using safe ('TRACE') method", function(){
+            it("authenticateRequest for a request using safe ('TRACE') method", function (){
 
                 mockRequest = {
                     headers : {},
@@ -187,7 +187,7 @@ define(["authAgents/SessionAuthAgent", "structures/CAPIError"], function (Sessio
                 expect(mockRequest.headers["X-CSRF-Token"]).not.toBeDefined();
             });
 
-            it("authenticateRequest for a request using non-safe ('POST') method", function(){
+            it("authenticateRequest for a request using non-safe ('POST') method", function (){
 
                 mockRequest = {
                     headers : {},
@@ -202,7 +202,7 @@ define(["authAgents/SessionAuthAgent", "structures/CAPIError"], function (Sessio
                 expect(mockRequest.headers["X-CSRF-Token"]).toEqual(testCsrfToken);
             });
 
-            it("logOut", function(){
+            it("logOut", function (){
 
                 mockStorage.setItem(SessionAuthAgent.KEY_SESSION_ID, testSessionId);
 
@@ -226,7 +226,7 @@ define(["authAgents/SessionAuthAgent", "structures/CAPIError"], function (Sessio
 
         });
 
-        describe("is returning errors correctly, when user service fails, while performing", function(){
+        describe("is returning errors correctly, when user service fails, while performing", function (){
 
             beforeEach(function (){
                 mockFaultyUserService = {
@@ -258,7 +258,7 @@ define(["authAgents/SessionAuthAgent", "structures/CAPIError"], function (Sessio
                 spyOn(mockFaultyUserService, 'newSessionCreateStruct').andCallThrough();
 
                 mockFaultyCAPI = {
-                    getUserService: function(){
+                    getUserService: function (){
                         return mockFaultyUserService;
                     }
                 };
@@ -270,7 +270,7 @@ define(["authAgents/SessionAuthAgent", "structures/CAPIError"], function (Sessio
                 sessionAuthAgent.setCAPI(mockFaultyCAPI);
             });
 
-            it("ensureAuthentication", function(){
+            it("ensureAuthentication", function (){
 
                 sessionAuthAgent.ensureAuthentication(mockCallback);
 
@@ -279,7 +279,7 @@ define(["authAgents/SessionAuthAgent", "structures/CAPIError"], function (Sessio
                 expect(mockCallback.mostRecentCall.args[1]).toEqual(false); //response
             });
 
-            it("logOut", function(){
+            it("logOut", function (){
 
                 mockStorage.setItem(SessionAuthAgent.KEY_SESSION_ID, testSessionId);
                 sessionAuthAgent.logOut(mockCallback);

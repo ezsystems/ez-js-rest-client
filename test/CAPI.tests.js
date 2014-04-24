@@ -22,7 +22,7 @@ define(function (require) {
         };
         TestOptions.prototype.dummyProperty = "dummy prototype property";
 
-        MockAuthenticationAgent = function() {
+        MockAuthenticationAgent = function () {
             this._CAPI = null;
             this.setCAPI = function (capi) {
                 this._CAPI = capi;
@@ -40,7 +40,7 @@ define(function (require) {
             );
         });
 
-        describe("Construction", function() {
+        describe("Construction", function () {
             it("should be constructable", function () {
                 expect(capi).toBeDefined();
                 expect(capi instanceof CAPI).toBeTruthy();

@@ -19,21 +19,21 @@ define(function (require) {
 
         TestWrapperObject.prototype.dummyProperty = "prototype dummy property";
 
-        it("is parsing it's 'body' property (JSON string) into structured 'document' property", function(){
+        it("is parsing it's 'body' property (JSON string) into structured 'document' property", function (){
 
             response = new Response(new TestWrapperObject());
 
             expect(response.document.Root).toEqual(testRootInnerObject);
         });
 
-        it("has correct default value for the 'document' property", function(){
+        it("has correct default value for the 'document' property", function (){
 
             response = new Response({});
 
             expect(response.document).toBeNull();
         });
 
-        it("is handling broken JSON as body properly", function(){
+        it("is handling broken JSON as body properly", function (){
 
             var data = new TestWrapperObject();
 

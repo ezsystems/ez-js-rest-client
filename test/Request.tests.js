@@ -13,7 +13,7 @@ define(function (require) {
 
         TestWrapperObject.prototype.dummyProperty = "prototype dummy property";
 
-        it("is running constructor correctly", function(){
+        it("is running constructor correctly", function (){
 
             request = new Request(new TestWrapperObject());
 

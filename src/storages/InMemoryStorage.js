@@ -11,7 +11,7 @@ define(["structures/CAPIError"], function(CAPIError) {
      * @implements {StorageAbstraction}
      * @constructor
      */
-    var InMemoryStorage = function() {
+    var InMemoryStorage = function () {
         /**
          * Storage object, which is used internally to store all the given data
          *
@@ -71,7 +71,7 @@ define(["structures/CAPIError"], function(CAPIError) {
      * @static
      * @return {boolean}
      */
-    InMemoryStorage.isCompatible = function() {
+    InMemoryStorage.isCompatible = function () {
         return true;
     };
 

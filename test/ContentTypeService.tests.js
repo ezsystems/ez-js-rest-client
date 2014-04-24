@@ -643,7 +643,7 @@ define(function (require) {
             // ******************************
             describe("structures creation", function () {
 
-                it("newContentTypeGroupInputStruct", function(){
+                it("newContentTypeGroupInputStruct", function (){
 
                     testStructure = contentTypeService.newContentTypeGroupInputStruct(
                         testContentTypeGroupIdentifier
@@ -653,7 +653,7 @@ define(function (require) {
                     expect(testStructure.body.ContentTypeGroupInput.identifier).toEqual(testContentTypeGroupIdentifier);
                 });
 
-                it("newContentTypeCreateStruct", function(){
+                it("newContentTypeCreateStruct", function (){
 
                     testStructure = contentTypeService.newContentTypeCreateStruct(
                         testContentTypeIdentifier,
@@ -667,14 +667,14 @@ define(function (require) {
                     expect(testStructure.body.ContentTypeCreate.names.value).toEqual(testArray);
                 });
 
-                it("newContentTypeUpdateStruct", function(){
+                it("newContentTypeUpdateStruct", function (){
 
                     testStructure = contentTypeService.newContentTypeUpdateStruct();
 
                     expect(testStructure).toEqual(jasmine.any(ContentTypeUpdateStruct));
                 });
 
-                it("newFieldDefinitionCreateStruct", function(){
+                it("newFieldDefinitionCreateStruct", function (){
 
                     testStructure = contentTypeService.newFieldDefinitionCreateStruct(
                         testContentTypeIdentifier,
@@ -690,7 +690,7 @@ define(function (require) {
                     expect(testStructure.body.FieldDefinitionCreate.names.value).toEqual(testArray);
                 });
 
-                it("newFieldDefinitionUpdateStruct", function(){
+                it("newFieldDefinitionUpdateStruct", function (){
 
                     testStructure = contentTypeService.newFieldDefinitionUpdateStruct();
 
@@ -751,7 +751,7 @@ define(function (require) {
 
             });
 
-            describe("dealing with faulty inner calls and performing", function(){
+            describe("dealing with faulty inner calls and performing", function (){
 
                 beforeEach(function (){
                     discoveryService = new DiscoveryService(

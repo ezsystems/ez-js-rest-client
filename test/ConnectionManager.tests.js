@@ -42,7 +42,7 @@ define(function (require) {
 
             mockConnection = jasmine.createSpyObj('mockConnection', ['execute']);
             mockConnectionFactory = {
-                createConnection : function(){
+                createConnection : function (){
                     return mockConnection;
                 }
             };
@@ -66,7 +66,7 @@ define(function (require) {
                 );
             });
 
-            it("request", function(){
+            it("request", function (){
 
                 connectionManager.logRequests = testFalse;
 
@@ -98,7 +98,7 @@ define(function (require) {
                 });
             });
 
-            it("request (with calls logging and minimum arguments set)", function(){
+            it("request (with calls logging and minimum arguments set)", function (){
 
                 connectionManager.logRequests = testTrue;
 
@@ -128,7 +128,7 @@ define(function (require) {
                 });
             });
 
-            it("request (with 1 optional argument)", function(){
+            it("request (with 1 optional argument)", function (){
 
                 connectionManager.request(
                     "GET",
@@ -153,7 +153,7 @@ define(function (require) {
                 });
             });
 
-            it("request (with 2 optional arguments)", function(){
+            it("request (with 2 optional arguments)", function (){
 
                 connectionManager.request(
                     "GET",
@@ -179,7 +179,7 @@ define(function (require) {
                 });
             });
 
-            it("request (with 3 optional arguments)", function(){
+            it("request (with 3 optional arguments)", function (){
 
                 connectionManager.request(
                     "GET",
@@ -206,7 +206,7 @@ define(function (require) {
                 });
             });
 
-            it("request (and stores request in queue while authentication is still in progress)", function(){
+            it("request (and stores request in queue while authentication is still in progress)", function (){
 
                 connectionManager._authInProgress = true;
                 connectionManager._requestsQueue.push("dummyRequest");
@@ -225,7 +225,7 @@ define(function (require) {
                 expect(connectionManager._requestsQueue.length).toEqual(2);
             });
 
-            it("notAuthorizedRequest", function(){
+            it("notAuthorizedRequest", function (){
 
                 connectionManager.logRequests = testFalse;
 
@@ -246,7 +246,7 @@ define(function (require) {
                 );
             });
 
-            it("notAuthorizedRequest (with calls logging and minimum arguments set)", function(){
+            it("notAuthorizedRequest (with calls logging and minimum arguments set)", function (){
 
                 connectionManager.logRequests = testTrue;
 
@@ -266,7 +266,7 @@ define(function (require) {
                 expect(console.dir).toHaveBeenCalledWith(jasmine.any(Request));
             });
 
-            it("notAuthorizedRequest (with 1 optional argument)", function(){
+            it("notAuthorizedRequest (with 1 optional argument)", function (){
 
                 connectionManager.notAuthorizedRequest(
                     "GET",
@@ -288,7 +288,7 @@ define(function (require) {
                 });
             });
 
-            it("notAuthorizedRequest (with 2 optional arguments)", function(){
+            it("notAuthorizedRequest (with 2 optional arguments)", function (){
 
                 connectionManager.notAuthorizedRequest(
                     "GET",
@@ -311,7 +311,7 @@ define(function (require) {
                 });
             });
 
-            it("notAuthorizedRequest (with 3 optional arguments)", function(){
+            it("notAuthorizedRequest (with 3 optional arguments)", function (){
 
                 connectionManager.notAuthorizedRequest(
                     "GET",
@@ -335,7 +335,7 @@ define(function (require) {
                 });
             });
 
-            it("logOut", function(){
+            it("logOut", function (){
 
                 connectionManager.logOut(mockCallback);
 
@@ -349,7 +349,7 @@ define(function (require) {
     // ******************************
         describe("is returning errors correctly, when authentication fails, while performing request and", function () {
 
-            it("ensuring authentication", function(){
+            it("ensuring authentication", function (){
 
                 mockFaultyAuthenticationAgent = {
                     ensureAuthentication : function(done){
@@ -382,7 +382,7 @@ define(function (require) {
                 );
             });
 
-            it("authenticating request", function(){
+            it("authenticating request", function (){
 
                 mockFaultyAuthenticationAgent = {
                     ensureAuthentication : function(done){

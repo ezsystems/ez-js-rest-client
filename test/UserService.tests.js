@@ -1052,7 +1052,7 @@ define(function (require) {
             // ******************************
             describe("structures creation", function () {
 
-                it("newSessionCreateStruct", function(){
+                it("newSessionCreateStruct", function (){
 
                     testStructure = userService.newSessionCreateStruct(
                         testLogin,
@@ -1064,7 +1064,7 @@ define(function (require) {
                     expect(testStructure.body.SessionInput.password).toEqual(testPass);
                 });
 
-                it("newUserGroupCreateStruct", function(){
+                it("newUserGroupCreateStruct", function (){
 
                     testStructure = userService.newUserGroupCreateStruct(
                         testLanguage,
@@ -1076,14 +1076,14 @@ define(function (require) {
                     expect(testStructure.body.UserGroupCreate.fields.field).toEqual(testArray);
                 });
 
-                it("newUserGroupUpdateStruct", function(){
+                it("newUserGroupUpdateStruct", function (){
 
                     testStructure = userService.newUserGroupUpdateStruct();
 
                     expect(testStructure).toEqual(jasmine.any(UserGroupUpdateStruct));
                 });
 
-                it("newUserCreateStruct", function(){
+                it("newUserCreateStruct", function (){
 
                     testStructure = userService.newUserCreateStruct(
                         testLanguage,
@@ -1101,14 +1101,14 @@ define(function (require) {
                     expect(testStructure.body.UserCreate.fields.field).toEqual(testArray);
                 });
 
-                it("newUserUpdateStruct", function(){
+                it("newUserUpdateStruct", function (){
 
                     testStructure = userService.newUserUpdateStruct();
 
                     expect(testStructure).toEqual(jasmine.any(UserUpdateStruct));
                 });
 
-                it("newRoleInputStruct", function(){
+                it("newRoleInputStruct", function (){
 
                     testStructure = userService.newRoleInputStruct(
                         testRoleIdentifier
@@ -1118,7 +1118,7 @@ define(function (require) {
                     expect(testStructure.body.RoleInput.identifier).toEqual(testRoleIdentifier);
                 });
 
-                it("newRoleAssignInputStruct", function(){
+                it("newRoleAssignInputStruct", function (){
 
                     testStructure = userService.newRoleAssignInputStruct(
                         testRoleId,
@@ -1130,7 +1130,7 @@ define(function (require) {
                     expect(testStructure.body.RoleAssignInput.limitation).toEqual(testLimitation);
                 });
 
-                it("newPolicyCreateStruct", function(){
+                it("newPolicyCreateStruct", function (){
 
                     testStructure = userService.newPolicyCreateStruct(
                         testModule,
@@ -1144,7 +1144,7 @@ define(function (require) {
                     expect(testStructure.body.PolicyCreate.limitations.limitation).toEqual(testLimitation);
                 });
 
-                it("newPolicyUpdateStruct", function(){
+                it("newPolicyUpdateStruct", function (){
 
                     testStructure = userService.newPolicyUpdateStruct(
                         testLimitation
@@ -1185,9 +1185,9 @@ define(function (require) {
                     );
                 };
 
-            describe("dealing with faulty Discovery Service and performing", function() {
+            describe("dealing with faulty Discovery Service and performing", function () {
 
-                beforeEach(function(){
+                beforeEach(function (){
 
                     mockFaultyDiscoveryService = {
                         getInfoObject : function(name, callback){
@@ -1274,7 +1274,7 @@ define(function (require) {
 
             });
 
-            describe("dealing with faulty Connection Manager and performing", function() {
+            describe("dealing with faulty Connection Manager and performing", function () {
 
                 it("createSession", function () {
                     var mockFaultyConnectionManager = {
@@ -1313,7 +1313,7 @@ define(function (require) {
                 });
             });
 
-            describe("dealing with faulty inner calls and performing", function(){
+            describe("dealing with faulty inner calls and performing", function (){
 
                 beforeEach(function (){
                     userService = new UserService(
