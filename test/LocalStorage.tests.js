@@ -1,6 +1,6 @@
 /* global define, describe, it, expect, beforeEach, afterEach */
-define(["storages/SessionStorage"], function (SessionStorage) {
-    describe("SessionStorage", function() {
+define(["storages/LocalStorage"], function (LocalStorage) {
+    describe("LocalStorage", function() {
         var originalStorage,
             storageData;
 
@@ -8,18 +8,18 @@ define(["storages/SessionStorage"], function (SessionStorage) {
             storageData = {};
 
             // Reinitialize every time, so that changes during tests are reset
-            originalStorage = window.sessionStorage;
-            window.sessionStorage = {};
-            window.sessionStorage.getItem = function(key) {
+            originalStorage = window.localStorage;
+            window.localStorage = {};
+            window.localStorage.getItem = function(key) {
                 if (storageData[key] === undefined) {
                     return null;
                 }
                 return storageData[key];
             };
-            window.sessionStorage.setItem = function(key, value) {
+            window.localStorage.setItem = function(key, value) {
                 storageData[key] = value.toString();
             };
-            window.sessionStorage.removeItem = function(key) {
+            window.localStorage.removeItem = function(key) {
                 if (storageData[key] === undefined) {
                     return;
                 }
@@ -28,25 +28,25 @@ define(["storages/SessionStorage"], function (SessionStorage) {
         });
 
         afterEach(function() {
-            window.sessionStorage = originalStorage;
+            window.localStorage = originalStorage;
         });
 
         describe("Compatibility", function() {
             it("detects positive compatibility", function() {
-                expect(SessionStorage.isCompatible()).toBeTruthy();
+                expect(LocalStorage.isCompatible()).toBeTruthy();
             });
 
-            it("detects negative compatibility if sessionStorage is missing", function() {
-                // sessionStorage itself can not be taken away unfortunately
-                window.sessionStorage.setItem = null;
-                expect(SessionStorage.isCompatible()).toBeFalsy();
+            it("detects negative compatibility if localStorage is missing", function() {
+                // localStorage itself can not be taken away unfortunately
+                window.localStorage.setItem = null;
+                expect(LocalStorage.isCompatible()).toBeFalsy();
             });
 
-            it("detects negative compatibility if sessionStorage exists, but does not work", function() {
-                window.sessionStorage.setItem = function() {
+            it("detects negative compatibility if localStorage exists, but does not work", function() {
+                window.localStorage.setItem = function() {
                     throw new Error("I do not work!");
                 };
-                expect(SessionStorage.isCompatible()).toBeFalsy();
+                expect(LocalStorage.isCompatible()).toBeFalsy();
             });
         });
 
@@ -54,7 +54,7 @@ define(["storages/SessionStorage"], function (SessionStorage) {
             var storage;
 
             beforeEach(function() {
-                storage = new SessionStorage();
+                storage = new LocalStorage();
             });
 
             it("should store data under the given key", function() {
@@ -110,7 +110,7 @@ define(["storages/SessionStorage"], function (SessionStorage) {
             }
 
             beforeEach(function() {
-                storage = new SessionStorage();
+                storage = new LocalStorage();
             });
 
             it("should store and retrieve strings", function() {

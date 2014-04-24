@@ -1,5 +1,5 @@
 /* global define */
-define(["structures/CAPIError", "storages/SessionStorage"], function (CAPIError, SessionStorage) {
+define(["structures/CAPIError", "storages/LocalStorage"], function (CAPIError, LocalStorage) {
     "use strict";
 
     /**
@@ -12,7 +12,7 @@ define(["structures/CAPIError", "storages/SessionStorage"], function (CAPIError,
      * @param credentials {Object} object literal containg credentials for the REST service access
      * @param credentials.login {String} user login
      * @param credentials.password {String} user password
-     * @param storage {StorageAbstraction?} storage to be used. By default a SessionStorage will be utilized
+     * @param storage {StorageAbstraction?} storage to be used. By default a LocalStorage will be utilized
      */
     var SessionAuthAgent = function (credentials, storage) {
         // is initiated inside CAPI constructor by using setCAPI() method
@@ -22,9 +22,9 @@ define(["structures/CAPIError", "storages/SessionStorage"], function (CAPIError,
         this._password = credentials.password;
 
 
-        // StorageAbstraction is optional. Use a SessionStorage by default if nothing else
+        // StorageAbstraction is optional. Use a LocalStorage by default if nothing else
         // is provided
-        this._storage = storage || new SessionStorage();
+        this._storage = storage || new LocalStorage();
     };
 
     /**

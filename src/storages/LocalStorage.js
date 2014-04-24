@@ -1,22 +1,22 @@
 /* global define */
 define(["structures/CAPIError"], function(CAPIError) {
     /**
-     * Implementation of the storage abstraction utilizing a window.sessionStorage
+     * Implementation of the storage abstraction utilizing a window.localStorage
      *
-     * If the sessionStorage is not available an error is thrown during construction
+     * If the localStorage is not available an error is thrown during construction
      *
      * Usability of this storage can be checked using the static isCompatible method.
      *
      * In addition of providing compatibility checking stored data will automatically be converted between
      * object and string representation to allow the storage of arbitrary datastructures
      *
-     * @class SessionStorage
+     * @class LocalStorage
      * @implements {StorageAbstraction}
      * @constructor
      */
-    var SessionStorage = function() {
-        if (!SessionStorage.isCompatible()) {
-            throw new CAPIError("SessionStorage abstraction can not be used: window.sessionStorage is not available.");
+    var LocalStorage = function() {
+        if (!LocalStorage.isCompatible()) {
+            throw new CAPIError("LocalStorage abstraction can not be used: window.localStorage is not available.");
         }
 
         /**
@@ -26,7 +26,7 @@ define(["structures/CAPIError"], function(CAPIError) {
          * @type {Storage}
          * @private
          */
-        this._storage = window.sessionStorage;
+        this._storage = window.localStorage;
     };
 
     /**
@@ -36,7 +36,7 @@ define(["structures/CAPIError"], function(CAPIError) {
      * @param {string} key
      * @return {*}
      */
-    SessionStorage.prototype.getItem = function(key) {
+    LocalStorage.prototype.getItem = function(key) {
         return JSON.parse(this._storage.getItem(key));
     };
 
@@ -47,7 +47,7 @@ define(["structures/CAPIError"], function(CAPIError) {
      * @param {string} key
      * @param {*} value
      */
-    SessionStorage.prototype.setItem = function(key, value) {
+    LocalStorage.prototype.setItem = function(key, value) {
         this._storage.setItem(key, JSON.stringify(value));
     };
 
@@ -57,7 +57,7 @@ define(["structures/CAPIError"], function(CAPIError) {
      * @method removeItem
      * @param {string} key
      */
-    SessionStorage.prototype.removeItem = function(key) {
+    LocalStorage.prototype.removeItem = function(key) {
         this._storage.removeItem(key);
     };
 
@@ -68,24 +68,24 @@ define(["structures/CAPIError"], function(CAPIError) {
      * @static
      * @return {boolean}
      */
-    SessionStorage.isCompatible = function() {
+    LocalStorage.isCompatible = function() {
         var t = "__featuredetection__";
 
-        if (!window.sessionStorage || !window.sessionStorage.setItem) {
+        if (!window.localStorage || !window.localStorage.setItem) {
             return false;
         }
 
-        // Unfortunately some browsers have a sessionStorage object but don't have a working sessionStorage ;)
+        // Unfortunately some browsers have a localStorage object but don't have a working localStorage ;)
         try {
-            window.sessionStorage.setItem(t, t);
-            window.sessionStorage.removeItem(t);
-            // sessionStorage is available everything is fine
+            window.localStorage.setItem(t, t);
+            window.localStorage.removeItem(t);
+            // localStorage is available everything is fine
             return true;
         } catch(e) {
-            // sessionStorage does not work
+            // localStorage does not work
             return false;
         }
     };
 
-    return SessionStorage;
+    return LocalStorage;
 });
