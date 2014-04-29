@@ -48,6 +48,13 @@ define(["storages/LocalStorage"], function (LocalStorage) {
                 };
                 expect(LocalStorage.isCompatible()).toBeFalsy();
             });
+
+            it("throws an error while instantiating LocalStorage if not compatible", function () {
+                window.localStorage.setItem = null;
+                expect(function () {
+                    new LocalStorage();
+                }).toThrow();
+            });
         });
 
         describe("Storage API", function () {
