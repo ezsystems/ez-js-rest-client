@@ -4,6 +4,7 @@ define(function (require) {
     // Declaring dependencies
     var UserService = require("services/UserService"),
         CAPIError = require("structures/CAPIError"),
+        parseUriTemplate = require("utils/uriparse"),
 
         SessionCreateStruct = require('structures/SessionCreateStruct'),
         UserCreateStruct = require('structures/UserCreateStruct'),
@@ -45,6 +46,12 @@ define(function (require) {
             testPolicyId = "/api/ezp/v2/user/roles/7/policies/1",
             testPolicies = "/api/ezp/v2/user/policies",
             testSessionId = "/api/ezp/v2/user/sessions/o7i8r1sapfc9r84ae53bgq8gp4",
+            sessionId = "o7i8r1sapfc9r84ae53bgq8gp4",
+            testRefreshSession = "/api/ezp/v2/user/sessions/{sessionId}/refresh",
+            refreshSessionInfo = {
+                "_href": testRefreshSession,
+                "_media-type": "application/vnd.ez.api.Session+json"
+            },
             testRootId = "/api/ezp/v2/",
             testLogin = "login",
             testPass = "pass",
@@ -62,7 +69,7 @@ define(function (require) {
 
         beforeEach(function (){
 
-            mockConnectionManager = jasmine.createSpyObj('mockConnectionManager', ['request', 'notAuthorizedRequest', 'logOut']);
+            mockConnectionManager = jasmine.createSpyObj('mockConnectionManager', ['request', 'notAuthorizedRequest']);
             mockCallback = jasmine.createSpy('mockCallback');
 
         });
@@ -180,7 +187,9 @@ define(function (require) {
                                 }
                             );
                         }
-
+                        if ( name === "refreshSession" ) {
+                            callback(false, refreshSessionInfo);
+                        }
                     }
                 };
 
@@ -1040,11 +1049,19 @@ define(function (require) {
                 );
             });
 
-            it("logOut", function () {
-                userService.logOut(mockCallback);
+            it("refreshSession", function () {
+                userService.refreshSession(sessionId, mockCallback);
 
-                expect(mockConnectionManager.logOut).toHaveBeenCalled();
-                expect(mockConnectionManager.logOut.mostRecentCall.args[0]).toBe(mockCallback); // callback
+                expect(mockDiscoveryService.getInfoObject).toHaveBeenCalledWith(
+                    "refreshSession", jasmine.any(Function)
+                );
+                expect(mockConnectionManager.request).toHaveBeenCalledWith(
+                    "POST",
+                    parseUriTemplate(testRefreshSession, {sessionId: sessionId}),
+                    "",
+                    {"Accept": refreshSessionInfo["_media-type"]},
+                    mockCallback
+                );
             });
 
             // ******************************
@@ -1270,6 +1287,15 @@ define(function (require) {
 
                     expect(mockCallback.mostRecentCall.args[0]).toEqual(jasmine.any(CAPIError)); //error
                     expect(mockCallback.mostRecentCall.args[1]).toEqual(false); //response
+                });
+
+                it("refreshSession", function () {
+                    userService.refreshSession(sessionId, mockCallback);
+
+                    expect(mockFaultyDiscoveryService.getInfoObject).toHaveBeenCalledWith(
+                        "refreshSession", jasmine.any(Function)
+                    );
+                    expect(mockCallback).toHaveBeenCalledWith(jasmine.any(CAPIError), false);
                 });
 
             });

@@ -64,6 +64,44 @@ define(['authAgents/SessionAuthAgent', 'authAgents/HttpBasicAuthAgent', 'Connect
         discoveryService = new DiscoveryService(mergedOptions.rootPath, connectionManager);
 
         /**
+         * Checks that the CAPI instance is logged in
+         *
+         * @method isLoggedIn
+         * @param {Function} callback
+         */
+        this.isLoggedIn = function (callback) {
+            authenticationAgent.isLoggedIn(callback);
+        };
+
+        /**
+         * Logs in the user
+         *
+         * @method logIn
+         * @param {Object} [credentials]
+         * @param {String} credentials.login
+         * @param {String} credentials.password
+         * @param {Function} callback
+         */
+        this.logIn = function (credentials, callback) {
+            if ( callback ) {
+                authenticationAgent.setCredentials(credentials);
+            } else {
+                callback = credentials;
+            }
+            authenticationAgent.logIn(callback);
+        };
+
+        /**
+         * Logs out the current user.
+         *
+         * @method logOut
+         * @param {Function} callback
+         */
+        this.logOut = function (callback) {
+            authenticationAgent.logOut(callback);
+        };
+
+        /**
          * Get instance of Content Service. Use ContentService to retrieve information and execute operations related to Content.
          *
          * @method getContentService

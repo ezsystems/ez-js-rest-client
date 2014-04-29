@@ -1,10 +1,12 @@
 /* global define */
 define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'structures/UserUpdateStruct',
         'structures/UserGroupCreateStruct', 'structures/UserGroupUpdateStruct', 'structures/PolicyCreateStruct',
-        'structures/PolicyUpdateStruct', 'structures/RoleInputStruct', 'structures/RoleAssignInputStruct'],
+        'structures/PolicyUpdateStruct', 'structures/RoleInputStruct', 'structures/RoleAssignInputStruct',
+        "utils/uriparse"],
     function (SessionCreateStruct, UserCreateStruct, UserUpdateStruct,
               UserGroupCreateStruct, UserGroupUpdateStruct, PolicyCreateStruct,
-              PolicyUpdateStruct, RoleInputStruct, RoleAssignInputStruct) {
+              PolicyUpdateStruct, RoleInputStruct, RoleAssignInputStruct,
+              parseUriTemplate) {
     "use strict";
 
     /**
@@ -1137,7 +1139,10 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
 // ******************************
 
     /**
-     * Create a session (login a user)
+     * Creates a session. This method **only** creates a session, for a complete
+     * and correct authentication from CAPI point of view, you need to use
+     * {{#crossLink "CAPI/logIn:method"}}the `logIn` method of the CAPI
+     * object{{/crossLink}}
      *
      * @method createSession
      * @param sessionCreateStruct {SessionCreateStruct} object describing new session to be created (see "newSessionCreateStruct")
@@ -1169,7 +1174,39 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
     };
 
     /**
-     * Delete the target session (without actual client logout)
+     * Calls the refresh session resource to check whether the current session
+     * is valid. For a complete and correct *is logged in* check, you need to
+     * use {{#crossLink "CAPI/isLoggedIn:method"}}CAPI.isLoggedIn{{/crossLink}}
+     *
+     * @method refreshSession
+     * @param {String} sessionId the session identifier (e.g. "o7i8r1sapfc9r84ae53bgq8gp4")
+     * @param {Function} callback
+     */
+    UserService.prototype.refreshSession = function (sessionId, callback) {
+        var that = this;
+
+        this._discoveryService.getInfoObject(
+            "refreshSession",
+            function (error, refreshSession) {
+                if (error) {
+                    callback(error, false);
+                    return;
+                }
+                that._connectionManager.request(
+                    "POST",
+                    parseUriTemplate(refreshSession._href, {sessionId: sessionId}),
+                    "",
+                    {"Accept": refreshSession["_media-type"]},
+                    callback
+                );
+            }
+        );
+    };
+
+    /**
+     * Delete the target session. For a complete and correct de-authentifcation,
+     * you need to use {{#crossLink "CAPI/logOut:method"}}the `logOut` method of
+     * the CAPI object{{/crossLink}}
      *
      * @method deleteSession
      * @param sessionId {String} target session identifier (e.g. "/api/ezp/v2/user/sessions/o7i8r1sapfc9r84ae53bgq8gp4")
@@ -1186,19 +1223,5 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
         );
     };
 
-    /**
-     * Actual client logout (based on deleteSession)
-     * Implemented by ConnectionManager. Depends on current system configuration.
-     * Kills currently active session and resets storage (e.g. LocalStorage) params (sessionId, CSRFToken)
-     *
-     * @method logOut
-     * @param callback {Function} callback executed after performing the request (see
-     *  {{#crossLink "UserService"}}Note on the callbacks usage{{/crossLink}} for more info)
-     */
-    UserService.prototype.logOut = function (callback) {
-        this._connectionManager.logOut(callback);
-    };
-
     return UserService;
-
 });
