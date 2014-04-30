@@ -139,36 +139,6 @@ define(function (require) {
                 expect(mockCallback.mostRecentCall.args[1]).toEqual(testTrashObject); //response
             });
 
-            it("getUrl", function () {
-
-                spyOn(discoveryService, '_getObjectFromCache').andCallThrough();
-
-                discoveryService.getUrl(
-                    "trash",
-                    mockCallback
-                );
-
-                expect(discoveryService._getObjectFromCache).toHaveBeenCalled();
-                expect(mockCallback).toHaveBeenCalled();
-                expect(mockCallback.mostRecentCall.args[0]).toEqual(false); //error
-                expect(mockCallback.mostRecentCall.args[1]).toEqual(testTrashObject._href); //response
-            });
-
-            it("getMediaType", function () {
-
-                spyOn(discoveryService, '_getObjectFromCache').andCallThrough();
-
-                discoveryService.getMediaType(
-                    "trash",
-                    mockCallback
-                );
-
-                expect(discoveryService._getObjectFromCache).toHaveBeenCalled();
-                expect(mockCallback).toHaveBeenCalled();
-                expect(mockCallback.mostRecentCall.args[0]).toEqual(false); //error
-                expect(mockCallback.mostRecentCall.args[1]).toEqual(testTrashObject["_media-type"]); //response
-            });
-
             it("getInfoObject", function () {
 
                 spyOn(discoveryService, '_getObjectFromCache').andCallThrough();
@@ -273,36 +243,6 @@ define(function (require) {
                     );
 
                     expect(discoveryService._discoverRoot).toHaveBeenCalled();
-                    expect(mockCallback).toHaveBeenCalled();
-                    expect(mockCallback.mostRecentCall.args[0]).toEqual(jasmine.any(CAPIError)); //error
-                    expect(mockCallback.mostRecentCall.args[1]).toEqual(false); //response
-                });
-
-                it("getUrl", function () {
-
-                    spyOn(discoveryService, '_getObjectFromCache').andCallThrough();
-
-                    discoveryService.getUrl(
-                        "magic",
-                        mockCallback
-                    );
-
-                    expect(discoveryService._getObjectFromCache).toHaveBeenCalled();
-                    expect(mockCallback).toHaveBeenCalled();
-                    expect(mockCallback.mostRecentCall.args[0]).toEqual(jasmine.any(CAPIError)); //error
-                    expect(mockCallback.mostRecentCall.args[1]).toEqual(false); //response
-                });
-
-                it("getMediaType", function () {
-
-                    spyOn(discoveryService, '_getObjectFromCache').andCallThrough();
-
-                    discoveryService.getMediaType(
-                        "magic",
-                        mockCallback
-                    );
-
-                    expect(discoveryService._getObjectFromCache).toHaveBeenCalled();
                     expect(mockCallback).toHaveBeenCalled();
                     expect(mockCallback.mostRecentCall.args[0]).toEqual(jasmine.any(CAPIError)); //error
                     expect(mockCallback.mostRecentCall.args[1]).toEqual(false); //response

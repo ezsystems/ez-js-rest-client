@@ -18,52 +18,6 @@ define(["structures/CAPIError"], function (CAPIError) {
     };
 
     /**
-     * Try to get url of the target object by given 'name'
-     *
-     * @method getUrl
-     * @param name {String} name of the target object (e.g. "Trash")
-     * @param callback {Function} callback executed after performing the request (see "_discoverRoot" call for more info)
-     * @param callback.error {mixed} false or CAPIError object if an error occurred
-     * @param callback.response {mixed} the url of the target object if it was found, false otherwise.
-     */
-    DiscoveryService.prototype.getUrl = function (name, callback) {
-        this._getObjectFromCache(
-            name,
-            function (error, cachedObject) {
-                if (error) {
-                    callback(error, false);
-                    return;
-                }
-
-                callback(false, cachedObject._href);
-            }
-        );
-    };
-
-    /**
-     * Try to get media-type of the target object by given 'name'
-     *
-     * @method getMediaType
-     * @param name {String} name of the target object (e.g. "Trash")
-     * @param callback {Function} callback executed after performing the request (see "_discoverRoot" call for more info)
-     * @param callback.error {mixed} false or CAPIError object if an error occurred
-     * @param callback.response {mixed} the media-type of the target object if it was found, false otherwise.
-     */
-    DiscoveryService.prototype.getMediaType = function (name, callback) {
-        this._getObjectFromCache(
-            name,
-            function (error, cachedObject) {
-                if (error) {
-                    callback(error, false);
-                    return;
-                }
-
-                callback(false, cachedObject["_media-type"]);
-            }
-        );
-    };
-
-    /**
      * Try to get the whole target object by given 'name'
      *
      * @method getInfoObject
