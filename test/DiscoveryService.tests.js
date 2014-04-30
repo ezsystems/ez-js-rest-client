@@ -1,121 +1,97 @@
 /* global define, describe, it, expect, beforeEach, jasmine, spyOn */
 define(function (require) {
-
-    // Declaring dependencies
     var DiscoveryService = require("services/DiscoveryService"),
         CAPIError = require("structures/CAPIError");
 
     describe("Discovery Service", function () {
-
-        var mockConnectionManager,
-            mockFaultyConnectionManager,
-            mockCallback,
-            mockRootResponse,
+        var mockCallback,
             discoveryService,
-            testRootPath = "/api/ezp/v2/",
-            testTrashObject = {
-                "_media-type" : "application/vnd.ez.api.Trash+json",
-                "_href" : "/api/ezp/v2/content/trash"
-            },
-            testRootObject = {
-                "Root": {
-                    "trash": testTrashObject
-                }
-            };
+            testRootPath = "/api/ezp/v2/";
 
         beforeEach(function () {
-
-            mockConnectionManager = {
-                request : function (method, url, body, headers, callback) {
-                    mockRootResponse = {};
-                    mockRootResponse.document = testRootObject;
-                    callback(false, mockRootResponse);
-                }
-            };
-
             mockCallback = jasmine.createSpy('mockCallback');
         });
 
-
-    // ******************************
-    // Cases without errors
-    // ******************************
-        describe("is calling objects with right arguments and saves info correctly while running", function () {
+        describe("getInfoObject", function () {
+            var mockConnectionManager,
+                testTrashObject = {
+                    "_media-type" : "application/vnd.ez.api.Trash+json",
+                    "_href" : "/api/ezp/v2/content/trash"
+                },
+                testRootObject = {
+                    "Root": {
+                        "trash": testTrashObject
+                    }
+                };
 
             beforeEach(function () {
+                mockConnectionManager = {
+                    request : function (method, url, body, headers, callback) {
+                        callback(false, {document: testRootObject});
+                    }
+                };
+
                 discoveryService = new DiscoveryService(
                     testRootPath,
                     mockConnectionManager
                 );
             });
 
-            it("getInfoObject", function () {
-                discoveryService.getInfoObject(
-                    "trash",
-                    mockCallback
+            it("should retrieve the info by requesting the root", function () {
+                spyOn(mockConnectionManager, "request").andCallThrough();
+                discoveryService.getInfoObject("trash", mockCallback);
+
+                expect(mockConnectionManager.request).toHaveBeenCalledWith(
+                    "GET", testRootPath, "",
+                    {'Accept': "application/vnd.ez.api.Root+json"},
+                    jasmine.any(Function)
                 );
 
                 expect(mockCallback).toHaveBeenCalledWith(false, testTrashObject);
             });
 
+            it("should request the root only once", function () {
+                discoveryService.getInfoObject("trash", mockCallback);
+
+                spyOn(mockConnectionManager, "request").andCallThrough();
+                discoveryService.getInfoObject("trash", mockCallback);
+
+                expect(mockCallback).toHaveBeenCalledWith(false, testTrashObject);
+                expect(mockConnectionManager.request).not.toHaveBeenCalled();
+            });
+
+
+            it("should check if the value exists", function () {
+                discoveryService.getInfoObject("doesnotexist", mockCallback);
+
+                expect(mockCallback).toHaveBeenCalledWith(
+                    jasmine.any(CAPIError), false
+                );
+            });
         });
 
-    // ******************************
-    // Cases with errors
-    // ******************************
-        describe("is returning errors correctly, while", function () {
-            var errorResponse = {'status': 418};
-
-            it("running getInfoObject call and Connection Manager fails to connect", function () {
+        describe("getInfoObject error handling", function () {
+            it("should handle root discovery error", function () {
+                var errorResponse = {'status': 418},
+                    mockFaultyConnectionManager;
 
                 mockFaultyConnectionManager = {
                     request : function (method, url, body, headers, callback) {
                         callback(new CAPIError(""), errorResponse);
                     }
                 };
-                spyOn(mockFaultyConnectionManager, 'request').andCallThrough();
 
                 discoveryService = new DiscoveryService(
                     testRootPath,
                     mockFaultyConnectionManager
                 );
 
-                discoveryService.getInfoObject(
-                    "somename",
-                    mockCallback
-                );
-
-                expect(mockFaultyConnectionManager.request).toHaveBeenCalledWith(
-                    "GET", testRootPath, "",
-                    {'Accept': "application/vnd.ez.api.Root+json"},
-                    jasmine.any(Function)
-                );
+                discoveryService.getInfoObject("somename", mockCallback);
 
                 expect(mockCallback).toHaveBeenCalledWith(
                     jasmine.any(CAPIError),
                     errorResponse
                 );
-            });
-
-            describe("trying to access non-existent object (sorry no magic in stock today, only trash :)", function () {
-
-                beforeEach(function () {
-                    discoveryService = new DiscoveryService(
-                        testRootPath,
-                        mockConnectionManager
-                    );
-                });
-
-                it("getInfoObject", function () {
-                    discoveryService.getInfoObject(
-                        "magic",
-                        mockCallback
-                    );
-
-                    expect(mockCallback).toHaveBeenCalledWith(
-                        jasmine.any(CAPIError), false
-                    );
-                });
             });
         });
     });
