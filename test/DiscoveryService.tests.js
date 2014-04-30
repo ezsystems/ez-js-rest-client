@@ -49,109 +49,13 @@ define(function (require) {
                 );
             });
 
-            it("discoverRoot", function () {
-
-                spyOn(mockConnectionManager, 'request').andCallThrough();
-
-                discoveryService._discoverRoot(
-                    testRootPath,
-                    mockCallback
-                );
-
-                expect(mockConnectionManager.request).toHaveBeenCalled();
-                expect(mockConnectionManager.request.mostRecentCall.args[0]).toEqual("GET"); //method
-                expect(mockConnectionManager.request.mostRecentCall.args[1]).toEqual(testRootPath); //url
-                expect(mockConnectionManager.request.mostRecentCall.args[2]).toEqual(""); // body
-                expect(mockConnectionManager.request.mostRecentCall.args[3].Accept).toEqual("application/vnd.ez.api.Root+json"); // headers
-                expect(mockConnectionManager.request.mostRecentCall.args[4]).toEqual(jasmine.any(Function)); // callback
-
-                expect(mockCallback).toHaveBeenCalled();
-                expect(mockCallback.mostRecentCall.args[0]).toEqual(false); //errors
-                expect(mockCallback.mostRecentCall.args[1]).toEqual(true); //response
-
-                // Second call to test correct caching
-                mockConnectionManager.request.reset();
-                discoveryService._discoverRoot(
-                    testRootPath,
-                    mockCallback
-                );
-
-                expect(mockConnectionManager.request).not.toHaveBeenCalled();
-
-                expect(mockCallback).toHaveBeenCalled();
-                expect(mockCallback.mostRecentCall.args[0]).toEqual(false); //errors
-                expect(mockCallback.mostRecentCall.args[1]).toEqual(true); //response
-
-            });
-
-            it("copyToCache", function (){
-                var TestObject = function () {
-                    this.trash = testTrashObject;
-                };
-
-                TestObject.prototype.dummyProperty = "prototype dummy property";
-
-                discoveryService._copyToCache(new TestObject());
-
-                expect(discoveryService._cacheObject.trash).toEqual(testTrashObject);
-                expect(discoveryService._cacheObject.dummyProperty).toBeUndefined();
-            });
-
-            it("copyToCache with faulty object", function () {
-
-                discoveryService._copyToCache({"trash": null});
-
-                expect(discoveryService._cacheObject.trash).toBeUndefined();
-            });
-
-
-
-
-            it("getObjectFromCache", function () {
-
-                spyOn(discoveryService, '_discoverRoot').andCallThrough();
-
-                discoveryService._getObjectFromCache(
-                    "trash",
-                    mockCallback
-                );
-
-                expect(discoveryService._discoverRoot).toHaveBeenCalled();
-                expect(mockCallback).toHaveBeenCalled();
-                expect(mockCallback.mostRecentCall.args[0]).toEqual(false); //error
-                expect(mockCallback.mostRecentCall.args[1]).toEqual(testTrashObject); //response
-            });
-
-            it("getObjectFromCache when object is cached but not in Root ", function () {
-
-                spyOn(discoveryService, '_discoverRoot').andCallThrough();
-
-                discoveryService._cacheObject.trashNotInRoot = testTrashObject;
-
-                discoveryService._getObjectFromCache(
-                    "trashNotInRoot",
-                    mockCallback
-                );
-
-                expect(discoveryService._discoverRoot).toHaveBeenCalled();
-                expect(mockCallback).toHaveBeenCalled();
-                expect(mockCallback.mostRecentCall.args[0]).toEqual(false); //error
-                expect(mockCallback.mostRecentCall.args[1]).toEqual(testTrashObject); //response
-            });
-
             it("getInfoObject", function () {
-
-                spyOn(discoveryService, '_getObjectFromCache').andCallThrough();
-
                 discoveryService.getInfoObject(
                     "trash",
                     mockCallback
                 );
 
-                expect(discoveryService._getObjectFromCache).toHaveBeenCalled();
-                expect(mockCallback).toHaveBeenCalled();
-                expect(mockCallback.mostRecentCall.args[0]).toEqual(false); //error
-                expect(mockCallback.mostRecentCall.args[1]).toEqual(testTrashObject); //response
+                expect(mockCallback).toHaveBeenCalledWith(false, testTrashObject);
             });
 
         });
@@ -181,12 +85,11 @@ define(function (require) {
                     mockCallback
                 );
 
-                expect(mockFaultyConnectionManager.request).toHaveBeenCalled();
-                expect(mockFaultyConnectionManager.request.mostRecentCall.args[0]).toEqual("GET"); //method
-                expect(mockFaultyConnectionManager.request.mostRecentCall.args[1]).toEqual(testRootPath); //url
-                expect(mockFaultyConnectionManager.request.mostRecentCall.args[2]).toEqual(""); // body
-                expect(mockFaultyConnectionManager.request.mostRecentCall.args[3].Accept).toEqual("application/vnd.ez.api.Root+json"); // headers
-                expect(mockFaultyConnectionManager.request.mostRecentCall.args[4]).toEqual(jasmine.any(Function)); // callback
+                expect(mockFaultyConnectionManager.request).toHaveBeenCalledWith(
+                    "GET", testRootPath, "",
+                    {'Accept': "application/vnd.ez.api.Root+json"},
+                    jasmine.any(Function)
+                );
 
                 expect(mockCallback).toHaveBeenCalledWith(
                     jasmine.any(CAPIError),
@@ -204,22 +107,16 @@ define(function (require) {
                 });
 
                 it("getInfoObject", function () {
-
-                    spyOn(discoveryService, '_getObjectFromCache').andCallThrough();
-
                     discoveryService.getInfoObject(
                         "magic",
                         mockCallback
                     );
 
-                    expect(discoveryService._getObjectFromCache).toHaveBeenCalled();
-                    expect(mockCallback).toHaveBeenCalled();
-                    expect(mockCallback.mostRecentCall.args[0]).toEqual(jasmine.any(CAPIError)); //error
-                    expect(mockCallback.mostRecentCall.args[1]).toEqual(false); //response
+                    expect(mockCallback).toHaveBeenCalledWith(
+                        jasmine.any(CAPIError), false
+                    );
                 });
             });
-
         });
     });
-
 });
