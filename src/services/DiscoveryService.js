@@ -29,13 +29,13 @@ define(["structures/CAPIError"], function (CAPIError) {
     DiscoveryService.prototype.getInfoObject = function (name, callback) {
         this._getObjectFromCache(
             name,
-            function (error, cachedObject) {
+            function (error, response) {
                 if (error) {
-                    callback(error, false);
+                    callback(error, response);
                     return;
                 }
 
-                callback(false, cachedObject);
+                callback(false, response);
             }
         );
     };
@@ -58,13 +58,13 @@ define(["structures/CAPIError"], function (CAPIError) {
                 rootPath,
                 "",
                 {"Accept": "application/vnd.ez.api.Root+json"},
-                function (error, rootJSON) {
+                function (error, response) {
                     if (error) {
-                        callback(error, false);
+                        callback(error, response);
                         return;
                     }
 
-                    that._copyToCache(rootJSON.document);
+                    that._copyToCache(response.document);
                     callback(false, true);
                 }
             );
@@ -104,9 +104,9 @@ define(["structures/CAPIError"], function (CAPIError) {
         // Discovering root, if not yet discovered
         // on discovery running the request for same 'name' again
         if (!this._cacheObject.Root) {
-            this._discoverRoot(this._rootPath, function (error, success) {
+            this._discoverRoot(this._rootPath, function (error, response) {
                 if (error) {
-                    callback(error, false);
+                    callback(error, response);
                     return;
                 }
                 that._getObjectFromCache(name, callback);

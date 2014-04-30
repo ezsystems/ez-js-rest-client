@@ -160,12 +160,13 @@ define(function (require) {
     // Cases with errors
     // ******************************
         describe("is returning errors correctly, while", function () {
+            var errorResponse = {'status': 418};
 
-            it("running discoverRoot call, and Connection Manager fails to connect", function () {
+            it("running getInfoObject call and Connection Manager fails to connect", function () {
 
                 mockFaultyConnectionManager = {
                     request : function (method, url, body, headers, callback) {
-                        callback(new CAPIError(""), false);
+                        callback(new CAPIError(""), errorResponse);
                     }
                 };
                 spyOn(mockFaultyConnectionManager, 'request').andCallThrough();
@@ -175,39 +176,7 @@ define(function (require) {
                     mockFaultyConnectionManager
                 );
 
-                discoveryService._discoverRoot(
-                    testRootPath,
-                    mockCallback
-                );
-
-                expect(mockFaultyConnectionManager.request).toHaveBeenCalled();
-                expect(mockFaultyConnectionManager.request.mostRecentCall.args[0]).toEqual("GET"); //method
-                expect(mockFaultyConnectionManager.request.mostRecentCall.args[1]).toEqual(testRootPath); //url
-                expect(mockFaultyConnectionManager.request.mostRecentCall.args[2]).toEqual(""); // body
-                expect(mockFaultyConnectionManager.request.mostRecentCall.args[3].Accept).toEqual("application/vnd.ez.api.Root+json"); // headers
-                expect(mockFaultyConnectionManager.request.mostRecentCall.args[4]).toEqual(jasmine.any(Function)); // callback
-
-                expect(mockCallback).toHaveBeenCalled();
-                expect(mockCallback.mostRecentCall.args[0]).toEqual(jasmine.any(CAPIError)); //errors
-                expect(mockCallback.mostRecentCall.args[1]).toEqual(false); //response
-
-            });
-
-            it("running getObjectFromCache call, and Connection Manager fails to connect", function () {
-
-                mockFaultyConnectionManager = {
-                    request : function (method, url, body, headers, callback) {
-                        callback(new CAPIError(""), false);
-                    }
-                };
-                spyOn(mockFaultyConnectionManager, 'request').andCallThrough();
-
-                discoveryService = new DiscoveryService(
-                    testRootPath,
-                    mockFaultyConnectionManager
-                );
-
-                discoveryService._getObjectFromCache(
+                discoveryService.getInfoObject(
                     "somename",
                     mockCallback
                 );
@@ -219,9 +188,10 @@ define(function (require) {
                 expect(mockFaultyConnectionManager.request.mostRecentCall.args[3].Accept).toEqual("application/vnd.ez.api.Root+json"); // headers
                 expect(mockFaultyConnectionManager.request.mostRecentCall.args[4]).toEqual(jasmine.any(Function)); // callback
 
-                expect(mockCallback).toHaveBeenCalled();
-                expect(mockCallback.mostRecentCall.args[0]).toEqual(jasmine.any(CAPIError)); //errors
-                expect(mockCallback.mostRecentCall.args[1]).toEqual(false); //response
+                expect(mockCallback).toHaveBeenCalledWith(
+                    jasmine.any(CAPIError),
+                    errorResponse
+                );
             });
 
             describe("trying to access non-existent object (sorry no magic in stock today, only trash :)", function () {
@@ -231,21 +201,6 @@ define(function (require) {
                         testRootPath,
                         mockConnectionManager
                     );
-                });
-
-                it("getObjectFromCache", function () {
-
-                    spyOn(discoveryService, '_discoverRoot').andCallThrough();
-
-                    discoveryService._getObjectFromCache(
-                        "magic",
-                        mockCallback
-                    );
-
-                    expect(discoveryService._discoverRoot).toHaveBeenCalled();
-                    expect(mockCallback).toHaveBeenCalled();
-                    expect(mockCallback.mostRecentCall.args[0]).toEqual(jasmine.any(CAPIError)); //error
-                    expect(mockCallback.mostRecentCall.args[1]).toEqual(false); //response
                 });
 
                 it("getInfoObject", function () {

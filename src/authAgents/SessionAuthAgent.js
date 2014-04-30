@@ -151,19 +151,21 @@ define(["structures/CAPIError", "storages/LocalStorage"], function (CAPIError, L
         userService.createSession(
             sessionCreateStruct,
             function (error, sessionResponse) {
+                var session;
+
                 if (error) {
-                    done(error, false);
+                    done(error, sessionResponse);
                     return;
                 }
 
-                var session = JSON.parse(sessionResponse.body).Session;
+                session = sessionResponse.document.Session;
 
                 that._storage.setItem(SessionAuthAgent.KEY_SESSION_NAME, session.name);
                 that._storage.setItem(SessionAuthAgent.KEY_SESSION_HREF, session._href);
                 that._storage.setItem(SessionAuthAgent.KEY_SESSION_ID, session.identifier);
                 that._storage.setItem(SessionAuthAgent.KEY_CSRF_TOKEN, session.csrfToken);
 
-                done(false, true);
+                done(false, sessionResponse);
             }
         );
     };

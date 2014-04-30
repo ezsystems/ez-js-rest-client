@@ -1812,6 +1812,7 @@ define(function (require) {
         // Discovery service errors
         // ******************************
         describe("is returning errors correctly, when discovery service fails, while performing:", function () {
+            var errorResponse = {'status': 401};
 
             // ******************************
             // beforeEach for discovery service errors
@@ -1826,7 +1827,7 @@ define(function (require) {
                         // Very faulty indeed
                         callback(
                             new CAPIError("Discover service failed to find object with name '" + name + "'"),
-                            false
+                            errorResponse
                         );
 
                     }
@@ -1849,7 +1850,7 @@ define(function (require) {
                 );
 
                 expect(mockFaultyDiscoveryService.getInfoObject).toHaveBeenCalledWith("sections", jasmine.any(Function));
-                expect(mockCallback).toHaveBeenCalledWith(jasmine.any(CAPIError), false);
+                expect(mockCallback).toHaveBeenCalledWith(jasmine.any(CAPIError), errorResponse);
             });
 
             it("loadSections", function () {
@@ -1858,7 +1859,7 @@ define(function (require) {
                 );
 
                 expect(mockFaultyDiscoveryService.getInfoObject).toHaveBeenCalledWith("sections", jasmine.any(Function));
-                expect(mockCallback).toHaveBeenCalledWith(jasmine.any(CAPIError), false);
+                expect(mockCallback).toHaveBeenCalledWith(jasmine.any(CAPIError), errorResponse);
             });
 
             it("createContent", function () {
@@ -1884,7 +1885,7 @@ define(function (require) {
                 );
 
                 expect(mockFaultyDiscoveryService.getInfoObject).toHaveBeenCalledWith("content", jasmine.any(Function));
-                expect(mockCallback).toHaveBeenCalledWith(jasmine.any(CAPIError), false);
+                expect(mockCallback).toHaveBeenCalledWith(jasmine.any(CAPIError), errorResponse);
             });
 
             it("loadContentByRemoteId", function () {
@@ -1894,7 +1895,7 @@ define(function (require) {
                 );
 
                 expect(mockFaultyDiscoveryService.getInfoObject).toHaveBeenCalledWith("contentByRemoteId", jasmine.any(Function));
-                expect(mockCallback).toHaveBeenCalledWith(jasmine.any(CAPIError), false);
+                expect(mockCallback).toHaveBeenCalledWith(jasmine.any(CAPIError), errorResponse);
             });
 
             it("loadLocationByRemoteId", function () {
@@ -1904,7 +1905,7 @@ define(function (require) {
                 );
 
                 expect(mockFaultyDiscoveryService.getInfoObject).toHaveBeenCalledWith("locationByRemoteId", jasmine.any(Function));
-                expect(mockCallback).toHaveBeenCalledWith(jasmine.any(CAPIError), false);
+                expect(mockCallback).toHaveBeenCalledWith(jasmine.any(CAPIError), errorResponse);
             });
 
             it("createView", function () {
@@ -1921,7 +1922,7 @@ define(function (require) {
                 );
 
                 expect(mockFaultyDiscoveryService.getInfoObject).toHaveBeenCalledWith("views", jasmine.any(Function));
-                expect(mockCallback).toHaveBeenCalledWith(jasmine.any(CAPIError), false);
+                expect(mockCallback).toHaveBeenCalledWith(jasmine.any(CAPIError), errorResponse);
             });
 
             it("loadTrashItems", function () {
@@ -1932,7 +1933,7 @@ define(function (require) {
                 );
 
                 expect(mockFaultyDiscoveryService.getInfoObject).toHaveBeenCalledWith("trash", jasmine.any(Function));
-                expect(mockCallback).toHaveBeenCalledWith(jasmine.any(CAPIError), false);
+                expect(mockCallback).toHaveBeenCalledWith(jasmine.any(CAPIError), errorResponse);
             });
 
             it("emptyTrash", function () {
@@ -1941,7 +1942,7 @@ define(function (require) {
                 );
 
                 expect(mockFaultyDiscoveryService.getInfoObject).toHaveBeenCalledWith("trash", jasmine.any(Function));
-                expect(mockCallback).toHaveBeenCalledWith(jasmine.any(CAPIError), false);
+                expect(mockCallback).toHaveBeenCalledWith(jasmine.any(CAPIError), errorResponse);
             });
         });
 

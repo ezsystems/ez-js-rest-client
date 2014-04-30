@@ -8,6 +8,14 @@ define(["authAgents/SessionAuthAgent", "structures/CAPIError"], function (Sessio
             testSessionId = "o7i8r1sapfc9r84ae53bgq8gp4",
             testSessionName = "EZSESSID",
             testCsrfToken = "o7i8r1sapfc9r84ae53bgq8gp4",
+            createSessionResponse = {
+                "Session" : {
+                    "_href" : testSessionHref,
+                    "identifier": testSessionId,
+                    "name" : testSessionName,
+                    "csrfToken" : testCsrfToken,
+                }
+            },
             mockCAPI,
             mockUserService,
             mockCallback,
@@ -48,14 +56,8 @@ define(["authAgents/SessionAuthAgent", "structures/CAPIError"], function (Sessio
                 },
                 createSession: function(sessionCreateStruct, callback){
                     mockSessionResponse = {};
-                    mockSessionResponse.body = JSON.stringify({
-                        "Session" : {
-                            "_href" : testSessionHref,
-                            "identifier": testSessionId,
-                            "name" : testSessionName,
-                            "csrfToken" : "o7i8r1sapfc9r84ae53bgq8gp4"
-                        }
-                    });
+                    mockSessionResponse.document = createSessionResponse;
+                    mockSessionResponse.body = JSON.stringify(createSessionResponse);
 
                     callback(
                         false,
@@ -230,7 +232,7 @@ define(["authAgents/SessionAuthAgent", "structures/CAPIError"], function (Sessio
                 expect(mockStorage.getItem(SessionAuthAgent.KEY_SESSION_HREF)).toEqual(testSessionHref);
                 expect(mockStorage.getItem(SessionAuthAgent.KEY_CSRF_TOKEN)).toEqual(testCsrfToken);
 
-                expect(mockCallback).toHaveBeenCalledWith(false, true);
+                expect(mockCallback).toHaveBeenCalledWith(false, mockSessionResponse);
             });
 
             it("should detect if the user is already logged in", function () {

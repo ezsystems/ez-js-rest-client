@@ -217,7 +217,7 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
             "rootUserGroup",
             function (error, rootUserGroup) {
                 if (error) {
-                    callback(error, false);
+                    callback(error, rootUserGroup);
                     return;
                 }
 
@@ -321,7 +321,7 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
             parentGroupId,
             function (error, userGroupResponse) {
                 if (error) {
-                    callback(error, false);
+                    callback(error, userGroupResponse);
                     return;
                 }
 
@@ -372,7 +372,7 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
             userGroupId,
             function (error, userGroupResponse) {
                 if (error) {
-                    callback(error, false);
+                    callback(error, userGroupResponse);
                     return;
                 }
 
@@ -404,7 +404,7 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
             userGroupId,
             function (error, userGroupResponse) {
                 if (error) {
-                    callback(error, false);
+                    callback(error, userGroupResponse);
                     return;
                 }
 
@@ -459,7 +459,7 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
             userGroupId,
             function (error, userGroupResponse) {
                 if (error) {
-                    callback(error, false);
+                    callback(error, userGroupResponse);
                     return;
                 }
 
@@ -490,7 +490,7 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
             "users",
             function (error, users) {
                 if (error) {
-                    callback(error, false);
+                    callback(error, users);
                     return;
                 }
                 that._connectionManager.request(
@@ -587,7 +587,7 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
             userId,
             function (error, userResponse) {
                 if (error) {
-                    callback(error, false);
+                    callback(error, userResponse);
                     return;
                 }
 
@@ -641,7 +641,7 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
             "roles",
             function (error, roles) {
                 if (error) {
-                    callback(error, false);
+                    callback(error, roles);
                     return;
                 }
 
@@ -720,7 +720,7 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
             "roles",
             function (error, roles) {
                 if (error) {
-                    callback(error, false);
+                    callback(error, roles);
                     return;
                 }
 
@@ -787,7 +787,7 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
             userId,
             function (error, userResponse) {
                 if (error) {
-                    callback(error, false);
+                    callback(error, userResponse);
                     return;
                 }
 
@@ -819,7 +819,7 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
             userGroupId,
             function (error, userGroupResponse) {
                 if (error) {
-                    callback(error, false);
+                    callback(error, userGroupResponse);
                     return;
                 }
 
@@ -889,7 +889,7 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
             userId,
             function (error, userResponse) {
                 if (error) {
-                    callback(error, false);
+                    callback(error, userResponse);
                     return;
                 }
 
@@ -922,7 +922,7 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
             userGroupId,
             function (error, userGroupResponse) {
                 if (error) {
-                    callback(error, false);
+                    callback(error, userGroupResponse);
                     return;
                 }
 
@@ -1011,7 +1011,7 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
             roleId,
             function (error, roleResponse) {
                 if (error) {
-                    callback(error, false);
+                    callback(error, roleResponse);
                     return;
                 }
 
@@ -1043,7 +1043,7 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
             roleId,
             function (error, roleResponse) {
                 if (error) {
-                    callback(error, false);
+                    callback(error, roleResponse);
                     return;
                 }
 
@@ -1159,7 +1159,7 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
             {"Accept": "application/vnd.ez.api.Root+json"},
             function (error, rootResource) {
                 if (error) {
-                    callback(error, false);
+                    callback(error, rootResource);
                     return;
                 }
                 that._connectionManager.notAuthorizedRequest(
@@ -1189,7 +1189,7 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
             "refreshSession",
             function (error, refreshSession) {
                 if (error) {
-                    callback(error, false);
+                    callback(error, refreshSession);
                     return;
                 }
                 that._connectionManager.request(
