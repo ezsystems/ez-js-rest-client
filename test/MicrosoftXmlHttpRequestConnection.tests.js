@@ -211,6 +211,21 @@ define(function (require) {
                 );
             });
 
+            it("should provide the request in the error object", function () {
+                mockXMLHttpRequest.prototype.send = function (body) {
+                    this.readyState = 4;
+                    this.status = testErrorCode;
+                    this.onreadystatechange();
+                };
+                window.ActiveXObject = (function () {
+                    return mockXMLHttpRequest;
+                }());
+
+                connection = new MicrosoftXmlHttpRequestConnection();
+                connection.execute(mockRequest, function (error, response) {
+                    expect(error.details.request).toEqual(mockRequest);
+                });
+            });
         });
     });
 

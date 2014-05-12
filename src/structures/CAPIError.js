@@ -8,12 +8,12 @@ define(function () {
      * @class CAPIError
      * @constructor
      * @param message {String} error message
-     * @param additionalInfo {Object} object literal containing any additional error properties
+     * @param details {Object} object literal containing any additional error properties
      */
-    var CAPIError = function (message, additionalInfo) {
+    var CAPIError = function (message, details) {
         this.name = "CAPIError";
         this.message = message;
-        this.additionalInfo = additionalInfo;
+        this.details = details;
     };
 
     CAPIError.prototype = new Error();
