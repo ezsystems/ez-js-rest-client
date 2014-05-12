@@ -207,11 +207,26 @@ define(function (require) {
                     mockCallback
                 );
 
-                expect(mockCallback).toHaveBeenCalled();
-                expect(mockCallback.mostRecentCall.args[0]).toEqual(jasmine.any(CAPIError)); // errors
-                expect(mockCallback.mostRecentCall.args[1]).toEqual(false); // response
+                expect(mockCallback).toHaveBeenCalledWith(
+                    jasmine.any(CAPIError), jasmine.any(Response)
+                );
             });
 
+            it("should provide the request in the error object", function () {
+                mockXMLHttpRequest.prototype.send = function (body){
+                    this.readyState = 4;
+                    this.status = testErrorCode;
+                    this.onreadystatechange();
+                };
+                window.XMLHttpRequest = (function () {
+                    return mockXMLHttpRequest;
+                }());
+
+                connection = new XmlHttpRequestConnection();
+                connection.execute(mockRequest, function (error, response) {
+                    expect(error.details.request).toEqual(mockRequest);
+                });
+            });
         });
     });
 

@@ -8,13 +8,34 @@ define(function () {
      *
      * @class HttpBasicAuthAgent
      * @constructor
-     * @param credentials {Object} object literal containg credentials for the REST service access
+     * @param [credentials] {Object} object literal containg credentials for the REST service access
      * @param credentials.login {String} user login
      * @param credentials.password {String} user password
      */
     var HttpBasicAuthAgent = function (credentials) {
-        this._login = credentials.login;
-        this._password = credentials.password;
+        /**
+         * The login
+         *
+         * @property _login
+         * @type {String}
+         * @default ""
+         * @protected
+         */
+        this._login = '';
+
+        /**
+         * The password
+         *
+         * @property _password
+         * @type {String}
+         * @default ""
+         * @protected
+         */
+        this._password = '';
+
+        if ( credentials ) {
+            this.setCredentials(credentials);
+        }
     };
 
     /**
@@ -49,7 +70,7 @@ define(function () {
     };
 
     /**
-     * Log out workflow
+     * Log out
      * No actual logic for HTTP Basic Auth
      *
      * @method logOut
@@ -60,15 +81,54 @@ define(function () {
     };
 
     /**
+     * Checks whether the user is logged in. For HttpBasicAuthAgent, it actually
+     * tries to load the root resource with the provided credentials.
+     *
+     * @method isLoggedIn
+     * @param {Function} done
+     */
+    HttpBasicAuthAgent.prototype.isLoggedIn = function (done) {
+        if ( !this._login || !this._password ) {
+            done(true, false);
+            return;
+        }
+        this._CAPI.getContentService().loadRoot(done);
+    };
+
+    /**
+     * Logs in the user by trying to load the root resource, it is the same as
+     * {{#crossLink
+     * "HttpBasicAuthAgent/isLoggedIn:method"}}HttpBasicAuthAgent.isLoggedIn{{/crossLink}}
+     *
+     * @method logIn
+     * @param {Function} done
+     */
+    HttpBasicAuthAgent.prototype.logIn = function (done) {
+        this.isLoggedIn(done);
+    };
+
+    /**
      * Set the instance of the CAPI to be used by the agent
-     * As HttpBasicAuthAgent has no use for the CAPI, implementation is empty
      *
      * @method setCAPI
      * @param CAPI {CAPI} current instance of the CAPI object
      */
     HttpBasicAuthAgent.prototype.setCAPI = function (CAPI) {
+        this._CAPI = CAPI;
+    };
+
+    /**
+     * Set the credentials
+     *
+     * @method setCredentials
+     * @param {Object} credentials
+     * @param {String} credentials.login
+     * @param {String} credentials.password
+     */
+    HttpBasicAuthAgent.prototype.setCredentials = function (credentials) {
+        this._login = credentials.login;
+        this._password = credentials.password;
     };
 
     return HttpBasicAuthAgent;
-
 });

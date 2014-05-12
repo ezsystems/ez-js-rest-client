@@ -3,8 +3,9 @@ define(["structures/CAPIError"], function (CAPIError) {
     "use strict";
 
     /**
-     * Creates an instance of discovery service.
-     * Discovery service is used internally to auto-discover and cache misc useful REST objects.
+     * Creates an instance of discovery service.  Discovery service is used
+     * internally to discover resources URI and media type provided in the root
+     * resource.
      *
      * @class DiscoveryService
      * @constructor
@@ -18,159 +19,39 @@ define(["structures/CAPIError"], function (CAPIError) {
     };
 
     /**
-     * Try to get url of the target object by given 'name'
-     *
-     * @method getUrl
-     * @param name {String} name of the target object (e.g. "Trash")
-     * @param callback {Function} callback executed after performing the request (see "_discoverRoot" call for more info)
-     * @param callback.error {mixed} false or CAPIError object if an error occurred
-     * @param callback.response {mixed} the url of the target object if it was found, false otherwise.
-     */
-    DiscoveryService.prototype.getUrl = function (name, callback) {
-        this._getObjectFromCache(
-            name,
-            function (error, cachedObject) {
-                if (error) {
-                    callback(error, false);
-                    return;
-                }
-
-                callback(false, cachedObject._href);
-            }
-        );
-    };
-
-    /**
-     * Try to get media-type of the target object by given 'name'
-     *
-     * @method getMediaType
-     * @param name {String} name of the target object (e.g. "Trash")
-     * @param callback {Function} callback executed after performing the request (see "_discoverRoot" call for more info)
-     * @param callback.error {mixed} false or CAPIError object if an error occurred
-     * @param callback.response {mixed} the media-type of the target object if it was found, false otherwise.
-     */
-    DiscoveryService.prototype.getMediaType = function (name, callback) {
-        this._getObjectFromCache(
-            name,
-            function (error, cachedObject) {
-                if (error) {
-                    callback(error, false);
-                    return;
-                }
-
-                callback(false, cachedObject["_media-type"]);
-            }
-        );
-    };
-
-    /**
-     * Try to get the whole target object by given 'name'
+     * Get the information for given name. The information is provided as the
+     * second argument of the callback unless there's a network issue while
+     * loading the REST root resource or if there's no resource associated with
+     * the given name.
      *
      * @method getInfoObject
+     *
      * @param name {String} name of the target object (e.g. "Trash")
-     * @param callback {Function} callback executed after performing the request (see "_discoverRoot" call for more info)
-     * @param callback.error {mixed} false or CAPIError object if an error occurred
-     * @param callback.response {mixed} the target object if it was found, false otherwise.
+     * @param callback {Function}
+     * @param callback.error {Boolean|CAPIError} false or CAPIError object if an
+     * error occurred
+     * @param callback.response {Object|Response|Boolean} the target object if
+     * it was found, the Response object if an error occured while loading the
+     * REST root or false if the name does not match any object.
      */
     DiscoveryService.prototype.getInfoObject = function (name, callback) {
-        this._getObjectFromCache(
-            name,
-            function (error, cachedObject) {
-                if (error) {
-                    callback(error, false);
-                    return;
-                }
+        var that = this;
 
-                callback(false, cachedObject);
-            }
-        );
-    };
-
-    /**
-     * discover Root object
-     *
-     * @method _discoverRoot
-     * @param rootPath {String} path to Root resource
-     * @param callback {Function} callback executed after performing the request
-     * @param callback.error {mixed} false or CAPIError object if an error occurred
-     * @param callback.response {boolean} true if the root was discovered successfully, false otherwise.
-     * @protected
-     */
-    DiscoveryService.prototype._discoverRoot = function (rootPath, callback) {
-        if (!this._cacheObject.Root) {
-            var that = this;
-            this._connectionManager.request(
-                "GET",
-                rootPath,
-                "",
-                {"Accept": "application/vnd.ez.api.Root+json"},
-                function (error, rootJSON) {
-                    if (error) {
-                        callback(error, false);
-                        return;
-                    }
-
-                    that._copyToCache(rootJSON.document);
-                    callback(false, true);
-                }
-            );
-        } else {
-            callback(false, true);
-        }
-    };
-
-    /**
-     * Copy all the properties of the target object into the cache object
-     *
-     * @method _copyToCache
-     * @param object {Object} target object
-     * @protected
-     */
-    DiscoveryService.prototype._copyToCache = function (object) {
-        for (var property in object) {
-            if (object.hasOwnProperty(property) && object[property]) {
-                this._cacheObject[property] = object[property];
-            }
-        }
-    };
-
-    /**
-     * Get target object from _cacheObject by given 'name' and run the discovery process if it is not available.
-     *
-     * @method _getObjectFromCache
-     * @param name {String} name of the target object to be retrived (e.g. "Trash")
-     * @param callback {Function} callback executed after performing the request
-     * @param callback.error {mixed} false or CAPIError object if an error occurred
-     * @param callback.response {mixed} the target object if it was found, false otherwise.
-     * @protected
-     */
-    DiscoveryService.prototype._getObjectFromCache = function (name, callback) {
-        var object = null,
-            that = this;
         // Discovering root, if not yet discovered
         // on discovery running the request for same 'name' again
         if (!this._cacheObject.Root) {
-            this._discoverRoot(this._rootPath, function (error, success) {
+            this._discoverRoot(this._rootPath, function (error, response) {
                 if (error) {
-                    callback(error, false);
+                    callback(error, response);
                     return;
                 }
-                that._getObjectFromCache(name, callback);
+                that.getInfoObject(name, callback);
             });
             return;
         }
 
-        // Checking most obvious places for now
-        // "Root" object (retrieved during root discovery request) and
-        // root of a cache object in case we have cached value from some other request
         if (this._cacheObject.Root.hasOwnProperty(name)) {
-            object = this._cacheObject.Root[name];
-        } else if (this._cacheObject.hasOwnProperty(name)) {
-            object = this._cacheObject[name];
-        }
-
-        if (object) {
-            callback(false, object);
+            callback(false, this._cacheObject.Root[name]);
         } else {
             callback(
                 new CAPIError(
@@ -182,6 +63,58 @@ define(["structures/CAPIError"], function (CAPIError) {
         }
     };
 
-    return DiscoveryService;
+    /**
+     * Load the REST root resource
+     *
+     * @method _discoverRoot
+     * @protected
+     *
+     * @param rootPath {String} path to Root resource
+     * @param callback {Function} callback executed after performing the request
+     * @param callback.error {Boolean|CAPIError} false or CAPIError object if an
+     * error occurred
+     * @param callback.response {Boolean|Response} true if the root was
+     * successfully loaded, the Response otherwise
+     */
+    DiscoveryService.prototype._discoverRoot = function (rootPath, callback) {
+        var that = this;
 
+        this._connectionManager.request(
+            "GET",
+            rootPath,
+            "",
+            {"Accept": "application/vnd.ez.api.Root+json"},
+            function (error, response) {
+                if (error) {
+                    callback(error, response);
+                    return;
+                }
+
+                that._copyToCache(response.document);
+                callback(false, true);
+            }
+        );
+    };
+
+    /**
+     * Copy all the properties of the target object into the cache
+     *
+     * @method _copyToCache
+     * @protected
+     *
+     * @param object {Object} the object to cache
+     */
+    DiscoveryService.prototype._copyToCache = function (object) {
+        var property;
+
+        // disabling hasOwnProperty check as it is useless here, we are caching
+        // literal object coming from the root resource
+        /*jslint forin:false */
+        for (property in object) {
+            this._cacheObject[property] = object[property];
+        }
+        /*jslint forin:true */
+    };
+
+    return DiscoveryService;
 });

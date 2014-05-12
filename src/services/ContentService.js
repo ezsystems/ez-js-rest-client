@@ -280,7 +280,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
             "sections",
             function (error, sections) {
                 if (error) {
-                    callback(error, false);
+                    callback(error, sections);
                     return;
                 }
 
@@ -328,7 +328,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
             "sections",
             function (error, sections) {
                 if (error) {
-                    callback(error, false);
+                    callback(error, sections);
                     return;
                 }
 
@@ -398,7 +398,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
             "content",
             function (error, contentObjects) {
                 if (error) {
-                    callback(error, false);
+                    callback(error, contentObjects);
                     return;
                 }
 
@@ -458,7 +458,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
             "contentByRemoteId",
             function (error, contentByRemoteId) {
                 if (error) {
-                    callback(error, false);
+                    callback(error, contentByRemoteId);
                     return;
                 }
                 that._connectionManager.request(
@@ -569,7 +569,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
             contentId,
             function (error, contentResponse) {
                 if (error) {
-                    callback(error, false);
+                    callback(error, contentResponse);
                     return;
                 }
 
@@ -664,7 +664,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
             contentId,
             function (error, contentResponse) {
                 if (error) {
-                    callback(error, false);
+                    callback(error, contentResponse);
                     return;
                 }
 
@@ -732,7 +732,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
                 var url = '';
 
                 if (error) {
-                    callback(error, false);
+                    callback(error, contentResponse);
                     return;
                 }
 
@@ -808,7 +808,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
             contentId,
             function (error, contentResponse) {
                 if (error) {
-                    callback(error, false);
+                    callback(error, contentResponse);
                     return;
                 }
 
@@ -840,7 +840,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
             contentId,
             function (error, contentResponse) {
                 if (error) {
-                    callback(error, false);
+                    callback(error, contentResponse);
                     return;
                 }
 
@@ -889,7 +889,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
             "locationByRemoteId",
             function (error, locationByRemoteId) {
                 if (error) {
-                    callback(error, false);
+                    callback(error, locationByRemoteId);
                     return;
                 }
                 that._connectionManager.request(
@@ -963,7 +963,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
             locationId,
             function (error, locationResponse) {
                 if (error) {
-                    callback(error, false);
+                    callback(error, locationResponse);
                     return;
                 }
 
@@ -1087,7 +1087,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
             "views",
             function (error, views) {
                 if (error) {
-                    callback(error, false);
+                    callback(error, views);
                     return;
                 }
 
@@ -1143,7 +1143,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
             {},
             function (error, versionResponse) {
                 if (error) {
-                    callback(error, false);
+                    callback(error, versionResponse);
                     return;
                 }
 
@@ -1196,7 +1196,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
             contentId,
             function (error, currentVersionResponse) {
                 if (error) {
-                    callback(error, false);
+                    callback(error, currentVersionResponse);
                     return;
                 }
 
@@ -1255,7 +1255,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
             {},
             function (error, versionResponse) {
                 if (error) {
-                    callback(error, false);
+                    callback(error, versionResponse);
                     return;
                 }
 
@@ -1329,7 +1329,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
             "trash",
             function (error, trash) {
                 if (error) {
-                    callback(error, false);
+                    callback(error, trash);
                     return;
                 }
 
@@ -1422,7 +1422,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
             "trash",
             function (error, trash) {
                 if (error) {
-                    callback(error, false);
+                    callback(error, trash);
                     return;
                 }
 

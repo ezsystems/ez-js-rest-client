@@ -15,17 +15,51 @@ define(["structures/CAPIError", "storages/LocalStorage"], function (CAPIError, L
      * @param storage {StorageAbstraction?} storage to be used. By default a LocalStorage will be utilized
      */
     var SessionAuthAgent = function (credentials, storage) {
-        // is initiated inside CAPI constructor by using setCAPI() method
-        this._CAPI = null;
+            /**
+             * The CAPI instance. It is set by the call to setCAPI() done while
+             * instantiating the CAPI.
+             *
+             * @property _CAPI
+             * @type CAPI
+             * @protected
+             */
+            this._CAPI = null;
 
-        this._login = credentials.login;
-        this._password = credentials.password;
+            /**
+             * The login
+             *
+             * @property _login
+             * @type {String}
+             * @default ""
+             * @protected
+             */
+            this._login = '';
 
+            /**
+             * The password
+             *
+             * @property _password
+             * @type {String}
+             * @default ""
+             * @protected
+             */
+            this._password = '';
 
-        // StorageAbstraction is optional. Use a LocalStorage by default if nothing else
-        // is provided
-        this._storage = storage || new LocalStorage();
-    };
+            /**
+             * The storage to use to store the session info.
+             *
+             * @property _storage
+             * @type {StorageAbstraction}
+             * @default LocalStorage
+             * @protected
+             */
+            this._storage = storage || new LocalStorage();
+
+            if ( credentials ) {
+                this.setCredentials(credentials);
+            }
+        },
+        SAFE_METHODS = {'GET': 1, 'HEAD': 1, 'OPTIONS': 1, 'TRACE': 1};
 
     /**
      * Constant to be used as storage key for the sessionName
@@ -46,6 +80,15 @@ define(["structures/CAPIError", "storages/LocalStorage"], function (CAPIError, L
     SessionAuthAgent.KEY_SESSION_ID = 'ezpRestClient.sessionId';
 
     /**
+     * Constant to be used as storage key for the sessionHref
+     *
+     * @static
+     * @const
+     * @type {string}
+     */
+    SessionAuthAgent.KEY_SESSION_HREF = 'ezpRestClient.sessionHref';
+
+    /**
      * Constant to be used as storage key for the csrfToken
      *
      * @static
@@ -53,6 +96,35 @@ define(["structures/CAPIError", "storages/LocalStorage"], function (CAPIError, L
      * @type {string}
      */
     SessionAuthAgent.KEY_CSRF_TOKEN = 'ezpRestClient.csrfToken';
+
+    /**
+     * Checks that the current user is still logged in. To be considered as
+     * logged in, the storage should have a session id and the refresh calls
+     * should be successful.
+     * If the storage does not contain any session info, the callback is called
+     * with `true` as its first argument, otherwise, the callback is called
+     * with the `error` and `result` from {{#crossLink
+     * "UserService/refreshSession:method"}}UserService.refreshSession{{/crossLink}}.
+     *
+     * @param {Function} callback
+     * @method isLoggedIn
+     */
+    SessionAuthAgent.prototype.isLoggedIn = function (callback) {
+        var that = this,
+            userService = this._CAPI.getUserService(),
+            sessionId = this._storage.getItem(SessionAuthAgent.KEY_SESSION_ID);
+
+        if ( sessionId === null) {
+            callback(true, false);
+            return;
+        }
+        userService.refreshSession(sessionId, function (error, result) {
+            if ( error ) {
+                that._resetStorage();
+            }
+            callback(error, result);
+        });
+    };
 
     /**
      * Called every time a new request cycle is started,
@@ -79,26 +151,42 @@ define(["structures/CAPIError", "storages/LocalStorage"], function (CAPIError, L
         userService.createSession(
             sessionCreateStruct,
             function (error, sessionResponse) {
+                var session;
+
                 if (error) {
-                    done(
-                        new CAPIError(
-                            "Failed to create new session.",
-                            {sessionCreateStruct: sessionCreateStruct}
-                        ),
-                        false
-                    );
+                    done(error, sessionResponse);
                     return;
                 }
 
-                var session = JSON.parse(sessionResponse.body).Session;
+                session = sessionResponse.document.Session;
 
                 that._storage.setItem(SessionAuthAgent.KEY_SESSION_NAME, session.name);
-                that._storage.setItem(SessionAuthAgent.KEY_SESSION_ID, session._href);
+                that._storage.setItem(SessionAuthAgent.KEY_SESSION_HREF, session._href);
+                that._storage.setItem(SessionAuthAgent.KEY_SESSION_ID, session.identifier);
                 that._storage.setItem(SessionAuthAgent.KEY_CSRF_TOKEN, session.csrfToken);
 
-                done(false, true);
+                done(false, sessionResponse);
             }
         );
+    };
+
+    /**
+     * Tries to log in in the REST API. If the storage already contains a
+     * session id, first it tries to log out before doing the log in.
+     *
+     * @method logIn
+     * @param {Function} callback
+     */
+    SessionAuthAgent.prototype.logIn = function (callback) {
+        var that = this;
+
+        if ( this._storage.getItem(SessionAuthAgent.KEY_SESSION_ID) !== null ) {
+            this.logOut(function (error, result) {
+                that.ensureAuthentication(callback);
+            });
+        } else {
+            this.ensureAuthentication(callback);
+        }
     };
 
     /**
@@ -110,37 +198,41 @@ define(["structures/CAPIError", "storages/LocalStorage"], function (CAPIError, L
      * @param done {function}
      */
     SessionAuthAgent.prototype.authenticateRequest = function (request, done) {
-        if (request.method !== "GET" && request.method !== "HEAD" && request.method !== "OPTIONS" && request.method !== "TRACE" ) {
-            request.headers["X-CSRF-Token"] = this._storage.getItem(SessionAuthAgent.KEY_CSRF_TOKEN);
+        var token = this._storage.getItem(SessionAuthAgent.KEY_CSRF_TOKEN);
+
+        if ( SAFE_METHODS[request.method.toUpperCase()] !== 1 && token !== null ) {
+            request.headers["X-CSRF-Token"] = token;
         }
 
         done(false, request);
     };
 
     /**
-     * Log out workflow
-     * Kills currently active session and resets Storage params (sessionId, CSRFToken)
+     * Log out. If the client did not logged in yet, the callback is called with
+     * `false` and `true` as arguments, otherwise the callback is called with the
+     * `error` and the `result` from {{#crossLink
+     * "UserService/deleteSession:method"}}userService.deleteSession{{/crossLink}}.
      *
      * @method logOut
      * @param done {function}
      */
     SessionAuthAgent.prototype.logOut = function (done) {
         var userService = this._CAPI.getUserService(),
+            sessionHref = this._storage.getItem(SessionAuthAgent.KEY_SESSION_HREF),
             that = this;
 
+        if ( sessionHref === null ) {
+            done(false, true);
+            return;
+        }
+
         userService.deleteSession(
-            this._storage.getItem(SessionAuthAgent.KEY_SESSION_ID),
+            sessionHref,
             function (error, response) {
-                if (error) {
-                    done(true, false);
-                    return;
+                if ( !error ) {
+                    that._resetStorage();
                 }
-
-                that._storage.removeItem(SessionAuthAgent.KEY_SESSION_NAME);
-                that._storage.removeItem(SessionAuthAgent.KEY_SESSION_ID);
-                that._storage.removeItem(SessionAuthAgent.KEY_CSRF_TOKEN);
-
-                done(false, true);
+                done(error, response);
             }
         );
     };
@@ -155,6 +247,31 @@ define(["structures/CAPIError", "storages/LocalStorage"], function (CAPIError, L
         this._CAPI = CAPI;
     };
 
-    return SessionAuthAgent;
+    /**
+     * Set the credentials
+     *
+     * @method setCredentials
+     * @param {Object} credentials
+     * @param {String} credentials.login
+     * @param {String} credentials.password
+     */
+    SessionAuthAgent.prototype.setCredentials = function (credentials) {
+        this._login = credentials.login;
+        this._password = credentials.password;
+    };
 
+    /**
+     * Resets the storage associated with this auth agent
+     *
+     * @method _resetStorage
+     * @protected
+     */
+    SessionAuthAgent.prototype._resetStorage = function () {
+        this._storage.removeItem(SessionAuthAgent.KEY_SESSION_NAME);
+        this._storage.removeItem(SessionAuthAgent.KEY_SESSION_ID);
+        this._storage.removeItem(SessionAuthAgent.KEY_SESSION_HREF);
+        this._storage.removeItem(SessionAuthAgent.KEY_CSRF_TOKEN);
+    };
+
+    return SessionAuthAgent;
 });

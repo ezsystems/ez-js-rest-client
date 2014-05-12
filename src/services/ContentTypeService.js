@@ -236,7 +236,7 @@ define(["structures/ContentTypeGroupInputStruct", "structures/ContentTypeCreateS
             contentTypeGroupId,
             function (error, contentTypeGroupResponse) {
                 if (error) {
-                    callback(error, false);
+                    callback(error, contentTypeGroupResponse);
                     return;
                 }
 
@@ -317,7 +317,7 @@ define(["structures/ContentTypeGroupInputStruct", "structures/ContentTypeCreateS
             contentTypeGroupId,
             function (error, contentTypeGroupResponse) {
                 if (error) {
-                    callback(error, false);
+                    callback(error, contentTypeGroupResponse);
                     return;
                 }
 
@@ -386,7 +386,7 @@ define(["structures/ContentTypeGroupInputStruct", "structures/ContentTypeCreateS
             "contentTypeByIdentifier",
             function (error, contentTypeByIdentifier) {
                 if (error) {
-                    callback(error, false);
+                    callback(error, contentTypeByIdentifier);
                     return;
                 }
                 that._connectionManager.request(
@@ -603,7 +603,7 @@ define(["structures/ContentTypeGroupInputStruct", "structures/ContentTypeCreateS
             contentTypeId,
             function (error, contentTypeDraftResponse) {
                 if (error) {
-                    callback(error, false);
+                    callback(error, contentTypeDraftResponse);
                     return;
                 }
 

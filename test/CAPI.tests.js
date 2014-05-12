@@ -1,4 +1,4 @@
-/* global define, describe, it, expect, beforeEach */
+/* global define, describe, it, expect, beforeEach, spyOn */
 define(function (require) {
 
     var CAPI = require("CAPI"),
@@ -27,6 +27,14 @@ define(function (require) {
             this.setCAPI = function (capi) {
                 this._CAPI = capi;
             };
+
+            this.isLoggedIn = function (callback) { };
+
+            this.logOut = function (callback) { };
+
+            this.logIn = function (callback) { };
+
+            this.setCredentials = function (credentials) { };
         };
 
         beforeEach(function () {
@@ -102,6 +110,51 @@ define(function (require) {
                 anotherUserService = capi.getUserService();
 
                 expect(anotherUserService).toBe(userService);
+            });
+        });
+
+        describe("isLoggedIn", function () {
+            it("should call the authentification agent isLoggedIn method", function () {
+                var mockCallback = function () {};
+
+                spyOn(mockAuthenticationAgent, 'isLoggedIn');
+                capi.isLoggedIn(mockCallback);
+
+                expect(mockAuthenticationAgent.isLoggedIn).toHaveBeenCalledWith(mockCallback);
+            });
+        });
+
+        describe("logOut", function () {
+            it("should call the authentification agent logOut method", function () {
+                var mockCallback = function () {};
+
+                spyOn(mockAuthenticationAgent, 'logOut');
+                capi.logOut(mockCallback);
+
+                expect(mockAuthenticationAgent.logOut).toHaveBeenCalledWith(mockCallback);
+            });
+        });
+
+        describe('logIn', function () {
+            it("should call the authentication agent logIn method", function () {
+                var mockCallback = function () {};
+
+                spyOn(mockAuthenticationAgent, 'logIn');
+                capi.logIn(mockCallback);
+
+                expect(mockAuthenticationAgent.logIn).toHaveBeenCalledWith(mockCallback);
+            });
+
+            it("should set the credentials and call the authentication agent logIn method", function () {
+                var mockCallback = function () {},
+                    credentials = {};
+
+                spyOn(mockAuthenticationAgent, 'logIn');
+                spyOn(mockAuthenticationAgent, 'setCredentials');
+                capi.logIn(credentials, mockCallback);
+
+                expect(mockAuthenticationAgent.setCredentials).toHaveBeenCalledWith(credentials);
+                expect(mockAuthenticationAgent.logIn).toHaveBeenCalledWith(mockCallback);
             });
         });
     });

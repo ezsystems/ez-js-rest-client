@@ -238,7 +238,7 @@ define(function (require) {
                 );
 
                 expect(mockAuthenticationAgent.ensureAuthentication).not.toHaveBeenCalled();
-                expect(mockAuthenticationAgent.authenticateRequest).not.toHaveBeenCalled();
+                expect(mockAuthenticationAgent.authenticateRequest).toHaveBeenCalled();
                 expect(mockConnectionFactory.createConnection).toHaveBeenCalled();
                 expect(mockConnection.execute).toHaveBeenCalledWith(
                     jasmine.any(Request),
@@ -258,7 +258,7 @@ define(function (require) {
                 );
 
                 expect(mockAuthenticationAgent.ensureAuthentication).not.toHaveBeenCalled();
-                expect(mockAuthenticationAgent.authenticateRequest).not.toHaveBeenCalled();
+                expect(mockAuthenticationAgent.authenticateRequest).toHaveBeenCalled();
                 expect(mockConnection.execute).toHaveBeenCalledWith(
                     jasmine.any(Request),
                     mockCallback
@@ -274,7 +274,7 @@ define(function (require) {
                 );
 
                 expect(mockAuthenticationAgent.ensureAuthentication).not.toHaveBeenCalled();
-                expect(mockAuthenticationAgent.authenticateRequest).not.toHaveBeenCalled();
+                expect(mockAuthenticationAgent.authenticateRequest).toHaveBeenCalled();
                 expect(mockConnection.execute).toHaveBeenCalledWith(
                     jasmine.any(Request),
                     mockCallback
@@ -297,7 +297,7 @@ define(function (require) {
                 );
 
                 expect(mockAuthenticationAgent.ensureAuthentication).not.toHaveBeenCalled();
-                expect(mockAuthenticationAgent.authenticateRequest).not.toHaveBeenCalled();
+                expect(mockAuthenticationAgent.authenticateRequest).toHaveBeenCalled();
                 expect(mockConnection.execute).toHaveBeenCalledWith(
                     jasmine.any(Request),
                     mockCallback
@@ -321,7 +321,7 @@ define(function (require) {
                 );
 
                 expect(mockAuthenticationAgent.ensureAuthentication).not.toHaveBeenCalled();
-                expect(mockAuthenticationAgent.authenticateRequest).not.toHaveBeenCalled();
+                expect(mockAuthenticationAgent.authenticateRequest).toHaveBeenCalled();
                 expect(mockConnection.execute).toHaveBeenCalledWith(
                     jasmine.any(Request),
                     mockCallback
@@ -334,14 +334,6 @@ define(function (require) {
                     headers: {}
                 });
             });
-
-            it("logOut", function (){
-
-                connectionManager.logOut(mockCallback);
-
-                expect(mockAuthenticationAgent.logOut).toHaveBeenCalledWith(mockCallback);
-            });
-
         });
 
     // ******************************

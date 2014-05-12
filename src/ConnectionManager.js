@@ -141,7 +141,7 @@ define(["structures/Response", "structures/Request", "structures/CAPIError"],
      * @param callback {function} function, which will be executed on request success
      */
     ConnectionManager.prototype.notAuthorizedRequest = function (method, url, body, headers, callback) {
-        var request,
+        var request, that = this,
             defaultMethod = "GET",
             defaultUrl = "/",
             defaultBody = "",
@@ -185,21 +185,10 @@ define(["structures/Response", "structures/Request", "structures/CAPIError"],
             console.dir(request);
         }
 
-        // Main goal
-        this._connectionFactory.createConnection().execute(request, callback);
-    };
-
-    /**
-     * logOut - logout workflow
-     * Kills currently active session and resets localStorage params (sessionId, CSRFToken)
-     *
-     * @method logOut
-     * @param callback {function} function, which will be executed on request success
-     */
-    ConnectionManager.prototype.logOut = function (callback) {
-        this._authenticationAgent.logOut(callback);
+        this._authenticationAgent.authenticateRequest(request, function (err, request) {
+            that._connectionFactory.createConnection().execute(request, callback);
+        });
     };
 
     return ConnectionManager;
-
 });
