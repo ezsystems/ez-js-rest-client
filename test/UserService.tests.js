@@ -1183,26 +1183,30 @@ define(function (require) {
             // ******************************
             // Faked faulty internal service calls
             // ******************************
-            var fakedFaultyLoadUserGroup = function(userGroupId, callback){
+            var loadUserGroupErrorResponse = {'status': 418},
+                fakedFaultyLoadUserGroup = function(userGroupId, callback){
                     callback(
                         new CAPIError("Content type service failed for some reason"),
-                        false
+                        loadUserGroupErrorResponse
                     );
                 },
+                loadUserErrorResponse = {'status': 401},
                 fakedFaultyLoadUser = function(userId, callback){
                     callback(
                         new CAPIError("Content type service failed for some reason"),
-                        false
+                        loadUserErrorResponse
                     );
                 },
+                loadRoleErrorResponse = {'status': 403},
                 fakedFaultyLoadRole = function(roleId, callback){
                     callback(
                         new CAPIError("Content type service failed for some reason"),
-                        false
+                        loadRoleErrorResponse
                     );
                 };
 
             describe("dealing with faulty Discovery Service and performing", function () {
+                var discoveryErrorResponse = {'status': 'timeout'};
 
                 beforeEach(function (){
 
@@ -1210,7 +1214,7 @@ define(function (require) {
                         getInfoObject : function(name, callback){
                             callback(
                                 new CAPIError("Discovery service failed for some reason"),
-                                false
+                                discoveryErrorResponse
                             );
                         }
                     };
@@ -1234,8 +1238,9 @@ define(function (require) {
                     expect(mockFaultyDiscoveryService.getInfoObject.mostRecentCall.args[0]).toEqual("rootUserGroup"); //name
                     expect(mockFaultyDiscoveryService.getInfoObject.mostRecentCall.args[1]).toEqual(jasmine.any(Function)); //callback
 
-                    expect(mockCallback.mostRecentCall.args[0]).toEqual(jasmine.any(CAPIError)); //error
-                    expect(mockCallback.mostRecentCall.args[1]).toEqual(false); //response
+                    expect(mockCallback).toHaveBeenCalledWith(
+                        jasmine.any(CAPIError), discoveryErrorResponse
+                    );
                 });
 
                 it("createRole", function () {
@@ -1253,8 +1258,9 @@ define(function (require) {
                     expect(mockFaultyDiscoveryService.getInfoObject.mostRecentCall.args[0]).toEqual("roles"); //name
                     expect(mockFaultyDiscoveryService.getInfoObject.mostRecentCall.args[1]).toEqual(jasmine.any(Function)); //callback
 
-                    expect(mockCallback.mostRecentCall.args[0]).toEqual(jasmine.any(CAPIError)); //error
-                    expect(mockCallback.mostRecentCall.args[1]).toEqual(false); //response
+                    expect(mockCallback).toHaveBeenCalledWith(
+                        jasmine.any(CAPIError), discoveryErrorResponse
+                    );
                 });
 
                 it("loadRoles", function () {
@@ -1270,8 +1276,9 @@ define(function (require) {
                     expect(mockFaultyDiscoveryService.getInfoObject.mostRecentCall.args[0]).toEqual("roles"); //name
                     expect(mockFaultyDiscoveryService.getInfoObject.mostRecentCall.args[1]).toEqual(jasmine.any(Function)); //callback
 
-                    expect(mockCallback.mostRecentCall.args[0]).toEqual(jasmine.any(CAPIError)); //error
-                    expect(mockCallback.mostRecentCall.args[1]).toEqual(false); //response
+                    expect(mockCallback).toHaveBeenCalledWith(
+                        jasmine.any(CAPIError), discoveryErrorResponse
+                    );
                 });
 
                 it("loadRoles", function () {
@@ -1285,8 +1292,9 @@ define(function (require) {
                     expect(mockFaultyDiscoveryService.getInfoObject.mostRecentCall.args[0]).toEqual("users"); //name
                     expect(mockFaultyDiscoveryService.getInfoObject.mostRecentCall.args[1]).toEqual(jasmine.any(Function)); //callback
 
-                    expect(mockCallback.mostRecentCall.args[0]).toEqual(jasmine.any(CAPIError)); //error
-                    expect(mockCallback.mostRecentCall.args[1]).toEqual(false); //response
+                    expect(mockCallback).toHaveBeenCalledWith(
+                        jasmine.any(CAPIError), discoveryErrorResponse
+                    );
                 });
 
                 it("refreshSession", function () {
@@ -1295,7 +1303,9 @@ define(function (require) {
                     expect(mockFaultyDiscoveryService.getInfoObject).toHaveBeenCalledWith(
                         "refreshSession", jasmine.any(Function)
                     );
-                    expect(mockCallback).toHaveBeenCalledWith(jasmine.any(CAPIError), false);
+                    expect(mockCallback).toHaveBeenCalledWith(
+                        jasmine.any(CAPIError), discoveryErrorResponse
+                    );
                 });
 
             });
@@ -1374,9 +1384,10 @@ define(function (require) {
                         mockCallback
                     );
 
-                    expect(mockCallback).toHaveBeenCalled();
-                    expect(mockCallback.mostRecentCall.args[0]).toEqual(jasmine.any(CAPIError)); //error
-                    expect(mockCallback.mostRecentCall.args[1]).toEqual(false); //response
+                    expect(mockCallback).toHaveBeenCalledWith(
+                        jasmine.any(CAPIError),
+                        loadUserGroupErrorResponse
+                    );
                 });
 
                 it("loadSubUserGroups", function () {
@@ -1388,9 +1399,10 @@ define(function (require) {
                         mockCallback
                     );
 
-                    expect(mockCallback).toHaveBeenCalled();
-                    expect(mockCallback.mostRecentCall.args[0]).toEqual(jasmine.any(CAPIError)); //error
-                    expect(mockCallback.mostRecentCall.args[1]).toEqual(false); //response
+                    expect(mockCallback).toHaveBeenCalledWith(
+                        jasmine.any(CAPIError),
+                        loadUserGroupErrorResponse
+                    );
                 });
 
                 it("loadUsersOfUserGroup", function () {
@@ -1402,9 +1414,10 @@ define(function (require) {
                         mockCallback
                     );
 
-                    expect(mockCallback).toHaveBeenCalled();
-                    expect(mockCallback.mostRecentCall.args[0]).toEqual(jasmine.any(CAPIError)); //error
-                    expect(mockCallback.mostRecentCall.args[1]).toEqual(false); //response
+                    expect(mockCallback).toHaveBeenCalledWith(
+                        jasmine.any(CAPIError),
+                        loadUserGroupErrorResponse
+                    );
                 });
 
                 it("createUser", function () {
@@ -1436,9 +1449,10 @@ define(function (require) {
                         mockCallback
                     );
 
-                    expect(mockCallback).toHaveBeenCalled();
-                    expect(mockCallback.mostRecentCall.args[0]).toEqual(jasmine.any(CAPIError)); //error
-                    expect(mockCallback.mostRecentCall.args[1]).toEqual(false); //response
+                    expect(mockCallback).toHaveBeenCalledWith(
+                        jasmine.any(CAPIError),
+                        loadUserGroupErrorResponse
+                    );
                 });
 
                 it("assignUserToUserGroup", function () {
@@ -1451,9 +1465,10 @@ define(function (require) {
                         mockCallback
                     );
 
-                    expect(mockCallback).toHaveBeenCalled();
-                    expect(mockCallback.mostRecentCall.args[0]).toEqual(jasmine.any(CAPIError)); //error
-                    expect(mockCallback.mostRecentCall.args[1]).toEqual(false); //response
+                    expect(mockCallback).toHaveBeenCalledWith(
+                        jasmine.any(CAPIError),
+                        loadUserErrorResponse
+                    );
                 });
 
                 it("getRoleAssignmentsForUser", function () {
@@ -1465,9 +1480,10 @@ define(function (require) {
                         mockCallback
                     );
 
-                    expect(mockCallback).toHaveBeenCalled();
-                    expect(mockCallback.mostRecentCall.args[0]).toEqual(jasmine.any(CAPIError)); //error
-                    expect(mockCallback.mostRecentCall.args[1]).toEqual(false); //response
+                    expect(mockCallback).toHaveBeenCalledWith(
+                        jasmine.any(CAPIError),
+                        loadUserErrorResponse
+                    );
                 });
 
                 it("getRoleAssignmentsForUserGroup", function () {
@@ -1479,9 +1495,10 @@ define(function (require) {
                         mockCallback
                     );
 
-                    expect(mockCallback).toHaveBeenCalled();
-                    expect(mockCallback.mostRecentCall.args[0]).toEqual(jasmine.any(CAPIError)); //error
-                    expect(mockCallback.mostRecentCall.args[1]).toEqual(false); //response
+                    expect(mockCallback).toHaveBeenCalledWith(
+                        jasmine.any(CAPIError),
+                        loadUserGroupErrorResponse
+                    );
                 });
 
                 it("assignRoleToUser", function () {
@@ -1516,9 +1533,10 @@ define(function (require) {
                         mockCallback
                     );
 
-                    expect(mockCallback).toHaveBeenCalled();
-                    expect(mockCallback.mostRecentCall.args[0]).toEqual(jasmine.any(CAPIError)); //error
-                    expect(mockCallback.mostRecentCall.args[1]).toEqual(false); //response
+                    expect(mockCallback).toHaveBeenCalledWith(
+                        jasmine.any(CAPIError),
+                        loadUserErrorResponse
+                    );
                 });
 
                 it("assignRoleToUserGroup", function () {
@@ -1553,9 +1571,10 @@ define(function (require) {
                         mockCallback
                     );
 
-                    expect(mockCallback).toHaveBeenCalled();
-                    expect(mockCallback.mostRecentCall.args[0]).toEqual(jasmine.any(CAPIError)); //error
-                    expect(mockCallback.mostRecentCall.args[1]).toEqual(false); //response
+                    expect(mockCallback).toHaveBeenCalledWith(
+                        jasmine.any(CAPIError),
+                        loadUserGroupErrorResponse
+                    );
                 });
 
                 it("addPolicy", function () {
@@ -1574,9 +1593,10 @@ define(function (require) {
                         mockCallback
                     );
 
-                    expect(mockCallback).toHaveBeenCalled();
-                    expect(mockCallback.mostRecentCall.args[0]).toEqual(jasmine.any(CAPIError)); //error
-                    expect(mockCallback.mostRecentCall.args[1]).toEqual(false); //response
+                    expect(mockCallback).toHaveBeenCalledWith(
+                        jasmine.any(CAPIError),
+                        loadRoleErrorResponse
+                    );
                 });
 
                 it("loadPolicies", function () {
@@ -1588,9 +1608,10 @@ define(function (require) {
                         mockCallback
                     );
 
-                    expect(mockCallback).toHaveBeenCalled();
-                    expect(mockCallback.mostRecentCall.args[0]).toEqual(jasmine.any(CAPIError)); //error
-                    expect(mockCallback.mostRecentCall.args[1]).toEqual(false); //response
+                    expect(mockCallback).toHaveBeenCalledWith(
+                        jasmine.any(CAPIError),
+                        loadRoleErrorResponse
+                    );
                 });
 
             });

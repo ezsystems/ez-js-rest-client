@@ -26,26 +26,23 @@ define(["structures/Response", "structures/CAPIError"], function (Response, CAPI
 
         // Create the state change handler:
         XHR.onreadystatechange = function () {
+            var response;
+
             if (XHR.readyState != 4) {return;} // Not ready yet
+
+            response = new Response({
+                status: XHR.status,
+                headers: XHR.getAllResponseHeaders(),
+                body: XHR.responseText
+            });
             if (XHR.status >= 400) {
                 callback(
-                    new CAPIError("Connection error : " + XHR.status + ".", {
-                        errorCode : XHR.status,
-                        xhr: XHR
-                    }),
-                    false
+                    new CAPIError("Connection error : " + XHR.status + "."),
+                    response
                 );
                 return;
             }
-            // Request successful
-            callback(
-                false,
-                new Response({
-                    status: XHR.status,
-                    headers: XHR.getAllResponseHeaders(),
-                    body: XHR.responseText
-                })
-            );
+            callback(false, response);
         };
 
         if (request.httpBasicAuth) {

@@ -207,9 +207,9 @@ define(function (require) {
                     mockCallback
                 );
 
-                expect(mockCallback).toHaveBeenCalled();
-                expect(mockCallback.mostRecentCall.args[0]).toEqual(jasmine.any(CAPIError)); // errors
-                expect(mockCallback.mostRecentCall.args[1]).toEqual(false); // response
+                expect(mockCallback).toHaveBeenCalledWith(
+                    jasmine.any(CAPIError), jasmine.any(Response)
+                );
             });
 
         });

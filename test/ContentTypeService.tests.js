@@ -710,26 +710,29 @@ define(function (require) {
             // ******************************
             // Faked faulty internal service calls
             // ******************************
-            var fakedFaultyLoadContentTypeGroup = function(ContentTypeGroupId, callback){
+            var loadTypeErrorResponse = {'status': 401},
+                loadTupeDraftErrorResponse = {'status': 403},
+                fakedFaultyLoadContentTypeGroup = function(ContentTypeGroupId, callback){
                     callback(
                         new CAPIError("Content type service failed for some reason"),
-                        false
+                        loadTypeErrorResponse
                     );
                 },
                 fakedFaultyLoadContentTypeDraft = function(ContentTypeId, callback){
                     callback(
                         new CAPIError("Content type service failed for some reason"),
-                        false
+                        loadTupeDraftErrorResponse
                     );
                 };
 
             it("running loadContentTypeByIdentifier call", function () {
+                var errorResponse = {'status': 'timeout'};
 
                 mockFaultyDiscoveryService = {
                     getInfoObject : function(name, callback){
                         callback(
                             new CAPIError("Discovery service failed for some reason"),
-                            false
+                            errorResponse
                         );
                     }
                 };
@@ -745,10 +748,9 @@ define(function (require) {
 
                 expect(mockFaultyDiscoveryService.getInfoObject).toHaveBeenCalled();
 
-                expect(mockCallback).toHaveBeenCalled();
-                expect(mockCallback.mostRecentCall.args[0]).toEqual(jasmine.any(CAPIError)); //error
-                expect(mockCallback.mostRecentCall.args[1]).toEqual(false); //response
-
+                expect(mockCallback).toHaveBeenCalledWith(
+                    jasmine.any(CAPIError), errorResponse
+                );
             });
 
             describe("dealing with faulty inner calls and performing", function (){
@@ -769,9 +771,9 @@ define(function (require) {
                         mockCallback
                     );
 
-                    expect(mockCallback).toHaveBeenCalled();
-                    expect(mockCallback.mostRecentCall.args[0]).toEqual(jasmine.any(CAPIError)); //error
-                    expect(mockCallback.mostRecentCall.args[1]).toEqual(false); //response
+                    expect(mockCallback).toHaveBeenCalledWith(
+                        jasmine.any(CAPIError), loadTypeErrorResponse
+                    );
                 });
 
                 it("createContentType", function () {
@@ -813,9 +815,9 @@ define(function (require) {
                         mockCallback
                     );
 
-                    expect(mockCallback).toHaveBeenCalled();
-                    expect(mockCallback.mostRecentCall.args[0]).toEqual(jasmine.any(CAPIError)); //error
-                    expect(mockCallback.mostRecentCall.args[1]).toEqual(false); //response
+                    expect(mockCallback).toHaveBeenCalledWith(
+                        jasmine.any(CAPIError), loadTypeErrorResponse
+                    );
                 });
 
                 it("addFieldDefinition", function () {
@@ -840,9 +842,9 @@ define(function (require) {
                         mockCallback
                     );
 
-                    expect(mockCallback).toHaveBeenCalled();
-                    expect(mockCallback.mostRecentCall.args[0]).toEqual(jasmine.any(CAPIError)); //error
-                    expect(mockCallback.mostRecentCall.args[1]).toEqual(false); //response
+                    expect(mockCallback).toHaveBeenCalledWith(
+                        jasmine.any(CAPIError), loadTupeDraftErrorResponse
+                    );
                 });
 
             });
