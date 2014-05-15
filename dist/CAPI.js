@@ -436,12 +436,12 @@ define('structures/CAPIError',[],function () {
      * @class CAPIError
      * @constructor
      * @param message {String} error message
-     * @param additionalInfo {Object} object literal containing any additional error properties
+     * @param details {Object} object literal containing any additional error properties
      */
-    var CAPIError = function (message, additionalInfo) {
+    var CAPIError = function (message, details) {
         this.name = "CAPIError";
         this.message = message;
-        this.additionalInfo = additionalInfo;
+        this.details = details;
     };
 
     CAPIError.prototype = new Error();
@@ -451,6 +451,7 @@ define('structures/CAPIError',[],function () {
     return CAPIError;
 
 });
+
 /* global define */
 define('storages/LocalStorage',["structures/CAPIError"], function(CAPIError) {
     /**
@@ -560,17 +561,51 @@ define('authAgents/SessionAuthAgent',["structures/CAPIError", "storages/LocalSto
      * @param storage {StorageAbstraction?} storage to be used. By default a LocalStorage will be utilized
      */
     var SessionAuthAgent = function (credentials, storage) {
-        // is initiated inside CAPI constructor by using setCAPI() method
-        this._CAPI = null;
+            /**
+             * The CAPI instance. It is set by the call to setCAPI() done while
+             * instantiating the CAPI.
+             *
+             * @property _CAPI
+             * @type CAPI
+             * @protected
+             */
+            this._CAPI = null;
 
-        this._login = credentials.login;
-        this._password = credentials.password;
+            /**
+             * The login
+             *
+             * @property _login
+             * @type {String}
+             * @default ""
+             * @protected
+             */
+            this._login = '';
 
+            /**
+             * The password
+             *
+             * @property _password
+             * @type {String}
+             * @default ""
+             * @protected
+             */
+            this._password = '';
 
-        // StorageAbstraction is optional. Use a LocalStorage by default if nothing else
-        // is provided
-        this._storage = storage || new LocalStorage();
-    };
+            /**
+             * The storage to use to store the session info.
+             *
+             * @property _storage
+             * @type {StorageAbstraction}
+             * @default LocalStorage
+             * @protected
+             */
+            this._storage = storage || new LocalStorage();
+
+            if ( credentials ) {
+                this.setCredentials(credentials);
+            }
+        },
+        SAFE_METHODS = {'GET': 1, 'HEAD': 1, 'OPTIONS': 1, 'TRACE': 1};
 
     /**
      * Constant to be used as storage key for the sessionName
@@ -591,6 +626,15 @@ define('authAgents/SessionAuthAgent',["structures/CAPIError", "storages/LocalSto
     SessionAuthAgent.KEY_SESSION_ID = 'ezpRestClient.sessionId';
 
     /**
+     * Constant to be used as storage key for the sessionHref
+     *
+     * @static
+     * @const
+     * @type {string}
+     */
+    SessionAuthAgent.KEY_SESSION_HREF = 'ezpRestClient.sessionHref';
+
+    /**
      * Constant to be used as storage key for the csrfToken
      *
      * @static
@@ -598,6 +642,35 @@ define('authAgents/SessionAuthAgent',["structures/CAPIError", "storages/LocalSto
      * @type {string}
      */
     SessionAuthAgent.KEY_CSRF_TOKEN = 'ezpRestClient.csrfToken';
+
+    /**
+     * Checks that the current user is still logged in. To be considered as
+     * logged in, the storage should have a session id and the refresh calls
+     * should be successful.
+     * If the storage does not contain any session info, the callback is called
+     * with `true` as its first argument, otherwise, the callback is called
+     * with the `error` and `result` from {{#crossLink
+     * "UserService/refreshSession:method"}}UserService.refreshSession{{/crossLink}}.
+     *
+     * @param {Function} callback
+     * @method isLoggedIn
+     */
+    SessionAuthAgent.prototype.isLoggedIn = function (callback) {
+        var that = this,
+            userService = this._CAPI.getUserService(),
+            sessionId = this._storage.getItem(SessionAuthAgent.KEY_SESSION_ID);
+
+        if ( sessionId === null) {
+            callback(true, false);
+            return;
+        }
+        userService.refreshSession(sessionId, function (error, result) {
+            if ( error ) {
+                that._resetStorage();
+            }
+            callback(error, result);
+        });
+    };
 
     /**
      * Called every time a new request cycle is started,
@@ -624,26 +697,42 @@ define('authAgents/SessionAuthAgent',["structures/CAPIError", "storages/LocalSto
         userService.createSession(
             sessionCreateStruct,
             function (error, sessionResponse) {
+                var session;
+
                 if (error) {
-                    done(
-                        new CAPIError(
-                            "Failed to create new session.",
-                            {sessionCreateStruct: sessionCreateStruct}
-                        ),
-                        false
-                    );
+                    done(error, sessionResponse);
                     return;
                 }
 
-                var session = JSON.parse(sessionResponse.body).Session;
+                session = sessionResponse.document.Session;
 
                 that._storage.setItem(SessionAuthAgent.KEY_SESSION_NAME, session.name);
-                that._storage.setItem(SessionAuthAgent.KEY_SESSION_ID, session._href);
+                that._storage.setItem(SessionAuthAgent.KEY_SESSION_HREF, session._href);
+                that._storage.setItem(SessionAuthAgent.KEY_SESSION_ID, session.identifier);
                 that._storage.setItem(SessionAuthAgent.KEY_CSRF_TOKEN, session.csrfToken);
 
-                done(false, true);
+                done(false, sessionResponse);
             }
         );
+    };
+
+    /**
+     * Tries to log in in the REST API. If the storage already contains a
+     * session id, first it tries to log out before doing the log in.
+     *
+     * @method logIn
+     * @param {Function} callback
+     */
+    SessionAuthAgent.prototype.logIn = function (callback) {
+        var that = this;
+
+        if ( this._storage.getItem(SessionAuthAgent.KEY_SESSION_ID) !== null ) {
+            this.logOut(function (error, result) {
+                that.ensureAuthentication(callback);
+            });
+        } else {
+            this.ensureAuthentication(callback);
+        }
     };
 
     /**
@@ -655,37 +744,41 @@ define('authAgents/SessionAuthAgent',["structures/CAPIError", "storages/LocalSto
      * @param done {function}
      */
     SessionAuthAgent.prototype.authenticateRequest = function (request, done) {
-        if (request.method !== "GET" && request.method !== "HEAD" && request.method !== "OPTIONS" && request.method !== "TRACE" ) {
-            request.headers["X-CSRF-Token"] = this._storage.getItem(SessionAuthAgent.KEY_CSRF_TOKEN);
+        var token = this._storage.getItem(SessionAuthAgent.KEY_CSRF_TOKEN);
+
+        if ( SAFE_METHODS[request.method.toUpperCase()] !== 1 && token !== null ) {
+            request.headers["X-CSRF-Token"] = token;
         }
 
         done(false, request);
     };
 
     /**
-     * Log out workflow
-     * Kills currently active session and resets Storage params (sessionId, CSRFToken)
+     * Log out. If the client did not logged in yet, the callback is called with
+     * `false` and `true` as arguments, otherwise the callback is called with the
+     * `error` and the `result` from {{#crossLink
+     * "UserService/deleteSession:method"}}userService.deleteSession{{/crossLink}}.
      *
      * @method logOut
      * @param done {function}
      */
     SessionAuthAgent.prototype.logOut = function (done) {
         var userService = this._CAPI.getUserService(),
+            sessionHref = this._storage.getItem(SessionAuthAgent.KEY_SESSION_HREF),
             that = this;
 
+        if ( sessionHref === null ) {
+            done(false, true);
+            return;
+        }
+
         userService.deleteSession(
-            this._storage.getItem(SessionAuthAgent.KEY_SESSION_ID),
+            sessionHref,
             function (error, response) {
-                if (error) {
-                    done(true, false);
-                    return;
+                if ( !error ) {
+                    that._resetStorage();
                 }
-
-                that._storage.removeItem(SessionAuthAgent.KEY_SESSION_NAME);
-                that._storage.removeItem(SessionAuthAgent.KEY_SESSION_ID);
-                that._storage.removeItem(SessionAuthAgent.KEY_CSRF_TOKEN);
-
-                done(false, true);
+                done(error, response);
             }
         );
     };
@@ -700,8 +793,33 @@ define('authAgents/SessionAuthAgent',["structures/CAPIError", "storages/LocalSto
         this._CAPI = CAPI;
     };
 
-    return SessionAuthAgent;
+    /**
+     * Set the credentials
+     *
+     * @method setCredentials
+     * @param {Object} credentials
+     * @param {String} credentials.login
+     * @param {String} credentials.password
+     */
+    SessionAuthAgent.prototype.setCredentials = function (credentials) {
+        this._login = credentials.login;
+        this._password = credentials.password;
+    };
 
+    /**
+     * Resets the storage associated with this auth agent
+     *
+     * @method _resetStorage
+     * @protected
+     */
+    SessionAuthAgent.prototype._resetStorage = function () {
+        this._storage.removeItem(SessionAuthAgent.KEY_SESSION_NAME);
+        this._storage.removeItem(SessionAuthAgent.KEY_SESSION_ID);
+        this._storage.removeItem(SessionAuthAgent.KEY_SESSION_HREF);
+        this._storage.removeItem(SessionAuthAgent.KEY_CSRF_TOKEN);
+    };
+
+    return SessionAuthAgent;
 });
 
 /* global define */
@@ -714,13 +832,34 @@ define('authAgents/HttpBasicAuthAgent',[],function () {
      *
      * @class HttpBasicAuthAgent
      * @constructor
-     * @param credentials {Object} object literal containg credentials for the REST service access
+     * @param [credentials] {Object} object literal containg credentials for the REST service access
      * @param credentials.login {String} user login
      * @param credentials.password {String} user password
      */
     var HttpBasicAuthAgent = function (credentials) {
-        this._login = credentials.login;
-        this._password = credentials.password;
+        /**
+         * The login
+         *
+         * @property _login
+         * @type {String}
+         * @default ""
+         * @protected
+         */
+        this._login = '';
+
+        /**
+         * The password
+         *
+         * @property _password
+         * @type {String}
+         * @default ""
+         * @protected
+         */
+        this._password = '';
+
+        if ( credentials ) {
+            this.setCredentials(credentials);
+        }
     };
 
     /**
@@ -755,7 +894,7 @@ define('authAgents/HttpBasicAuthAgent',[],function () {
     };
 
     /**
-     * Log out workflow
+     * Log out
      * No actual logic for HTTP Basic Auth
      *
      * @method logOut
@@ -766,18 +905,58 @@ define('authAgents/HttpBasicAuthAgent',[],function () {
     };
 
     /**
+     * Checks whether the user is logged in. For HttpBasicAuthAgent, it actually
+     * tries to load the root resource with the provided credentials.
+     *
+     * @method isLoggedIn
+     * @param {Function} done
+     */
+    HttpBasicAuthAgent.prototype.isLoggedIn = function (done) {
+        if ( !this._login || !this._password ) {
+            done(true, false);
+            return;
+        }
+        this._CAPI.getContentService().loadRoot(done);
+    };
+
+    /**
+     * Logs in the user by trying to load the root resource, it is the same as
+     * {{#crossLink
+     * "HttpBasicAuthAgent/isLoggedIn:method"}}HttpBasicAuthAgent.isLoggedIn{{/crossLink}}
+     *
+     * @method logIn
+     * @param {Function} done
+     */
+    HttpBasicAuthAgent.prototype.logIn = function (done) {
+        this.isLoggedIn(done);
+    };
+
+    /**
      * Set the instance of the CAPI to be used by the agent
-     * As HttpBasicAuthAgent has no use for the CAPI, implementation is empty
      *
      * @method setCAPI
      * @param CAPI {CAPI} current instance of the CAPI object
      */
     HttpBasicAuthAgent.prototype.setCAPI = function (CAPI) {
+        this._CAPI = CAPI;
+    };
+
+    /**
+     * Set the credentials
+     *
+     * @method setCredentials
+     * @param {Object} credentials
+     * @param {String} credentials.login
+     * @param {String} credentials.password
+     */
+    HttpBasicAuthAgent.prototype.setCredentials = function (credentials) {
+        this._login = credentials.login;
+        this._password = credentials.password;
     };
 
     return HttpBasicAuthAgent;
-
 });
+
 /* global define */
 define('structures/Response',[],function () {
     
@@ -993,7 +1172,7 @@ define('ConnectionManager',["structures/Response", "structures/Request", "struct
      * @param callback {function} function, which will be executed on request success
      */
     ConnectionManager.prototype.notAuthorizedRequest = function (method, url, body, headers, callback) {
-        var request,
+        var request, that = this,
             defaultMethod = "GET",
             defaultUrl = "/",
             defaultBody = "",
@@ -1037,23 +1216,12 @@ define('ConnectionManager',["structures/Response", "structures/Request", "struct
             console.dir(request);
         }
 
-        // Main goal
-        this._connectionFactory.createConnection().execute(request, callback);
-    };
-
-    /**
-     * logOut - logout workflow
-     * Kills currently active session and resets localStorage params (sessionId, CSRFToken)
-     *
-     * @method logOut
-     * @param callback {function} function, which will be executed on request success
-     */
-    ConnectionManager.prototype.logOut = function (callback) {
-        this._authenticationAgent.logOut(callback);
+        this._authenticationAgent.authenticateRequest(request, function (err, request) {
+            that._connectionFactory.createConnection().execute(request, callback);
+        });
     };
 
     return ConnectionManager;
-
 });
 
 /* global define */
@@ -1131,26 +1299,23 @@ define('connections/XmlHttpRequestConnection',["structures/Response", "structure
 
         // Create the state change handler:
         XHR.onreadystatechange = function () {
+            var response;
+
             if (XHR.readyState != 4) {return;} // Not ready yet
+
+            response = new Response({
+                status: XHR.status,
+                headers: XHR.getAllResponseHeaders(),
+                body: XHR.responseText
+            });
             if (XHR.status >= 400) {
                 callback(
-                    new CAPIError("Connection error : " + XHR.status + ".", {
-                        errorCode : XHR.status,
-                        xhr: XHR
-                    }),
-                    false
+                    new CAPIError("Connection error : " + XHR.status + ".", {request: request}),
+                    response
                 );
                 return;
             }
-            // Request successful
-            callback(
-                false,
-                new Response({
-                    status: XHR.status,
-                    headers: XHR.getAllResponseHeaders(),
-                    body: XHR.responseText
-                })
-            );
+            callback(false, response);
         };
 
         if (request.httpBasicAuth) {
@@ -1183,6 +1348,7 @@ define('connections/XmlHttpRequestConnection',["structures/Response", "structure
 
     return XmlHttpRequestConnection;
 });
+
 /* global define */
 /* global ActiveXObject */
 define('connections/MicrosoftXmlHttpRequestConnection',["structures/Response", "structures/CAPIError"], function (Response, CAPIError) {
@@ -1212,26 +1378,23 @@ define('connections/MicrosoftXmlHttpRequestConnection',["structures/Response", "
 
         // Create the state change handler:
         XHR.onreadystatechange = function () {
+            var response;
+
             if (XHR.readyState != 4) {return;} // Not ready yet
+
+            response = new Response({
+                status: XHR.status,
+                headers: XHR.getAllResponseHeaders(),
+                body: XHR.responseText
+            });
             if (XHR.status >= 400) {
                 callback(
-                    new CAPIError("Connection error : " + XHR.status + ".", {
-                        errorCode : XHR.status,
-                        xhr: XHR
-                    }),
-                    false
+                    new CAPIError("Connection error : " + XHR.status + ".", {request: request}),
+                    response
                 );
                 return;
             }
-            // Request successful
-            callback(
-                false,
-                new Response({
-                    status: XHR.status,
-                    headers: XHR.getAllResponseHeaders(),
-                    body: XHR.responseText
-                })
-            );
+            callback(false, response);
         };
 
         if (request.httpBasicAuth) {
@@ -1264,13 +1427,15 @@ define('connections/MicrosoftXmlHttpRequestConnection',["structures/Response", "
 
     return MicrosoftXmlHttpRequestConnection;
 });
+
 /* global define */
 define('services/DiscoveryService',["structures/CAPIError"], function (CAPIError) {
     
 
     /**
-     * Creates an instance of discovery service.
-     * Discovery service is used internally to auto-discover and cache misc useful REST objects.
+     * Creates an instance of discovery service.  Discovery service is used
+     * internally to discover resources URI and media type provided in the root
+     * resource.
      *
      * @class DiscoveryService
      * @constructor
@@ -1284,159 +1449,39 @@ define('services/DiscoveryService',["structures/CAPIError"], function (CAPIError
     };
 
     /**
-     * Try to get url of the target object by given 'name'
-     *
-     * @method getUrl
-     * @param name {String} name of the target object (e.g. "Trash")
-     * @param callback {Function} callback executed after performing the request (see "_discoverRoot" call for more info)
-     * @param callback.error {mixed} false or CAPIError object if an error occurred
-     * @param callback.response {mixed} the url of the target object if it was found, false otherwise.
-     */
-    DiscoveryService.prototype.getUrl = function (name, callback) {
-        this._getObjectFromCache(
-            name,
-            function (error, cachedObject) {
-                if (error) {
-                    callback(error, false);
-                    return;
-                }
-
-                callback(false, cachedObject._href);
-            }
-        );
-    };
-
-    /**
-     * Try to get media-type of the target object by given 'name'
-     *
-     * @method getMediaType
-     * @param name {String} name of the target object (e.g. "Trash")
-     * @param callback {Function} callback executed after performing the request (see "_discoverRoot" call for more info)
-     * @param callback.error {mixed} false or CAPIError object if an error occurred
-     * @param callback.response {mixed} the media-type of the target object if it was found, false otherwise.
-     */
-    DiscoveryService.prototype.getMediaType = function (name, callback) {
-        this._getObjectFromCache(
-            name,
-            function (error, cachedObject) {
-                if (error) {
-                    callback(error, false);
-                    return;
-                }
-
-                callback(false, cachedObject["_media-type"]);
-            }
-        );
-    };
-
-    /**
-     * Try to get the whole target object by given 'name'
+     * Get the information for given name. The information is provided as the
+     * second argument of the callback unless there's a network issue while
+     * loading the REST root resource or if there's no resource associated with
+     * the given name.
      *
      * @method getInfoObject
+     *
      * @param name {String} name of the target object (e.g. "Trash")
-     * @param callback {Function} callback executed after performing the request (see "_discoverRoot" call for more info)
-     * @param callback.error {mixed} false or CAPIError object if an error occurred
-     * @param callback.response {mixed} the target object if it was found, false otherwise.
+     * @param callback {Function}
+     * @param callback.error {Boolean|CAPIError} false or CAPIError object if an
+     * error occurred
+     * @param callback.response {Object|Response|Boolean} the target object if
+     * it was found, the Response object if an error occured while loading the
+     * REST root or false if the name does not match any object.
      */
     DiscoveryService.prototype.getInfoObject = function (name, callback) {
-        this._getObjectFromCache(
-            name,
-            function (error, cachedObject) {
-                if (error) {
-                    callback(error, false);
-                    return;
-                }
+        var that = this;
 
-                callback(false, cachedObject);
-            }
-        );
-    };
-
-    /**
-     * discover Root object
-     *
-     * @method _discoverRoot
-     * @param rootPath {String} path to Root resource
-     * @param callback {Function} callback executed after performing the request
-     * @param callback.error {mixed} false or CAPIError object if an error occurred
-     * @param callback.response {boolean} true if the root was discovered successfully, false otherwise.
-     * @protected
-     */
-    DiscoveryService.prototype._discoverRoot = function (rootPath, callback) {
-        if (!this._cacheObject.Root) {
-            var that = this;
-            this._connectionManager.request(
-                "GET",
-                rootPath,
-                "",
-                {"Accept": "application/vnd.ez.api.Root+json"},
-                function (error, rootJSON) {
-                    if (error) {
-                        callback(error, false);
-                        return;
-                    }
-
-                    that._copyToCache(rootJSON.document);
-                    callback(false, true);
-                }
-            );
-        } else {
-            callback(false, true);
-        }
-    };
-
-    /**
-     * Copy all the properties of the target object into the cache object
-     *
-     * @method _copyToCache
-     * @param object {Object} target object
-     * @protected
-     */
-    DiscoveryService.prototype._copyToCache = function (object) {
-        for (var property in object) {
-            if (object.hasOwnProperty(property) && object[property]) {
-                this._cacheObject[property] = object[property];
-            }
-        }
-    };
-
-    /**
-     * Get target object from _cacheObject by given 'name' and run the discovery process if it is not available.
-     *
-     * @method _getObjectFromCache
-     * @param name {String} name of the target object to be retrived (e.g. "Trash")
-     * @param callback {Function} callback executed after performing the request
-     * @param callback.error {mixed} false or CAPIError object if an error occurred
-     * @param callback.response {mixed} the target object if it was found, false otherwise.
-     * @protected
-     */
-    DiscoveryService.prototype._getObjectFromCache = function (name, callback) {
-        var object = null,
-            that = this;
         // Discovering root, if not yet discovered
         // on discovery running the request for same 'name' again
         if (!this._cacheObject.Root) {
-            this._discoverRoot(this._rootPath, function (error, success) {
+            this._discoverRoot(this._rootPath, function (error, response) {
                 if (error) {
-                    callback(error, false);
+                    callback(error, response);
                     return;
                 }
-                that._getObjectFromCache(name, callback);
+                that.getInfoObject(name, callback);
             });
             return;
         }
 
-        // Checking most obvious places for now
-        // "Root" object (retrieved during root discovery request) and
-        // root of a cache object in case we have cached value from some other request
         if (this._cacheObject.Root.hasOwnProperty(name)) {
-            object = this._cacheObject.Root[name];
-        } else if (this._cacheObject.hasOwnProperty(name)) {
-            object = this._cacheObject[name];
-        }
-
-        if (object) {
-            callback(false, object);
+            callback(false, this._cacheObject.Root[name]);
         } else {
             callback(
                 new CAPIError(
@@ -1448,9 +1493,62 @@ define('services/DiscoveryService',["structures/CAPIError"], function (CAPIError
         }
     };
 
-    return DiscoveryService;
+    /**
+     * Load the REST root resource
+     *
+     * @method _discoverRoot
+     * @protected
+     *
+     * @param rootPath {String} path to Root resource
+     * @param callback {Function} callback executed after performing the request
+     * @param callback.error {Boolean|CAPIError} false or CAPIError object if an
+     * error occurred
+     * @param callback.response {Boolean|Response} true if the root was
+     * successfully loaded, the Response otherwise
+     */
+    DiscoveryService.prototype._discoverRoot = function (rootPath, callback) {
+        var that = this;
 
+        this._connectionManager.request(
+            "GET",
+            rootPath,
+            "",
+            {"Accept": "application/vnd.ez.api.Root+json"},
+            function (error, response) {
+                if (error) {
+                    callback(error, response);
+                    return;
+                }
+
+                that._copyToCache(response.document);
+                callback(false, true);
+            }
+        );
+    };
+
+    /**
+     * Copy all the properties of the target object into the cache
+     *
+     * @method _copyToCache
+     * @protected
+     *
+     * @param object {Object} the object to cache
+     */
+    DiscoveryService.prototype._copyToCache = function (object) {
+        var property;
+
+        // disabling hasOwnProperty check as it is useless here, we are caching
+        // literal object coming from the root resource
+        /*jslint forin:false */
+        for (property in object) {
+            this._cacheObject[property] = object[property];
+        }
+        /*jslint forin:true */
+    };
+
+    return DiscoveryService;
 });
+
 /* global define */
 define('structures/ContentCreateStruct',[],function () {
     
@@ -3155,7 +3253,7 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
             "sections",
             function (error, sections) {
                 if (error) {
-                    callback(error, false);
+                    callback(error, sections);
                     return;
                 }
 
@@ -3203,7 +3301,7 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
             "sections",
             function (error, sections) {
                 if (error) {
-                    callback(error, false);
+                    callback(error, sections);
                     return;
                 }
 
@@ -3273,7 +3371,7 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
             "content",
             function (error, contentObjects) {
                 if (error) {
-                    callback(error, false);
+                    callback(error, contentObjects);
                     return;
                 }
 
@@ -3333,7 +3431,7 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
             "contentByRemoteId",
             function (error, contentByRemoteId) {
                 if (error) {
-                    callback(error, false);
+                    callback(error, contentByRemoteId);
                     return;
                 }
                 that._connectionManager.request(
@@ -3444,7 +3542,7 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
             contentId,
             function (error, contentResponse) {
                 if (error) {
-                    callback(error, false);
+                    callback(error, contentResponse);
                     return;
                 }
 
@@ -3539,7 +3637,7 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
             contentId,
             function (error, contentResponse) {
                 if (error) {
-                    callback(error, false);
+                    callback(error, contentResponse);
                     return;
                 }
 
@@ -3607,7 +3705,7 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
                 var url = '';
 
                 if (error) {
-                    callback(error, false);
+                    callback(error, contentResponse);
                     return;
                 }
 
@@ -3683,7 +3781,7 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
             contentId,
             function (error, contentResponse) {
                 if (error) {
-                    callback(error, false);
+                    callback(error, contentResponse);
                     return;
                 }
 
@@ -3715,7 +3813,7 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
             contentId,
             function (error, contentResponse) {
                 if (error) {
-                    callback(error, false);
+                    callback(error, contentResponse);
                     return;
                 }
 
@@ -3764,7 +3862,7 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
             "locationByRemoteId",
             function (error, locationByRemoteId) {
                 if (error) {
-                    callback(error, false);
+                    callback(error, locationByRemoteId);
                     return;
                 }
                 that._connectionManager.request(
@@ -3838,7 +3936,7 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
             locationId,
             function (error, locationResponse) {
                 if (error) {
-                    callback(error, false);
+                    callback(error, locationResponse);
                     return;
                 }
 
@@ -3962,7 +4060,7 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
             "views",
             function (error, views) {
                 if (error) {
-                    callback(error, false);
+                    callback(error, views);
                     return;
                 }
 
@@ -4018,7 +4116,7 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
             {},
             function (error, versionResponse) {
                 if (error) {
-                    callback(error, false);
+                    callback(error, versionResponse);
                     return;
                 }
 
@@ -4071,7 +4169,7 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
             contentId,
             function (error, currentVersionResponse) {
                 if (error) {
-                    callback(error, false);
+                    callback(error, currentVersionResponse);
                     return;
                 }
 
@@ -4130,7 +4228,7 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
             {},
             function (error, versionResponse) {
                 if (error) {
-                    callback(error, false);
+                    callback(error, versionResponse);
                     return;
                 }
 
@@ -4204,7 +4302,7 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
             "trash",
             function (error, trash) {
                 if (error) {
-                    callback(error, false);
+                    callback(error, trash);
                     return;
                 }
 
@@ -4297,7 +4395,7 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
             "trash",
             function (error, trash) {
                 if (error) {
-                    callback(error, false);
+                    callback(error, trash);
                     return;
                 }
 
@@ -5145,7 +5243,7 @@ define('services/ContentTypeService',["structures/ContentTypeGroupInputStruct", 
             contentTypeGroupId,
             function (error, contentTypeGroupResponse) {
                 if (error) {
-                    callback(error, false);
+                    callback(error, contentTypeGroupResponse);
                     return;
                 }
 
@@ -5226,7 +5324,7 @@ define('services/ContentTypeService',["structures/ContentTypeGroupInputStruct", 
             contentTypeGroupId,
             function (error, contentTypeGroupResponse) {
                 if (error) {
-                    callback(error, false);
+                    callback(error, contentTypeGroupResponse);
                     return;
                 }
 
@@ -5295,7 +5393,7 @@ define('services/ContentTypeService',["structures/ContentTypeGroupInputStruct", 
             "contentTypeByIdentifier",
             function (error, contentTypeByIdentifier) {
                 if (error) {
-                    callback(error, false);
+                    callback(error, contentTypeByIdentifier);
                     return;
                 }
                 that._connectionManager.request(
@@ -5512,7 +5610,7 @@ define('services/ContentTypeService',["structures/ContentTypeGroupInputStruct", 
             contentTypeId,
             function (error, contentTypeDraftResponse) {
                 if (error) {
-                    callback(error, false);
+                    callback(error, contentTypeDraftResponse);
                     return;
                 }
 
@@ -5876,10 +5974,12 @@ define('structures/RoleAssignInputStruct',[],function () {
 /* global define */
 define('services/UserService',['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'structures/UserUpdateStruct',
         'structures/UserGroupCreateStruct', 'structures/UserGroupUpdateStruct', 'structures/PolicyCreateStruct',
-        'structures/PolicyUpdateStruct', 'structures/RoleInputStruct', 'structures/RoleAssignInputStruct'],
+        'structures/PolicyUpdateStruct', 'structures/RoleInputStruct', 'structures/RoleAssignInputStruct',
+        "utils/uriparse"],
     function (SessionCreateStruct, UserCreateStruct, UserUpdateStruct,
               UserGroupCreateStruct, UserGroupUpdateStruct, PolicyCreateStruct,
-              PolicyUpdateStruct, RoleInputStruct, RoleAssignInputStruct) {
+              PolicyUpdateStruct, RoleInputStruct, RoleAssignInputStruct,
+              parseUriTemplate) {
     
 
     /**
@@ -6090,7 +6190,7 @@ define('services/UserService',['structures/SessionCreateStruct', 'structures/Use
             "rootUserGroup",
             function (error, rootUserGroup) {
                 if (error) {
-                    callback(error, false);
+                    callback(error, rootUserGroup);
                     return;
                 }
 
@@ -6194,7 +6294,7 @@ define('services/UserService',['structures/SessionCreateStruct', 'structures/Use
             parentGroupId,
             function (error, userGroupResponse) {
                 if (error) {
-                    callback(error, false);
+                    callback(error, userGroupResponse);
                     return;
                 }
 
@@ -6245,7 +6345,7 @@ define('services/UserService',['structures/SessionCreateStruct', 'structures/Use
             userGroupId,
             function (error, userGroupResponse) {
                 if (error) {
-                    callback(error, false);
+                    callback(error, userGroupResponse);
                     return;
                 }
 
@@ -6277,7 +6377,7 @@ define('services/UserService',['structures/SessionCreateStruct', 'structures/Use
             userGroupId,
             function (error, userGroupResponse) {
                 if (error) {
-                    callback(error, false);
+                    callback(error, userGroupResponse);
                     return;
                 }
 
@@ -6332,7 +6432,7 @@ define('services/UserService',['structures/SessionCreateStruct', 'structures/Use
             userGroupId,
             function (error, userGroupResponse) {
                 if (error) {
-                    callback(error, false);
+                    callback(error, userGroupResponse);
                     return;
                 }
 
@@ -6363,7 +6463,7 @@ define('services/UserService',['structures/SessionCreateStruct', 'structures/Use
             "users",
             function (error, users) {
                 if (error) {
-                    callback(error, false);
+                    callback(error, users);
                     return;
                 }
                 that._connectionManager.request(
@@ -6460,7 +6560,7 @@ define('services/UserService',['structures/SessionCreateStruct', 'structures/Use
             userId,
             function (error, userResponse) {
                 if (error) {
-                    callback(error, false);
+                    callback(error, userResponse);
                     return;
                 }
 
@@ -6514,7 +6614,7 @@ define('services/UserService',['structures/SessionCreateStruct', 'structures/Use
             "roles",
             function (error, roles) {
                 if (error) {
-                    callback(error, false);
+                    callback(error, roles);
                     return;
                 }
 
@@ -6593,7 +6693,7 @@ define('services/UserService',['structures/SessionCreateStruct', 'structures/Use
             "roles",
             function (error, roles) {
                 if (error) {
-                    callback(error, false);
+                    callback(error, roles);
                     return;
                 }
 
@@ -6660,7 +6760,7 @@ define('services/UserService',['structures/SessionCreateStruct', 'structures/Use
             userId,
             function (error, userResponse) {
                 if (error) {
-                    callback(error, false);
+                    callback(error, userResponse);
                     return;
                 }
 
@@ -6692,7 +6792,7 @@ define('services/UserService',['structures/SessionCreateStruct', 'structures/Use
             userGroupId,
             function (error, userGroupResponse) {
                 if (error) {
-                    callback(error, false);
+                    callback(error, userGroupResponse);
                     return;
                 }
 
@@ -6762,7 +6862,7 @@ define('services/UserService',['structures/SessionCreateStruct', 'structures/Use
             userId,
             function (error, userResponse) {
                 if (error) {
-                    callback(error, false);
+                    callback(error, userResponse);
                     return;
                 }
 
@@ -6795,7 +6895,7 @@ define('services/UserService',['structures/SessionCreateStruct', 'structures/Use
             userGroupId,
             function (error, userGroupResponse) {
                 if (error) {
-                    callback(error, false);
+                    callback(error, userGroupResponse);
                     return;
                 }
 
@@ -6884,7 +6984,7 @@ define('services/UserService',['structures/SessionCreateStruct', 'structures/Use
             roleId,
             function (error, roleResponse) {
                 if (error) {
-                    callback(error, false);
+                    callback(error, roleResponse);
                     return;
                 }
 
@@ -6916,7 +7016,7 @@ define('services/UserService',['structures/SessionCreateStruct', 'structures/Use
             roleId,
             function (error, roleResponse) {
                 if (error) {
-                    callback(error, false);
+                    callback(error, roleResponse);
                     return;
                 }
 
@@ -7012,7 +7112,10 @@ define('services/UserService',['structures/SessionCreateStruct', 'structures/Use
 // ******************************
 
     /**
-     * Create a session (login a user)
+     * Creates a session. This method **only** creates a session, for a complete
+     * and correct authentication from CAPI point of view, you need to use
+     * {{#crossLink "CAPI/logIn:method"}}the `logIn` method of the CAPI
+     * object{{/crossLink}}
      *
      * @method createSession
      * @param sessionCreateStruct {SessionCreateStruct} object describing new session to be created (see "newSessionCreateStruct")
@@ -7029,7 +7132,7 @@ define('services/UserService',['structures/SessionCreateStruct', 'structures/Use
             {"Accept": "application/vnd.ez.api.Root+json"},
             function (error, rootResource) {
                 if (error) {
-                    callback(error, false);
+                    callback(error, rootResource);
                     return;
                 }
                 that._connectionManager.notAuthorizedRequest(
@@ -7044,7 +7147,39 @@ define('services/UserService',['structures/SessionCreateStruct', 'structures/Use
     };
 
     /**
-     * Delete the target session (without actual client logout)
+     * Calls the refresh session resource to check whether the current session
+     * is valid. For a complete and correct *is logged in* check, you need to
+     * use {{#crossLink "CAPI/isLoggedIn:method"}}CAPI.isLoggedIn{{/crossLink}}
+     *
+     * @method refreshSession
+     * @param {String} sessionId the session identifier (e.g. "o7i8r1sapfc9r84ae53bgq8gp4")
+     * @param {Function} callback
+     */
+    UserService.prototype.refreshSession = function (sessionId, callback) {
+        var that = this;
+
+        this._discoveryService.getInfoObject(
+            "refreshSession",
+            function (error, refreshSession) {
+                if (error) {
+                    callback(error, refreshSession);
+                    return;
+                }
+                that._connectionManager.request(
+                    "POST",
+                    parseUriTemplate(refreshSession._href, {sessionId: sessionId}),
+                    "",
+                    {"Accept": refreshSession["_media-type"]},
+                    callback
+                );
+            }
+        );
+    };
+
+    /**
+     * Delete the target session. For a complete and correct de-authentifcation,
+     * you need to use {{#crossLink "CAPI/logOut:method"}}the `logOut` method of
+     * the CAPI object{{/crossLink}}
      *
      * @method deleteSession
      * @param sessionId {String} target session identifier (e.g. "/api/ezp/v2/user/sessions/o7i8r1sapfc9r84ae53bgq8gp4")
@@ -7061,21 +7196,7 @@ define('services/UserService',['structures/SessionCreateStruct', 'structures/Use
         );
     };
 
-    /**
-     * Actual client logout (based on deleteSession)
-     * Implemented by ConnectionManager. Depends on current system configuration.
-     * Kills currently active session and resets storage (e.g. LocalStorage) params (sessionId, CSRFToken)
-     *
-     * @method logOut
-     * @param callback {Function} callback executed after performing the request (see
-     *  {{#crossLink "UserService"}}Note on the callbacks usage{{/crossLink}} for more info)
-     */
-    UserService.prototype.logOut = function (callback) {
-        this._connectionManager.logOut(callback);
-    };
-
     return UserService;
-
 });
 
 /* globals define */
@@ -7190,6 +7311,44 @@ define('CAPI',['authAgents/SessionAuthAgent', 'authAgents/HttpBasicAuthAgent', '
         connectionManager = new ConnectionManager(endPointUrl, authenticationAgent, connectionFactory);
         connectionManager.logRequests = mergedOptions.logRequests;
         discoveryService = new DiscoveryService(mergedOptions.rootPath, connectionManager);
+
+        /**
+         * Checks that the CAPI instance is logged in
+         *
+         * @method isLoggedIn
+         * @param {Function} callback
+         */
+        this.isLoggedIn = function (callback) {
+            authenticationAgent.isLoggedIn(callback);
+        };
+
+        /**
+         * Logs in the user
+         *
+         * @method logIn
+         * @param {Object} [credentials]
+         * @param {String} credentials.login
+         * @param {String} credentials.password
+         * @param {Function} callback
+         */
+        this.logIn = function (credentials, callback) {
+            if ( callback ) {
+                authenticationAgent.setCredentials(credentials);
+            } else {
+                callback = credentials;
+            }
+            authenticationAgent.logIn(callback);
+        };
+
+        /**
+         * Logs out the current user.
+         *
+         * @method logOut
+         * @param {Function} callback
+         */
+        this.logOut = function (callback) {
+            authenticationAgent.logOut(callback);
+        };
 
         /**
          * Get instance of Content Service. Use ContentService to retrieve information and execute operations related to Content.
