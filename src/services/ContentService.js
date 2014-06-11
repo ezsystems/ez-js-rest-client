@@ -591,17 +591,17 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
      *
      * @method loadContent
      * @param versionedContentId {String} target version identifier (e.g. "/api/ezp/v2/content/objects/108/versions/2")
-     * @param [fields] {String} comma separated list of fields which should be returned in the response (see Content)
-     * @param [responseGroups] {String}  alternative: comma separated lists of predefined field groups (see REST API Spec v1)
-     * @param [languages] {String} (comma separated list) restricts the output of translatable fields to the given languages
+     * @param [fields=''] {String} comma separated list of fields which should be returned in the response (see Content).
+     * @param [responseGroups=''] {String}  alternative: comma separated lists of predefined field groups (see REST API Spec v1).
+     * @param [languages=''] {String} (comma separated list) restricts the output of translatable fields to the given languages.
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      * @example
      *     contentService.loadContent(
-     *          "/api/ezp/v2/content/objects/180/versions/1",
-     *          null,
-     *          null,
-     *          "eng-US",
+     *          '/api/ezp/v2/content/objects/180/versions/1',
+     *          '',
+     *          '',
+     *          'eng-US',
      *          callback
      *     );
      */
@@ -630,15 +630,9 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
             }
         }
 
-        if (fields) {
-            fields = '?fields=' + fields;
-        }
-        if (responseGroups) {
-            responseGroups = '&responseGroups="' + responseGroups + '"';
-        }
-        if (languages) {
-            languages = '&languages=' + languages;
-        }
+        fields = fields ? '?fields=' + fields : '';
+        responseGroups = responseGroups ? '&responseGroups="' + responseGroups + '"' : '';
+        languages = languages ? '&languages=' + languages : '';
 
         this._connectionManager.request(
             "GET",
