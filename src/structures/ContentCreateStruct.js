@@ -8,7 +8,7 @@ define(function () {
      *
      * @class ContentCreateStruct
      * @constructor
-     * @param contentTypeId {String} Content Type for new Content object (e.g. "blog")
+     * @param contentTypeId {String} Content Type id (e.g. "/api/ezp/v2/content/types/16")
      * @param locationCreateStruct {LocationCreateStruct} create structure for a Location object, where the new Content object will be situated
      * @param languageCode {String} The language code (e.g. "eng-GB")
      */
