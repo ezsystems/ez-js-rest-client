@@ -1569,7 +1569,7 @@ define('structures/ContentCreateStruct',[],function () {
      *
      * @class ContentCreateStruct
      * @constructor
-     * @param contentTypeId {String} Content Type for new Content object (e.g. "blog")
+     * @param contentTypeId {String} Content Type id (e.g. "/api/ezp/v2/content/types/16")
      * @param locationCreateStruct {LocationCreateStruct} create structure for a Location object, where the new Content object will be situated
      * @param languageCode {String} The language code (e.g. "eng-GB")
      */
@@ -5163,18 +5163,26 @@ define('services/ContentTypeService',["structures/ContentTypeGroupInputStruct", 
      * Load all content type groups
      *
      * @method loadContentTypeGroups
-     * @param contentTypeGroups {String} link to root ContentTypeGroups resource (should be auto-discovered)
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentTypeService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentTypeService.prototype.loadContentTypeGroups = function (contentTypeGroups, callback) {
-        this._connectionManager.request(
-            "GET",
-            contentTypeGroups,
-            "",
-            {"Accept": "application/vnd.ez.api.ContentTypeGroupList+json"},
-            callback
-        );
+    ContentTypeService.prototype.loadContentTypeGroups = function (callback) {
+        var that = this;
+
+        this._discoveryService.getInfoObject('contentTypeGroups', function (error, xhr) {
+            if (error) {
+                callback(error);
+                return;
+            }
+
+            that._connectionManager.request(
+                "GET",
+                xhr._href,
+                "",
+                {"Accept": "application/vnd.ez.api.ContentTypeGroupList+json"},
+                callback
+            );
+        });
     };
 
     /**
