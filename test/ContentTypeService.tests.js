@@ -95,12 +95,9 @@ define(function (require) {
                     getInfoObject : function(name, callback){
 
                         if (name === "contentTypeByIdentifier") {
-                            callback(
-                                false,
-                                {
-                                    "_href" : testContentTypeByIdentifierTemplate
-                                }
-                            );
+                            callback(false, {"_href" : testContentTypeByIdentifierTemplate});
+                        } else if (name === 'contentTypeGroups') {
+                            callback(false, {"_href": testContentTypeGroups});
                         }
                     }
                 };
@@ -137,8 +134,12 @@ define(function (require) {
 
             it("loadContentTypeGroups", function () {
                 contentTypeService.loadContentTypeGroups(
-                    testContentTypeGroups,
                     mockCallback
+                );
+
+                expect(mockDiscoveryService.getInfoObject).toHaveBeenCalledWith(
+                    'contentTypeGroups',
+                    jasmine.any(Function)
                 );
 
                 expect(mockConnectionManager.request).toHaveBeenCalledWith(
@@ -723,10 +724,13 @@ define(function (require) {
                         new CAPIError("Content type service failed for some reason"),
                         loadTupeDraftErrorResponse
                     );
-                };
+                },
+                errorResponse = {'status': 'timeout'};
 
-            it("running loadContentTypeByIdentifier call", function () {
-                var errorResponse = {'status': 'timeout'};
+            // ******************************
+            // beforeEach for positive cases
+            // ******************************
+            beforeEach(function (){
 
                 mockFaultyDiscoveryService = {
                     getInfoObject : function(name, callback){
@@ -741,6 +745,9 @@ define(function (require) {
 
                 contentTypeService = new ContentTypeService(mockConnectionManager, mockFaultyDiscoveryService);
 
+            });
+
+            it("running loadContentTypeByIdentifier call", function () {
                 contentTypeService.loadContentTypeByIdentifier(
                     testContentTypeIdentifier,
                     mockCallback
@@ -751,6 +758,15 @@ define(function (require) {
                 expect(mockCallback).toHaveBeenCalledWith(
                     jasmine.any(CAPIError), errorResponse
                 );
+            });
+
+            it("running loadContentTypeGroups call", function () {
+                contentTypeService.loadContentTypeGroups(
+                    mockCallback
+                );
+
+                expect(mockFaultyDiscoveryService.getInfoObject).toHaveBeenCalled();
+                expect(mockCallback).toHaveBeenCalledWith(jasmine.any(CAPIError));
             });
 
             describe("dealing with faulty inner calls and performing", function (){
