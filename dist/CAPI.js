@@ -1601,8 +1601,26 @@ define('structures/ContentCreateStruct',[],function () {
         return this;
     };
 
-    return ContentCreateStruct;
+    /**
+     * Adds a new field and its value into the structure
+     *
+     * @method addField
+     * @param id {Integer}  field id
+     * @param fieldIdentifer {String} field identifier
+     * @param fieldValue {Mixed} field value
+     *
+     * @return {ContentCreateStruct}
+     */
+    ContentCreateStruct.prototype.addField = function (fieldIdentifer, fieldValue) {
+        this.body.ContentCreate.fields.field.push({
+            fieldDefinitionIdentifier: fieldIdentifer,
+            fieldValue: fieldValue,
+        });
 
+        return this;
+    };
+
+    return ContentCreateStruct;
 });
 
 /* global define */
