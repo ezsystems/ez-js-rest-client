@@ -1844,6 +1844,24 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
         );
     };
 
+    /**
+     * Loads an image variation
+     *
+     * @method loadImageVariation
+     * @param variation {String} The variation REST id
+     * @param callback {Function} Callback executed after performing the request (see
+     *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
+     */
+    ContentService.prototype.loadImageVariation = function (variation, callback) {
+        this._connectionManager.request(
+            "GET",
+            variation,
+            "",
+            {"Accept": "application\/vnd.ez.api.ContentImageVariation+json"},
+            callback
+        );
+    };
+
     return ContentService;
 
 });

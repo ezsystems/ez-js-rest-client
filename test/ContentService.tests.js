@@ -406,6 +406,22 @@ define(function (require) {
 
             });
 
+            describe('Image variations', function () {
+                it('loadImageVariation', function () {
+                    var variationId = 'a_variation_id';
+
+                    contentService.loadImageVariation(variationId, mockCallback);
+
+                    expect(mockConnectionManager.request).toHaveBeenCalledWith(
+                        "GET",
+                        variationId,
+                        "",
+                        {Accept: "application\/vnd.ez.api.ContentImageVariation+json"},
+                        mockCallback
+                    );
+                });
+            });
+
             // ******************************
             // Versions management
             // ******************************
