@@ -5,16 +5,36 @@ define(["structures/CAPIError", "storages/LocalStorage"], function (CAPIError, L
     /**
      * Creates an instance of SessionAuthAgent object
      *
-     * Auth agent handles low level implementation of authorization workflow
+     * Auth agent handles low level implementation of authorization workflow.
+     * By providing a `login` and a `password` in the `authInfo` object, the
+     * auth agent will try to create a session:
+     *
+     *     var SessionAuthAgent({login: "admin", password: "publish"});
+     *
+     * The session auth agent is also able to reuse an existing session, to do
+     * that it needs to receive an object with the session info:
+     *
+     *     var new SessionAuthAgent({
+     *            name: "eZSESSID",
+     *            identifier: "sessionidentifier",
+     *            href: "/api/ezp/v2/users/session/sessionidentifier",
+     *            csrfToken: "longCsrfToken",
+     *        });
      *
      * @class SessionAuthAgent
      * @constructor
-     * @param credentials {Object} object literal containg credentials for the REST service access
-     * @param credentials.login {String} user login
-     * @param credentials.password {String} user password
+     * @param authInfo {Object} object literal containg the credentials (`login`
+     * and `password`) or the session info of an already existing one (`name`,
+     * `identifier`, `href` and `csrfToken`)
+     * @param authInfo.login {String} user login
+     * @param authInfo.password {String} user password
+     * @param authInfo.name {String} name of the session
+     * @param authInfo.identifier {String} identifier of the session
+     * @param authInfo.href {String} refresh resource URI for the session
+     * @param authInfo.csrfToken {String} CSRF Token
      * @param storage {StorageAbstraction?} storage to be used. By default a LocalStorage will be utilized
      */
-    var SessionAuthAgent = function (credentials, storage) {
+    var SessionAuthAgent = function (authInfo, storage) {
             /**
              * The CAPI instance. It is set by the call to setCAPI() done while
              * instantiating the CAPI.
@@ -55,8 +75,14 @@ define(["structures/CAPIError", "storages/LocalStorage"], function (CAPIError, L
              */
             this._storage = storage || new LocalStorage();
 
-            if ( credentials ) {
-                this.setCredentials(credentials);
+            if ( authInfo ) {
+                if ( authInfo.login && authInfo.password ) {
+                    this.setCredentials(authInfo);
+                } else if ( authInfo.csrfToken && authInfo.identifier && authInfo.name && authInfo.href ) {
+                    this._storeSessionInfo(authInfo);
+                } else {
+                    throw new CAPIError("Invalid authInfo parameter");
+                }
             }
         },
         SAFE_METHODS = {'GET': 1, 'HEAD': 1, 'OPTIONS': 1, 'TRACE': 1};
@@ -159,11 +185,12 @@ define(["structures/CAPIError", "storages/LocalStorage"], function (CAPIError, L
                 }
 
                 session = sessionResponse.document.Session;
-
-                that._storage.setItem(SessionAuthAgent.KEY_SESSION_NAME, session.name);
-                that._storage.setItem(SessionAuthAgent.KEY_SESSION_HREF, session._href);
-                that._storage.setItem(SessionAuthAgent.KEY_SESSION_ID, session.identifier);
-                that._storage.setItem(SessionAuthAgent.KEY_CSRF_TOKEN, session.csrfToken);
+                that._storeSessionInfo({
+                    name: session.name,
+                    href: session._href,
+                    identifier: session.identifier,
+                    csrfToken: session.csrfToken,
+                });
 
                 done(false, sessionResponse);
             }
@@ -271,6 +298,25 @@ define(["structures/CAPIError", "storages/LocalStorage"], function (CAPIError, L
         this._storage.removeItem(SessionAuthAgent.KEY_SESSION_ID);
         this._storage.removeItem(SessionAuthAgent.KEY_SESSION_HREF);
         this._storage.removeItem(SessionAuthAgent.KEY_CSRF_TOKEN);
+    };
+
+    /**
+     * Stores the session information in the storage
+     *
+     * @method _storeSessionInfo
+     * @param {Object} session an object describing the session
+     * @param session.name {String} the name of the session
+     * @param session.identifier {String} the identifier of the session
+     * @param session.href {String} the resource uri to refresh the session
+     * @param session.csrfToken {String} the CSRF Token associated with the
+     * session
+     * @protected
+     */
+    SessionAuthAgent.prototype._storeSessionInfo = function (session) {
+        this._storage.setItem(SessionAuthAgent.KEY_SESSION_NAME, session.name);
+        this._storage.setItem(SessionAuthAgent.KEY_SESSION_HREF, session.href);
+        this._storage.setItem(SessionAuthAgent.KEY_SESSION_ID, session.identifier);
+        this._storage.setItem(SessionAuthAgent.KEY_CSRF_TOKEN, session.csrfToken);
     };
 
     return SessionAuthAgent;
