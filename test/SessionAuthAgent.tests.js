@@ -99,6 +99,57 @@ define(["authAgents/SessionAuthAgent", "structures/CAPIError"], function (Sessio
             });
         });
 
+        describe("Existing session", function () {
+            var authInfo,
+                _brokenAuthInfo = function (authInfo, missing) {
+                    if ( missing ) {
+                        delete authInfo[missing];
+                    }
+
+                    expect(function () {
+                        new SessionAuthAgent(authInfo);
+                    }).toThrow();
+                };
+
+            beforeEach(function () {
+                authInfo = {
+                    name: testSessionName,
+                    identifier: testSessionId,
+                    href: testSessionHref,
+                    csrfToken: testCsrfToken,
+                };
+            });
+
+            it("should store the existing session info", function () {
+                sessionAuthAgent = new SessionAuthAgent(authInfo, mockStorage);
+
+                expect(mockStorage.getItem(SessionAuthAgent.KEY_SESSION_NAME)).toEqual(authInfo.name);
+                expect(mockStorage.getItem(SessionAuthAgent.KEY_SESSION_ID)).toEqual(authInfo.identifier);
+                expect(mockStorage.getItem(SessionAuthAgent.KEY_SESSION_HREF)).toEqual(authInfo.href);
+                expect(mockStorage.getItem(SessionAuthAgent.KEY_CSRF_TOKEN)).toEqual(authInfo.csrfToken);
+            });
+
+            it("should throw an error with an invalid authInfo (empty)", function () {
+                _brokenAuthInfo({});
+            });
+
+            it("should throw an error with an invalid authInfo (missing token)", function () {
+                _brokenAuthInfo(authInfo, "csrfToken");
+            });
+
+            it("should throw an error with an invalid authInfo (missing name)", function () {
+                _brokenAuthInfo(authInfo, "name");
+            });
+
+            it("should throw an error with an invalid authInfo (missing identifier)", function () {
+                _brokenAuthInfo(authInfo, "identifier");
+            });
+
+            it("should throw an error with an invalid authInfo (missing href)", function () {
+                _brokenAuthInfo(authInfo, "href");
+            });
+        });
+
         describe("logIn", function () {
             beforeEach(function () {
                 sessionAuthAgent = new SessionAuthAgent({
