@@ -304,9 +304,7 @@ define(function (require) {
 
                 it("updateContentMetadata", function () {
 
-                    var updateStruct = contentService.newContentMetadataUpdateStruct(
-                        "eng-US"
-                    );
+                    var updateStruct = contentService.newContentMetadataUpdateStruct();
 
                     updateStruct.body.ContentUpdate.Section = "/api/ezp/v2/content/sections/2";
                     updateStruct.body.ContentUpdate.remoteId = "random-id-";
@@ -1690,12 +1688,10 @@ define(function (require) {
 
                 it("newContentMetadataUpdateStruct", function (){
 
-                    testStructure = contentService.newContentMetadataUpdateStruct(
-                        testLanguage
-                    );
+                    testStructure = contentService.newContentMetadataUpdateStruct();
 
                     expect(testStructure).toEqual(jasmine.any(ContentMetadataUpdateStruct));
-                    expect(testStructure.body.ContentUpdate.MainLanguageCode).toEqual(testLanguage);
+                    expect(testStructure.body).toEqual({ContentUpdate: {}});
                 });
 
                 it("newContentCreateStruct", function (){
