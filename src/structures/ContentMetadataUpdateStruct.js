@@ -18,5 +18,15 @@ define(function () {
             };
         };
 
+    /**
+     * Sets the section id
+     *
+     * @method setSection
+     * @param {String} sectionId the Section REST id
+     */
+    ContentMetadataUpdateStruct.prototype.setSection = function (sectionId) {
+        this.body.ContentUpdate.Section = {_href: sectionId};
+    };
+
     return ContentMetadataUpdateStruct;
 });
