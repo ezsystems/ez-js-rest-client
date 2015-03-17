@@ -10,14 +10,13 @@ define(function () {
      * @constructor
      */
     var ContentMetadataUpdateStruct = function () {
-        this.body = {'ContentUpdate': {}};
+            this.body = {'ContentUpdate': {}};
 
-        this.headers = {
-            "Accept": "application/vnd.ez.api.ContentInfo+json",
-            "Content-Type": "application/vnd.ez.api.ContentUpdate+json"
+            this.headers = {
+                "Accept": "application/vnd.ez.api.ContentInfo+json",
+                "Content-Type": "application/vnd.ez.api.ContentUpdate+json"
+            };
         };
-    };
 
     return ContentMetadataUpdateStruct;
-
 });
