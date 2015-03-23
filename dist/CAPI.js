@@ -1805,36 +1805,32 @@ define('structures/ContentMetadataUpdateStruct',[],function () {
     
 
     /**
-     * Returns a structure used to update a Content's metadata. See
-     * {{#crossLink "ContentService/updateContentMetadata"}}ContentService.updateContentMetadata{{/crossLink}}
+     * The Content Update structure that can be used with {{#crossLink
+     * "ContentService/updateContentMetadata"}}ContentService.updateContentMetadata{{/crossLink}}
      *
      * @class ContentMetadataUpdateStruct
      * @constructor
-     * @param languageCode {String} The language code (eng-GB, fre-FR, ...)
      */
-    var ContentMetadataUpdateStruct = function (languageCode) {
-        var now = JSON.parse(JSON.stringify(new Date()));
+    var ContentMetadataUpdateStruct = function () {
+            this.body = {'ContentUpdate': {}};
 
-        this.body = {};
-        this.body.ContentUpdate = {};
-
-        this.body.ContentUpdate.MainLanguageCode = languageCode;
-        this.body.ContentUpdate.Section = null;
-        this.body.ContentUpdate.alwaysAvailable = "true";
-        this.body.ContentUpdate.remoteId = null;
-        this.body.ContentUpdate.modificationDate = now;
-        this.body.ContentUpdate.publishDate = null;
-
-        this.headers = {
-            "Accept": "application/vnd.ez.api.ContentInfo+json",
-            "Content-Type": "application/vnd.ez.api.ContentUpdate+json"
+            this.headers = {
+                "Accept": "application/vnd.ez.api.ContentInfo+json",
+                "Content-Type": "application/vnd.ez.api.ContentUpdate+json"
+            };
         };
 
-        return this;
+    /**
+     * Sets the section id
+     *
+     * @method setSection
+     * @param {String} sectionId the Section REST id
+     */
+    ContentMetadataUpdateStruct.prototype.setSection = function (sectionId) {
+        this.body.ContentUpdate.Section = {_href: sectionId};
     };
 
     return ContentMetadataUpdateStruct;
-
 });
 
 /* global define */
