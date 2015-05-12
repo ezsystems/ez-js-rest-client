@@ -227,7 +227,27 @@ define(function (require) {
                     expect(error.details.request).toEqual(mockRequest);
                 });
             });
+
+            it("should handle the fail to connect error", function () {
+                mockXMLHttpRequest.prototype.send = function (body){
+                    this.readyState = 4;
+                    this.status = 0;
+                    this.onreadystatechange();
+                };
+                window.XMLHttpRequest = (function () {
+                    return mockXMLHttpRequest;
+                }());
+
+                connection = new XmlHttpRequestConnection();
+                connection.execute(
+                    mockRequest,
+                    mockCallback
+                );
+
+                expect(mockCallback).toHaveBeenCalledWith(
+                    jasmine.any(CAPIError), jasmine.any(Response)
+                );
+            });
         });
     });
-
 });

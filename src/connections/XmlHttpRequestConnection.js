@@ -35,7 +35,7 @@ define(["structures/Response", "structures/CAPIError"], function (Response, CAPI
                 headers: XHR.getAllResponseHeaders(),
                 body: XHR.responseText
             });
-            if (XHR.status >= 400) {
+            if (XHR.status >= 400 || !XHR.status) {
                 callback(
                     new CAPIError("Connection error : " + XHR.status + ".", {request: request}),
                     response
