@@ -59,7 +59,7 @@ define(function () {
      *
      * @method authenticateRequest
      * @param request {Request}
-     * @param done {function}
+     * @param done {Function}
      */
     HttpBasicAuthAgent.prototype.authenticateRequest = function (request, done) {
         request.httpBasicAuth = true;
@@ -74,7 +74,7 @@ define(function () {
      * No actual logic for HTTP Basic Auth
      *
      * @method logOut
-     * @param done {function}
+     * @param done {Function}
      */
     HttpBasicAuthAgent.prototype.logOut = function (done) {
         done(false, true);

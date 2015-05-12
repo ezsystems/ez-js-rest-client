@@ -10,7 +10,7 @@ define(function () {
      * @constructor
      * @param identifier {String} unique ObjectState identifier (e.g. "some-new-state")
      * @param languageCode {String} The language code (eng-GB, fre-FR, ...)
-     * @param priority {int}
+     * @param priority {Number}
      * @param names {Array} Multi language value (see example)
      * @param descriptions {Array} Multi language value (see example)
      * @example

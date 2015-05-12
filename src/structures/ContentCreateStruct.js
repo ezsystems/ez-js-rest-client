@@ -44,7 +44,7 @@ define(function () {
      * Adds a new field and its value into the structure
      *
      * @method addField
-     * @param id {Integer}  field id
+     * @param id {Number}  field id
      * @param fieldIdentifer {String} field identifier
      * @param fieldValue {Mixed} field value
      *

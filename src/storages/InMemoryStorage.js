@@ -69,7 +69,7 @@ define(["structures/CAPIError"], function(CAPIError) {
      *
      * @method isComaptible
      * @static
-     * @return {boolean}
+     * @return {Boolean}
      */
     InMemoryStorage.isCompatible = function () {
         return true;

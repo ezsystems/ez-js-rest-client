@@ -19,7 +19,7 @@ define(["structures/Response", "structures/CAPIError"], function (Response, CAPI
      *
      * @method execute
      * @param request {Request} structure containing all needed params and data
-     * @param callback {function} function, which will be executed on request success
+     * @param callback {Function} function, which will be executed on request success
      */
     MicrosoftXmlHttpRequestConnection.prototype.execute = function (request, callback) {
         var XHR = this._xhr,
@@ -68,7 +68,7 @@ define(["structures/Response", "structures/CAPIError"], function (Response, CAPI
      *
      * @method isCompatible
      * @static
-     * @return {boolean} whether the connection is compatible with current environment
+     * @return {Boolean} whether the connection is compatible with current environment
      */
     MicrosoftXmlHttpRequestConnection.isCompatible = function () {
         return !!window.ActiveXObject;
