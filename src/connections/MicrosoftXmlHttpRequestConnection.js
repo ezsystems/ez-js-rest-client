@@ -34,7 +34,8 @@ define(["structures/Response", "structures/CAPIError"], function (Response, CAPI
             response = new Response({
                 status: XHR.status,
                 headers: XHR.getAllResponseHeaders(),
-                body: XHR.responseText
+                body: XHR.responseText,
+                xhr: XHR,
             });
             if (XHR.status >= 400) {
                 callback(
