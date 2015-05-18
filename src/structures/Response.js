@@ -9,6 +9,15 @@ define(function () {
      */
     var Response = function (valuesContainer) {
         /**
+         * The XMLHttpRequest object
+         *
+         * @property xhr
+         * @type {XMLHttpRequest}
+         * @default null
+         */
+        this.xhr = null;
+
+        /**
          * Body of the response (most times JSON string recieved from REST service via a Connection object)
          *
          * @property body
@@ -41,6 +50,10 @@ define(function () {
         }
 
         return this;
+    };
+
+    Response.prototype.getHeader = function (header) {
+        return this.xhr.getResponseHeader(header);
     };
 
     return Response;

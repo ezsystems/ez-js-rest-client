@@ -1,4 +1,4 @@
-/* global define, describe, it, expect */
+/* global define, describe, it, expect, spyOn */
 define(function (require) {
 
     // Declaring dependencies
@@ -46,4 +46,17 @@ define(function (require) {
 
     });
 
+    describe("getHeader", function () {
+        it("should call getResponseHeader on the XHR object", function () {
+            var response,
+                header = 'location',
+                xhr = {getResponseHeader: function (h) {}},
+                params =  {xhr: xhr};
+
+            spyOn(xhr, 'getResponseHeader');
+            response = new Response(params);
+            response.getHeader(header);
+            expect(xhr.getResponseHeader).toHaveBeenCalledWith(header);
+        });
+    });
 });
