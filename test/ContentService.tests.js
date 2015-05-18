@@ -2029,13 +2029,23 @@ define(function (require) {
                 expect(mockCallback).toHaveBeenCalledWith(jasmine.any(CAPIError), false);
             });
 
-            it("createContentDraft from current version", function () {
-
+            it("createContentDraft from a given version", function () {
                 spyOn(contentService, 'loadContentInfo').andCallFake(fakedFaultyLoadContentInfo);
 
                 contentService.createContentDraft(
                     testContentId,
-                    null,
+                    2,
+                    mockCallback
+                );
+
+                expect(mockCallback).toHaveBeenCalledWith(jasmine.any(CAPIError), false);
+            });
+
+            it("createContentDraft from current version", function () {
+                spyOn(contentService, 'loadContentInfo').andCallFake(fakedFaultyLoadContentInfo);
+
+                contentService.createContentDraft(
+                    testContentId,
                     mockCallback
                 );
 

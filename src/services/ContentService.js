@@ -721,6 +721,10 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
     ContentService.prototype.createContentDraft = function (contentId, versionId, callback) {
         var that = this;
 
+        if ( !callback ) {
+            callback = versionId;
+            versionId = false;
+        }
         this.loadContentInfo(
             contentId,
             function (error, contentResponse) {
@@ -731,10 +735,9 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
                     return;
                 }
 
-                if (typeof versionId !== "function") {
+                if ( versionId ) {
                     url = contentResponse.document.Content.Versions._href + "/" + versionId;
                 } else {
-                    callback = versionId;
                     url = contentResponse.document.Content.CurrentVersion._href;
                 }
 
