@@ -679,8 +679,8 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
      *
      * @method loadRoles
      * @param [identifier] {String} string identifier of the roles to search (e.g. "admin")
-     * @param [limit=-1] {int} the limit of the result set
-     * @param [offset=0] {int} the offset of the result set
+     * @param [limit=-1] {Number} the limit of the result set
+     * @param [offset=0] {Number} the offset of the result set
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "UserService"}}Note on the callbacks usage{{/crossLink}} for more info)
      * @example

@@ -66,7 +66,7 @@ define(["structures/CAPIError"], function(CAPIError) {
      *
      * @method isComaptible
      * @static
-     * @return {boolean}
+     * @return {Boolean}
      */
     LocalStorage.isCompatible = function () {
         var t = "__featuredetection__";

@@ -222,7 +222,7 @@ define(["structures/CAPIError", "storages/LocalStorage"], function (CAPIError, L
      *
      * @method authenticateRequest
      * @param request {Request}
-     * @param done {function}
+     * @param done {Function}
      */
     SessionAuthAgent.prototype.authenticateRequest = function (request, done) {
         var token = this._storage.getItem(SessionAuthAgent.KEY_CSRF_TOKEN);
@@ -241,7 +241,7 @@ define(["structures/CAPIError", "storages/LocalStorage"], function (CAPIError, L
      * "UserService/deleteSession:method"}}userService.deleteSession{{/crossLink}}.
      *
      * @method logOut
-     * @param done {function}
+     * @param done {Function}
      */
     SessionAuthAgent.prototype.logOut = function (done) {
         var userService = this._CAPI.getUserService(),

@@ -195,7 +195,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
      * @method newObjectStateCreateStruct
      * @param identifier {String} unique ObjectState identifier (e.g. "some-new-state")
      * @param languageCode {String} The language code (eng-GB, fre-FR, ...)
-     * @param priority {int}
+     * @param priority {Number}
      * @param names {Array} Multi language value (see example)
      * @param descriptions {Array} Multi language value (see example)
      * @return {ObjectStateCreateStruct}
@@ -249,7 +249,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
      * @method newUrlWildcardCreateStruct
      * @param sourceUrl {String} new url wildcard
      * @param destinationUrl {String} existing resource where wildcard should point
-     * @param forward {boolean} weather or not the wildcard should redirect to the resource
+     * @param forward {Boolean} weather or not the wildcard should redirect to the resource
      * @example
      *     var urlWildcardCreateStruct = contentService.newUrlWildcardCreateStruct(
      *         "some-new-wildcard",
@@ -699,7 +699,8 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
      *
      * @method createContentDraft
      * @param contentId {String} target content identifier (e.g. "/api/ezp/v2/content/objects/108")
-     * @param [versionId] {int} numerical id of the base version for the new draft. If not provided the current version of the content will be used.
+     * @param [versionId] {Number} numerical id of the base version for the new draft.
+     * If not provided the current version of the content will be used.
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      * @example
@@ -921,8 +922,8 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
      *
      * @method loadLocationChildren
      * @param locationId {String} target location identifier (e.g. "/api/ezp/v2/content/locations/1/2/102")
-     * @param [limit=-1] {int} the number of results returned
-     * @param [offset=0] {int} the offset of the result set
+     * @param [limit=-1] {Number} the number of results returned
+     * @param [offset=0] {Number} the offset of the result set
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      * @example
@@ -1105,8 +1106,8 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
      *
      * @method loadRelations
      * @param versionedContentId {String} target version identifier (e.g. "/api/ezp/v2/content/objects/108/versions/2")
-     * @param [limit=-1] {int} the number of results returned
-     * @param [offset=0] {int} the offset of the result set
+     * @param [limit=-1] {Number} the number of results returned
+     * @param [offset=0] {Number} the offset of the result set
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      * @example
@@ -1159,8 +1160,8 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
      *
      * @method loadCurrentRelations
      * @param contentId {String} target content identifier (e.g. "/api/ezp/v2/content/objects/102")
-     * @param [limit=-1] {int} the number of results returned
-     * @param [offset=0] {int} the offset of the result set
+     * @param [limit=-1] {Number} the number of results returned
+     * @param [offset=0] {Number} the offset of the result set
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      * @example
@@ -1292,8 +1293,8 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
      *  Loads all the thrash can items
      *
      * @method loadTrashItems
-     * @param [limit=-1] {int} the number of results returned
-     * @param [offset=0] {int} the offset of the result set
+     * @param [limit=-1] {Number} the number of results returned
+     * @param [offset=0] {Number} the offset of the result set
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      * @example
@@ -1706,7 +1707,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
      *
      * @method listLocationAliases
      * @param locationUrlAliases {String} link to target location's UrlAliases (should be auto-discovered from locationId)
-     * @param [custom=true] {boolean} this flag indicates weather autogenerated (false) or manual url aliases (true) should be returned
+     * @param [custom=true] {Boolean} this flag indicates weather autogenerated (false) or manual url aliases (true) should be returned
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */

@@ -12,7 +12,7 @@ define(function (require) {
              * Custom matcher which is applied to any function. It runs the function and tests thrown error to be of CAPIError type
              *
              * @method toThrowCAPIError
-             * @returns {boolean}
+             * @returns {Boolean}
              */
             toThrowCAPIError: function () {
                 try {
@@ -36,7 +36,7 @@ define(function (require) {
              *
              * @method toHaveBeenCalledWithObject
              * @param comparisonObject {object}
-             * @returns {boolean}
+             * @returns {Boolean}
              */
             toHaveBeenCalledWithObject: function (comparisonObject) {
 

@@ -10,7 +10,7 @@ define(function () {
      * @constructor
      * @param sourceUrl {String} new url wildcard
      * @param destinationUrl {String} existing resource where wildcard should point
-     * @param forward {boolean} weather or not the wildcard should redirect to the resource
+     * @param forward {Boolean} weather or not the wildcard should redirect to the resource
      */
     var UrlWildcardCreateStruct = function (sourceUrl, destinationUrl, forward) {
         this.body = {};
