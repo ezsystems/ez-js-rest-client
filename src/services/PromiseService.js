@@ -1,5 +1,5 @@
 /* global define */
-define(["../../node_modules/q/q", "structures/CAPIError"], function (q, CAPIError) {
+define(["q", "structures/CAPIError"], function (q, CAPIError) {
     "use strict";
 
     /**
