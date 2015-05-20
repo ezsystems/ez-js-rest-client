@@ -530,7 +530,7 @@ define('storages/LocalStorage',["structures/CAPIError"], function(CAPIError) {
      *
      * @method isComaptible
      * @static
-     * @return {boolean}
+     * @return {Boolean}
      */
     LocalStorage.isCompatible = function () {
         var t = "__featuredetection__";
@@ -778,7 +778,7 @@ define('authAgents/SessionAuthAgent',["structures/CAPIError", "storages/LocalSto
      *
      * @method authenticateRequest
      * @param request {Request}
-     * @param done {function}
+     * @param done {Function}
      */
     SessionAuthAgent.prototype.authenticateRequest = function (request, done) {
         var token = this._storage.getItem(SessionAuthAgent.KEY_CSRF_TOKEN);
@@ -797,7 +797,7 @@ define('authAgents/SessionAuthAgent',["structures/CAPIError", "storages/LocalSto
      * "UserService/deleteSession:method"}}userService.deleteSession{{/crossLink}}.
      *
      * @method logOut
-     * @param done {function}
+     * @param done {Function}
      */
     SessionAuthAgent.prototype.logOut = function (done) {
         var userService = this._CAPI.getUserService(),
@@ -939,7 +939,7 @@ define('authAgents/HttpBasicAuthAgent',[],function () {
      *
      * @method authenticateRequest
      * @param request {Request}
-     * @param done {function}
+     * @param done {Function}
      */
     HttpBasicAuthAgent.prototype.authenticateRequest = function (request, done) {
         request.httpBasicAuth = true;
@@ -954,7 +954,7 @@ define('authAgents/HttpBasicAuthAgent',[],function () {
      * No actual logic for HTTP Basic Auth
      *
      * @method logOut
-     * @param done {function}
+     * @param done {Function}
      */
     HttpBasicAuthAgent.prototype.logOut = function (done) {
         done(false, true);
@@ -1024,6 +1024,15 @@ define('structures/Response',[],function () {
      */
     var Response = function (valuesContainer) {
         /**
+         * The XMLHttpRequest object
+         *
+         * @property xhr
+         * @type {XMLHttpRequest}
+         * @default null
+         */
+        this.xhr = null;
+
+        /**
          * Body of the response (most times JSON string recieved from REST service via a Connection object)
          *
          * @property body
@@ -1058,9 +1067,14 @@ define('structures/Response',[],function () {
         return this;
     };
 
+    Response.prototype.getHeader = function (header) {
+        return this.xhr.getResponseHeader(header);
+    };
+
     return Response;
 
 });
+
 /* global define */
 define('structures/Request',[],function () {
     
@@ -1118,7 +1132,7 @@ define('ConnectionManager',["structures/Response", "structures/Request", "struct
      * @param [url="/"] {String} requested REST resource
      * @param [body=""] {String} a string which should be passed in request body to the REST service
      * @param [headers={}] {object} object literal describing request headers
-     * @param callback {function} function, which will be executed on request success
+     * @param callback {Function} function, which will be executed on request success
      */
     ConnectionManager.prototype.request = function (method, url, body, headers, callback) {
         var that = this,
@@ -1225,7 +1239,7 @@ define('ConnectionManager',["structures/Response", "structures/Request", "struct
      * @param [url="/"] {String} requested REST resource
      * @param [body=""] {String} a string which should be passed in request body to the REST service
      * @param [headers={}] {object} object literal describing request headers
-     * @param callback {function} function, which will be executed on request success
+     * @param callback {Function} function, which will be executed on request success
      */
     ConnectionManager.prototype.notAuthorizedRequest = function (method, url, body, headers, callback) {
         var request, that = this,
@@ -1347,7 +1361,7 @@ define('connections/XmlHttpRequestConnection',["structures/Response", "structure
      *
      * @method execute
      * @param request {Request} structure containing all needed params and data
-     * @param callback {function} function, which will be executed on request success
+     * @param callback {Function} function, which will be executed on request success
      */
     XmlHttpRequestConnection.prototype.execute = function (request, callback) {
         var XHR = this._xhr,
@@ -1362,9 +1376,10 @@ define('connections/XmlHttpRequestConnection',["structures/Response", "structure
             response = new Response({
                 status: XHR.status,
                 headers: XHR.getAllResponseHeaders(),
-                body: XHR.responseText
+                body: XHR.responseText,
+                xhr: XHR,
             });
-            if (XHR.status >= 400) {
+            if (XHR.status >= 400 || !XHR.status) {
                 callback(
                     new CAPIError("Connection error : " + XHR.status + ".", {request: request}),
                     response
@@ -1396,7 +1411,7 @@ define('connections/XmlHttpRequestConnection',["structures/Response", "structure
      *
      * @method isCompatible
      * @static
-     * @return {boolean} whether the connection is compatible with current environment
+     * @return {Boolean} whether the connection is compatible with current environment
      */
     XmlHttpRequestConnection.isCompatible = function () {
         return !!window.XMLHttpRequest;
@@ -1426,7 +1441,7 @@ define('connections/MicrosoftXmlHttpRequestConnection',["structures/Response", "
      *
      * @method execute
      * @param request {Request} structure containing all needed params and data
-     * @param callback {function} function, which will be executed on request success
+     * @param callback {Function} function, which will be executed on request success
      */
     MicrosoftXmlHttpRequestConnection.prototype.execute = function (request, callback) {
         var XHR = this._xhr,
@@ -1441,9 +1456,11 @@ define('connections/MicrosoftXmlHttpRequestConnection',["structures/Response", "
             response = new Response({
                 status: XHR.status,
                 headers: XHR.getAllResponseHeaders(),
-                body: XHR.responseText
+                body: XHR.responseText,
+                xhr: XHR,
             });
-            if (XHR.status >= 400) {
+
+            if (XHR.status >= 400 || !XHR.status) {
                 callback(
                     new CAPIError("Connection error : " + XHR.status + ".", {request: request}),
                     response
@@ -1475,7 +1492,7 @@ define('connections/MicrosoftXmlHttpRequestConnection',["structures/Response", "
      *
      * @method isCompatible
      * @static
-     * @return {boolean} whether the connection is compatible with current environment
+     * @return {Boolean} whether the connection is compatible with current environment
      */
     MicrosoftXmlHttpRequestConnection.isCompatible = function () {
         return !!window.ActiveXObject;
@@ -1651,7 +1668,7 @@ define('structures/ContentCreateStruct',[],function () {
      * Adds a new field and its value into the structure
      *
      * @method addField
-     * @param id {Integer}  field id
+     * @param id {Number}  field id
      * @param fieldIdentifer {String} field identifier
      * @param fieldValue {Mixed} field value
      *
@@ -1918,7 +1935,7 @@ define('structures/ObjectStateCreateStruct',[],function () {
      * @constructor
      * @param identifier {String} unique ObjectState identifier (e.g. "some-new-state")
      * @param languageCode {String} The language code (eng-GB, fre-FR, ...)
-     * @param priority {int}
+     * @param priority {Number}
      * @param names {Array} Multi language value (see example)
      * @param descriptions {Array} Multi language value (see example)
      * @example
@@ -2080,7 +2097,7 @@ define('structures/UrlWildcardCreateStruct',[],function () {
      * @constructor
      * @param sourceUrl {String} new url wildcard
      * @param destinationUrl {String} existing resource where wildcard should point
-     * @param forward {boolean} weather or not the wildcard should redirect to the resource
+     * @param forward {Boolean} weather or not the wildcard should redirect to the resource
      */
     var UrlWildcardCreateStruct = function (sourceUrl, destinationUrl, forward) {
         this.body = {};
@@ -3238,7 +3255,7 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
      * @method newObjectStateCreateStruct
      * @param identifier {String} unique ObjectState identifier (e.g. "some-new-state")
      * @param languageCode {String} The language code (eng-GB, fre-FR, ...)
-     * @param priority {int}
+     * @param priority {Number}
      * @param names {Array} Multi language value (see example)
      * @param descriptions {Array} Multi language value (see example)
      * @return {ObjectStateCreateStruct}
@@ -3292,7 +3309,7 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
      * @method newUrlWildcardCreateStruct
      * @param sourceUrl {String} new url wildcard
      * @param destinationUrl {String} existing resource where wildcard should point
-     * @param forward {boolean} weather or not the wildcard should redirect to the resource
+     * @param forward {Boolean} weather or not the wildcard should redirect to the resource
      * @example
      *     var urlWildcardCreateStruct = contentService.newUrlWildcardCreateStruct(
      *         "some-new-wildcard",
@@ -3742,7 +3759,8 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
      *
      * @method createContentDraft
      * @param contentId {String} target content identifier (e.g. "/api/ezp/v2/content/objects/108")
-     * @param [versionId] {int} numerical id of the base version for the new draft. If not provided the current version of the content will be used.
+     * @param [versionId] {Number} numerical id of the base version for the new draft.
+     * If not provided the current version of the content will be used.
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      * @example
@@ -3763,6 +3781,10 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
     ContentService.prototype.createContentDraft = function (contentId, versionId, callback) {
         var that = this;
 
+        if ( !callback ) {
+            callback = versionId;
+            versionId = false;
+        }
         this.loadContentInfo(
             contentId,
             function (error, contentResponse) {
@@ -3773,10 +3795,9 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
                     return;
                 }
 
-                if (typeof versionId !== "function") {
+                if ( versionId ) {
                     url = contentResponse.document.Content.Versions._href + "/" + versionId;
                 } else {
-                    callback = versionId;
                     url = contentResponse.document.Content.CurrentVersion._href;
                 }
 
@@ -3964,8 +3985,8 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
      *
      * @method loadLocationChildren
      * @param locationId {String} target location identifier (e.g. "/api/ezp/v2/content/locations/1/2/102")
-     * @param [limit=-1] {int} the number of results returned
-     * @param [offset=0] {int} the offset of the result set
+     * @param [limit=-1] {Number} the number of results returned
+     * @param [offset=0] {Number} the offset of the result set
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      * @example
@@ -4148,8 +4169,8 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
      *
      * @method loadRelations
      * @param versionedContentId {String} target version identifier (e.g. "/api/ezp/v2/content/objects/108/versions/2")
-     * @param [limit=-1] {int} the number of results returned
-     * @param [offset=0] {int} the offset of the result set
+     * @param [limit=-1] {Number} the number of results returned
+     * @param [offset=0] {Number} the offset of the result set
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      * @example
@@ -4202,8 +4223,8 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
      *
      * @method loadCurrentRelations
      * @param contentId {String} target content identifier (e.g. "/api/ezp/v2/content/objects/102")
-     * @param [limit=-1] {int} the number of results returned
-     * @param [offset=0] {int} the offset of the result set
+     * @param [limit=-1] {Number} the number of results returned
+     * @param [offset=0] {Number} the offset of the result set
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      * @example
@@ -4335,8 +4356,8 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
      *  Loads all the thrash can items
      *
      * @method loadTrashItems
-     * @param [limit=-1] {int} the number of results returned
-     * @param [offset=0] {int} the offset of the result set
+     * @param [limit=-1] {Number} the number of results returned
+     * @param [offset=0] {Number} the offset of the result set
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      * @example
@@ -4749,7 +4770,7 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
      *
      * @method listLocationAliases
      * @param locationUrlAliases {String} link to target location's UrlAliases (should be auto-discovered from locationId)
-     * @param [custom=true] {boolean} this flag indicates weather autogenerated (false) or manual url aliases (true) should be returned
+     * @param [custom=true] {Boolean} this flag indicates weather autogenerated (false) or manual url aliases (true) should be returned
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
@@ -6742,8 +6763,8 @@ define('services/UserService',['structures/SessionCreateStruct', 'structures/Use
      *
      * @method loadRoles
      * @param [identifier] {String} string identifier of the roles to search (e.g. "admin")
-     * @param [limit=-1] {int} the limit of the result set
-     * @param [offset=0] {int} the offset of the result set
+     * @param [limit=-1] {Number} the limit of the result set
+     * @param [offset=0] {Number} the offset of the result set
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "UserService"}}Note on the callbacks usage{{/crossLink}} for more info)
      * @example
