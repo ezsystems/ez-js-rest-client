@@ -34,7 +34,7 @@ environment with a help of Grunt task runner.
   ```
 * Install the global dependencies (usually you need to be root)
   ```
-  # npm install -g grunt-cli yuidoc
+  # npm install -g grunt-cli yuidocjs
   ```
 
 ### API Documentation
