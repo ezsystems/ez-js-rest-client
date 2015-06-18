@@ -4,6 +4,7 @@ define(function (require) {
     var CAPI = require("CAPI"),
         ContentService = require("services/ContentService"),
         ContentTypeService = require("services/ContentTypeService"),
+        DiscoveryService = require("services/DiscoveryService"),
         UserService = require("services/UserService");
 
     describe("CAPI", function () {
@@ -78,6 +79,13 @@ define(function (require) {
 
                 expect(userService).toBeDefined();
                 expect(userService instanceof UserService).toBeTruthy();
+            });
+
+            it("should provide DiscoveryService", function () {
+                var discoveryService = capi.getDiscoveryService();
+
+                expect(discoveryService).toBeDefined();
+                expect(discoveryService instanceof DiscoveryService).toBeTruthy();
             });
         });
 

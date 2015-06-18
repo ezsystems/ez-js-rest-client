@@ -166,6 +166,23 @@ define(['authAgents/SessionAuthAgent', 'authAgents/HttpBasicAuthAgent', 'Connect
             }
             return userService;
         };
+
+        /**
+         * Get instance of Discovery Service. Use DiscoveryService to internally to discover
+         * resources URI and media type provided in the root resource.
+         *
+         * @method getDiscoveryService
+         * @return {DiscoveryService}
+         * @example
+         *      var discoveryService = jsCAPI.getDiscoveryService();
+         *      discoveryService.getInfoObject(
+         *          "Trash",
+         *          callback
+         *      );
+         */
+        this.getDiscoveryService = function () {
+            return discoveryService;
+        };
     };
 
     return CAPI;
