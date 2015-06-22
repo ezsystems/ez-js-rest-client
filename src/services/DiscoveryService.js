@@ -19,19 +19,19 @@ define(["structures/CAPIError"], function (CAPIError) {
     };
 
     /**
-     * Get the information for given name. The information is provided as the
-     * second argument of the callback unless there's a network issue while
-     * loading the REST root resource or if there's no resource associated with
-     * the given name.
+     * Get the information for given object name (located under the root).
+     * The information is provided as the second argument of the callback unless there's a
+     * network issue while loading the REST root resource or if there's no resource
+     * associated with the given name.
      *
      * @method getInfoObject
      *
-     * @param name {String} name of the target object (e.g. "Trash")
+     * @param name {String} name of the target object (located under the root, e.g. "Trash")
      * @param callback {Function}
      * @param callback.error {Boolean|CAPIError} false or CAPIError object if an
      * error occurred
      * @param callback.response {Object|Response|Boolean} the target object if
-     * it was found, the Response object if an error occured while loading the
+     * it was found, the Response object if an error occurred while loading the
      * REST root or false if the name does not match any object.
      */
     DiscoveryService.prototype.getInfoObject = function (name, callback) {
