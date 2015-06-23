@@ -438,7 +438,7 @@ define("almond", function(){});
 
 /* global define */
 define('structures/CAPIError',[],function () {
-    
+    "use strict";
 
     /**
      * Class describing any error which could be thrown during CAPI workflow
@@ -556,7 +556,7 @@ define('storages/LocalStorage',["structures/CAPIError"], function(CAPIError) {
 
 /* global define */
 define('authAgents/SessionAuthAgent',["structures/CAPIError", "storages/LocalStorage"], function (CAPIError, LocalStorage) {
-    
+    "use strict";
 
     /**
      * Creates an instance of SessionAuthAgent object
@@ -880,7 +880,7 @@ define('authAgents/SessionAuthAgent',["structures/CAPIError", "storages/LocalSto
 
 /* global define */
 define('authAgents/HttpBasicAuthAgent',[],function () {
-    
+    "use strict";
 
     /**
      * Creates an instance of HttpBasicAuthAgent object
@@ -1015,7 +1015,7 @@ define('authAgents/HttpBasicAuthAgent',[],function () {
 
 /* global define */
 define('structures/Response',[],function () {
-    
+    "use strict";
 
     /**
      * @class Response
@@ -1077,7 +1077,7 @@ define('structures/Response',[],function () {
 
 /* global define */
 define('structures/Request',[],function () {
-    
+    "use strict";
 
     /**
      * Request object used for storing all the data, which should be sent to the REST server.
@@ -1102,7 +1102,7 @@ define('structures/Request',[],function () {
 /* global define */
 define('ConnectionManager',["structures/Response", "structures/Request", "structures/CAPIError"],
     function (Response, Request, CAPIError) {
-    
+    "use strict";
 
     /**
      * Creates an instance of connection manager object
@@ -1296,7 +1296,7 @@ define('ConnectionManager',["structures/Response", "structures/Request", "struct
 
 /* global define */
 define('ConnectionFeatureFactory',[],function () {
-    
+    "use strict";
 
     /**
      * Creates an instance of connection feature factory. This factory is choosing compatible connection from list of available connections.
@@ -1343,7 +1343,7 @@ define('ConnectionFeatureFactory',[],function () {
 });
 /* global define */
 define('connections/XmlHttpRequestConnection',["structures/Response", "structures/CAPIError"], function (Response, CAPIError) {
-    
+    "use strict";
 
     /**
      * Creates an instance of XmlHttpRequestConnection object
@@ -1423,7 +1423,7 @@ define('connections/XmlHttpRequestConnection',["structures/Response", "structure
 /* global define */
 /* global ActiveXObject */
 define('connections/MicrosoftXmlHttpRequestConnection',["structures/Response", "structures/CAPIError"], function (Response, CAPIError) {
-    
+    "use strict";
 
     /**
      * Creates an instance of MicrosoftXmlHttpRequestConnection object
@@ -1503,7 +1503,7 @@ define('connections/MicrosoftXmlHttpRequestConnection',["structures/Response", "
 
 /* global define */
 define('services/DiscoveryService',["structures/CAPIError"], function (CAPIError) {
-    
+    "use strict";
 
     /**
      * Creates an instance of discovery service.  Discovery service is used
@@ -1522,19 +1522,19 @@ define('services/DiscoveryService',["structures/CAPIError"], function (CAPIError
     };
 
     /**
-     * Get the information for given name. The information is provided as the
-     * second argument of the callback unless there's a network issue while
-     * loading the REST root resource or if there's no resource associated with
-     * the given name.
+     * Get the information for given object name (located under the root).
+     * The information is provided as the second argument of the callback unless there's a
+     * network issue while loading the REST root resource or if there's no resource
+     * associated with the given name.
      *
      * @method getInfoObject
      *
-     * @param name {String} name of the target object (e.g. "Trash")
+     * @param name {String} name of the target object (located under the root, e.g. "Trash")
      * @param callback {Function}
      * @param callback.error {Boolean|CAPIError} false or CAPIError object if an
      * error occurred
      * @param callback.response {Object|Response|Boolean} the target object if
-     * it was found, the Response object if an error occured while loading the
+     * it was found, the Response object if an error occurred while loading the
      * REST root or false if the name does not match any object.
      */
     DiscoveryService.prototype.getInfoObject = function (name, callback) {
@@ -1624,7 +1624,7 @@ define('services/DiscoveryService',["structures/CAPIError"], function (CAPIError
 
 /* global define */
 define('structures/ContentCreateStruct',[],function () {
-    
+    "use strict";
 
     /**
      * Returns a structure used to create a new Content object. See
@@ -1688,7 +1688,7 @@ define('structures/ContentCreateStruct',[],function () {
 
 /* global define */
 define('structures/ContentUpdateStruct',[],function () {
-    
+    "use strict";
 
     /**
      * Returns a structure used to update a Content object. See
@@ -1724,7 +1724,7 @@ define('structures/ContentUpdateStruct',[],function () {
 
 /* global define */
 define('structures/SectionInputStruct',[],function () {
-    
+    "use strict";
 
     /**
      * Returns a structure used to create and update a Section. See for ex.
@@ -1755,7 +1755,7 @@ define('structures/SectionInputStruct',[],function () {
 });
 /* global define */
 define('structures/LocationCreateStruct',[],function () {
-    
+    "use strict";
 
     /**
      * Returns a structure used to create a new Location. See
@@ -1790,7 +1790,7 @@ define('structures/LocationCreateStruct',[],function () {
 
 /* global define */
 define('structures/LocationUpdateStruct',[],function () {
-    
+    "use strict";
 
     /**
      * Returns a structure used to update a Location. See
@@ -1819,7 +1819,7 @@ define('structures/LocationUpdateStruct',[],function () {
 });
 /* global define */
 define('structures/ContentMetadataUpdateStruct',[],function () {
-    
+    "use strict";
 
     /**
      * The Content Update structure that can be used with {{#crossLink
@@ -1852,7 +1852,7 @@ define('structures/ContentMetadataUpdateStruct',[],function () {
 
 /* global define */
 define('structures/ObjectStateGroupCreateStruct',[],function () {
-    
+    "use strict";
 
     /**
      * Returns a structure used to create a new Object State group. See
@@ -1900,7 +1900,7 @@ define('structures/ObjectStateGroupCreateStruct',[],function () {
 });
 /* global define */
 define('structures/ObjectStateGroupUpdateStruct',[],function () {
-    
+    "use strict";
 
     /**
      * Returns a structure used to update an Object State group. See
@@ -1925,7 +1925,7 @@ define('structures/ObjectStateGroupUpdateStruct',[],function () {
 });
 /* global define */
 define('structures/ObjectStateCreateStruct',[],function () {
-    
+    "use strict";
 
     /**
      * Returns a structure used to create a new Object State. See
@@ -1981,7 +1981,7 @@ define('structures/ObjectStateCreateStruct',[],function () {
 });
 /* global define */
 define('structures/ObjectStateUpdateStruct',[],function () {
-    
+    "use strict";
 
     /**
      * Returns a structure used to update an Object State. See
@@ -2006,7 +2006,7 @@ define('structures/ObjectStateUpdateStruct',[],function () {
 });
 /* global define */
 define('structures/ViewCreateStruct',[],function () {
-    
+    "use strict";
 
     /**
      * Returns a structure used to create a new View. See
@@ -2044,7 +2044,7 @@ define('structures/ViewCreateStruct',[],function () {
 
 /* global define */
 define('structures/UrlAliasCreateStruct',[],function () {
-    
+    "use strict";
 
     /**
      * Returns a structure used to create a new UrlAlias object. See
@@ -2087,7 +2087,7 @@ define('structures/UrlAliasCreateStruct',[],function () {
 });
 /* global define */
 define('structures/UrlWildcardCreateStruct',[],function () {
-    
+    "use strict";
 
     /**
      * Returns a structure used to create a new Url Wildcard object. See
@@ -2119,7 +2119,7 @@ define('structures/UrlWildcardCreateStruct',[],function () {
 });
 /* global define */
 define('structures/RelationCreateStruct',[],function () {
-    
+    "use strict";
 
     /**
      * Returns a structure used to create a new Content object. See
@@ -2154,7 +2154,7 @@ define('structures/RelationCreateStruct',[],function () {
 */
 
 (function (exportCallback) {
-    
+    "use strict";
 
 var UriTemplateError = (function () {
 
@@ -3013,7 +3013,7 @@ var UriTemplate = (function () {
     exportCallback(UriTemplate);
 
 }(function (UriTemplate) {
-        
+        "use strict";
         // export UriTemplate, when module is present, or pass it to window or global
         if (typeof module !== "undefined") {
             module.exports = UriTemplate;
@@ -3034,7 +3034,7 @@ var UriTemplate = (function () {
 
 /* global define */
 define('utils/uriparse',["uritemplate"], function (uriTemplateLib) {
-    
+    "use strict";
     /**
      * Provides the parseUriTemplate function
      *
@@ -3069,7 +3069,7 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
               ObjectStateGroupCreateStruct, ObjectStateGroupUpdateStruct, ObjectStateCreateStruct,
               ObjectStateUpdateStruct, ViewCreateStruct, UrlAliasCreateStruct,
               UrlWildcardCreateStruct, RelationCreateStruct, parseUriTemplate) {
-    
+    "use strict";
 
     /**
      * Creates an instance of Content Service object. Use ContentService to retrieve information and execute operations related to Content.
@@ -4932,7 +4932,7 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
 
 /* global define */
 define('structures/ContentTypeGroupInputStruct',[],function () {
-    
+    "use strict";
 
     /**
      * Returns a structure used to create and update a Content Type group. See
@@ -4960,7 +4960,7 @@ define('structures/ContentTypeGroupInputStruct',[],function () {
 });
 /* global define */
 define('structures/ContentTypeCreateStruct',[],function () {
-    
+    "use strict";
 
     /**
      * Returns a structure used to create a new Content Type object. See
@@ -5011,7 +5011,7 @@ define('structures/ContentTypeCreateStruct',[],function () {
 });
 /* global define */
 define('structures/ContentTypeUpdateStruct',[],function () {
-    
+    "use strict";
 
     /**
      * Returns a structure used to update a Content Type object. See for ex.
@@ -5036,7 +5036,7 @@ define('structures/ContentTypeUpdateStruct',[],function () {
 });
 /* global define */
 define('structures/FieldDefinitionCreateStruct',[],function () {
-    
+    "use strict";
 
     /**
      * Returns a structure used to create a new Field Definition. See
@@ -5085,7 +5085,7 @@ define('structures/FieldDefinitionCreateStruct',[],function () {
 });
 /* global define */
 define('structures/FieldDefinitionUpdateStruct',[],function () {
-    
+    "use strict";
 
     /**
      * Returns a structure used to update a Field Definition. See
@@ -5113,7 +5113,7 @@ define('services/ContentTypeService',["structures/ContentTypeGroupInputStruct", 
         "structures/FieldDefinitionCreateStruct", "structures/FieldDefinitionUpdateStruct", "utils/uriparse"],
     function (ContentTypeGroupInputStruct, ContentTypeCreateStruct, ContentTypeUpdateStruct,
               FieldDefinitionCreateStruct, FieldDefinitionUpdateStruct, parseUriTemplate) {
-    
+    "use strict";
 
     /**
      * Creates an instance of content type service object. Should be retrieved from CAPI instance (see example).
@@ -5799,7 +5799,7 @@ define('services/ContentTypeService',["structures/ContentTypeGroupInputStruct", 
 
 /* global define */
 define('structures/SessionCreateStruct',[],function () {
-    
+    "use strict";
 
     /**
      * Returns a structure used to create a new Session. See
@@ -5830,7 +5830,7 @@ define('structures/SessionCreateStruct',[],function () {
 });
 /* global define */
 define('structures/UserCreateStruct',[],function () {
-    
+    "use strict";
 
     /**
      * Returns a structure used to create a new User. See
@@ -5869,7 +5869,7 @@ define('structures/UserCreateStruct',[],function () {
 });
 /* global define */
 define('structures/UserUpdateStruct',[],function () {
-    
+    "use strict";
 
     /**
      * Returns a structure used to update a User. See
@@ -5897,7 +5897,7 @@ define('structures/UserUpdateStruct',[],function () {
 });
 /* global define */
 define('structures/UserGroupCreateStruct',[],function () {
-    
+    "use strict";
 
     /**
      * Returns a structure used to create a new User group. See
@@ -5930,7 +5930,7 @@ define('structures/UserGroupCreateStruct',[],function () {
 });
 /* global define */
 define('structures/UserGroupUpdateStruct',[],function () {
-    
+    "use strict";
 
     /**
      * Returns a structure used to update a User group. See
@@ -5961,7 +5961,7 @@ define('structures/UserGroupUpdateStruct',[],function () {
 });
 /* global define */
 define('structures/PolicyCreateStruct',[],function () {
-    
+    "use strict";
 
     /**
      * Returns a structure used to create a new Policy. See
@@ -5995,7 +5995,7 @@ define('structures/PolicyCreateStruct',[],function () {
 });
 /* global define */
 define('structures/PolicyUpdateStruct',[],function () {
-    
+    "use strict";
 
     /**
      * Returns a structure used to update a Policy. See
@@ -6024,7 +6024,7 @@ define('structures/PolicyUpdateStruct',[],function () {
 });
 /* global define */
 define('structures/RoleInputStruct',[],function () {
-    
+    "use strict";
 
     /**
      * Returns a structure used to create and update a Role. See
@@ -6052,7 +6052,7 @@ define('structures/RoleInputStruct',[],function () {
 });
 /* global define */
 define('structures/RoleAssignInputStruct',[],function () {
-    
+    "use strict";
 
     /**
      * Returns a structure used to create and update a Role Assign object. See for ex.
@@ -6091,7 +6091,7 @@ define('services/UserService',['structures/SessionCreateStruct', 'structures/Use
               UserGroupCreateStruct, UserGroupUpdateStruct, PolicyCreateStruct,
               PolicyUpdateStruct, RoleInputStruct, RoleAssignInputStruct,
               parseUriTemplate) {
-    
+    "use strict";
 
     /**
      * Creates an instance of user service object. Should be retrieved from CAPI instance (see example).
@@ -7312,7 +7312,7 @@ define('services/UserService',['structures/SessionCreateStruct', 'structures/Use
 
 /* globals define */
 define('utils/extend',[], function () {
-    
+    "use strict";
     /**
      * Provides only the `extend` function.
      *
@@ -7367,7 +7367,7 @@ define('CAPI',['authAgents/SessionAuthAgent', 'authAgents/HttpBasicAuthAgent', '
               ConnectionFeatureFactory, XmlHttpRequestConnection, MicrosoftXmlHttpRequestConnection,
               DiscoveryService, ContentService, ContentTypeService,
               UserService, extend) {
-    
+    "use strict";
 
     /**
      * Creates an instance of CAPI - main object which handles the API initialization and gives ability to retrieve various services.
@@ -7526,6 +7526,23 @@ define('CAPI',['authAgents/SessionAuthAgent', 'authAgents/HttpBasicAuthAgent', '
             }
             return userService;
         };
+
+        /**
+         * Get instance of Discovery Service. Use DiscoveryService to internally to discover
+         * resources URI and media type provided in the root resource.
+         *
+         * @method getDiscoveryService
+         * @return {DiscoveryService}
+         * @example
+         *      var discoveryService = jsCAPI.getDiscoveryService();
+         *      discoveryService.getInfoObject(
+         *          "Trash",
+         *          callback
+         *      );
+         */
+        this.getDiscoveryService = function () {
+            return discoveryService;
+        };
     };
 
     return CAPI;
@@ -7578,7 +7595,7 @@ define('CAPI',['authAgents/SessionAuthAgent', 'authAgents/HttpBasicAuthAgent', '
 
     // RequireJS
     } else if (typeof define === "function" && define.amd) {
-        define('services/../../node_modules/q/q',definition);
+        define('q',definition);
 
     // SES (Secure EcmaScript)
     } else if (typeof ses !== "undefined") {
@@ -7594,7 +7611,7 @@ define('CAPI',['authAgents/SessionAuthAgent', 'authAgents/HttpBasicAuthAgent', '
     }
 
 })(function () {
-
+"use strict";
 
 var hasStacks = false;
 try {
@@ -9470,8 +9487,8 @@ return Q;
 });
 
 /* global define */
-define('services/PromiseService',["../../node_modules/q/q", "structures/CAPIError"], function (q, CAPIError) {
-    
+define('services/PromiseService',["q", "structures/CAPIError"], function (q, CAPIError) {
+    "use strict";
 
     /**
      * Creates an instance of promise-based service object based on original service
@@ -9571,7 +9588,7 @@ define('services/PromiseService',["../../node_modules/q/q", "structures/CAPIErro
 
 /* global define */
 define('PromiseCAPI',["CAPI", "services/PromiseService"], function (CAPI, PromiseService) {
-    
+    "use strict";
 
     /**
      * Creates an instance of PromiseCAPI object based on existing CAPI object
