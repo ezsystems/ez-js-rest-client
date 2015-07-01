@@ -3555,13 +3555,19 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
      *
      * @method loadContentInfoAndCurrentVersion
      * @param contentId {String} target content identifier (e.g. "/api/ezp/v2/content/objects/108")
+     * @param [languageCodes=false] {String} comma separated list of language codes
+     * (ie "fre-FR,eng-GB")
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentService.prototype.loadContentInfoAndCurrentVersion = function (contentId, callback) {
+    ContentService.prototype.loadContentInfoAndCurrentVersion = function (contentId, languageCodes, callback) {
+        if ( typeof languageCodes === "function" ) {
+            callback = languageCodes;
+            languageCodes = false;
+        }
         this._connectionManager.request(
             "GET",
-            contentId,
+            contentId + (languageCodes ? '?languages=' + languageCodes : ''),
             "",
             {"Accept": "application/vnd.ez.api.Content+json"},
             callback
