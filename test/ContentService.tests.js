@@ -354,6 +354,25 @@ define(function (require) {
                     );
                 });
 
+                it("loadContentInfoAndCurrentVersion with a languages", function () {
+                    var languages = 'fre-FR,eng-GB';
+
+                    contentService.loadContentInfoAndCurrentVersion(
+                        testContentId,
+                        languages,
+                        mockCallback
+                    );
+
+                    expect(mockConnectionManager.request).toHaveBeenCalledWith(
+                        "GET",
+                        testContentId + '?languages=' + languages,
+                        "",
+                        {Accept: "application/vnd.ez.api.Content+json"},
+                        mockCallback
+                    );
+                });
+
+
                 it("deleteContent", function () {
                     contentService.deleteContent(
                         testContentId,
