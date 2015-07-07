@@ -117,7 +117,7 @@ module.exports = function(grunt) {
                 description: '<%= pkg.description %>',
                 version: '<%= pkg.version %>',
                 url: '<%= pkg.repository %>',
-                logo: "http://ez.no/extension/ez_ezno/design/ezno_2011/images/ez-logo.png",
+                logo: "http://ez.no/extension/ez_ezno/design/ezno_2014/images/ez-logo.png",
                 options: {
                     paths: 'src/',
                     outdir: 'api/'
