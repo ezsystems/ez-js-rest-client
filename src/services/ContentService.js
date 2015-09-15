@@ -142,10 +142,11 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
      *
      * @method newViewCreateStruct
      * @param identifier {String} unique view identifier (e.g. "my-new-view")
+     * @param [type="ContentQuery"] {String} the view type to create
      * @return {ViewCreateStruct}
      */
-    ContentService.prototype.newViewCreateStruct = function (identifier) {
-        return new ViewCreateStruct(identifier);
+    ContentService.prototype.newViewCreateStruct = function (identifier, type) {
+        return new ViewCreateStruct(identifier, type);
     };
 
     /**

@@ -240,12 +240,7 @@ define(function (require) {
             });
 
             it("createView", function () {
-
                 var viewCreateStruct = contentService.newViewCreateStruct('some-test-id');
-
-                viewCreateStruct.body.ViewInput.Query.Criteria = {
-                    FullTextCriterion : "title"
-                };
 
                 contentService.createView(
                     viewCreateStruct,
@@ -1767,6 +1762,18 @@ define(function (require) {
                     expect(testStructure.body.ViewInput.identifier).toEqual(testIdentifier);
                 });
 
+                it("newViewCreateStruct with type parameter", function (){
+                    var queryType = 'WhateverQueryType';
+
+                    testStructure = contentService.newViewCreateStruct(
+                        testIdentifier, queryType
+                    );
+
+                    expect(testStructure).toEqual(jasmine.any(ViewCreateStruct));
+                    expect(testStructure.body.ViewInput.identifier).toEqual(testIdentifier);
+                    expect(testStructure.body.ViewInput[queryType]).toBeDefined();
+                });
+
                 it("newRelationCreateStruct", function (){
 
                     testStructure = contentService.newRelationCreateStruct(
@@ -1940,12 +1947,7 @@ define(function (require) {
             });
 
             it("createView", function () {
-
                 var viewCreateStruct = contentService.newViewCreateStruct('some-test-id');
-
-                viewCreateStruct.body.ViewInput.Query.Criteria = {
-                    FullTextCriterion : "title"
-                };
 
                 contentService.createView(
                     viewCreateStruct,
