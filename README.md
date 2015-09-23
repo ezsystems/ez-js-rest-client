@@ -7,7 +7,7 @@ Publish REST API](https://confluence.ez.no/display/EZP/eZ+Publish+REST+API).
 
 ## Installation
 
-The eZ Publish JavaScript REST Client is a [bower](http://blower.io) package, so
+The eZ Publish JavaScript REST Client is a [bower](http://bower.io) package, so
 the easiest way to install it is to run:
 
 ```
