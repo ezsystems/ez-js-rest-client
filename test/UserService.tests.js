@@ -52,6 +52,9 @@ define(function (require) {
                 "_href": testRefreshSession,
                 "_media-type": "application/vnd.ez.api.Session+json"
             },
+            usersByLoginInfo = {
+                "_href": "/api/ezp/v2/user/users{?login}",
+            },
             testRootId = "/api/ezp/v2/",
             testLogin = "login",
             testPass = "pass",
@@ -189,6 +192,9 @@ define(function (require) {
                         }
                         if ( name === "refreshSession" ) {
                             callback(false, refreshSessionInfo);
+                        }
+                        if ( name === "usersByLogin" ) {
+                            callback(false, usersByLoginInfo);
                         }
                     }
                 };
@@ -1009,6 +1015,61 @@ define(function (require) {
                 );
             });
 
+            describe('isLoginAvailable', function () {
+                var login = 'foo';
+
+                it('should be available', function () {
+                    var error = false,
+                        response = {
+                            xhr: {
+                                "status": 404
+                            }
+                        };
+
+                    userService.isLoginAvailable(login, mockCallback);
+                    expect(mockDiscoveryService.getInfoObject).toHaveBeenCalledWith("usersByLogin", jasmine.any(Function));
+                    expect(mockConnectionManager.request).toHaveBeenCalledWith(
+                        "HEAD", "/api/ezp/v2/user/users?login=" + login, '', {}, jasmine.any(Function)
+                    );
+                    mockConnectionManager.request.mostRecentCall.args[4].call(window, error, response);
+                    expect(mockCallback).toHaveBeenCalledWith(true, response);
+                });
+
+                it('should not be available', function () {
+                    var error = false,
+                        response = {
+                            xhr: {
+                                "status": 200
+                            }
+                        };
+
+                    userService.isLoginAvailable(login, mockCallback);
+                    expect(mockDiscoveryService.getInfoObject).toHaveBeenCalledWith("usersByLogin", jasmine.any(Function));
+                    expect(mockConnectionManager.request).toHaveBeenCalledWith(
+                        "HEAD", "/api/ezp/v2/user/users?login=" + login, '', {}, jasmine.any(Function)
+                    );
+                    mockConnectionManager.request.mostRecentCall.args[4].call(window, error, response);
+                    expect(mockCallback).toHaveBeenCalledWith(false, response);
+                });
+
+                it('should handle the error', function () {
+                    var error = new CAPIError(),
+                        response = {
+                            xhr: {
+                                "status": 500
+                            }
+                        };
+
+                    userService.isLoginAvailable(login, mockCallback);
+                    expect(mockDiscoveryService.getInfoObject).toHaveBeenCalledWith("usersByLogin", jasmine.any(Function));
+                    expect(mockConnectionManager.request).toHaveBeenCalledWith(
+                        "HEAD", "/api/ezp/v2/user/users?login=" + login, '', {}, jasmine.any(Function)
+                    );
+                    mockConnectionManager.request.mostRecentCall.args[4].call(null, error, response);
+                    expect(mockCallback).toHaveBeenCalledWith(error, response);
+                });
+            });
+
             // ******************************
             // Sessions management
             // ******************************
@@ -1227,6 +1288,16 @@ define(function (require) {
                         testRootId
                     );
 
+                });
+
+                describe('isLoginAvailable', function () {
+                    it('should handle the discoveryService error', function () {
+                        userService.isLoginAvailable('whatever', mockCallback);
+
+                        expect(mockCallback).toHaveBeenCalledWith(
+                            jasmine.any(CAPIError), discoveryErrorResponse
+                        );
+                    });
                 });
 
                 it("loadRootUserGroup", function () {
