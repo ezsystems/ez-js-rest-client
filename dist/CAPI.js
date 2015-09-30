@@ -1803,9 +1803,6 @@ define('structures/LocationUpdateStruct',[],function () {
         this.body = {};
         this.body.LocationUpdate = {};
 
-        this.body.LocationUpdate.sortField = "PATH";
-        this.body.LocationUpdate.sortOrder = "ASC";
-
         this.headers = {
             "Accept": "application/vnd.ez.api.Location+json",
             "Content-Type": "application/vnd.ez.api.LocationUpdate+json"
@@ -6636,6 +6633,38 @@ define('services/UserService',['structures/SessionCreateStruct', 'structures/Use
             {"Accept": "application/vnd.ez.api.User+json"},
             callback
         );
+    };
+
+    /**
+     * Checks if the given login is available.
+     *
+     * @method isLoginAvailable
+     * @param {String} login
+     * @param {Function} callback
+     * @param {CAPIError|Boolean} callback.available
+     */
+    UserService.prototype.isLoginAvailable = function (login, callback) {
+        var that = this;
+
+        this._discoveryService.getInfoObject("usersByLogin", function (error, usersByLogin) {
+            if ( error ) {
+                callback(error, usersByLogin);
+                return;
+            }
+            that._connectionManager.request(
+                "HEAD", parseUriTemplate(usersByLogin._href, {login: login}),
+                "", {}, function (error, response) {
+                    var available = false;
+
+                    if ( response.xhr.status === 404 ) {
+                        available = true;
+                    } else if ( error ) {
+                        available = error;
+                    }
+                    callback(available, response);
+                }
+            );
+        });
     };
 
     /**
