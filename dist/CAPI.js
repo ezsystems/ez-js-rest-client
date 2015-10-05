@@ -1844,6 +1844,16 @@ define('structures/ContentMetadataUpdateStruct',[],function () {
         this.body.ContentUpdate.Section = {_href: sectionId};
     };
 
+    /**
+     * Sets the main location id
+     *
+     * @method setMainLocation
+     * @param {String} locationId the Location REST id
+     */
+    ContentMetadataUpdateStruct.prototype.setMainLocation = function (locationId) {
+        this.body.ContentUpdate.MainLocation = {_href: locationId};
+    };
+
     return ContentMetadataUpdateStruct;
 });
 
@@ -3166,11 +3176,10 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
      * Returns update structure for Content object metadata
      *
      * @method newContentMetadataUpdateStruct
-     * @param language {String} The language code (eng-GB, fre-FR, ...)
      * @return ContentMetadataUpdateStruct
      */
-    ContentService.prototype.newContentMetadataUpdateStruct = function (language) {
-        return new ContentMetadataUpdateStruct(language);
+    ContentService.prototype.newContentMetadataUpdateStruct = function () {
+        return new ContentMetadataUpdateStruct();
     };
 
     /**
