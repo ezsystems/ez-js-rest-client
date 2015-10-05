@@ -28,5 +28,15 @@ define(function () {
         this.body.ContentUpdate.Section = {_href: sectionId};
     };
 
+    /**
+     * Sets the main location id
+     *
+     * @method setMainLocation
+     * @param {String} locationId the Location REST id
+     */
+    ContentMetadataUpdateStruct.prototype.setMainLocation = function (locationId) {
+        this.body.ContentUpdate.MainLocation = {_href: locationId};
+    };
+
     return ContentMetadataUpdateStruct;
 });
