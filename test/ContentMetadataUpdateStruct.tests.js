@@ -33,5 +33,17 @@ define(function (require) {
                 });
             });
         });
+
+        describe('setMainLocation', function () {
+            it('should set the MainLocation property', function () {
+                var locationId = 'location-id';
+
+                contentMetadataUpdateStruct.setMainLocation(locationId);
+
+                expect(contentMetadataUpdateStruct.body.ContentUpdate.MainLocation).toEqual({
+                    _href: locationId,
+                });
+            });
+        });
     });
 });
