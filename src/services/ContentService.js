@@ -84,11 +84,10 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
      * Returns update structure for Content object metadata
      *
      * @method newContentMetadataUpdateStruct
-     * @param language {String} The language code (eng-GB, fre-FR, ...)
      * @return ContentMetadataUpdateStruct
      */
-    ContentService.prototype.newContentMetadataUpdateStruct = function (language) {
-        return new ContentMetadataUpdateStruct(language);
+    ContentService.prototype.newContentMetadataUpdateStruct = function () {
+        return new ContentMetadataUpdateStruct();
     };
 
     /**
