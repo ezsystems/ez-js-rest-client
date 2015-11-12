@@ -99,8 +99,8 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
      * @param language {String} The language code (eng-GB, fre-FR, ...)
      * @return {ContentCreateStruct}
      */
-    ContentService.prototype.newContentCreateStruct = function (contentTypeId, locationCreateStruct, language) {
-        return new ContentCreateStruct(contentTypeId, locationCreateStruct, language);
+    ContentService.prototype.newContentCreateStruct = function (contentTypeId, locationCreateStruct, language, alwaysAvailable) {
+        return new ContentCreateStruct(contentTypeId, locationCreateStruct, language, alwaysAvailable);
     };
 
     /**

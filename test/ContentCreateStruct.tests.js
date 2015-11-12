@@ -9,20 +9,45 @@ define(function (require) {
             contentTypeId = '/api/ezp/v2/content/types/18',
             fieldIdentifier = 'test',
             fieldValue = 'test value',
-            locationStruct,
+            locationStruct = new LocationCreateStruct(),
             contentCreateStruct;
 
-        beforeEach(function () {
-            locationStruct = new LocationCreateStruct(parentLocationId);
-            contentCreateStruct = new ContentCreateStruct(contentTypeId, locationStruct, language);
+        describe('constructor', function () {
+            beforeEach(function () {
+                locationStruct = new LocationCreateStruct(parentLocationId);
+                contentCreateStruct = new ContentCreateStruct(contentTypeId, locationStruct, language, true);
+            });
+
+            it('should take the locationCreateStruct paremeter into account', function () {
+                expect(contentCreateStruct.body.ContentCreate.LocationCreate).toBe(locationStruct.body.LocationCreate);
+            });
+
+            it('should take the contentTypeId paremeter into account', function () {
+                expect(contentCreateStruct.body.ContentCreate.ContentType._href).toBe(contentTypeId);
+            });
+
+            it('should take the languageCode paremeter into account', function () {
+                expect(contentCreateStruct.body.ContentCreate.mainLanguageCode).toBe(language);
+            });
+
+            it('should take the alwaysAvailable paremeter into account', function () {
+                expect(contentCreateStruct.body.ContentCreate.alwaysAvailable).toBe(true);
+            });
         });
 
-        it('should add a new field', function () {
-            contentCreateStruct.addField(fieldIdentifier, fieldValue);
+        describe('addField', function () {
+            beforeEach(function () {
+                locationStruct = new LocationCreateStruct(parentLocationId);
+                contentCreateStruct = new ContentCreateStruct(contentTypeId, locationStruct, language, false);
+            });
 
-            expect(contentCreateStruct.body.ContentCreate.fields.field[0]).toEqual({
-                fieldDefinitionIdentifier: fieldIdentifier,
-                fieldValue: fieldValue,
+            it('should add a new field', function () {
+                contentCreateStruct.addField(fieldIdentifier, fieldValue);
+
+                expect(contentCreateStruct.body.ContentCreate.fields.field[0]).toEqual({
+                    fieldDefinitionIdentifier: fieldIdentifier,
+                    fieldValue: fieldValue,
+                });
             });
         });
     });
