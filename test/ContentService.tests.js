@@ -1713,13 +1713,15 @@ define(function (require) {
                     testStructure = contentService.newContentCreateStruct(
                         testContentTypeId,
                         testLocationCreateStruct,
-                        testLanguage
+                        testLanguage,
+                        true
                     );
 
                     expect(testStructure).toEqual(jasmine.any(ContentCreateStruct));
                     expect(testStructure.body.ContentCreate.LocationCreate).toEqual(testLocationCreateStruct.body.LocationCreate);
                     expect(testStructure.body.ContentCreate.ContentType._href).toEqual(testContentTypeId);
                     expect(testStructure.body.ContentCreate.mainLanguageCode).toEqual(testLanguage);
+                    expect(testStructure.body.ContentCreate.alwaysAvailable).toBe(true);
                 });
 
                 it("newSectionInputStruct", function (){
