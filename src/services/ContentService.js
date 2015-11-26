@@ -597,52 +597,48 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
      *
      * @method loadContent
      * @param versionedContentId {String} target version identifier (e.g. "/api/ezp/v2/content/objects/108/versions/2")
+     * @param [languages=''] {String} (comma separated list) restricts the output of translatable fields to the given languages.
      * @param [fields=''] {String} comma separated list of fields which should be returned in the response (see Content).
      * @param [responseGroups=''] {String}  alternative: comma separated lists of predefined field groups (see REST API Spec v1).
-     * @param [languages=''] {String} (comma separated list) restricts the output of translatable fields to the given languages.
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      * @example
      *     contentService.loadContent(
      *          '/api/ezp/v2/content/objects/180/versions/1',
-     *          '',
-     *          '',
      *          'eng-US',
+     *          '',
+     *          '',
      *          callback
      *     );
      */
-    ContentService.prototype.loadContent = function (versionedContentId, fields, responseGroups, languages, callback) {
-        var defaultFields = '',
-            defaultResponseGroups = '',
-            defaultLanguages = '';
+    ContentService.prototype.loadContent = function (versionedContentId, languages, responseGroups, fields, callback) {
+        var query;
 
-        // default values for omitted parameters (if any)
-        if (arguments.length < 5) {
-            if (typeof fields == "function") {
-                //no optional parameteres are passed
-                callback = fields;
-                fields = defaultFields;
-                responseGroups = defaultResponseGroups;
-                languages = defaultLanguages;
-            } else if (typeof responseGroups == "function") {
-                // only first 1 optional parameter is passed
-                callback = responseGroups;
-                responseGroups = defaultResponseGroups;
-                languages = defaultLanguages;
-            } else {
-                // only first 2 optional parameters are passed
-                callback = languages;
-                languages = defaultLanguages;
-            }
+        if ( !callback && !fields && !responseGroups ) {
+            callback = languages;
+            languages = '';
+        } else if ( !callback && !fields ) {
+            callback = responseGroups;
+            responseGroups = '';
+        } else if ( !callback ) {
+            callback = fields;
+            fields = '';
         }
 
-        fields = fields ? '?fields=' + fields : '';
-        responseGroups = responseGroups ? '&responseGroups="' + responseGroups + '"' : '';
-        languages = languages ? '&languages=' + languages : '';
+        query = languages ? '?languages=' + languages : '';
+
+        if ( responseGroups ) {
+            query += query ? '&' : '?';
+            query += 'responseGroups=' + responseGroups;
+        }
+        if ( fields ) {
+            query += query ? '&' : '?';
+            query += 'fields=' + fields;
+        }
 
         this._connectionManager.request(
             "GET",
-            versionedContentId + fields + responseGroups + languages,
+            versionedContentId + query,
             "",
             {"Accept": "application/vnd.ez.api.Version+json"},
             callback

@@ -476,27 +476,24 @@ define(function (require) {
                 });
 
                 it("loadContent", function () {
-
                     contentService.loadContent(
                         testVersionedContentId,
-                        'testFields',
-                        'testResponseGroups',
                         'testLanguages',
+                        'testResponseGroups',
+                        'testFields',
                         mockCallback
                     );
 
-                    expect(mockConnectionManager.request).toHaveBeenCalled();
-                    expect(mockConnectionManager.request.mostRecentCall.args[0]).toEqual("GET"); //method
-                    expect(
-                        mockConnectionManager.request.mostRecentCall.args[1]
-                    ).toEqual(testVersionedContentId + '?fields=testFields&responseGroups="testResponseGroups"&languages=testLanguages'); //url
-                    expect(mockConnectionManager.request.mostRecentCall.args[2]).toEqual(""); // body
-                    expect(mockConnectionManager.request.mostRecentCall.args[3].Accept).toEqual("application/vnd.ez.api.Version+json"); // headers
-                    expect(mockConnectionManager.request.mostRecentCall.args[4]).toBe(mockCallback); // callback
+                    expect(mockConnectionManager.request).toHaveBeenCalledWith(
+                        "GET",
+                        testVersionedContentId + '?languages=testLanguages&responseGroups=testResponseGroups&fields=testFields',
+                        "",
+                        {Accept: "application/vnd.ez.api.Version+json"},
+                        mockCallback
+                    );
                 });
 
                 it("loadContent with omitted params", function () {
-
                     contentService.loadContent(
                         testVersionedContentId,
                         mockCallback
@@ -512,16 +509,15 @@ define(function (require) {
                 });
 
                 it("loadContent with 1 optional parameter", function () {
-
                     contentService.loadContent(
                         testVersionedContentId,
-                        'testFields',
+                        'testLanguages',
                         mockCallback
                     );
 
                     expect(mockConnectionManager.request).toHaveBeenCalledWith(
                         "GET",
-                        testVersionedContentId + '?fields=testFields',
+                        testVersionedContentId + '?languages=testLanguages',
                         "",
                         {Accept: "application/vnd.ez.api.Version+json"},
                         mockCallback
@@ -529,17 +525,52 @@ define(function (require) {
                 });
 
                 it("loadContent with 2 optional parameters", function () {
-
                     contentService.loadContent(
                         testVersionedContentId,
-                        'testFields',
+                        'testLanguages',
                         'testResponseGroups',
                         mockCallback
                     );
 
                     expect(mockConnectionManager.request).toHaveBeenCalledWith(
                         "GET",
-                        testVersionedContentId + '?fields=testFields&responseGroups="testResponseGroups"',
+                        testVersionedContentId + '?languages=testLanguages&responseGroups=testResponseGroups',
+                        "",
+                        {Accept: "application/vnd.ez.api.Version+json"},
+                        mockCallback
+                    );
+                });
+
+                it('loadContent with default languages', function () {
+                    contentService.loadContent(
+                        testVersionedContentId,
+                        '',
+                        'testResponseGroups',
+                        'testFields',
+                        mockCallback
+                    );
+
+                    expect(mockConnectionManager.request).toHaveBeenCalledWith(
+                        "GET",
+                        testVersionedContentId + '?responseGroups=testResponseGroups&fields=testFields',
+                        "",
+                        {Accept: "application/vnd.ez.api.Version+json"},
+                        mockCallback
+                    );
+                });
+
+                it('loadContent with default languages and responseGroups', function () {
+                    contentService.loadContent(
+                        testVersionedContentId,
+                        '',
+                        '',
+                        'testFields',
+                        mockCallback
+                    );
+
+                    expect(mockConnectionManager.request).toHaveBeenCalledWith(
+                        "GET",
+                        testVersionedContentId + '?fields=testFields',
                         "",
                         {Accept: "application/vnd.ez.api.Version+json"},
                         mockCallback
