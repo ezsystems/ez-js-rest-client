@@ -114,7 +114,7 @@ module.exports = function(grunt) {
         yuidoc: {
             compile: {
                 name: '<%= pkg.description %>',
-                description: 'Auto-generated doc API of the eZ Platform JavaScript REST client',
+                description: 'Auto-generated API doc of eZ Platform JavaScript REST client',
                 version: '<%= pkg.version %>',
                 url: '<%= pkg.repository %>',
                 logo: "http://ez.no/extension/ez_ezno/design/ezno_2014/images/ez-logo.png",

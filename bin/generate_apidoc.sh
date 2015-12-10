@@ -5,7 +5,7 @@
 # Github user token who is allowed to push on the target repository
 
 JS_REST_CLIENT_DIR="javascript-rest-client"
-TRIGGER_COMMIT_MSG=`git log --oneline -1`
+TRIGGER_COMMIT_MSG=`git log --oneline -1 $TRAVIS_COMMIT`
 # TODO change to ezsystems/ezsystems.github.com
 DOC_REPOSITORY="dpobel/test-doc"
 # TODO change to master
@@ -29,7 +29,7 @@ STATUS=`git status --porcelain`
 
 if [ ! -z "$STATUS" ] ; then
     git add "$JS_REST_CLIENT_DIR"
-    git commit -m "Updated JavaScript REST Client API doc\n\nAfter:\n$TRIGGER_COMMIT_MSG"
+    git commit -m "`echo "Updated JavaScript REST Client API doc\n\nAfter:\n$TRIGGER_COMMIT_MSG"`"
     git pull --rebase
     git push origin $DOC_BRANCH
 else
