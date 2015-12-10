@@ -12,4 +12,4 @@ after_success:
     - if [ $TRAVIS_PULL_REQUEST != "false" ] ; then sh bin/generate_apidoc.sh ; fi
 env:
     global:
-        secure: Z0GXdVOLMJNtueamtpA9FZzeNQeX8EEaaVOLYZTKZ7XNATlrFiZHzGk4IOU6YcWjUxpLv7E03HE8yCGvTnHuUOQAXskvZsUBngDKsc/DkpvFRj1lhSPOKkUU+ClfcxtbnBfwfQz+552oxlqVwdS9ZSD6/YBaoVIeEtiLOEs6O3Y=
+        secure: MAyyZNJ9zHL2ENRZhoqD2IIlaPbFpzB+HFZsTPyA406O04sMIaJJRyVxMGmnKk7/PPt9/OdGb6lYs8pAJkZPHTf67c5CU4u/0HFFXZPnysBjhln9egLqGc/g2UkgIYcDl9d6H34HGf/5wQG1XWZeaqkLwdhPVJDiH5PT2/IBU+8=
