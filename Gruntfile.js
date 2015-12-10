@@ -113,8 +113,8 @@ module.exports = function(grunt) {
         pkg: grunt.file.readJSON('package.json'),
         yuidoc: {
             compile: {
-                name: '<%= pkg.name %>',
-                description: '<%= pkg.description %>',
+                name: '<%= pkg.description %>',
+                description: 'Auto-generated doc API of the eZ Platform JavaScript REST client',
                 version: '<%= pkg.version %>',
                 url: '<%= pkg.repository %>',
                 logo: "http://ez.no/extension/ez_ezno/design/ezno_2014/images/ez-logo.png",

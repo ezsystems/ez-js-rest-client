@@ -1,7 +1,7 @@
 {
   "name": "CAPI",
   "repository": "https://github.com/ezsystems/ez-js-rest-client",
-  "description": "JS REST Client for eZ Publish Platform",
+  "description": "eZ Platform JavaScript REST client",
   "version": "0.1.0",
   "devDependencies": {
     "grunt": "~0.4.1",
