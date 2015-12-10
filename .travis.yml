@@ -8,8 +8,7 @@ branches:
 before_script:
     - npm install -g grunt-cli
 after_success:
-    # TODO do the opposite before merge ie generate the doc if it's not a PR
-    - if [ $TRAVIS_PULL_REQUEST != "false" ] ; then sh bin/generate_apidoc.sh ; fi
+    - if [ $TRAVIS_PULL_REQUEST = "false" ] ; then sh bin/generate_apidoc.sh ; fi
 env:
     global:
         secure: JO1M7asQCvew+AIXgh++vUDRKMS7S1ZLPJ1HVGPCyG1E1BjTCojwX+IJ0po1FtCWESWjPRr0kVBqLEu5J6g1Pcxx4I2bpgecfRAQS8Bhw2gn5C51OpNcJz7PFjAxg5VwaL4YmIndmInGU+YTU0J3ovLbnnlavpvYklXMXBaYe6M=
