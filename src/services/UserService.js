@@ -51,8 +51,8 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
      * Returns session create structure
      *
      * @method newSessionCreateStruct
-     * @param login {String} login for a user, which wants to start a session
-     * @param password {String} password for a user, which wants to start a session
+     * @param login {String} user's login
+     * @param password {String} user's password
      * @return {SessionCreateStruct}
      */
     UserService.prototype.newSessionCreateStruct = function (login, password) {
