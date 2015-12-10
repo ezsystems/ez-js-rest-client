@@ -12,5 +12,4 @@ after_success:
     - if [ $TRAVIS_PULL_REQUEST != "false" ] ; then sh bin/generate_apidoc.sh ; fi
 env:
     global:
-        # TODO: use an ezrobot token
-        secure: hzGZ7j6dWYbMwPkPqXHt1L4SIRMW/bO76GVMoZ/+8CH5L3pJie5TIwAssjM/1qhMAABVpSl9Bi79JOqP3nq7fT953yEM7y51OS0RPnc0dbHjyT6q23TlwJj10E4kApPUA5orgQy4eLChS/IrNrAY50bQoz+OEZv8wJHJa3Nr2Tw=
+        secure: Z0GXdVOLMJNtueamtpA9FZzeNQeX8EEaaVOLYZTKZ7XNATlrFiZHzGk4IOU6YcWjUxpLv7E03HE8yCGvTnHuUOQAXskvZsUBngDKsc/DkpvFRj1lhSPOKkUU+ClfcxtbnBfwfQz+552oxlqVwdS9ZSD6/YBaoVIeEtiLOEs6O3Y=
