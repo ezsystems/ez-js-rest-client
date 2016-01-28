@@ -1291,11 +1291,11 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
     };
 
 // ******************************
-// Thrash management
+// Trash management
 // ******************************
 
     /**
-     *  Loads all the thrash can items
+     *  Loads all the trash can items
      *
      * @method loadTrashItems
      * @param [limit=-1] {Number} the number of results returned
@@ -1345,7 +1345,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
     };
 
     /**
-     *  Loads target thrash can item
+     *  Loads target trash can item
      *
      * @method loadTrashItem
      * @param trashItemId {String} target trash item identifier (e.g. "/api/ezp/v2/content/trash/1")
@@ -1414,8 +1414,25 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
      * @method emptyThrash
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
+     * @deprecated since 1.1 and will be removed in 2.0. Is replaced `emptyTrash` which has the same behavior
+     *
      */
     ContentService.prototype.emptyThrash = function (callback) {
+        console.warn('[DEPRECATED] ContentService.emptyThrash is deprecated');
+        console.warn('[DEPRECATED] ContentService.emptyThrash is deprecated will be removed in eZ JS REST client 2.0');
+        console.warn('[DEPRECATED] use ContentService.emptyTrash instead');
+
+        this.emptyTrash(callback);
+    };
+
+    /**
+     *  Empty the trash can
+     *
+     * @method emptyTrash
+     * @param callback {Function} callback executed after performing the request (see
+     *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
+     */
+    ContentService.prototype.emptyTrash = function (callback) {
         var that = this;
 
         this._discoveryService.getInfoObject(
