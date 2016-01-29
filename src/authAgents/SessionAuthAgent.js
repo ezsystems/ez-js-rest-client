@@ -32,7 +32,7 @@ define(["structures/CAPIError", "storages/LocalStorage"], function (CAPIError, L
      * @param authInfo.identifier {String} identifier of the session
      * @param authInfo.href {String} refresh resource URI for the session
      * @param authInfo.csrfToken {String} CSRF Token
-     * @param storage {StorageAbstraction?} storage to be used. By default a LocalStorage will be utilized
+     * @param [storage=LocalStorage] {StorageAbstraction} storage to be used. By default a LocalStorage will be utilized
      */
     var SessionAuthAgent = function (authInfo, storage) {
             /**
