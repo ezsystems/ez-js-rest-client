@@ -1,13 +1,13 @@
-# JavaScript client library for the eZ Publish REST API
+# JavaScript client for the eZ Platform REST API
 
 [![Build Status](https://travis-ci.org/ezsystems/ez-js-rest-client.png)](https://travis-ci.org/ezsystems/ez-js-rest-client)
 
 This repository provides a JavaScript library meant to ease the usage of [the eZ
-Publish REST API](https://confluence.ez.no/display/EZP/eZ+Publish+REST+API).
+Publish REST API](https://doc.ez.no/display/TECHDOC/REST+API+Tutorials).
 
 ## Installation
 
-The eZ Publish JavaScript REST Client is a [bower](http://bower.io) package, so
+The eZ Platform JavaScript REST Client is a [bower](http://bower.io) package, so
 the easiest way to install it is to run:
 
 ```
@@ -18,6 +18,12 @@ Then you can include in your project the file
 `bower\_components/ez-js-rest-client/dist/CAPI-min.js` (or the non minified
 version). It's also possible to directly take `dist/CAPI.js` or
 `dist/CAPI-min.js` in a clone of this repository.
+
+## Usage
+
+The usage the JavaScript REST Client is detailed in [Using the JavaScript REST
+API
+Client](https://doc.ez.no/display/TECHDOC/Using+the+JavaScript+REST+API+Client)
 
 ## Development
 
@@ -105,7 +111,7 @@ using following instruction:
 
 * Create `path/to/ezpublish5/src/EzSystems` if it does not exist.
 * Symlink the bundle into /src/EzSystems/ (keep folder name).
-* Edit /ezpublish/EzPublishKernel.php and add the following line before in the
+* Edit /app/AppKernel.php and add the following line before in the
   return statement of the method registerBundles:
 
     ```php
@@ -120,7 +126,7 @@ using following instruction:
         resource: "@jsRestClientBundle/Resources/config/routing.yml"
     ```
 
-* Clear the Symfony 2 caches with ezpublish/console.
+* Clear the Symfony 2 caches with app/console.
 
 After these steps you may access `/js-rest-client-test/` path where you will find
 testing html page.  Most of requests can be configured a little bit before
