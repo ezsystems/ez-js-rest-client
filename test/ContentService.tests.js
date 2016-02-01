@@ -1162,7 +1162,7 @@ define(function (require) {
             });
 
             // ******************************
-            // Thrash management
+            // Trash management
             // ******************************
             describe("Trash management request:", function () {
 
@@ -1279,7 +1279,7 @@ define(function (require) {
                     );
                 });
 
-                it("emptyTrash", function () {
+                it("emptyThrash", function () {
                     contentService.emptyThrash(
                         mockCallback
                     );
@@ -1293,7 +1293,22 @@ define(function (require) {
                         {},
                         mockCallback
                     );
+                });
 
+                it("emptyTrash", function () {
+                    contentService.emptyTrash(
+                        mockCallback
+                    );
+
+                    expect(mockDiscoveryService.getInfoObject).toHaveBeenCalledWith("trash", jasmine.any(Function));
+
+                    expect(mockConnectionManager.request).toHaveBeenCalledWith(
+                        "DELETE",
+                        trash,
+                        "",
+                        {},
+                        mockCallback
+                    );
                 });
 
             });
@@ -2002,8 +2017,17 @@ define(function (require) {
                 expect(mockCallback).toHaveBeenCalledWith(jasmine.any(CAPIError), errorResponse);
             });
 
-            it("emptyTrash", function () {
+            it("emptyThrash", function () {
                 contentService.emptyThrash(
+                    mockCallback
+                );
+
+                expect(mockFaultyDiscoveryService.getInfoObject).toHaveBeenCalledWith("trash", jasmine.any(Function));
+                expect(mockCallback).toHaveBeenCalledWith(jasmine.any(CAPIError), errorResponse);
+            });
+
+            it("emptyTrash", function () {
+                contentService.emptyTrash(
                     mockCallback
                 );
 
