@@ -1,6 +1,6 @@
 {
   "name": "eZ Publish JavaScript REST Client",
-  "version": "1.1",
+  "version": "1.1.0",
   "homepage": "https://github.com/ezsystems/ez-js-rest-client",
   "authors": [
     "eZ Systems"

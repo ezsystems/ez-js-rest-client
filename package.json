@@ -2,7 +2,7 @@
   "name": "CAPI",
   "repository": "https://github.com/ezsystems/ez-js-rest-client",
   "description": "eZ Platform JavaScript REST client",
-  "version": "1.1",
+  "version": "1.1.0",
   "devDependencies": {
     "grunt": "~0.4.1",
     "grunt-contrib-jshint": "~0.6.0",
