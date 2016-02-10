@@ -2,6 +2,7 @@
 define(function (require) {
 
     var CAPI = require("CAPI"),
+        ConnectionManager = require("ConnectionManager"),
         ContentService = require("services/ContentService"),
         ContentTypeService = require("services/ContentTypeService"),
         DiscoveryService = require("services/DiscoveryService"),
@@ -163,6 +164,15 @@ define(function (require) {
 
                 expect(mockAuthenticationAgent.setCredentials).toHaveBeenCalledWith(credentials);
                 expect(mockAuthenticationAgent.logIn).toHaveBeenCalledWith(mockCallback);
+            });
+        });
+
+        describe("getConnectionManager", function () {
+            it("should provide ConnectionManager", function () {
+                var connectionManager = capi.getConnectionManager();
+
+                expect(connectionManager).toBeDefined();
+                expect(connectionManager instanceof ConnectionManager).toBeTruthy();
             });
         });
     });

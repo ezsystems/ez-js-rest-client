@@ -192,12 +192,12 @@ define(['authAgents/SessionAuthAgent', 'authAgents/HttpBasicAuthAgent', 'Connect
          * @example
          *      var connectionManager = jsCAPI.getConnectionManager();
          *      connectionManager.request(
-         *   		"GET",
-         *   		"/endpoint",
-         *   		"",
-         *   		{"Accept": "application/json"},
-         *   		callback
-         *		);
+         *          "GET",
+         *          "/endpoint",
+         *          "",
+         *          {"Accept": "application/json"},
+         *          callback
+         *      );
          */
         this.getConnectionManager = function () {
             return connectionManager;
