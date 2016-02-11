@@ -2,7 +2,7 @@
 define(['authAgents/SessionAuthAgent', 'authAgents/HttpBasicAuthAgent', 'ConnectionManager',
         'ConnectionFeatureFactory', 'connections/XmlHttpRequestConnection', 'connections/MicrosoftXmlHttpRequestConnection',
         'services/DiscoveryService', 'services/ContentService', 'services/ContentTypeService',
-        'services/UserService', "utils/extend"],
+        'services/UserService', 'utils/extend'],
     function (SessionAuthAgent, HttpBasicAuthAgent, ConnectionManager,
               ConnectionFeatureFactory, XmlHttpRequestConnection, MicrosoftXmlHttpRequestConnection,
               DiscoveryService, ContentService, ContentTypeService,
@@ -17,7 +17,10 @@ define(['authAgents/SessionAuthAgent', 'authAgents/HttpBasicAuthAgent', 'Connect
      * @constructor
      * @param endPointUrl {String} url pointing to REST root
      * @param authenticationAgent {Object} Instance of one of the AuthAgents (e.g. SessionAuthAgent, HttpBasicAuthAgent)
-     * @param [options] {Object} Object containing different options for the CAPI (see example)
+     * @param [options] {Object} Object containing different options for the CAPI
+     * @param [options.rootPath='/api/ezp/v2/'] {String} the API root path
+     * @param [options.logRequests=false] {Boolean} whether to log requests
+     * @param [options.siteAccess=null] {String|null} siteaccess in which requests should be executed
      * @example
      *     var   authAgent = new SessionAuthAgent({
                login: "admin",
@@ -50,7 +53,8 @@ define(['authAgents/SessionAuthAgent', 'authAgents/HttpBasicAuthAgent', 'Connect
             connectionStack: [ // Array of connections, should be filled-in in preferred order
                 {connection: XmlHttpRequestConnection},
                 {connection: MicrosoftXmlHttpRequestConnection}
-            ]
+            ],
+            siteAccess: null
         };
 
         authenticationAgent.setCAPI(this);
@@ -59,7 +63,7 @@ define(['authAgents/SessionAuthAgent', 'authAgents/HttpBasicAuthAgent', 'Connect
         mergedOptions = extend({}, defaultOptions, options);
 
         connectionFactory = new ConnectionFeatureFactory(mergedOptions.connectionStack);
-        connectionManager = new ConnectionManager(endPointUrl, authenticationAgent, connectionFactory);
+        connectionManager = new ConnectionManager(endPointUrl, authenticationAgent, connectionFactory, mergedOptions.siteAccess);
         connectionManager.logRequests = mergedOptions.logRequests;
         discoveryService = new DiscoveryService(mergedOptions.rootPath, connectionManager);
 

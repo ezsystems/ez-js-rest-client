@@ -11,11 +11,13 @@ define(["structures/Response", "structures/Request", "structures/CAPIError"],
      * @param endPointUrl {String} url to REST root
      * @param authenticationAgent {object} Instance of one of the AuthAgents (e.g. SessionAuthAgent, HttpBasicAuthAgent)
      * @param connectionFactory {ConnectionFeatureFactory}  the factory which is choosing compatible connection from connections list
+     * @param [siteAccess] {String} SiteAccess to use for requests
      */
-    var ConnectionManager = function (endPointUrl, authenticationAgent, connectionFactory) {
+    var ConnectionManager = function (endPointUrl, authenticationAgent, connectionFactory, siteAccess) {
         this._endPointUrl = endPointUrl;
         this._authenticationAgent = authenticationAgent;
         this._connectionFactory = connectionFactory;
+        this._siteAccess = siteAccess;
 
         this._requestsQueue = [];
         this._authInProgress = false;
@@ -67,6 +69,10 @@ define(["structures/Response", "structures/Request", "structures/CAPIError"],
                 callback = headers;
                 headers = defaultHeaders;
             }
+        }
+
+        if (this._siteAccess) {
+            headers['X-Siteaccess'] = this._siteAccess;
         }
 
         request = new Request({
@@ -172,6 +178,10 @@ define(["structures/Response", "structures/Request", "structures/CAPIError"],
                 callback = headers;
                 headers = defaultHeaders;
             }
+        }
+
+        if (this._siteAccess) {
+            headers['X-Siteaccess'] = this._siteAccess;
         }
 
         request = new Request({
