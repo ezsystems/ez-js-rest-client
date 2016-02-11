@@ -7626,6 +7626,25 @@ define('CAPI',['authAgents/SessionAuthAgent', 'authAgents/HttpBasicAuthAgent', '
         this.getDiscoveryService = function () {
             return discoveryService;
         };
+
+        /**
+         * Gets the connection manager
+         *
+         * @method getConnectionManager
+         * @return {ConnectionManager}
+         * @example
+         *      var connectionManager = jsCAPI.getConnectionManager();
+         *      connectionManager.request(
+         *          "GET",
+         *          "/endpoint",
+         *          "",
+         *          {"Accept": "application/json"},
+         *          callback
+         *      );
+         */
+        this.getConnectionManager = function () {
+            return connectionManager;
+        };
     };
 
     return CAPI;
