@@ -126,9 +126,9 @@ define(function (require) {
                 expect(mockXMLHttpRequest.prototype.open.mostRecentCall.args[4]).toEqual(testPassword); //password
 
                 expect(mockXMLHttpRequest.prototype.setRequestHeader).toHaveBeenCalled();
+                expect(mockXMLHttpRequest.prototype.setRequestHeader.calls.length).toEqual(1);
                 expect(mockXMLHttpRequest.prototype.setRequestHeader.mostRecentCall.args[0]).toEqual("testHeader"); //header type
                 expect(mockXMLHttpRequest.prototype.setRequestHeader.mostRecentCall.args[1]).toEqual("testHeaderValue"); //header value
-
                 expect(mockXMLHttpRequest.prototype.send).toHaveBeenCalled();
                 expect(mockXMLHttpRequest.prototype.send.mostRecentCall.args[0]).toEqual({testBody: ""}); //body
 
@@ -137,6 +137,40 @@ define(function (require) {
                 expect(mockCallback).toHaveBeenCalled();
                 expect(mockCallback.mostRecentCall.args[0]).toEqual(false); // errors
                 expect(mockCallback.mostRecentCall.args[1]).toEqual(jasmine.any(Response));
+            });
+
+            it("execute call with custom http verb that needs to use POST", function (){
+
+                mockRequest.method = "PUBLISH";
+
+                connection.execute(
+                    mockRequest,
+                    mockCallback
+                );
+
+                expect(mockXMLHttpRequest.prototype.open).toHaveBeenCalled();
+                expect(mockXMLHttpRequest.prototype.open.mostRecentCall.args[0]).toEqual("POST"); //method
+                expect(mockXMLHttpRequest.prototype.open.mostRecentCall.args[1]).toEqual("/"); //url
+                expect(mockXMLHttpRequest.prototype.open.mostRecentCall.args[2]).toEqual(true); //async
+
+                expect(mockXMLHttpRequest.prototype.setRequestHeader).toHaveBeenCalled();
+                expect(mockXMLHttpRequest.prototype.setRequestHeader.calls.length).toEqual(2);
+                expect(mockXMLHttpRequest.prototype.setRequestHeader.mostRecentCall.args[0]).toEqual("testHeader"); //header type
+                expect(mockXMLHttpRequest.prototype.setRequestHeader.mostRecentCall.args[1]).toEqual("testHeaderValue"); //header value
+                expect(mockXMLHttpRequest.prototype.setRequestHeader.calls[0].args[0]).toEqual("X-HTTP-Method-Override"); //header type
+                expect(mockXMLHttpRequest.prototype.setRequestHeader.calls[0].args[1]).toEqual("PUBLISH"); //header value
+
+                expect(mockXMLHttpRequest.prototype.send).toHaveBeenCalled();
+                expect(mockXMLHttpRequest.prototype.send.mostRecentCall.args[0]).toEqual({testBody: ""}); //body
+
+                expect(mockXMLHttpRequest.prototype.getAllResponseHeaders).toHaveBeenCalled();
+
+                expect(mockCallback).toHaveBeenCalled();
+                expect(mockCallback.mostRecentCall.args[0]).toEqual(false); // errors
+                expect(mockCallback.mostRecentCall.args[1]).toEqual(jasmine.any(Response)); // response
+
+                // cleanup
+                mockRequest.method = "GET";
             });
 
         });
