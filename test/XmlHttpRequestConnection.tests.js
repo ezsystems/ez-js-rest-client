@@ -23,15 +23,15 @@ define(function (require) {
         };
         HeadersObject.prototype.dummyProperty = "prototype dummy property";
 
-        mockRequest = {
-            body: {testBody: ""},
-            headers: new HeadersObject(),
-            httpBasicAuth: false,
-            method: "GET",
-            url: "/"
-        };
-
         beforeEach(function (){
+
+            mockRequest = {
+                body: {testBody: ""},
+                headers: new HeadersObject(),
+                httpBasicAuth: false,
+                method: "GET",
+                url: "/"
+            };
 
             mockCallback = jasmine.createSpy('mockCallback');
 
@@ -87,17 +87,12 @@ define(function (require) {
                     mockCallback
                 );
 
-                expect(mockXMLHttpRequest.prototype.open).toHaveBeenCalled();
-                expect(mockXMLHttpRequest.prototype.open.mostRecentCall.args[0]).toEqual("GET"); //method
-                expect(mockXMLHttpRequest.prototype.open.mostRecentCall.args[1]).toEqual("/"); //url
-                expect(mockXMLHttpRequest.prototype.open.mostRecentCall.args[2]).toEqual(true); //async
+                expect(mockXMLHttpRequest.prototype.open).toHaveBeenCalledWith("GET", "/", true);
 
-                expect(mockXMLHttpRequest.prototype.setRequestHeader).toHaveBeenCalled();
-                expect(mockXMLHttpRequest.prototype.setRequestHeader.mostRecentCall.args[0]).toEqual("testHeader"); //header type
-                expect(mockXMLHttpRequest.prototype.setRequestHeader.mostRecentCall.args[1]).toEqual("testHeaderValue"); //header value
+                expect(mockXMLHttpRequest.prototype.setRequestHeader).toHaveBeenCalledWith("testHeader", "testHeaderValue");
+                expect(mockXMLHttpRequest.prototype.setRequestHeader.calls.length).toEqual(1);
 
-                expect(mockXMLHttpRequest.prototype.send).toHaveBeenCalled();
-                expect(mockXMLHttpRequest.prototype.send.mostRecentCall.args[0]).toEqual({testBody: ""}); //body
+                expect(mockXMLHttpRequest.prototype.send).toHaveBeenCalledWith({testBody: ""});
 
                 expect(mockXMLHttpRequest.prototype.getAllResponseHeaders).toHaveBeenCalled();
 
@@ -118,25 +113,34 @@ define(function (require) {
                     mockCallback
                 );
 
-                expect(mockXMLHttpRequest.prototype.open).toHaveBeenCalled();
-                expect(mockXMLHttpRequest.prototype.open.mostRecentCall.args[0]).toEqual("GET"); //method
-                expect(mockXMLHttpRequest.prototype.open.mostRecentCall.args[1]).toEqual("/"); //url
-                expect(mockXMLHttpRequest.prototype.open.mostRecentCall.args[2]).toEqual(true); //async
-                expect(mockXMLHttpRequest.prototype.open.mostRecentCall.args[3]).toEqual(testLogin); //login
-                expect(mockXMLHttpRequest.prototype.open.mostRecentCall.args[4]).toEqual(testPassword); //password
+                expect(mockXMLHttpRequest.prototype.open).toHaveBeenCalledWith("GET", "/", true, testLogin, testPassword);
 
-                expect(mockXMLHttpRequest.prototype.setRequestHeader).toHaveBeenCalled();
-                expect(mockXMLHttpRequest.prototype.setRequestHeader.mostRecentCall.args[0]).toEqual("testHeader"); //header type
-                expect(mockXMLHttpRequest.prototype.setRequestHeader.mostRecentCall.args[1]).toEqual("testHeaderValue"); //header value
+                expect(mockXMLHttpRequest.prototype.setRequestHeader).toHaveBeenCalledWith("testHeader", "testHeaderValue");
+                expect(mockXMLHttpRequest.prototype.setRequestHeader.calls.length).toEqual(1);
 
-                expect(mockXMLHttpRequest.prototype.send).toHaveBeenCalled();
-                expect(mockXMLHttpRequest.prototype.send.mostRecentCall.args[0]).toEqual({testBody: ""}); //body
+                expect(mockXMLHttpRequest.prototype.send).toHaveBeenCalledWith({testBody: ""});
 
                 expect(mockXMLHttpRequest.prototype.getAllResponseHeaders).toHaveBeenCalled();
 
                 expect(mockCallback).toHaveBeenCalled();
                 expect(mockCallback.mostRecentCall.args[0]).toEqual(false); // errors
                 expect(mockCallback.mostRecentCall.args[1]).toEqual(jasmine.any(Response));
+            });
+
+            it("execute call with custom http verb that needs to use POST", function (){
+
+                mockRequest.method = "PUBLISH";
+
+                connection.execute(
+                    mockRequest,
+                    mockCallback
+                );
+
+                expect(mockXMLHttpRequest.prototype.open).toHaveBeenCalledWith("POST", "/", true);
+                expect(mockXMLHttpRequest.prototype.setRequestHeader).toHaveBeenCalledWith("testHeader", "testHeaderValue");
+                expect(mockXMLHttpRequest.prototype.setRequestHeader).toHaveBeenCalledWith("X-HTTP-Method-Override", "PUBLISH");
+                expect(mockXMLHttpRequest.prototype.setRequestHeader.calls.length).toEqual(2);
+                expect(mockXMLHttpRequest.prototype.send).toHaveBeenCalledWith({testBody: ""});
             });
 
         });
@@ -166,19 +170,12 @@ define(function (require) {
                     mockCallback
                 );
 
-                expect(mockXMLHttpRequest.prototype.open).toHaveBeenCalled();
-                expect(mockXMLHttpRequest.prototype.open.mostRecentCall.args[0]).toEqual("GET"); //method
-                expect(mockXMLHttpRequest.prototype.open.mostRecentCall.args[1]).toEqual("/"); //url
-                expect(mockXMLHttpRequest.prototype.open.mostRecentCall.args[2]).toEqual(true); //async
-                expect(mockXMLHttpRequest.prototype.open.mostRecentCall.args[3]).toEqual(testLogin); //login
-                expect(mockXMLHttpRequest.prototype.open.mostRecentCall.args[4]).toEqual(testPassword); //password
+                expect(mockXMLHttpRequest.prototype.open).toHaveBeenCalledWith("GET", "/", true);
 
-                expect(mockXMLHttpRequest.prototype.setRequestHeader).toHaveBeenCalled();
-                expect(mockXMLHttpRequest.prototype.setRequestHeader.mostRecentCall.args[0]).toEqual("testHeader"); //header type
-                expect(mockXMLHttpRequest.prototype.setRequestHeader.mostRecentCall.args[1]).toEqual("testHeaderValue"); //header value
+                expect(mockXMLHttpRequest.prototype.setRequestHeader).toHaveBeenCalledWith("testHeader", "testHeaderValue");
+                expect(mockXMLHttpRequest.prototype.setRequestHeader.calls.length).toEqual(1);
 
-                expect(mockXMLHttpRequest.prototype.send).toHaveBeenCalled();
-                expect(mockXMLHttpRequest.prototype.send.mostRecentCall.args[0]).toEqual({testBody: ""}); //body
+                expect(mockXMLHttpRequest.prototype.send).toHaveBeenCalledWith({testBody: ""});
 
                 expect(mockXMLHttpRequest.prototype.getAllResponseHeaders).toHaveBeenCalled();
 
