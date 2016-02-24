@@ -1112,11 +1112,13 @@ define('ConnectionManager',["structures/Response", "structures/Request", "struct
      * @param endPointUrl {String} url to REST root
      * @param authenticationAgent {object} Instance of one of the AuthAgents (e.g. SessionAuthAgent, HttpBasicAuthAgent)
      * @param connectionFactory {ConnectionFeatureFactory}  the factory which is choosing compatible connection from connections list
+     * @param [siteAccess] {String} SiteAccess to use for requests
      */
-    var ConnectionManager = function (endPointUrl, authenticationAgent, connectionFactory) {
+    var ConnectionManager = function (endPointUrl, authenticationAgent, connectionFactory, siteAccess) {
         this._endPointUrl = endPointUrl;
         this._authenticationAgent = authenticationAgent;
         this._connectionFactory = connectionFactory;
+        this._siteAccess = siteAccess;
 
         this._requestsQueue = [];
         this._authInProgress = false;
@@ -1168,6 +1170,10 @@ define('ConnectionManager',["structures/Response", "structures/Request", "struct
                 callback = headers;
                 headers = defaultHeaders;
             }
+        }
+
+        if (this._siteAccess) {
+            headers['X-Siteaccess'] = this._siteAccess;
         }
 
         request = new Request({
@@ -1273,6 +1279,10 @@ define('ConnectionManager',["structures/Response", "structures/Request", "struct
                 callback = headers;
                 headers = defaultHeaders;
             }
+        }
+
+        if (this._siteAccess) {
+            headers['X-Siteaccess'] = this._siteAccess;
         }
 
         request = new Request({
@@ -7459,7 +7469,7 @@ define('utils/extend',[], function () {
 define('CAPI',['authAgents/SessionAuthAgent', 'authAgents/HttpBasicAuthAgent', 'ConnectionManager',
         'ConnectionFeatureFactory', 'connections/XmlHttpRequestConnection', 'connections/MicrosoftXmlHttpRequestConnection',
         'services/DiscoveryService', 'services/ContentService', 'services/ContentTypeService',
-        'services/UserService', "utils/extend"],
+        'services/UserService', 'utils/extend'],
     function (SessionAuthAgent, HttpBasicAuthAgent, ConnectionManager,
               ConnectionFeatureFactory, XmlHttpRequestConnection, MicrosoftXmlHttpRequestConnection,
               DiscoveryService, ContentService, ContentTypeService,
@@ -7474,7 +7484,10 @@ define('CAPI',['authAgents/SessionAuthAgent', 'authAgents/HttpBasicAuthAgent', '
      * @constructor
      * @param endPointUrl {String} url pointing to REST root
      * @param authenticationAgent {Object} Instance of one of the AuthAgents (e.g. SessionAuthAgent, HttpBasicAuthAgent)
-     * @param [options] {Object} Object containing different options for the CAPI (see example)
+     * @param [options] {Object} Object containing different options for the CAPI
+     * @param [options.rootPath='/api/ezp/v2/'] {String} the API root path
+     * @param [options.logRequests=false] {Boolean} whether to log requests
+     * @param [options.siteAccess=null] {String|null} siteaccess in which requests should be executed
      * @example
      *     var   authAgent = new SessionAuthAgent({
                login: "admin",
@@ -7507,7 +7520,8 @@ define('CAPI',['authAgents/SessionAuthAgent', 'authAgents/HttpBasicAuthAgent', '
             connectionStack: [ // Array of connections, should be filled-in in preferred order
                 {connection: XmlHttpRequestConnection},
                 {connection: MicrosoftXmlHttpRequestConnection}
-            ]
+            ],
+            siteAccess: null
         };
 
         authenticationAgent.setCAPI(this);
@@ -7516,7 +7530,7 @@ define('CAPI',['authAgents/SessionAuthAgent', 'authAgents/HttpBasicAuthAgent', '
         mergedOptions = extend({}, defaultOptions, options);
 
         connectionFactory = new ConnectionFeatureFactory(mergedOptions.connectionStack);
-        connectionManager = new ConnectionManager(endPointUrl, authenticationAgent, connectionFactory);
+        connectionManager = new ConnectionManager(endPointUrl, authenticationAgent, connectionFactory, mergedOptions.siteAccess);
         connectionManager.logRequests = mergedOptions.logRequests;
         discoveryService = new DiscoveryService(mergedOptions.rootPath, connectionManager);
 
