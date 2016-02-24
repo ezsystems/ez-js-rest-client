@@ -18,6 +18,7 @@ define(function (require) {
 
             endPointUrl = 'http://ez.git.local',
             rootId = '/api/ezp/v2/',
+            siteAccess = 'site',
             testTrue = true,
             testFalse = false;
 
@@ -332,6 +333,50 @@ define(function (require) {
                     url: endPointUrl + rootId,
                     body: "",
                     headers: {}
+                });
+            });
+        });
+
+        describe("is calling with siteaccess:", function () {
+
+            beforeEach(function (){
+                connectionManager = new ConnectionManager(
+                    endPointUrl,
+                    mockAuthenticationAgent,
+                    mockConnectionFactory,
+                    siteAccess
+                );
+            });
+
+            it("request (with siteaccess)", function (){
+
+                connectionManager.logRequests = testFalse;
+
+                connectionManager.request(
+                    "GET",
+                    rootId,
+                    "",
+                    {},
+                    mockCallback
+                );
+
+                expect(mockAuthenticationAgent.ensureAuthentication).toHaveBeenCalled();
+                expect(mockAuthenticationAgent.authenticateRequest).toHaveBeenCalledWith(
+                    jasmine.any(Request),
+                    jasmine.any(Function)
+                );
+
+                expect(mockConnectionFactory.createConnection).toHaveBeenCalled();
+                expect(mockConnection.execute).toHaveBeenCalledWith(
+                    jasmine.any(Request),
+                    mockCallback
+                );
+
+                expect(mockConnection.execute).toHaveBeenCalledWithObject({
+                    method: "GET",
+                    url: endPointUrl + rootId,
+                    body: "",
+                    headers: {"X-Siteaccess": siteAccess}
                 });
             });
         });
