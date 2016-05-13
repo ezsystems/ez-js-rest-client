@@ -3677,6 +3677,24 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
 // ******************************
 
     /**
+     * Loads user drafts
+     *
+     * @method loadUserDrafts
+     * @param userId {String} target user identifier (e.g. "/api/ezp/v2/user/users/14")
+     * @param callback {Function} callback executed after performing the request (see
+     *  {{#crossLink "ContentService"}} Note on the callbacks usage{{/crossLink}} for more info)
+     */
+    ContentService.prototype.loadUserDrafts = function (userId, callback) {
+        this._connectionManager.request(
+            "GET",
+            userId + "/drafts",
+            "",
+            {"Accept": "application/vnd.ez.api.VersionList+json"},
+            callback
+        );
+    };
+
+    /**
      * Load current version for target content
      *
      * @method loadCurrentVersion

@@ -53,6 +53,7 @@ define(function (require) {
             testSections = '/api/ezp/v2/content/sections',
             testSection = '/api/ezp/v2/content/sections/1',
             trash = '/api/ezp/v2/content/trash',
+            testUserId = "/api/ezp/v2/user/users/144",
             testOffset = 2,
             testLimit = 5,
             defaultOffset = 0,
@@ -438,6 +439,21 @@ define(function (require) {
             // Versions management
             // ******************************
             describe("Versions management request:", function () {
+
+                it("loadUserDrafts", function () {
+                    contentService.loadUserDrafts(
+                        testUserId,
+                        mockCallback
+                    );
+
+                    expect(mockConnectionManager.request).toHaveBeenCalledWith(
+                        "GET",
+                        testUserId + "/drafts",
+                        "",
+                        {"Accept": "application/vnd.ez.api.VersionList+json"},
+                        mockCallback
+                    );
+                });
 
                 it("loadCurrentVersion", function () {
 
