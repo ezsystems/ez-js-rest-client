@@ -674,12 +674,20 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
      *
      * @method loadVersions
      * @param contentId {String} target content identifier (e.g. "/api/ezp/v2/content/objects/108")
+     * @param [headers] {Object}
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentService.prototype.loadVersions = function (contentId, callback) {
+    ContentService.prototype.loadVersions = function (contentId, headers, callback) {
         var that = this;
 
+        if ( !callback ) {
+            callback = headers;
+            headers = {};
+        }
+
+        // TODO instead of loading the content info and then the corresponding
+        // versions we could maybe use REST embedding here as well.
         this.loadContentInfo(
             contentId,
             function (error, contentResponse) {
@@ -690,11 +698,12 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
 
                 var contentVersions = contentResponse.document.Content.Versions;
 
+                headers.Accept = contentVersions["_media-type"];
                 that._connectionManager.request(
                     "GET",
                     contentVersions._href,
                     "",
-                    {"Accept": contentVersions["_media-type"]},
+                    headers,
                     callback
                 );
             }
