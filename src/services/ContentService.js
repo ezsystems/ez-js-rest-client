@@ -1089,8 +1089,8 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      * @example
-     *     var viewCreateStruct = contentService.newViewCreateStruct('some-test-id');
-     *     viewCreateStruct.body.ViewInput.Query.Criteria = {
+     *     var viewCreateStruct = contentService.newViewCreateStruct('some-test-id', 'LocationQuery');
+     *     viewCreateStruct.body.ViewInput.LocationQuery.Query = {
      *         FullTextCriterion : "title"
      *     };
      *     contentService.createView(
@@ -1108,7 +1108,10 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
                     callback(error, views);
                     return;
                 }
-
+                if ( viewCreateStruct.getCriteria() && Object.keys(viewCreateStruct.getCriteria()).length !== 0 ) {
+                    console.warn('[DEPRECATED] virtual property Criteria is deprecated');
+                }
+                
                 that._connectionManager.request(
                     "POST",
                     views._href,

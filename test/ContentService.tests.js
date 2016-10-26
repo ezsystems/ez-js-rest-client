@@ -221,6 +221,7 @@ define(function (require) {
                 };
 
                 spyOn(mockDiscoveryService, 'getInfoObject').andCallThrough();
+                spyOn(console, 'warn');
 
                 contentService = new ContentService(mockConnectionManager, mockDiscoveryService, rootId);
             });
@@ -247,7 +248,27 @@ define(function (require) {
                     viewCreateStruct,
                     mockCallback
                 );
+                expect(console.warn.callCount).toBe(0);
+                expect(mockDiscoveryService.getInfoObject).toHaveBeenCalledWith("views", jasmine.any(Function));
 
+                expect(mockConnectionManager.request).toHaveBeenCalledWith(
+                    "POST",
+                    testViews,
+                    JSON.stringify(viewCreateStruct.body),
+                    viewCreateStruct.headers,
+                    mockCallback
+                );
+            });
+
+            it("createView with a ViewCreateStruct having Criteria", function () {
+                var viewCreateStruct = contentService.newViewCreateStruct('some-test-id');
+
+                viewCreateStruct.body.ViewInput.ContentQuery.Criteria = {AnyCriterion: ''};
+                contentService.createView(
+                    viewCreateStruct,
+                    mockCallback
+                );
+                expect(console.warn.callCount).toBe(1);
                 expect(mockDiscoveryService.getInfoObject).toHaveBeenCalledWith("views", jasmine.any(Function));
 
                 expect(mockConnectionManager.request).toHaveBeenCalledWith(

@@ -55,5 +55,97 @@ define(function (require) {
                 expect(viewInput.public).toEqual(false);
             });
         });
+        describe('getCriteria', function () {
+
+            it('should get Criteria property', function () {
+                var struct = new ViewCreateStruct("my-view"),
+                    viewInput = struct.body.ViewInput;
+
+                expect(struct.getCriteria()).toEqual(viewInput.ContentQuery.Criteria);
+            });
+        });
+        describe('getQuery', function () {
+
+            it('should get Query property', function () {
+                var struct = new ViewCreateStruct("my-view"),
+                    viewInput = struct.body.ViewInput;
+
+                expect(struct.getQuery()).toEqual(viewInput.ContentQuery.Query);
+            });
+        });
+        describe('getFilter', function () {
+
+            it('should get Filter property', function () {
+                var struct = new ViewCreateStruct("my-view"),
+                    viewInput = struct.body.ViewInput;
+
+                expect(struct.getFilter()).toEqual(viewInput.ContentQuery.Filter);
+            });
+        });
+        describe('setFilter', function () {
+
+            it('should set Filter property', function () {
+                var struct = new ViewCreateStruct("my-view"),
+                    filter = {some: 'thing'};
+
+                struct.setFilter(filter);
+                expect(struct.getFilter()).toEqual(filter);
+            });
+        });
+        describe('setCriteria', function () {
+
+            it('should set Criteria property', function () {
+                var struct = new ViewCreateStruct("my-view"),
+                    criteria = {some: 'thing'};
+
+                struct.setCriteria(criteria);
+                expect(struct.getCriteria()).toEqual(criteria);
+            });
+        });
+        describe('setQuery', function () {
+
+            it('should set Query property', function () {
+                var struct = new ViewCreateStruct("my-view"),
+                    query = {some: 'thing'};
+
+                struct.setQuery(query);
+                expect(struct.getQuery()).toEqual(query);
+            });
+        });
+        describe('setSortClauses', function () {
+
+            it('should set SortClauses property', function () {
+                var struct = new ViewCreateStruct("my-view"),
+                    viewInput = struct.body.ViewInput,
+                    sortClauses = {some: 'thing'};
+
+                struct.setSortClauses(sortClauses);
+                expect(viewInput.ContentQuery.SortClauses).toEqual(sortClauses);
+            });
+        });
+        describe('setFacetBuilders', function () {
+
+            it('should set FacetBuilders property', function () {
+                var struct = new ViewCreateStruct("my-view"),
+                    viewInput = struct.body.ViewInput,
+                    facetBuilders = {some: 'thing'};
+
+                struct.setFacetBuilders(facetBuilders);
+                expect(viewInput.ContentQuery.FacetBuilders).toEqual(facetBuilders);
+            });
+        });
+        describe('setLimitAndOffset', function () {
+
+            it('should set Limit and Offset property', function () {
+                var struct = new ViewCreateStruct("my-view"),
+                    viewInput = struct.body.ViewInput,
+                    limit = 1,
+                    offset = 2;
+
+                struct.setLimitAndOffset(limit, offset);
+                expect(viewInput.ContentQuery.limit).toEqual(limit);
+                expect(viewInput.ContentQuery.offset).toEqual(offset);
+            });
+        });
     });
 });
