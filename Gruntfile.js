@@ -144,7 +144,11 @@ module.exports = function(grunt) {
             lint: {
                 files: ['src/**/*.js', 'test/*.tests.js', 'test/jasmine/*.js'],
                 tasks: ["jshint"]
-            }
+            },
+            build: {
+                files: ['src/**/*.js'],
+                tasks: ['build']
+            },
         }
     });
 
