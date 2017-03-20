@@ -33,41 +33,80 @@ define(["structures/Response", "structures/Request", "structures/CAPIError"],
      * @param [url="/"] {String} requested REST resource
      * @param [body=""] {String} a string which should be passed in request body to the REST service
      * @param [headers={}] {object} object literal describing request headers
+     * @param [requestEventHandlers] {Object} a set of callbacks to apply on a specific XHR event like onload, onerror, onprogress, etc.
      * @param callback {Function} function, which will be executed on request success
+     * @example
+     *      var connectionManager = jsCAPI.getConnectionManager();
+     *
+     *      connectionManager.request(
+     *          'GET',
+     *          '/endpoint',
+     *          '',
+     *          {Accept: 'application/json'},
+     *          {
+     *              upload: {
+     *                  onloadstart: someUploadCallback,
+     *                  onload: someUploadCallback,
+     *                  onloadend: someUploadCallback,
+     *                  onprogress: someUploadCallback,
+     *                  onabort: someUploadCallback,
+     *                  onerror: someUploadCallback,
+     *                  ontimeout: someUploadCallback,
+     *              },
+     *              onloadstart: someCallback,
+     *              onload: someCallback,
+     *              onloadend: someCallback,
+     *              onprogress: someCallback,
+     *              onabort: someCallback,
+     *              onerror: someCallback,
+     *              ontimeout: someCallback,
+     *          },
+     *          callback
+     *      );
      */
-    ConnectionManager.prototype.request = function (method, url, body, headers, callback) {
+    ConnectionManager.prototype.request = function (method, url, body, headers, requestEventHandlers, callback) {
         var that = this,
             request,
             nextRequest,
             defaultMethod = "GET",
             defaultUrl = "/",
             defaultBody = "",
-            defaultHeaders = {};
+            defaultHeaders = {},
+            defaultRequestEventHandlers = {};
 
         // default values for omitted parameters (if any)
-        if (arguments.length < 5) {
-            if (typeof method == "function") {
-                //no optional parameteres are passed
+        if (arguments.length < 6) {
+            if (typeof method === 'function') {
+                // no optional parameteres are passed
                 callback = method;
                 method = defaultMethod;
                 url = defaultUrl;
                 body = defaultBody;
                 headers = defaultHeaders;
-            } else if (typeof url == "function") {
+                requestEventHandlers = defaultRequestEventHandlers;
+            } else if (typeof url === 'function') {
                 // only first 1 optional parameter is passed
+                requestEventHandlers = body;
                 callback = url;
                 url = defaultUrl;
                 body = defaultBody;
                 headers = defaultHeaders;
-            } else if (typeof body == "function") {
+                requestEventHandlers = defaultRequestEventHandlers;
+            } else if (typeof body === 'function') {
                 // only first 2 optional parameters are passed
                 callback = body;
                 body = defaultBody;
                 headers = defaultHeaders;
-            } else {
+                requestEventHandlers = defaultRequestEventHandlers;
+            } else if (typeof headers === 'function') {
                 // only first 3 optional parameters are passed
                 callback = headers;
                 headers = defaultHeaders;
+                requestEventHandlers = defaultRequestEventHandlers;
+            } else if (typeof requestEventHandlers === 'function') {
+                // only first 4 optional parameters are passed
+                callback = requestEventHandlers;
+                requestEventHandlers = defaultRequestEventHandlers;
             }
         }
 
@@ -124,7 +163,7 @@ define(["structures/Response", "structures/Request", "structures/CAPIError"],
                                     console.dir(request);
                                 }
                                 // Main goal
-                                that._connectionFactory.createConnection().execute(authenticatedRequest, callback);
+                                that._connectionFactory.createConnection().execute(authenticatedRequest, requestEventHandlers, callback);
                             }
                         );
                     } // while

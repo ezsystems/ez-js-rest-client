@@ -145,6 +145,80 @@ define(function (require) {
 
         });
 
+        describe("is correctly using XmlHttpRequest and runs attached callbacks while performing:", function (){
+            beforeEach(function (){
+                mockXMLHttpRequest.prototype.send = function (body) {
+                    this.readyState = 4;
+                    this.status = 200;
+                    this.onloadstart();
+                    this.onload();
+                    this.onloadend();
+                    this.onprogress();
+                    this.ontimeout();
+                    this.onerror();
+                    this.onabort();
+                    this.upload.onloadstart();
+                    this.upload.onload();
+                    this.upload.onloadend();
+                    this.upload.onprogress();
+                    this.upload.ontimeout();
+                    this.upload.onerror();
+                    this.upload.onabort();
+                    this.onreadystatechange();
+                };
+                mockXMLHttpRequest.prototype.upload = {};
+                spyOn(mockXMLHttpRequest.prototype, 'send').andCallThrough();
+
+                window.XMLHttpRequest = (function () { return mockXMLHttpRequest; }());
+
+                connection = new XmlHttpRequestConnection();
+            });
+
+            it("execute call and invokes custom request event callbacks", function () {
+                var requestEventHandlers = {
+                    onreadystatechange: jasmine.createSpy('onreadystatechange'),
+                    onloadstart: jasmine.createSpy('onloadstart'),
+                    onload: jasmine.createSpy('onload'),
+                    onloadend: jasmine.createSpy('onloadend'),
+                    onprogress: jasmine.createSpy('onprogress'),
+                    ontimeout: jasmine.createSpy('ontimeout'),
+                    onerror: jasmine.createSpy('onerror'),
+                    onabort: jasmine.createSpy('onabort'),
+                    upload: {
+                        onloadstart: jasmine.createSpy('uploadOnloadstart'),
+                        onload: jasmine.createSpy('uploadOnload'),
+                        onloadend: jasmine.createSpy('uploadOnloadend'),
+                        onprogress: jasmine.createSpy('uploadOnprogress'),
+                        ontimeout: jasmine.createSpy('uploadOntimeout'),
+                        onerror: jasmine.createSpy('uploadOnerror'),
+                        onabort: jasmine.createSpy('uploadOnabort'),
+                    }
+                };
+
+                connection.execute(
+                    mockRequest,
+                    requestEventHandlers,
+                    mockCallback
+                );
+
+                expect(requestEventHandlers.onloadstart).toHaveBeenCalled();
+                expect(requestEventHandlers.onload).toHaveBeenCalled();
+                expect(requestEventHandlers.onloadend).toHaveBeenCalled();
+                expect(requestEventHandlers.ontimeout).toHaveBeenCalled();
+                expect(requestEventHandlers.onreadystatechange).not.toHaveBeenCalled();
+                expect(requestEventHandlers.onprogress).toHaveBeenCalled();
+                expect(requestEventHandlers.onabort).toHaveBeenCalled();
+                expect(requestEventHandlers.onerror).toHaveBeenCalled();
+                expect(requestEventHandlers.upload.onloadstart).toHaveBeenCalled();
+                expect(requestEventHandlers.upload.onload).toHaveBeenCalled();
+                expect(requestEventHandlers.upload.onloadend).toHaveBeenCalled();
+                expect(requestEventHandlers.upload.ontimeout).toHaveBeenCalled();
+                expect(requestEventHandlers.upload.onprogress).toHaveBeenCalled();
+                expect(requestEventHandlers.upload.onabort).toHaveBeenCalled();
+                expect(requestEventHandlers.upload.onerror).toHaveBeenCalled();
+            });
+        });
+
         describe("is returning errors and retrying correctly, when ", function (){
 
             it("request is not finished yet", function (){

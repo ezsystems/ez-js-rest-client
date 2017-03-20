@@ -287,7 +287,6 @@ define(function (require) {
             describe("Content management request:", function () {
 
                 it("createContent", function () {
-
                     var locationCreateStruct = contentService.newLocationCreateStruct("/api/ezp/v2/content/locations/1/2/118"),
                         contentCreateStruct = contentService.newContentCreateStruct(
                             "/api/ezp/v2/content/types/18",
@@ -315,6 +314,45 @@ define(function (require) {
                         testContentObjects,
                         JSON.stringify(contentCreateStruct.body),
                         contentCreateStruct.headers,
+                        {},
+                        mockCallback
+                    );
+                });
+
+                it("createContent with optional request callbacks", function () {
+                    var locationCreateStruct = contentService.newLocationCreateStruct("/api/ezp/v2/content/locations/1/2/118"),
+                        contentCreateStruct = contentService.newContentCreateStruct(
+                            "/api/ezp/v2/content/types/18",
+                            locationCreateStruct,
+                            "eng-US",
+                            "DummyUser"
+                        ),
+                        fieldInfo = {
+                            "fieldDefinitionIdentifier": "title",
+                            "languageCode": "eng-US",
+                            "fieldValue": "This is a title"
+                        },
+                        requestCallbacks = {
+                            upload: {},
+                            onerror: function () {}
+                        };
+
+                    contentCreateStruct.body.ContentCreate.fields.field.push(fieldInfo);
+
+                    contentService.createContent(
+                        contentCreateStruct,
+                        requestCallbacks,
+                        mockCallback
+                    );
+
+                    expect(mockDiscoveryService.getInfoObject).toHaveBeenCalledWith("content", jasmine.any(Function));
+
+                    expect(mockConnectionManager.request).toHaveBeenCalledWith(
+                        "POST",
+                        testContentObjects,
+                        JSON.stringify(contentCreateStruct.body),
+                        contentCreateStruct.headers,
+                        requestCallbacks,
                         mockCallback
                     );
                 });
