@@ -145,78 +145,106 @@ define(function (require) {
 
         });
 
-        describe("is correctly using XmlHttpRequest and runs attached callbacks while performing:", function (){
-            beforeEach(function (){
-                mockXMLHttpRequest.prototype.send = function (body) {
-                    this.readyState = 4;
-                    this.status = 200;
-                    this.onloadstart();
-                    this.onload();
-                    this.onloadend();
-                    this.onprogress();
-                    this.ontimeout();
-                    this.onerror();
-                    this.onabort();
-                    this.upload.onloadstart();
-                    this.upload.onload();
-                    this.upload.onloadend();
-                    this.upload.onprogress();
-                    this.upload.ontimeout();
-                    this.upload.onerror();
-                    this.upload.onabort();
-                    this.onreadystatechange();
-                };
+        describe('register XmlHttpRequest event handler', function (){
+            beforeEach(function () {
                 mockXMLHttpRequest.prototype.upload = {};
-                spyOn(mockXMLHttpRequest.prototype, 'send').andCallThrough();
-
                 window.XMLHttpRequest = (function () { return mockXMLHttpRequest; }());
 
                 connection = new XmlHttpRequestConnection();
             });
 
-            it("execute call and invokes custom request event callbacks", function () {
-                var requestEventHandlers = {
-                    onreadystatechange: jasmine.createSpy('onreadystatechange'),
-                    onloadstart: jasmine.createSpy('onloadstart'),
-                    onload: jasmine.createSpy('onload'),
-                    onloadend: jasmine.createSpy('onloadend'),
-                    onprogress: jasmine.createSpy('onprogress'),
-                    ontimeout: jasmine.createSpy('ontimeout'),
-                    onerror: jasmine.createSpy('onerror'),
-                    onabort: jasmine.createSpy('onabort'),
-                    upload: {
-                        onloadstart: jasmine.createSpy('uploadOnloadstart'),
-                        onload: jasmine.createSpy('uploadOnload'),
-                        onloadend: jasmine.createSpy('uploadOnloadend'),
-                        onprogress: jasmine.createSpy('uploadOnprogress'),
-                        ontimeout: jasmine.createSpy('uploadOntimeout'),
-                        onerror: jasmine.createSpy('uploadOnerror'),
-                        onabort: jasmine.createSpy('uploadOnabort'),
+            function testEventHandler(eventHandlerName, isAllowed) {
+                var eventHandler = function () {},
+                    events = {};
+
+                isAllowed = typeof isAllowed === 'undefined' ? true : isAllowed;
+
+                events[eventHandlerName] = eventHandler;
+
+                mockXMLHttpRequest.prototype.send = function () {
+                    if (isAllowed) {
+                        expect(this[eventHandlerName]).toBe(eventHandler);
+                    } else {
+                        expect(this[eventHandlerName]).not.toBe(eventHandler);
                     }
                 };
 
-                connection.execute(
-                    mockRequest,
-                    requestEventHandlers,
-                    mockCallback
-                );
+                connection.execute(mockRequest, events, mockCallback);
+            }
 
-                expect(requestEventHandlers.onloadstart).toHaveBeenCalled();
-                expect(requestEventHandlers.onload).toHaveBeenCalled();
-                expect(requestEventHandlers.onloadend).toHaveBeenCalled();
-                expect(requestEventHandlers.ontimeout).toHaveBeenCalled();
-                expect(requestEventHandlers.onreadystatechange).not.toHaveBeenCalled();
-                expect(requestEventHandlers.onprogress).toHaveBeenCalled();
-                expect(requestEventHandlers.onabort).toHaveBeenCalled();
-                expect(requestEventHandlers.onerror).toHaveBeenCalled();
-                expect(requestEventHandlers.upload.onloadstart).toHaveBeenCalled();
-                expect(requestEventHandlers.upload.onload).toHaveBeenCalled();
-                expect(requestEventHandlers.upload.onloadend).toHaveBeenCalled();
-                expect(requestEventHandlers.upload.ontimeout).toHaveBeenCalled();
-                expect(requestEventHandlers.upload.onprogress).toHaveBeenCalled();
-                expect(requestEventHandlers.upload.onabort).toHaveBeenCalled();
-                expect(requestEventHandlers.upload.onerror).toHaveBeenCalled();
+            function testUploadEventHandler(eventHandlerName) {
+                var eventHandler = function () {},
+                    events = {upload: {}};
+
+                events.upload[eventHandlerName] = eventHandler;
+
+                mockXMLHttpRequest.prototype.send = function () {
+                    expect(this.upload[eventHandlerName]).toBe(eventHandler);
+                };
+                connection.execute(mockRequest, events, mockCallback);
+            }
+
+            it('should register onloadstart event handler', function () {
+                testEventHandler('onloadstart');
             });
+
+            it('should register onload event handler', function () {
+                testEventHandler('onload');
+            });
+
+            it('should register onloadend event handler', function () {
+                testEventHandler('onloadend');
+            });
+
+            it('should register onprogress event handler', function () {
+                testEventHandler('onprogress');
+            });
+
+            it('should register ontimeout event handler', function () {
+                testEventHandler('ontimeout');
+            });
+
+            it('should register onerror event handler', function () {
+                testEventHandler('onerror');
+            });
+
+            it('should register onabort event handler', function () {
+                testEventHandler('onabort');
+            });
+
+            it('should register onreadystatechange event handler', function () {
+                testEventHandler('onreadystatechange', false);
+            });
+
+            it('should register upload onloadstart event handler', function () {
+                testUploadEventHandler('onloadstart');
+            });
+
+            it('should register upload onload event handler', function () {
+                testUploadEventHandler('onload');
+            });
+
+            it('should register upload onloadend event handler', function () {
+                testUploadEventHandler('onloadend');
+            });
+
+            it('should register upload onprogress event handler', function () {
+                testUploadEventHandler('onprogress');
+            });
+
+            it('should register upload ontimeout event handler', function () {
+                testUploadEventHandler('ontimeout');
+            });
+
+            it('should register upload onerror event handler', function () {
+                testUploadEventHandler('onerror');
+            });
+
+            it('should register upload onabort event handler', function () {
+                testUploadEventHandler('onabort');
+            });
+
+
         });
 
         describe("is returning errors and retrying correctly, when ", function (){
