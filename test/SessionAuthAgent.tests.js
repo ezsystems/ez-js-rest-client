@@ -300,17 +300,17 @@ define(["authAgents/SessionAuthAgent", "structures/CAPIError"], function (Sessio
 
             it("should provide the userService.createSession error", function () {
                 var createSessionError = new CAPIError(),
-                    capi = {
-                        getUserService: function () {
-                            return userService;
-                        }
-                    },
                     userService = {
                         createSession: function (struct, callback) {
                             callback(createSessionError, false);
                         },
                         newSessionCreateStruct: function () {
                             return {};
+                        }
+                    },
+                    capi = {
+                        getUserService: function () {
+                            return userService;
                         }
                     };
 
@@ -415,14 +415,14 @@ define(["authAgents/SessionAuthAgent", "structures/CAPIError"], function (Sessio
 
             it("should handle the userService.deleteSession error", function () {
                 var deleteSessionError = new CAPIError(),
-                    capi = {
-                        getUserService: function () {
-                            return userService;
-                        }
-                    },
                     userService = {
                         deleteSession: function (href, callback) {
                             callback(deleteSessionError, false);
+                        }
+                    },
+                    capi = {
+                        getUserService: function () {
+                            return userService;
                         }
                     };
 
