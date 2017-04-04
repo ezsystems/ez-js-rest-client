@@ -1134,41 +1134,80 @@ define('ConnectionManager',["structures/Response", "structures/Request", "struct
      * @param [url="/"] {String} requested REST resource
      * @param [body=""] {String} a string which should be passed in request body to the REST service
      * @param [headers={}] {object} object literal describing request headers
+     * @param [requestEventHandlers] {Object} a set of callbacks to apply on a specific XHR event like onload, onerror, onprogress, etc.
      * @param callback {Function} function, which will be executed on request success
+     * @example
+     *      var connectionManager = jsCAPI.getConnectionManager();
+     *
+     *      connectionManager.request(
+     *          'GET',
+     *          '/endpoint',
+     *          '',
+     *          {Accept: 'application/json'},
+     *          {
+     *              upload: {
+     *                  onloadstart: someUploadCallback,
+     *                  onload: someUploadCallback,
+     *                  onloadend: someUploadCallback,
+     *                  onprogress: someUploadCallback,
+     *                  onabort: someUploadCallback,
+     *                  onerror: someUploadCallback,
+     *                  ontimeout: someUploadCallback,
+     *              },
+     *              onloadstart: someCallback,
+     *              onload: someCallback,
+     *              onloadend: someCallback,
+     *              onprogress: someCallback,
+     *              onabort: someCallback,
+     *              onerror: someCallback,
+     *              ontimeout: someCallback,
+     *          },
+     *          callback
+     *      );
      */
-    ConnectionManager.prototype.request = function (method, url, body, headers, callback) {
+    ConnectionManager.prototype.request = function (method, url, body, headers, requestEventHandlers, callback) {
         var that = this,
             request,
             nextRequest,
             defaultMethod = "GET",
             defaultUrl = "/",
             defaultBody = "",
-            defaultHeaders = {};
+            defaultHeaders = {},
+            defaultRequestEventHandlers = {};
 
         // default values for omitted parameters (if any)
-        if (arguments.length < 5) {
-            if (typeof method == "function") {
-                //no optional parameteres are passed
+        if (arguments.length < 6) {
+            if (typeof method === 'function') {
+                // no optional parameteres are passed
                 callback = method;
                 method = defaultMethod;
                 url = defaultUrl;
                 body = defaultBody;
                 headers = defaultHeaders;
-            } else if (typeof url == "function") {
+                requestEventHandlers = defaultRequestEventHandlers;
+            } else if (typeof url === 'function') {
                 // only first 1 optional parameter is passed
+                requestEventHandlers = body;
                 callback = url;
                 url = defaultUrl;
                 body = defaultBody;
                 headers = defaultHeaders;
-            } else if (typeof body == "function") {
+                requestEventHandlers = defaultRequestEventHandlers;
+            } else if (typeof body === 'function') {
                 // only first 2 optional parameters are passed
                 callback = body;
                 body = defaultBody;
                 headers = defaultHeaders;
-            } else {
+                requestEventHandlers = defaultRequestEventHandlers;
+            } else if (typeof headers === 'function') {
                 // only first 3 optional parameters are passed
                 callback = headers;
                 headers = defaultHeaders;
+                requestEventHandlers = defaultRequestEventHandlers;
+            } else if (typeof requestEventHandlers === 'function') {
+                // only first 4 optional parameters are passed
+                callback = requestEventHandlers;
+                requestEventHandlers = defaultRequestEventHandlers;
             }
         }
 
@@ -1225,7 +1264,7 @@ define('ConnectionManager',["structures/Response", "structures/Request", "struct
                                     console.dir(request);
                                 }
                                 // Main goal
-                                that._connectionFactory.createConnection().execute(authenticatedRequest, callback);
+                                that._connectionFactory.createConnection().execute(authenticatedRequest, requestEventHandlers, callback);
                             }
                         );
                     } // while
@@ -1363,21 +1402,36 @@ define('connections/XmlHttpRequestConnection',["structures/Response", "structure
      * @constructor
      */
     var XmlHttpRequestConnection = function () {
-        this._xhr = new XMLHttpRequest();
-    };
+            this._xhr = new XMLHttpRequest();
+        },
+        _assignCallback = function(xhr, eventName, callback) {
+            if (typeof callback !== 'function') {
+                return xhr;
+            }
+
+            xhr[eventName] = callback;
+
+            return xhr;
+        };
 
     /**
      * Basic request implemented via XHR technique
      *
      * @method execute
      * @param request {Request} structure containing all needed params and data
+     * @param [requestEventHandlers] {Object} a set of callbacks to apply on a specific XHR event like onload, onerror, onprogress, etc.
      * @param callback {Function} function, which will be executed on request success
      */
-    XmlHttpRequestConnection.prototype.execute = function (request, callback) {
+    XmlHttpRequestConnection.prototype.execute = function (request, requestEventHandlers, callback) {
         var XHR = this._xhr,
             headerType,
             method = request.method,
             standardMethods = {"OPTIONS": 1, "GET": 1, "HEAD": 1, "POST": 1, "PUT": 1, "DELETE": 1, "TRACE": 1};
+
+        if (typeof requestEventHandlers === 'function') {
+            callback = requestEventHandlers;
+            requestEventHandlers = {};
+        }
 
         // Create the state change handler:
         XHR.onreadystatechange = function () {
@@ -1405,6 +1459,26 @@ define('connections/XmlHttpRequestConnection',["structures/Response", "structure
         // Avoids problems with conservative proxies, HTTP security tools and limited web servers.
         if (standardMethods[method.toUpperCase()] !== 1) {
             method = "POST";
+        }
+
+        if (requestEventHandlers && Object.keys(requestEventHandlers).length) {
+            if (requestEventHandlers.upload && Object.keys(requestEventHandlers.upload).length) {
+                _assignCallback(XHR.upload, 'onloadstart', requestEventHandlers.upload.onloadstart);
+                _assignCallback(XHR.upload, 'onload', requestEventHandlers.upload.onload);
+                _assignCallback(XHR.upload, 'onloadend', requestEventHandlers.upload.onloadend);
+                _assignCallback(XHR.upload, 'onprogress', requestEventHandlers.upload.onprogress);
+                _assignCallback(XHR.upload, 'onabort', requestEventHandlers.upload.onabort);
+                _assignCallback(XHR.upload, 'onerror', requestEventHandlers.upload.onerror);
+                _assignCallback(XHR.upload, 'ontimeout', requestEventHandlers.upload.ontimeout);
+            }
+
+            _assignCallback(XHR, 'onloadstart', requestEventHandlers.onloadstart);
+            _assignCallback(XHR, 'onload', requestEventHandlers.onload);
+            _assignCallback(XHR, 'onloadend', requestEventHandlers.onloadend);
+            _assignCallback(XHR, 'onprogress', requestEventHandlers.onprogress);
+            _assignCallback(XHR, 'onabort', requestEventHandlers.onabort);
+            _assignCallback(XHR, 'onerror', requestEventHandlers.onerror);
+            _assignCallback(XHR, 'ontimeout', requestEventHandlers.ontimeout);
         }
 
         if (request.httpBasicAuth) {
@@ -3599,11 +3673,45 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
      *
      * @method createContent
      * @param contentCreateStruct {ContentCreateStruct} object describing content to be created
+     * @param [requestEventHandlers] {Object} a set of callbacks to apply on a specific XHR event like onload, onerror, onprogress, etc.
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
+     * @example
+     *      var contentService = jsCAPI.getContentService();
+     *
+     *      contentService.createContent(
+     *          {
+     *              body: '',
+     *              headers: {}
+     *          },
+     *          {
+     *              upload: {
+     *                  onloadstart: someUploadCallback,
+     *                  onload: someUploadCallback,
+     *                  onloadend: someUploadCallback,
+     *                  onprogress: someUploadCallback,
+     *                  onabort: someUploadCallback,
+     *                  onerror: someUploadCallback,
+     *                  ontimeout: someUploadCallback,
+     *              },
+     *              onloadstart: someCallback,
+     *              onload: someCallback,
+     *              onloadend: someCallback,
+     *              onprogress: someCallback,
+     *              onabort: someCallback,
+     *              onerror: someCallback,
+     *              ontimeout: someCallback,
+     *          },
+     *          callback
+     *      );
      */
-    ContentService.prototype.createContent = function (contentCreateStruct, callback) {
+    ContentService.prototype.createContent = function (contentCreateStruct, requestEventHandlers, callback) {
         var that = this;
+
+        if (typeof requestEventHandlers === 'function') {
+            callback = requestEventHandlers;
+            requestEventHandlers = {};
+        }
 
         this._discoveryService.getInfoObject(
             "content",
@@ -3618,6 +3726,7 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
                     contentObjects._href,
                     JSON.stringify(contentCreateStruct.body),
                     contentCreateStruct.headers,
+                    requestEventHandlers,
                     callback
                 );
             }
@@ -4322,7 +4431,7 @@ define('services/ContentService',["structures/ContentCreateStruct", "structures/
                 if ( viewCreateStruct.getCriteria() && Object.keys(viewCreateStruct.getCriteria()).length !== 0 ) {
                     console.warn('[DEPRECATED] virtual property Criteria is deprecated');
                 }
-                
+
                 that._connectionManager.request(
                     "POST",
                     views._href,
