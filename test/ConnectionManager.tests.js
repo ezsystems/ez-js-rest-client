@@ -88,6 +88,7 @@ define(function (require) {
                 expect(mockConnectionFactory.createConnection).toHaveBeenCalled();
                 expect(mockConnection.execute).toHaveBeenCalledWith(
                     jasmine.any(Request),
+                    {},
                     mockCallback
                 );
 
@@ -117,6 +118,7 @@ define(function (require) {
                 );
                 expect(mockConnection.execute).toHaveBeenCalledWith(
                     jasmine.any(Request),
+                    {},
                     mockCallback
                 );
                 expect(console.dir).toHaveBeenCalledWith(jasmine.any(Request));
@@ -143,6 +145,7 @@ define(function (require) {
                 );
                 expect(mockConnection.execute).toHaveBeenCalledWith(
                     jasmine.any(Request),
+                    {},
                     mockCallback
                 );
 
@@ -169,6 +172,7 @@ define(function (require) {
                 );
                 expect(mockConnection.execute).toHaveBeenCalledWith(
                     jasmine.any(Request),
+                    {},
                     mockCallback
                 );
 
@@ -196,6 +200,7 @@ define(function (require) {
                 );
                 expect(mockConnection.execute).toHaveBeenCalledWith(
                     jasmine.any(Request),
+                    {},
                     mockCallback
                 );
 
@@ -204,6 +209,41 @@ define(function (require) {
                     url: endPointUrl + rootId,
                     body: "",
                     headers: {}
+                });
+            });
+
+            it("request (with 5 optional arguments)", function () {
+                var requestEventHandlers = {
+                        upload: { onerror: function () {}},
+                        onerror: function () {}
+                    },
+                    requestHeaders = {};
+
+                connectionManager.request(
+                    "GET",
+                    rootId,
+                    "",
+                    requestHeaders,
+                    requestEventHandlers,
+                    mockCallback
+                );
+
+                expect(mockAuthenticationAgent.ensureAuthentication).toHaveBeenCalled();
+                expect(mockAuthenticationAgent.authenticateRequest).toHaveBeenCalledWith(
+                    jasmine.any(Request),
+                    jasmine.any(Function)
+                );
+                expect(mockConnection.execute).toHaveBeenCalledWith(
+                    jasmine.any(Request),
+                    requestEventHandlers,
+                    mockCallback
+                );
+
+                expect(mockConnection.execute).toHaveBeenCalledWithObject({
+                    method: "GET",
+                    url: endPointUrl + rootId,
+                    body: "",
+                    headers: requestHeaders
                 });
             });
 
@@ -369,6 +409,7 @@ define(function (require) {
                 expect(mockConnectionFactory.createConnection).toHaveBeenCalled();
                 expect(mockConnection.execute).toHaveBeenCalledWith(
                     jasmine.any(Request),
+                    {},
                     mockCallback
                 );
 

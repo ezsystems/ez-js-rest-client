@@ -388,11 +388,45 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
      *
      * @method createContent
      * @param contentCreateStruct {ContentCreateStruct} object describing content to be created
+     * @param [requestEventHandlers] {Object} a set of callbacks to apply on a specific XHR event like onload, onerror, onprogress, etc.
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
+     * @example
+     *      var contentService = jsCAPI.getContentService();
+     *
+     *      contentService.createContent(
+     *          {
+     *              body: '',
+     *              headers: {}
+     *          },
+     *          {
+     *              upload: {
+     *                  onloadstart: someUploadCallback,
+     *                  onload: someUploadCallback,
+     *                  onloadend: someUploadCallback,
+     *                  onprogress: someUploadCallback,
+     *                  onabort: someUploadCallback,
+     *                  onerror: someUploadCallback,
+     *                  ontimeout: someUploadCallback,
+     *              },
+     *              onloadstart: someCallback,
+     *              onload: someCallback,
+     *              onloadend: someCallback,
+     *              onprogress: someCallback,
+     *              onabort: someCallback,
+     *              onerror: someCallback,
+     *              ontimeout: someCallback,
+     *          },
+     *          callback
+     *      );
      */
-    ContentService.prototype.createContent = function (contentCreateStruct, callback) {
+    ContentService.prototype.createContent = function (contentCreateStruct, requestEventHandlers, callback) {
         var that = this;
+
+        if (typeof requestEventHandlers === 'function') {
+            callback = requestEventHandlers;
+            requestEventHandlers = {};
+        }
 
         this._discoveryService.getInfoObject(
             "content",
@@ -407,6 +441,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
                     contentObjects._href,
                     JSON.stringify(contentCreateStruct.body),
                     contentCreateStruct.headers,
+                    requestEventHandlers,
                     callback
                 );
             }
@@ -1111,7 +1146,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
                 if ( viewCreateStruct.getCriteria() && Object.keys(viewCreateStruct.getCriteria()).length !== 0 ) {
                     console.warn('[DEPRECATED] virtual property Criteria is deprecated');
                 }
-                
+
                 that._connectionManager.request(
                     "POST",
                     views._href,

@@ -145,6 +145,108 @@ define(function (require) {
 
         });
 
+        describe('register XmlHttpRequest event handler', function (){
+            beforeEach(function () {
+                mockXMLHttpRequest.prototype.upload = {};
+                window.XMLHttpRequest = (function () { return mockXMLHttpRequest; }());
+
+                connection = new XmlHttpRequestConnection();
+            });
+
+            function testEventHandler(eventHandlerName, isAllowed) {
+                var eventHandler = function () {},
+                    events = {};
+
+                isAllowed = typeof isAllowed === 'undefined' ? true : isAllowed;
+
+                events[eventHandlerName] = eventHandler;
+
+                mockXMLHttpRequest.prototype.send = function () {
+                    if (isAllowed) {
+                        expect(this[eventHandlerName]).toBe(eventHandler);
+                    } else {
+                        expect(this[eventHandlerName]).not.toBe(eventHandler);
+                    }
+                };
+
+                connection.execute(mockRequest, events, mockCallback);
+            }
+
+            function testUploadEventHandler(eventHandlerName) {
+                var eventHandler = function () {},
+                    events = {upload: {}};
+
+                events.upload[eventHandlerName] = eventHandler;
+
+                mockXMLHttpRequest.prototype.send = function () {
+                    expect(this.upload[eventHandlerName]).toBe(eventHandler);
+                };
+                connection.execute(mockRequest, events, mockCallback);
+            }
+
+            it('should register onloadstart event handler', function () {
+                testEventHandler('onloadstart');
+            });
+
+            it('should register onload event handler', function () {
+                testEventHandler('onload');
+            });
+
+            it('should register onloadend event handler', function () {
+                testEventHandler('onloadend');
+            });
+
+            it('should register onprogress event handler', function () {
+                testEventHandler('onprogress');
+            });
+
+            it('should register ontimeout event handler', function () {
+                testEventHandler('ontimeout');
+            });
+
+            it('should register onerror event handler', function () {
+                testEventHandler('onerror');
+            });
+
+            it('should register onabort event handler', function () {
+                testEventHandler('onabort');
+            });
+
+            it('should register onreadystatechange event handler', function () {
+                testEventHandler('onreadystatechange', false);
+            });
+
+            it('should register upload onloadstart event handler', function () {
+                testUploadEventHandler('onloadstart');
+            });
+
+            it('should register upload onload event handler', function () {
+                testUploadEventHandler('onload');
+            });
+
+            it('should register upload onloadend event handler', function () {
+                testUploadEventHandler('onloadend');
+            });
+
+            it('should register upload onprogress event handler', function () {
+                testUploadEventHandler('onprogress');
+            });
+
+            it('should register upload ontimeout event handler', function () {
+                testUploadEventHandler('ontimeout');
+            });
+
+            it('should register upload onerror event handler', function () {
+                testUploadEventHandler('onerror');
+            });
+
+            it('should register upload onabort event handler', function () {
+                testUploadEventHandler('onabort');
+            });
+
+
+        });
+
         describe("is returning errors and retrying correctly, when ", function (){
 
             it("request is not finished yet", function (){
