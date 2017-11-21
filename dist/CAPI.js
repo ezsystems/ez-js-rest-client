@@ -1114,11 +1114,12 @@ define('ConnectionManager',["structures/Response", "structures/Request", "struct
      * @param connectionFactory {ConnectionFeatureFactory}  the factory which is choosing compatible connection from connections list
      * @param [siteAccess] {String} SiteAccess to use for requests
      */
-    var ConnectionManager = function (endPointUrl, authenticationAgent, connectionFactory, siteAccess) {
+    var ConnectionManager = function (endPointUrl, authenticationAgent, connectionFactory, siteAccess, token) {
         this._endPointUrl = endPointUrl;
         this._authenticationAgent = authenticationAgent;
         this._connectionFactory = connectionFactory;
         this._siteAccess = siteAccess;
+        this._token = token;
 
         this._requestsQueue = [];
         this._authInProgress = false;
@@ -1213,6 +1214,10 @@ define('ConnectionManager',["structures/Response", "structures/Request", "struct
 
         if (this._siteAccess) {
             headers['X-Siteaccess'] = this._siteAccess;
+        }
+
+        if (this._token) {
+            headers['X-CSRF-Token'] = this._token;
         }
 
         request = new Request({
@@ -7746,7 +7751,8 @@ define('CAPI',['authAgents/SessionAuthAgent', 'authAgents/HttpBasicAuthAgent', '
                 {connection: XmlHttpRequestConnection},
                 {connection: MicrosoftXmlHttpRequestConnection}
             ],
-            siteAccess: null
+            siteAccess: null,
+            token: null
         };
 
         authenticationAgent.setCAPI(this);
@@ -7755,7 +7761,7 @@ define('CAPI',['authAgents/SessionAuthAgent', 'authAgents/HttpBasicAuthAgent', '
         mergedOptions = extend({}, defaultOptions, options);
 
         connectionFactory = new ConnectionFeatureFactory(mergedOptions.connectionStack);
-        connectionManager = new ConnectionManager(endPointUrl, authenticationAgent, connectionFactory, mergedOptions.siteAccess);
+        connectionManager = new ConnectionManager(endPointUrl, authenticationAgent, connectionFactory, mergedOptions.siteAccess, mergedOptions.token);
         connectionManager.logRequests = mergedOptions.logRequests;
         discoveryService = new DiscoveryService(mergedOptions.rootPath, connectionManager);
 
@@ -7795,6 +7801,21 @@ define('CAPI',['authAgents/SessionAuthAgent', 'authAgents/HttpBasicAuthAgent', '
          */
         this.logOut = function (callback) {
             authenticationAgent.logOut(callback);
+        };
+
+        /**
+         * Stores session info.
+         *
+         * @method storeSessionInfo
+         * @param {Object} session
+         */
+        this.storeSessionInfo = function (session) {
+            authenticationAgent._storeSessionInfo({
+                name: session.name,
+                href: session._href,
+                identifier: session.identifier,
+                csrfToken: session.csrfToken,
+            });
         };
 
         /**
