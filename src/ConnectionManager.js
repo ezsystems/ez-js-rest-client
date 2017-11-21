@@ -13,11 +13,12 @@ define(["structures/Response", "structures/Request", "structures/CAPIError"],
      * @param connectionFactory {ConnectionFeatureFactory}  the factory which is choosing compatible connection from connections list
      * @param [siteAccess] {String} SiteAccess to use for requests
      */
-    var ConnectionManager = function (endPointUrl, authenticationAgent, connectionFactory, siteAccess) {
+    var ConnectionManager = function (endPointUrl, authenticationAgent, connectionFactory, siteAccess, token) {
         this._endPointUrl = endPointUrl;
         this._authenticationAgent = authenticationAgent;
         this._connectionFactory = connectionFactory;
         this._siteAccess = siteAccess;
+        this._token = token;
 
         this._requestsQueue = [];
         this._authInProgress = false;
@@ -112,6 +113,10 @@ define(["structures/Response", "structures/Request", "structures/CAPIError"],
 
         if (this._siteAccess) {
             headers['X-Siteaccess'] = this._siteAccess;
+        }
+
+        if (this._token) {
+            headers['X-CSRF-Token'] = this._token;
         }
 
         request = new Request({

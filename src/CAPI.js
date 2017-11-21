@@ -54,7 +54,8 @@ define(['authAgents/SessionAuthAgent', 'authAgents/HttpBasicAuthAgent', 'Connect
                 {connection: XmlHttpRequestConnection},
                 {connection: MicrosoftXmlHttpRequestConnection}
             ],
-            siteAccess: null
+            siteAccess: null,
+            token: null
         };
 
         authenticationAgent.setCAPI(this);
@@ -63,7 +64,7 @@ define(['authAgents/SessionAuthAgent', 'authAgents/HttpBasicAuthAgent', 'Connect
         mergedOptions = extend({}, defaultOptions, options);
 
         connectionFactory = new ConnectionFeatureFactory(mergedOptions.connectionStack);
-        connectionManager = new ConnectionManager(endPointUrl, authenticationAgent, connectionFactory, mergedOptions.siteAccess);
+        connectionManager = new ConnectionManager(endPointUrl, authenticationAgent, connectionFactory, mergedOptions.siteAccess, mergedOptions.token);
         connectionManager.logRequests = mergedOptions.logRequests;
         discoveryService = new DiscoveryService(mergedOptions.rootPath, connectionManager);
 
@@ -103,6 +104,21 @@ define(['authAgents/SessionAuthAgent', 'authAgents/HttpBasicAuthAgent', 'Connect
          */
         this.logOut = function (callback) {
             authenticationAgent.logOut(callback);
+        };
+
+        /**
+         * Stores session info.
+         *
+         * @method storeSessionInfo
+         * @param {Object} session
+         */
+        this.storeSessionInfo = function (session) {
+            authenticationAgent._storeSessionInfo({
+                name: session.name,
+                href: session._href,
+                identifier: session.identifier,
+                csrfToken: session.csrfToken,
+            });
         };
 
         /**
