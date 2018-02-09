@@ -591,6 +591,25 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
         );
     };
 
+    /**
+     * Removes the translation in `languageCode` from the given Content item.
+     *
+     * @method removeTranslation
+     * @param contentId {String} REST content id
+     * @param languageCode {String}
+     * @param callback {Function} callback executed after performing the request (see
+     *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
+     */
+    ContentService.prototype.removeTranslation = function (contentId, languageCode, callback) {
+        this._connectionManager.request(
+            'DELETE',
+            contentId + '/translations/' + languageCode,
+            '',
+            {},
+            callback
+        );
+    };
+
 // ******************************
 // Versions management
 // ******************************

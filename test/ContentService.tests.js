@@ -459,6 +459,24 @@ define(function (require) {
                     );
                 });
 
+                it('removeTranslation', function () {
+                    var lang = 'whatever';
+
+                    contentService.removeTranslation(
+                        testContentId,
+                        lang,
+                        mockCallback
+                    );
+
+                    expect(mockConnectionManager.request).toHaveBeenCalledWith(
+                        'DELETE',
+                        testContentId + '/translations/' + lang,
+                        "",
+                        {},
+                        mockCallback
+                    );
+                });
+
                 it("loadContentByRemoteId", function () {
                     contentService.loadContentByRemoteId(
                         testRemoteId,
