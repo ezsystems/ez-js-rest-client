@@ -2,7 +2,7 @@
   "name": "ez-js-rest-client",
   "repository": "https://github.com/ezsystems/ez-js-rest-client",
   "description": "eZ Platform JavaScript REST client",
-  "version": "1.5.2",
+  "version": "1.5.3",
   "devDependencies": {
     "grunt": "~0.4.1",
     "grunt-contrib-jshint": "~0.6.0",
