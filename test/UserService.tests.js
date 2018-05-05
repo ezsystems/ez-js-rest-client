@@ -227,6 +227,25 @@ define(function (require) {
                 );
             });
 
+            it("loadRootUserGroup should allow to overwrite Accept header", function () {
+                userService.loadRootUserGroup(
+                    "application/vnd.acme.UserGroup+json",
+                    mockCallback
+                );
+
+                expect(mockDiscoveryService.getInfoObject).toHaveBeenCalled();
+                expect(mockDiscoveryService.getInfoObject.mostRecentCall.args[0]).toEqual("rootUserGroup"); //name
+                expect(mockDiscoveryService.getInfoObject.mostRecentCall.args[1]).toEqual(jasmine.any(Function)); //callback
+
+                expect(mockConnectionManager.request).toHaveBeenCalledWith(
+                    "GET",
+                    testRootUserGroup,
+                    "",
+                    {Accept: "application/vnd.acme.UserGroup+json"},
+                    mockCallback
+                );
+            });
+
             it("loadUserGroup", function () {
                 userService.loadUserGroup(
                     testUserGroupId,
@@ -238,6 +257,22 @@ define(function (require) {
                     testUserGroupId,
                     "",
                     {Accept: "application/vnd.ez.api.UserGroup+json"},
+                    mockCallback
+                );
+            });
+
+            it("loadUserGroup should allow to overwrite Accept header", function () {
+                userService.loadUserGroup(
+                    testUserGroupId,
+                    "application/vnd.acme.UserGroup+json",
+                    mockCallback
+                );
+
+                expect(mockConnectionManager.request).toHaveBeenCalledWith(
+                    "GET",
+                    testUserGroupId,
+                    "",
+                    {Accept: "application/vnd.acme.UserGroup+json"},
                     mockCallback
                 );
             });
@@ -254,6 +289,23 @@ define(function (require) {
                     testUserGroups + "?remoteId=" + testRemoteId,
                     "",
                     {Accept: "application/vnd.ez.api.UserGroupList+json"},
+                    mockCallback
+                );
+            });
+
+            it("loadUserGroupByRemoteId should allow to overwrite Accept header", function () {
+                userService.loadUserGroupByRemoteId(
+                    testUserGroups,
+                    testRemoteId,
+                    "application/vnd.acme.UserGroupList+json",
+                    mockCallback
+                );
+
+                expect(mockConnectionManager.request).toHaveBeenCalledWith(
+                    "GET",
+                    testUserGroups + "?remoteId=" + testRemoteId,
+                    "",
+                    {Accept: "application/vnd.acme.UserGroupList+json"},
                     mockCallback
                 );
             });
@@ -368,6 +420,24 @@ define(function (require) {
                 );
             });
 
+            it("loadSubUserGroups should allow to overwrite Accept header", function () {
+                spyOn(userService, 'loadUserGroup').andCallFake(fakedLoadUserGroup);
+
+                userService.loadSubUserGroups(
+                    testUserGroupId,
+                    "application/vnd.acme.UserGroupList+json",
+                    mockCallback
+                );
+
+                expect(mockConnectionManager.request).toHaveBeenCalledWith(
+                    "GET",
+                    testUserGroupSubgroups,
+                    "",
+                    {Accept: "application/vnd.acme.UserGroupList+json"},
+                    mockCallback
+                );
+            });
+
             it("loadUsersOfUserGroup", function () {
 
                 spyOn(userService, 'loadUserGroup').andCallFake(fakedLoadUserGroup);
@@ -382,6 +452,24 @@ define(function (require) {
                     testUserGroupUsers,
                     "",
                     {Accept: "application/vnd.ez.api.UserList+json"},
+                    mockCallback
+                );
+            });
+
+            it("loadUsersOfUserGroup should allow to overwrite Accept header", function () {
+                spyOn(userService, 'loadUserGroup').andCallFake(fakedLoadUserGroup);
+
+                userService.loadUsersOfUserGroup(
+                    testUserGroupId,
+                    "application/vnd.acme.UserList+json",
+                    mockCallback
+                );
+
+                expect(mockConnectionManager.request).toHaveBeenCalledWith(
+                    "GET",
+                    testUserGroupUsers,
+                    "",
+                    {Accept: "application/vnd.acme.UserList+json"},
                     mockCallback
                 );
             });
@@ -406,6 +494,29 @@ define(function (require) {
                 expect(
                     mockConnectionManager.request.mostRecentCall.args[3].Accept
                 ).toEqual("application/vnd.ez.api.UserGroupRefList+json"); // headers
+                expect(mockConnectionManager.request.mostRecentCall.args[4]).toBe(mockCallback); // callback
+            });
+
+            it("loadUserGroupsOfUser should allow to overwrite Accept header", function () {
+                userService.loadUserGroupsOfUser(
+                    testUserId,
+                    "application/vnd.acme.UserGroupRefList+json",
+                    mockCallback
+                );
+
+                expect(mockConnectionManager.request).toHaveBeenCalledWith(
+                    "GET",
+                    testUserId + "/groups",
+                    "",
+                    {Accept: "application/vnd.acme.UserGroupRefList+json"},
+                    mockCallback
+                );
+                expect(mockConnectionManager.request.mostRecentCall.args[0]).toEqual("GET"); //method
+                expect(mockConnectionManager.request.mostRecentCall.args[1]).toEqual(testUserId + "/groups"); //url
+                expect(mockConnectionManager.request.mostRecentCall.args[2]).toEqual(""); // body
+                expect(
+                    mockConnectionManager.request.mostRecentCall.args[3].Accept
+                ).toEqual("application/vnd.acme.UserGroupRefList+json"); // headers
                 expect(mockConnectionManager.request.mostRecentCall.args[4]).toBe(mockCallback); // callback
             });
 
@@ -460,6 +571,22 @@ define(function (require) {
                 );
             });
 
+            it("getRoleAssignments should allow to overwrite Accept header", function () {
+                userService.getRoleAssignments(
+                    testRoleId,
+                    "application/vnd.acme.UserList+json",
+                    mockCallback
+                );
+
+                expect(mockConnectionManager.request).toHaveBeenCalledWith(
+                    "GET",
+                    testUsers + "?roleId=" + testRoleId,
+                    "",
+                    {Accept: "application/vnd.acme.UserList+json"},
+                    mockCallback
+                );
+            });
+
             it("loadUser", function () {
 
                 userService.loadUser(
@@ -472,6 +599,22 @@ define(function (require) {
                     testUserId,
                     "",
                     {Accept: "application/vnd.ez.api.User+json"},
+                    mockCallback
+                );
+            });
+
+            it("loadUser", function () {
+                userService.loadUser(
+                    testUserId,
+                    "application/vnd.acme.User+json",
+                    mockCallback
+                );
+
+                expect(mockConnectionManager.request).toHaveBeenCalledWith(
+                    "GET",
+                    testUserId,
+                    "",
+                    {Accept: "application/vnd.acme.User+json"},
                     mockCallback
                 );
             });
@@ -592,12 +735,29 @@ define(function (require) {
                 );
             });
 
+            it("loadRole should allow to overwrite Accept header", function () {
+                userService.loadRole(
+                    testRoleId,
+                    "application/vnd.acme.Role+json",
+                    mockCallback
+                );
+
+                expect(mockConnectionManager.request).toHaveBeenCalledWith(
+                    "GET",
+                    testRoleId,
+                    "",
+                    {Accept: "application/vnd.acme.Role+json"},
+                    mockCallback
+                );
+            });
+
             it("loadRoles", function () {
 
                 userService.loadRoles(
                     testRoleIdentifier,
                     testLimit,
                     testOffset,
+                    "application/vnd.acme.RoleList+json",
                     mockCallback
                 );
 
@@ -609,7 +769,7 @@ define(function (require) {
                     "GET",
                     testRoles + '?offset=' + testOffset + '&limit=' + testLimit + '&identifier=' + testRoleIdentifier,
                     "",
-                    {Accept: "application/vnd.ez.api.RoleList+json"},
+                    {Accept: "application/vnd.acme.RoleList+json"},
                     mockCallback
                 );
             });
@@ -674,6 +834,26 @@ define(function (require) {
                 );
             });
 
+            it("loadRoles with 3 optional arguments", function () {
+                userService.loadRoles(
+                    testRoleIdentifier,
+                    testLimit,
+                    testOffset,
+                    mockCallback
+                );
+
+                expect(mockDiscoveryService.getInfoObject).toHaveBeenCalled();
+                expect(mockDiscoveryService.getInfoObject.mostRecentCall.args[0]).toEqual("roles"); //name
+                expect(mockDiscoveryService.getInfoObject.mostRecentCall.args[1]).toEqual(jasmine.any(Function)); //callback
+
+                expect(mockConnectionManager.request).toHaveBeenCalledWith(
+                    "GET",
+                    testRoles + '?offset=' + testOffset + '&limit=' + testLimit + '&identifier=' + testRoleIdentifier,
+                    "",
+                    {Accept: "application/vnd.ez.api.RoleList+json"},
+                    mockCallback
+                );
+            });
 
             it("updateRole", function () {
 
@@ -732,6 +912,24 @@ define(function (require) {
                 );
             });
 
+            it("getRoleAssignmentsForUser should allow to overwrite Accept header", function () {
+                spyOn(userService, 'loadUser').andCallFake(fakedLoadUser);
+
+                userService.getRoleAssignmentsForUser(
+                    testUserId,
+                    "application/vnd.acme.RoleAssignmentList+json",
+                    mockCallback
+                );
+
+                expect(mockConnectionManager.request).toHaveBeenCalledWith(
+                    "GET",
+                    testUserRoles,
+                    "",
+                    {Accept: "application/vnd.acme.RoleAssignmentList+json"},
+                    mockCallback
+                );
+            });
+
             it("getRoleAssignmentsForUserGroup", function () {
 
                 spyOn(userService, 'loadUserGroup').andCallFake(fakedLoadUserGroup);
@@ -746,6 +944,24 @@ define(function (require) {
                     testUserGroupRoles,
                     "",
                     {Accept: "application/vnd.ez.api.RoleAssignmentList+json"},
+                    mockCallback
+                );
+            });
+
+            it("getRoleAssignmentsForUserGroup should allow to overwrite Accept header", function () {
+                spyOn(userService, 'loadUserGroup').andCallFake(fakedLoadUserGroup);
+
+                userService.getRoleAssignmentsForUserGroup(
+                    testUserGroupId,
+                    "application/vnd.acme.RoleAssignmentList+json",
+                    mockCallback
+                );
+
+                expect(mockConnectionManager.request).toHaveBeenCalledWith(
+                    "GET",
+                    testUserGroupRoles,
+                    "",
+                    {Accept: "application/vnd.acme.RoleAssignmentList+json"},
                     mockCallback
                 );
             });
@@ -766,6 +982,22 @@ define(function (require) {
                 );
             });
 
+            it("getUserAssignmentObject should allow to overwrite Accept header", function () {
+                userService.getUserAssignmentObject(
+                    testUserAssignmentId,
+                    "application/vnd.acme.RoleAssignment+json",
+                    mockCallback
+                );
+
+                expect(mockConnectionManager.request).toHaveBeenCalledWith(
+                    "GET",
+                    testUserAssignmentId,
+                    "",
+                    {Accept: "application/vnd.acme.RoleAssignment+json"},
+                    mockCallback
+                );
+            });
+
             it("getUserGroupAssignmentObject", function () {
 
                 userService.getUserGroupAssignmentObject(
@@ -778,6 +1010,22 @@ define(function (require) {
                     testUserGroupAssignmentId,
                     "",
                     {Accept: "application/vnd.ez.api.RoleAssignment+json"},
+                    mockCallback
+                );
+            });
+
+            it("getUserGroupAssignmentObject should allow to overwrite Accept header", function () {
+                userService.getUserGroupAssignmentObject(
+                    testUserGroupAssignmentId,
+                    "application/vnd.acme.RoleAssignment+json",
+                    mockCallback
+                );
+
+                expect(mockConnectionManager.request).toHaveBeenCalledWith(
+                    "GET",
+                    testUserGroupAssignmentId,
+                    "",
+                    {Accept: "application/vnd.acme.RoleAssignment+json"},
                     mockCallback
                 );
             });
@@ -937,6 +1185,24 @@ define(function (require) {
                 );
             });
 
+            it("loadPolicies should allow to overwrite Accept header", function () {
+                spyOn(userService, 'loadRole').andCallFake(fakedLoadRole);
+
+                userService.loadPolicies(
+                    testRoleId,
+                    "application/vnd.acme.PolicyList+json",
+                    mockCallback
+                );
+
+                expect(mockConnectionManager.request).toHaveBeenCalledWith(
+                    "GET",
+                    testRolePolicies,
+                    "",
+                    {Accept: "application/vnd.acme.PolicyList+json"},
+                    mockCallback
+                );
+            });
+
             it("loadPolicy", function () {
 
                 userService.loadPolicy(
@@ -949,6 +1215,22 @@ define(function (require) {
                     testPolicyId,
                     "",
                     {Accept: "application/vnd.ez.api.Policy+json"},
+                    mockCallback
+                );
+            });
+
+            it("loadPolicy should allow to overwrite Accept header", function () {
+                userService.loadPolicy(
+                    testPolicyId,
+                    "application/vnd.acme.Policy+json",
+                    mockCallback
+                );
+
+                expect(mockConnectionManager.request).toHaveBeenCalledWith(
+                    "GET",
+                    testPolicyId,
+                    "",
+                    {Accept: "application/vnd.acme.Policy+json"},
                     mockCallback
                 );
             });

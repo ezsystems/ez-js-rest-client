@@ -73,17 +73,23 @@ define(["structures/CAPIError"], function (CAPIError) {
      * @param callback {Function} callback executed after performing the request
      * @param callback.error {Boolean|CAPIError} false or CAPIError object if an
      * error occurred
+     * @param [acceptHeader] {String} Optional accept header value
      * @param callback.response {Boolean|Response} true if the root was
      * successfully loaded, the Response otherwise
      */
-    DiscoveryService.prototype._discoverRoot = function (rootPath, callback) {
+    DiscoveryService.prototype._discoverRoot = function (rootPath, acceptHeader, callback) {
         var that = this;
+
+        if ( !callback ) {
+            callback = acceptHeader;
+            acceptHeader = null;
+        }
 
         this._connectionManager.request(
             "GET",
             rootPath,
             "",
-            {"Accept": "application/vnd.ez.api.Root+json"},
+            {"Accept": acceptHeader || "application/vnd.ez.api.Root+json"},
             function (error, response) {
                 if (error) {
                     callback(error, response);

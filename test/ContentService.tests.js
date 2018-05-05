@@ -241,6 +241,21 @@ define(function (require) {
                 );
             });
 
+            it("loadRoot should allow to overwrite Accept header", function () {
+                contentService.loadRoot(
+                    "application/vnd.acme.Root+json",
+                    mockCallback
+                );
+
+                expect(mockConnectionManager.request).toHaveBeenCalledWith(
+                    "GET",
+                    rootId,
+                    "",
+                    {Accept: "application/vnd.acme.Root+json"},
+                    mockCallback
+                );
+            });
+
             it("createView", function () {
                 var viewCreateStruct = contentService.newViewCreateStruct('some-test-id');
 
@@ -394,6 +409,22 @@ define(function (require) {
                     );
                 });
 
+                it("loadContentInfo should allow to overwrite Accept header", function () {
+                    contentService.loadContentInfo(
+                        testContentId,
+                        "application/vnd.acme.ContentInfo+json",
+                        mockCallback
+                    );
+
+                    expect(mockConnectionManager.request).toHaveBeenCalledWith(
+                        "GET",
+                        testContentId,
+                        "",
+                        {Accept: "application/vnd.acme.ContentInfo+json"},
+                        mockCallback
+                    );
+                });
+
                 it("loadContentInfoAndCurrentVersion", function () {
                     contentService.loadContentInfoAndCurrentVersion(
                         testContentId,
@@ -427,6 +458,22 @@ define(function (require) {
                     );
                 });
 
+                it("loadContentInfoAndCurrentVersion should allow to overwrite Accept header", function () {
+                    contentService.loadContentInfoAndCurrentVersion(
+                        testContentId,
+                        '',
+                        "application/vnd.acme.Content+json",
+                        mockCallback
+                    );
+
+                    expect(mockConnectionManager.request).toHaveBeenCalledWith(
+                        "GET",
+                        testContentId,
+                        "",
+                        {Accept: "application/vnd.acme.Content+json"},
+                        mockCallback
+                    );
+                });
 
                 it("deleteContent", function () {
                     contentService.deleteContent(
@@ -494,6 +541,23 @@ define(function (require) {
                     );
                 });
 
+                it("loadContentByRemoteId should allow to overwrite Accept header", function () {
+                    contentService.loadContentByRemoteId(
+                        testRemoteId,
+                        "application/vnd.acme.ContentInfo+json",
+                        mockCallback
+                    );
+
+                    expect(mockDiscoveryService.getInfoObject).toHaveBeenCalledWith("contentByRemoteId", jasmine.any(Function));
+
+                    expect(mockConnectionManager.request).toHaveBeenCalledWith(
+                        "GET",
+                        testContentObjects + "?remoteId=" + testRemoteId,
+                        "",
+                        {Accept: "application/vnd.acme.ContentInfo+json"},
+                        mockCallback
+                    );
+                });
             });
 
             describe('Image variations', function () {
@@ -507,6 +571,26 @@ define(function (require) {
                         variationId,
                         "",
                         {Accept: "application\/vnd.ez.api.ContentImageVariation+json"},
+                        mockCallback
+                    );
+                });
+
+                it('loadImageVariation should allow to overwrite Accept header', function () {
+                    var variationId = 'a_variation_id',
+                        acceptHeader = 'application\/vnd.acme.ContentImageVariation+json';
+
+
+                    contentService.loadImageVariation(
+                        variationId,
+                        acceptHeader,
+                        mockCallback
+                    );
+
+                    expect(mockConnectionManager.request).toHaveBeenCalledWith(
+                        "GET",
+                        variationId,
+                        "",
+                        {Accept: acceptHeader},
                         mockCallback
                     );
                 });
@@ -532,6 +616,22 @@ define(function (require) {
                     );
                 });
 
+                it("loadUserDrafts should allow to overwrite Accept header", function () {
+                    contentService.loadUserDrafts(
+                        testUserId,
+                        "application/vnd.acme.VersionList+json",
+                        mockCallback
+                    );
+
+                    expect(mockConnectionManager.request).toHaveBeenCalledWith(
+                        "GET",
+                        testUserId + "/drafts",
+                        "",
+                        {"Accept": "application/vnd.acme.VersionList+json"},
+                        mockCallback
+                    );
+                });
+
                 it("loadCurrentVersion", function () {
 
                     spyOn(contentService, 'loadContentInfo').andCallFake(fakedLoadContentInfo);
@@ -546,6 +646,24 @@ define(function (require) {
                         testVersionedContentId,
                         "",
                         {Accept: "application/vnd.ez.api.Version+json"},
+                        mockCallback
+                    );
+                });
+
+                it("loadCurrentVersion should allow to overwrite Accept header", function () {
+                    spyOn(contentService, 'loadContentInfo').andCallFake(fakedLoadContentInfo);
+
+                    contentService.loadCurrentVersion(
+                        testContentId,
+                        "application/vnd.acme.Version+json",
+                        mockCallback
+                    );
+
+                    expect(mockConnectionManager.request).toHaveBeenCalledWith(
+                        "GET",
+                        testVersionedContentId,
+                        "",
+                        {Accept: "application/vnd.acme.Version+json"},
                         mockCallback
                     );
                 });
@@ -568,12 +686,31 @@ define(function (require) {
                     );
                 });
 
+                it("loadVersions should allow to overwrite Accept header", function () {
+                    spyOn(contentService, 'loadContentInfo').andCallFake(fakedLoadContentInfo);
+
+                    contentService.loadVersions(
+                        testContentId,
+                        "application/vnd.acme.VersionList+json",
+                        mockCallback
+                    );
+
+                    expect(mockConnectionManager.request).toHaveBeenCalledWith(
+                        "GET",
+                        testVersionsList,
+                        "",
+                        {Accept: "application/vnd.acme.VersionList+json"},
+                        mockCallback
+                    );
+                });
+
                 it("loadContent", function () {
                     contentService.loadContent(
                         testVersionedContentId,
                         'testLanguages',
                         'testResponseGroups',
                         'testFields',
+                        "application/vnd.acme.Version+json",
                         mockCallback
                     );
 
@@ -581,7 +718,7 @@ define(function (require) {
                         "GET",
                         testVersionedContentId + '?languages=testLanguages&responseGroups=testResponseGroups&fields=testFields',
                         "",
-                        {Accept: "application/vnd.ez.api.Version+json"},
+                        {Accept: "application/vnd.acme.Version+json"},
                         mockCallback
                     );
                 });
@@ -628,6 +765,24 @@ define(function (require) {
                     expect(mockConnectionManager.request).toHaveBeenCalledWith(
                         "GET",
                         testVersionedContentId + '?languages=testLanguages&responseGroups=testResponseGroups',
+                        "",
+                        {Accept: "application/vnd.ez.api.Version+json"},
+                        mockCallback
+                    );
+                });
+
+                it("loadContent with 3 optional parameters", function () {
+                    contentService.loadContent(
+                        testVersionedContentId,
+                        'testLanguages',
+                        'testResponseGroups',
+                        'testFields',
+                        mockCallback
+                    );
+
+                    expect(mockConnectionManager.request).toHaveBeenCalledWith(
+                        "GET",
+                        testVersionedContentId + '?languages=testLanguages&responseGroups=testResponseGroups&fields=testFields',
                         "",
                         {Accept: "application/vnd.ez.api.Version+json"},
                         mockCallback
@@ -782,6 +937,7 @@ define(function (require) {
                         testContentId,
                         testLimit,
                         testOffset,
+                        "application/vnd.acme.RelationList+json",
                         mockCallback
                     );
 
@@ -789,7 +945,7 @@ define(function (require) {
                         "GET",
                         testVersionRelations + '?offset=' + testOffset + '&limit=' + testLimit,
                         "",
-                        {Accept: "application/vnd.ez.api.RelationList+json"},
+                        {Accept: "application/vnd.acme.RelationList+json"},
                         mockCallback
                     );
                 });
@@ -831,12 +987,11 @@ define(function (require) {
                     );
                 });
 
-                it("loadRelations", function () {
+                it("loadCurrentRelations with 2 optional param", function () {
+                    spyOn(contentService, 'loadCurrentVersion').andCallFake(fakedLoadCurrentVersion);
 
-                    spyOn(contentService, 'loadContent').andCallFake(fakedLoadContent);
-
-                    contentService.loadRelations(
-                        testVersionedContentId,
+                    contentService.loadCurrentRelations(
+                        testContentId,
                         testLimit,
                         testOffset,
                         mockCallback
@@ -847,6 +1002,27 @@ define(function (require) {
                         testVersionRelations + '?offset=' + testOffset + '&limit=' + testLimit,
                         "",
                         {Accept: "application/vnd.ez.api.RelationList+json"},
+                        mockCallback
+                    );
+                });
+
+                it("loadRelations", function () {
+
+                    spyOn(contentService, 'loadContent').andCallFake(fakedLoadContent);
+
+                    contentService.loadRelations(
+                        testVersionedContentId,
+                        testLimit,
+                        testOffset,
+                        "application/vnd.acme.RelationList+json",
+                        mockCallback
+                    );
+
+                    expect(mockConnectionManager.request).toHaveBeenCalledWith(
+                        "GET",
+                        testVersionRelations + '?offset=' + testOffset + '&limit=' + testLimit,
+                        "",
+                        {Accept: "application/vnd.acme.RelationList+json"},
                         mockCallback
                     );
                 });
@@ -888,6 +1064,24 @@ define(function (require) {
                     );
                 });
 
+                it("loadRelations with 2 optional param", function () {
+                    spyOn(contentService, 'loadContent').andCallFake(fakedLoadContent);
+
+                    contentService.loadRelations(
+                        testVersionedContentId,
+                        testLimit,
+                        testOffset,
+                        mockCallback
+                    );
+
+                    expect(mockConnectionManager.request).toHaveBeenCalledWith(
+                        "GET",
+                        testVersionRelations + '?offset=' + testOffset + '&limit=' + testLimit,
+                        "",
+                        {Accept: "application/vnd.ez.api.RelationList+json"},
+                        mockCallback
+                    );
+                });
 
                 it("loadRelation", function () {
                     contentService.loadRelation(
@@ -900,6 +1094,22 @@ define(function (require) {
                         testRelationId,
                         "",
                         {Accept: "application/vnd.ez.api.Relation+json"},
+                        mockCallback
+                    );
+                });
+
+                it("loadRelation should allow to overwrite Accept header", function () {
+                    contentService.loadRelation(
+                        testRelationId,
+                        "application/vnd.acme.Relation+json",
+                        mockCallback
+                    );
+
+                    expect(mockConnectionManager.request).toHaveBeenCalledWith(
+                        "GET",
+                        testRelationId,
+                        "",
+                        {Accept: "application/vnd.acme.Relation+json"},
                         mockCallback
                     );
                 });
@@ -1002,6 +1212,22 @@ define(function (require) {
                     );
                 });
 
+                it("loadLocation should allow to overwrite Accept header", function () {
+                    contentService.loadLocation(
+                        testLocation,
+                        "application/vnd.acme.Location+json",
+                        mockCallback
+                    );
+
+                    expect(mockConnectionManager.request).toHaveBeenCalledWith(
+                        "GET",
+                        testLocation,
+                        "",
+                        {Accept: "application/vnd.acme.Location+json"},
+                        mockCallback
+                    );
+                });
+
                 it("loadLocations", function () {
                     spyOn(contentService, 'loadContentInfo').andCallFake(fakedLoadContentInfo);
 
@@ -1019,6 +1245,24 @@ define(function (require) {
                     );
                 });
 
+                it("loadLocations should allow to overwrite Accept header", function () {
+                    spyOn(contentService, 'loadContentInfo').andCallFake(fakedLoadContentInfo);
+
+                    contentService.loadLocations(
+                        testContentId,
+                        "application/vnd.acme.LocationList+json",
+                        mockCallback
+                    );
+
+                    expect(mockConnectionManager.request).toHaveBeenCalledWith(
+                        "GET",
+                        testContentLocations,
+                        "",
+                        {Accept: "application/vnd.acme.LocationList+json"},
+                        mockCallback
+                    );
+                });
+
                 it("loadLocationChildren", function () {
 
                     spyOn(contentService, 'loadLocation').andCallFake(fakedLoadLocation);
@@ -1027,6 +1271,7 @@ define(function (require) {
                         testContentId,
                         testLimit,
                         testOffset,
+                        "application/vnd.acme.LocationList+json",
                         mockCallback
                     );
 
@@ -1034,7 +1279,7 @@ define(function (require) {
                         "GET",
                         testLocationChildren + '?offset=' + testOffset + '&limit=' + testLimit,
                         "",
-                        {Accept: "application/vnd.ez.api.LocationList+json"},
+                        {Accept: "application/vnd.acme.LocationList+json"},
                         mockCallback
                     );
                 });
@@ -1076,6 +1321,25 @@ define(function (require) {
                     );
                 });
 
+                it("loadLocationChildren with 2 optional parameter", function () {
+                    spyOn(contentService, 'loadLocation').andCallFake(fakedLoadLocation);
+
+                    contentService.loadLocationChildren(
+                        testContentId,
+                        testLimit,
+                        testOffset,
+                        mockCallback
+                    );
+
+                    expect(mockConnectionManager.request).toHaveBeenCalledWith(
+                        "GET",
+                        testLocationChildren + '?offset=' + testOffset + '&limit=' + testLimit,
+                        "",
+                        {Accept: "application/vnd.ez.api.LocationList+json"},
+                        mockCallback
+                    );
+                });
+
                 it("loadLocationByRemoteId", function () {
                     contentService.loadLocationByRemoteId(
                         testRemoteId,
@@ -1087,6 +1351,22 @@ define(function (require) {
                         testLocationByRemoteId + '?remoteId=' + testRemoteId,
                         "",
                         {Accept: "application/vnd.ez.api.Location+json"},
+                        mockCallback
+                    );
+                });
+
+                it("loadLocationByRemoteId should allow to overwrite Accept header", function () {
+                    contentService.loadLocationByRemoteId(
+                        testRemoteId,
+                        "application/vnd.acme.Location+json",
+                        mockCallback
+                    );
+
+                    expect(mockConnectionManager.request).toHaveBeenCalledWith(
+                        "GET",
+                        testLocationByRemoteId + '?remoteId=' + testRemoteId,
+                        "",
+                        {Accept: "application/vnd.acme.Location+json"},
                         mockCallback
                     );
                 });
@@ -1221,6 +1501,22 @@ define(function (require) {
                     );
                 });
 
+                it("loadSection should allow to overwrite Accept header", function () {
+                    contentService.loadSection(
+                        testSection,
+                        "application/vnd.ez.api.Section+json",
+                        mockCallback
+                    );
+
+                    expect(mockConnectionManager.request).toHaveBeenCalledWith(
+                        "GET",
+                        testSection,
+                        "",
+                        {Accept: "application/vnd.ez.api.Section+json"},
+                        mockCallback
+                    );
+                });
+
                 it("loadSections", function () {
                     contentService.loadSections(
                         mockCallback
@@ -1233,6 +1529,23 @@ define(function (require) {
                         testSections,
                         "",
                         {Accept: "application/vnd.ez.api.SectionList+json"},
+                        mockCallback
+                    );
+                });
+
+                it("loadSections should allow to overwrite Accept header", function () {
+                    contentService.loadSections(
+                        "application/vnd.acme.SectionList+json",
+                        mockCallback
+                    );
+
+                    expect(mockDiscoveryService.getInfoObject).toHaveBeenCalledWith("sections", jasmine.any(Function));
+
+                    expect(mockConnectionManager.request).toHaveBeenCalledWith(
+                        "GET",
+                        testSections,
+                        "",
+                        {Accept: "application/vnd.acme.SectionList+json"},
                         mockCallback
                     );
                 });
@@ -1263,6 +1576,7 @@ define(function (require) {
                     contentService.loadTrashItems(
                         testLimit,
                         testOffset,
+                        "application/vnd.acme.Trash+json",
                         mockCallback
                     );
 
@@ -1272,7 +1586,7 @@ define(function (require) {
                         "GET",
                         trash  + '?offset=' + testOffset + '&limit=' + testLimit,
                         "",
-                        {Accept: "application/vnd.ez.api.Trash+json"},
+                        {Accept: "application/vnd.acme.Trash+json"},
                         mockCallback
                     );
                 });
@@ -1310,6 +1624,24 @@ define(function (require) {
                     );
                 });
 
+                it("loadTrashItems with 2 optional param", function () {
+                    contentService.loadTrashItems(
+                        testLimit,
+                        testOffset,
+                        mockCallback
+                    );
+
+                    expect(mockDiscoveryService.getInfoObject).toHaveBeenCalledWith("trash", jasmine.any(Function));
+
+                    expect(mockConnectionManager.request).toHaveBeenCalledWith(
+                        "GET",
+                        trash  + '?offset=' + testOffset + '&limit=' + testLimit,
+                        "",
+                        {Accept: "application/vnd.ez.api.Trash+json"},
+                        mockCallback
+                    );
+                });
+
                 it("loadTrashItem", function () {
                     contentService.loadTrashItem(
                         testTrashItem,
@@ -1321,6 +1653,22 @@ define(function (require) {
                         testTrashItem,
                         "",
                         {Accept: "application/vnd.ez.api.TrashItem+json"},
+                        mockCallback
+                    );
+                });
+
+                it("loadTrashItem should allow to overwrite Accept header", function () {
+                    contentService.loadTrashItem(
+                        testTrashItem,
+                        "application/vnd.acme.TrashItem+json",
+                        mockCallback
+                    );
+
+                    expect(mockConnectionManager.request).toHaveBeenCalledWith(
+                        "GET",
+                        testTrashItem,
+                        "",
+                        {Accept: "application/vnd.acme.TrashItem+json"},
                         mockCallback
                     );
                 });
@@ -1474,6 +1822,22 @@ define(function (require) {
                     );
                 });
 
+                it("loadObjectStateGroups should allow to overwrite Accept header", function () {
+                    contentService.loadObjectStateGroups(
+                        testObjectStateGroups,
+                        "application/vnd.acme.ObjectStateGroupList+json",
+                        mockCallback
+                    );
+
+                    expect(mockConnectionManager.request).toHaveBeenCalledWith(
+                        "GET",
+                        testObjectStateGroups,
+                        "",
+                        {Accept: "application/vnd.acme.ObjectStateGroupList+json"},
+                        mockCallback
+                    );
+                });
+
                 it("loadObjectStateGroup", function () {
                     contentService.loadObjectStateGroup(
                         testObjectStateGroup,
@@ -1485,6 +1849,22 @@ define(function (require) {
                         testObjectStateGroup,
                         "",
                         {Accept: "application/vnd.ez.api.ObjectStateGroup+json"},
+                        mockCallback
+                    );
+                });
+
+                it("loadObjectStateGroup should allow to overwrite Accept header", function () {
+                    contentService.loadObjectStateGroup(
+                        testObjectStateGroup,
+                        "application/vnd.acme.ObjectStateGroup+json",
+                        mockCallback
+                    );
+
+                    expect(mockConnectionManager.request).toHaveBeenCalledWith(
+                        "GET",
+                        testObjectStateGroup,
+                        "",
+                        {Accept: "application/vnd.acme.ObjectStateGroup+json"},
                         mockCallback
                     );
                 });
@@ -1671,6 +2051,22 @@ define(function (require) {
                     );
                 });
 
+                it("listGlobalAliases should allow to overwrite Accept header", function () {
+                    contentService.listGlobalAliases(
+                        testUrlAliases,
+                        "application/vnd.acme.UrlAliasRefList+json",
+                        mockCallback
+                    );
+
+                    expect(mockConnectionManager.request).toHaveBeenCalledWith(
+                        "GET",
+                        testUrlAliases,
+                        "",
+                        {Accept: "application/vnd.acme.UrlAliasRefList+json"},
+                        mockCallback
+                    );
+                });
+
                 it("listLocatonAliases (autogenerated)", function () {
                     contentService.listLocationAliases(
                         testLocation,
@@ -1718,6 +2114,23 @@ define(function (require) {
                     );
                 });
 
+                it("listLocatonAliases should allow to overwrite Accept header", function () {
+                    contentService.listLocationAliases(
+                        testLocation,
+                        true,
+                        "application/vnd.acme.UrlAliasRefList+json",
+                        mockCallback
+                    );
+
+                    expect(mockConnectionManager.request).toHaveBeenCalledWith(
+                        "GET",
+                        testLocation + '/urlaliases',
+                        "",
+                        {Accept: "application/vnd.acme.UrlAliasRefList+json"},
+                        mockCallback
+                    );
+                });
+
                 it("loadUrlAlias", function () {
                     contentService.loadUrlAlias(
                         testUrlAlias,
@@ -1729,6 +2142,22 @@ define(function (require) {
                         testUrlAlias,
                         "",
                         {Accept: "application/vnd.ez.api.UrlAlias+json"},
+                        mockCallback
+                    );
+                });
+
+                it("loadUrlAlias should allow to overwrite Accept header", function () {
+                    contentService.loadUrlAlias(
+                        testUrlAlias,
+                        "application/vnd.acme.UrlAlias+json",
+                        mockCallback
+                    );
+
+                    expect(mockConnectionManager.request).toHaveBeenCalledWith(
+                        "GET",
+                        testUrlAlias,
+                        "",
+                        {Accept: "application/vnd.acme.UrlAlias+json"},
                         mockCallback
                     );
                 });
@@ -1791,6 +2220,22 @@ define(function (require) {
                     );
                 });
 
+                it("loadUrlWildcards should allow to overwrite Accept header", function () {
+                    contentService.loadUrlWildcards(
+                        testUrlWildcards,
+                        "application/vnd.acme.UrlWildcardList+json",
+                        mockCallback
+                    );
+
+                    expect(mockConnectionManager.request).toHaveBeenCalledWith(
+                        "GET",
+                        testUrlWildcards,
+                        "",
+                        {Accept: "application/vnd.acme.UrlWildcardList+json"},
+                        mockCallback
+                    );
+                });
+
                 it("loadUrlWildcard", function () {
                     contentService.loadUrlWildcard(
                         testUrlWildcard,
@@ -1802,6 +2247,22 @@ define(function (require) {
                         testUrlWildcard,
                         "",
                         {Accept: "application/vnd.ez.api.UrlWildcard+json"},
+                        mockCallback
+                    );
+                });
+
+                it("loadUrlWildcard", function () {
+                    contentService.loadUrlWildcard(
+                        testUrlWildcard,
+                        "application/vnd.acme.UrlWildcard+json",
+                        mockCallback
+                    );
+
+                    expect(mockConnectionManager.request).toHaveBeenCalledWith(
+                        "GET",
+                        testUrlWildcard,
+                        "",
+                        {Accept: "application/vnd.acme.UrlWildcard+json"},
                         mockCallback
                     );
                 });
