@@ -292,7 +292,7 @@ define(["structures/ContentTypeGroupInputStruct", "structures/ContentTypeCreateS
             callback = acceptHeader;
             acceptHeader = null;
         }
-        
+
         this._connectionManager.request(
             "GET",
             contentTypeGroups + "?identifier=" + identifier,
