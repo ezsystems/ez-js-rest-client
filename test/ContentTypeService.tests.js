@@ -151,6 +151,26 @@ define(function (require) {
                 );
             });
 
+            it("loadContentTypeGroups should allow to overwrite Accept header", function () {
+                contentTypeService.loadContentTypeGroups(
+                    'application/vnd.acme.ContentTypeGroupList+json',
+                    mockCallback
+                );
+
+                expect(mockDiscoveryService.getInfoObject).toHaveBeenCalledWith(
+                    'contentTypeGroups',
+                    jasmine.any(Function)
+                );
+
+                expect(mockConnectionManager.request).toHaveBeenCalledWith(
+                    "GET",
+                    testContentTypeGroups,
+                    "",
+                    {Accept: "application/vnd.acme.ContentTypeGroupList+json"},
+                    mockCallback
+                );
+            });
+
             it("loadContentTypeGroup", function () {
                 contentTypeService.loadContentTypeGroup(
                     testContentTypeGroupId,
@@ -162,6 +182,22 @@ define(function (require) {
                     testContentTypeGroupId,
                     "",
                     {Accept: "application/vnd.ez.api.ContentTypeGroup+json"},
+                    mockCallback
+                );
+            });
+
+            it("loadContentTypeGroup should allow to overwrite Accept header", function () {
+                contentTypeService.loadContentTypeGroup(
+                    testContentTypeGroupId,
+                    "application/vnd.ez.acme.ContentTypeGroup+json",
+                    mockCallback
+                );
+
+                expect(mockConnectionManager.request).toHaveBeenCalledWith(
+                    "GET",
+                    testContentTypeGroupId,
+                    "",
+                    {Accept: "application/vnd.ez.acme.ContentTypeGroup+json"},
                     mockCallback
                 );
             });
@@ -182,6 +218,22 @@ define(function (require) {
                 );
             });
 
+            it("loadContentTypeGroupByIdentifier should allow to overwrite Accept header", function () {
+                contentTypeService.loadContentTypeGroupByIdentifier(
+                    testContentTypeGroups,
+                    testContentTypeGroupIdentifier,
+                    "application/vnd.acme.ContentTypeGroup+json",
+                    mockCallback
+                );
+
+                expect(mockConnectionManager.request).toHaveBeenCalledWith(
+                    "GET",
+                    testContentTypeGroups + '?identifier=' + testContentTypeGroupIdentifier,
+                    "",
+                    {Accept: "application/vnd.acme.ContentTypeGroup+json"},
+                    mockCallback
+                );
+            });
 
             it("updateContentTypeGroup", function () {
 
@@ -237,6 +289,23 @@ define(function (require) {
                 );
             });
 
+            it("loadContentTypes should allow to overwrite Accept header", function () {
+                spyOn(contentTypeService, 'loadContentTypeGroup').andCallFake(fakedLoadContentTypeGroup);
+
+                contentTypeService.loadContentTypes(
+                    testContentTypeGroupId,
+                    "application/vnd.acme.ContentTypeInfoList+json",
+                    mockCallback
+                );
+
+                expect(mockConnectionManager.request).toHaveBeenCalledWith(
+                    "GET",
+                    testContentTypeGroupTypes,
+                    "",
+                    {Accept: "application/vnd.acme.ContentTypeInfoList+json"},
+                    mockCallback
+                );
+            });
 
             // ******************************
             // Content Type Management
@@ -367,6 +436,22 @@ define(function (require) {
                 );
             });
 
+            it("loadContentType should allow to overwrite Accept header", function () {
+                contentTypeService.loadContentType(
+                    testContentTypeId,
+                    "application/vnd.acme.ContentType+json",
+                    mockCallback
+                );
+
+                expect(mockConnectionManager.request).toHaveBeenCalledWith(
+                    "GET",
+                    testContentTypeId,
+                    "",
+                    {Accept: "application/vnd.acme.ContentType+json"},
+                    mockCallback
+                );
+            });
+
             it("loadContentTypeByIdentifier", function () {
                 contentTypeService.loadContentTypeByIdentifier(
                     testContentTypeIdentifier,
@@ -387,6 +472,27 @@ define(function (require) {
                 );
             });
 
+            it("loadContentTypeByIdentifier should allow to overwrite Accept header", function () {
+                contentTypeService.loadContentTypeByIdentifier(
+                    testContentTypeIdentifier,
+                    "application/vnd.acme.ContentTypeInfoList+json",
+                    mockCallback
+                );
+
+                expect(mockDiscoveryService.getInfoObject).toHaveBeenCalledWith(
+                    "contentTypeByIdentifier",
+                    jasmine.any(Function)
+                );
+
+                expect(mockConnectionManager.request).toHaveBeenCalledWith(
+                    "GET",
+                    testContentTypes + "?identifier=" + testContentTypeIdentifier,
+                    "",
+                    {Accept: "application/vnd.acme.ContentTypeInfoList+json"},
+                    mockCallback
+                );
+            });
+
             it("deleteContentType", function () {
                 contentTypeService.deleteContentType(
                     testContentTypeId,
@@ -398,6 +504,21 @@ define(function (require) {
                     testContentTypeId,
                     "",
                     {},
+                    mockCallback
+                );
+            });
+
+            it("loadGroupsOfContentType", function () {
+                contentTypeService.loadGroupsOfContentType(
+                    testContentTypeId,
+                    mockCallback
+                );
+
+                expect(mockConnectionManager.request).toHaveBeenCalledWith(
+                    "GET",
+                    testContentTypeId + "/groups",
+                    "",
+                    {Accept: "application/vnd.ez.api.ContentTypeGroupRefList+json"},
                     mockCallback
                 );
             });
@@ -489,6 +610,22 @@ define(function (require) {
                     testContentTypeId + "/draft",
                     "",
                     {Accept: "application/vnd.ez.api.ContentType+json"},
+                    mockCallback
+                );
+            });
+
+            it("loadContentTypeDraft should allow to overwrite Accept header", function () {
+                contentTypeService.loadContentTypeDraft(
+                    testContentTypeId,
+                    "application/vnd.acme.ContentType+json",
+                    mockCallback
+                );
+
+                expect(mockConnectionManager.request).toHaveBeenCalledWith(
+                    "GET",
+                    testContentTypeId + "/draft",
+                    "",
+                    {Accept: "application/vnd.acme.ContentType+json"},
                     mockCallback
                 );
             });
@@ -596,6 +733,22 @@ define(function (require) {
                     testFieldDefintionId,
                     "",
                     {Accept: "application/vnd.ez.api.FieldDefinition+json"},
+                    mockCallback
+                );
+            });
+
+            it("loadFieldDefinition should allow to overwrite Accept header", function () {
+                contentTypeService.loadFieldDefinition(
+                    testFieldDefintionId,
+                    "application/vnd.acme.FieldDefinition+json",
+                    mockCallback
+                );
+
+                expect(mockConnectionManager.request).toHaveBeenCalledWith(
+                    "GET",
+                    testFieldDefintionId,
+                    "",
+                    {Accept: "application/vnd.acme.FieldDefinition+json"},
                     mockCallback
                 );
             });

@@ -51,15 +51,21 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
      * This call is used by DiscoveryService automatically, whenever needed.
      *
      * @method loadRoot
+     * @param [acceptHeader] {String} Optional accept header value
      * @param callback {Function} callback executed after performing the request (see
      * {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentService.prototype.loadRoot = function (callback) {
+    ContentService.prototype.loadRoot = function (acceptHeader, callback) {
+        if (!callback) {
+            callback = acceptHeader;
+            acceptHeader = null;
+        }
+
         this._connectionManager.request(
             "GET",
             this._rootPath,
             "",
-            {"Accept": "application/vnd.ez.api.Root+json"},
+            {"Accept": acceptHeader || "application/vnd.ez.api.Root+json"},
             callback
         );
     };
@@ -318,11 +324,17 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
      * List all available sections of eZ Publish instance
      *
      * @method loadSections
+     * @param [acceptHeader] {String} Optional accept header value
      * @param callback {Function} callback executed after performing the request (see
      * {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentService.prototype.loadSections = function (callback) {
+    ContentService.prototype.loadSections = function (acceptHeader, callback) {
         var that = this;
+
+        if (!callback) {
+            callback = acceptHeader;
+            acceptHeader = null;
+        }
 
         this._discoveryService.getInfoObject(
             "sections",
@@ -336,7 +348,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
                     "GET",
                     sections._href,
                     "",
-                    {"Accept": sections["_media-type"]},
+                    {"Accept": acceptHeader || sections["_media-type"]},
                     callback
                 );
             }
@@ -348,15 +360,21 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
      *
      * @method loadSection
      * @param sectionId {String} target section identifier (e.g. "/api/ezp/v2/content/sections/2")
+     * @param [acceptHeader] {String} Optional accept header value
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentService.prototype.loadSection = function (sectionId, callback) {
+    ContentService.prototype.loadSection = function (sectionId, acceptHeader, callback) {
+        if (!callback) {
+            callback = acceptHeader;
+            acceptHeader = null;
+        }
+
         this._connectionManager.request(
             "GET",
             sectionId,
             "",
-            {"Accept": "application/vnd.ez.api.Section+json"},
+            {"Accept": acceptHeader || "application/vnd.ez.api.Section+json"},
             callback
         );
     };
@@ -483,11 +501,17 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
      *
      * @method loadContentByRemoteId
      * @param remoteId {String} remote id of target content object (e.g. "30847bec12a8a398777493a4bdb10398")
+     * @param [acceptHeader] {String} Optional accept header value
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentService.prototype.loadContentByRemoteId = function (remoteId, callback) {
+    ContentService.prototype.loadContentByRemoteId = function (remoteId, acceptHeader, callback) {
         var that = this;
+
+        if (!callback) {
+            callback = acceptHeader;
+            acceptHeader = null;
+        }
 
         this._discoveryService.getInfoObject(
             "contentByRemoteId",
@@ -500,7 +524,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
                     "GET",
                     parseUriTemplate(contentByRemoteId._href, {remoteId: remoteId}),
                     "",
-                    {"Accept": "application/vnd.ez.api.ContentInfo+json"},
+                    {"Accept": acceptHeader || "application/vnd.ez.api.ContentInfo+json"},
                     callback
                 );
             }
@@ -512,15 +536,21 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
      *
      * @method loadContentInfo
      * @param contentId {String} target content identifier (e.g. "/api/ezp/v2/content/objects/108")
+     * @param [acceptHeader] {String} Optional accept header value
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentService.prototype.loadContentInfo = function (contentId, callback) {
+    ContentService.prototype.loadContentInfo = function (contentId, acceptHeader, callback) {
+        if (!callback) {
+            callback = acceptHeader;
+            acceptHeader = null;
+        }
+
         this._connectionManager.request(
             "GET",
             contentId,
             "",
-            {"Accept": "application/vnd.ez.api.ContentInfo+json"},
+            {"Accept": acceptHeader || "application/vnd.ez.api.ContentInfo+json"},
             callback
         );
     };
@@ -532,19 +562,24 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
      * @param contentId {String} target content identifier (e.g. "/api/ezp/v2/content/objects/108")
      * @param [languageCodes=false] {String} comma separated list of language codes
      * (ie "fre-FR,eng-GB")
+     * @param [acceptHeader] {String} Optional accept header value
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentService.prototype.loadContentInfoAndCurrentVersion = function (contentId, languageCodes, callback) {
+    ContentService.prototype.loadContentInfoAndCurrentVersion = function (contentId, languageCodes, acceptHeader, callback) {
         if ( typeof languageCodes === "function" ) {
             callback = languageCodes;
             languageCodes = false;
+        } else if (typeof acceptHeader === "function") {
+            callback = acceptHeader;
+            acceptHeader = null;
         }
+
         this._connectionManager.request(
             "GET",
             contentId + (languageCodes ? '?languages=' + languageCodes : ''),
             "",
-            {"Accept": "application/vnd.ez.api.Content+json"},
+            {"Accept": acceptHeader || "application/vnd.ez.api.Content+json"},
             callback
         );
     };
@@ -619,15 +654,21 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
      *
      * @method loadUserDrafts
      * @param userId {String} target user identifier (e.g. "/api/ezp/v2/user/users/14")
+     * @param [acceptHeader] {String} Optional accept header value
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentService"}} Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentService.prototype.loadUserDrafts = function (userId, callback) {
+    ContentService.prototype.loadUserDrafts = function (userId, acceptHeader, callback) {
+        if (!callback) {
+            callback = acceptHeader;
+            acceptHeader = null;
+        }
+
         this._connectionManager.request(
             "GET",
             userId + "/drafts",
             "",
-            {"Accept": "application/vnd.ez.api.VersionList+json"},
+            {"Accept": acceptHeader || "application/vnd.ez.api.VersionList+json"},
             callback
         );
     };
@@ -637,11 +678,17 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
      *
      * @method loadCurrentVersion
      * @param contentId {String} target content identifier (e.g. "/api/ezp/v2/content/objects/108")
+     * @param [acceptHeader] {String} Optional accept header value
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentService.prototype.loadCurrentVersion = function (contentId, callback) {
+    ContentService.prototype.loadCurrentVersion = function (contentId, acceptHeader, callback) {
         var that = this;
+
+        if (!callback) {
+            callback = acceptHeader;
+            acceptHeader = null;
+        }
 
         this.loadContentInfo(
             contentId,
@@ -657,7 +704,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
                     "GET",
                     currentVersion._href,
                     "",
-                    {"Accept": currentVersion["_media-type"]},
+                    {"Accept": acceptHeader || currentVersion["_media-type"]},
                     callback
                 );
             }
@@ -672,6 +719,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
      * @param [languages=''] {String} (comma separated list) restricts the output of translatable fields to the given languages.
      * @param [fields=''] {String} comma separated list of fields which should be returned in the response (see Content).
      * @param [responseGroups=''] {String}  alternative: comma separated lists of predefined field groups (see REST API Spec v1).
+     * @param [acceptHeader] {String} Optional accept header value
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      * @example
@@ -683,18 +731,21 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
      *          callback
      *     );
      */
-    ContentService.prototype.loadContent = function (versionedContentId, languages, responseGroups, fields, callback) {
+    ContentService.prototype.loadContent = function (versionedContentId, languages, responseGroups, fields, acceptHeader, callback) {
         var query;
 
-        if ( !callback && !fields && !responseGroups ) {
+        if ( !callback && !acceptHeader && !fields && !responseGroups) {
             callback = languages;
             languages = '';
-        } else if ( !callback && !fields ) {
+        } else if ( !callback && !acceptHeader && !fields ) {
             callback = responseGroups;
             responseGroups = '';
-        } else if ( !callback ) {
+        } else if ( !callback && !acceptHeader ) {
             callback = fields;
             fields = '';
+        } else if (!callback) {
+            callback = acceptHeader;
+            acceptHeader = null;
         }
 
         query = languages ? '?languages=' + languages : '';
@@ -712,7 +763,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
             "GET",
             versionedContentId + query,
             "",
-            {"Accept": "application/vnd.ez.api.Version+json"},
+            {"Accept": acceptHeader || "application/vnd.ez.api.Version+json"},
             callback
         );
     };
@@ -722,11 +773,17 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
      *
      * @method loadVersions
      * @param contentId {String} target content identifier (e.g. "/api/ezp/v2/content/objects/108")
+     * @param [acceptHeader] {String} Optional accept header value
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentService.prototype.loadVersions = function (contentId, callback) {
+    ContentService.prototype.loadVersions = function (contentId, acceptHeader, callback) {
         var that = this;
+
+        if (!callback) {
+            callback = acceptHeader;
+            acceptHeader = null;
+        }
 
         this.loadContentInfo(
             contentId,
@@ -742,7 +799,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
                     "GET",
                     contentVersions._href,
                     "",
-                    {"Accept": contentVersions["_media-type"]},
+                    {"Accept": acceptHeader || contentVersions["_media-type"]},
                     callback
                 );
             }
@@ -795,7 +852,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
     ContentService.prototype.createContentDraft = function (contentId, versionId, callback) {
         var that = this;
 
-        if ( !callback ) {
+        if (!callback) {
             callback = versionId;
             versionId = false;
         }
@@ -902,11 +959,17 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
      *
      * @method loadLocations
      * @param contentId {String} target content identifier (e.g. "/api/ezp/v2/content/objects/108")
+     * @param [acceptHeader] {String} Optional accept header value
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentService.prototype.loadLocations = function (contentId, callback) {
+    ContentService.prototype.loadLocations = function (contentId, acceptHeader, callback) {
         var that = this;
+
+        if (!callback) {
+            callback = acceptHeader;
+            acceptHeader = null;
+        }
 
         this.loadContentInfo(
             contentId,
@@ -922,7 +985,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
                     "GET",
                     locations._href,
                     "",
-                    {"Accept": "application/vnd.ez.api.LocationList+json"},
+                    {"Accept": acceptHeader || "application/vnd.ez.api.LocationList+json"},
                     callback
                 );
             }
@@ -934,15 +997,21 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
      *
      * @method loadLocation
      * @param locationId {String} target location identifier (e.g. "/api/ezp/v2/content/locations/1/2/102")
+     * @param [acceptHeader] {String} Optional accept header value
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentService.prototype.loadLocation = function (locationId, callback) {
+    ContentService.prototype.loadLocation = function (locationId, acceptHeader, callback) {
+        if (!callback) {
+            callback = acceptHeader;
+            acceptHeader = null;
+        }
+
         this._connectionManager.request(
             "GET",
             locationId,
             "",
-            {"Accept": "application/vnd.ez.api.Location+json"},
+            {"Accept": acceptHeader || "application/vnd.ez.api.Location+json"},
             callback
         );
     };
@@ -952,11 +1021,18 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
      *
      * @method loadLocationByRemoteId
      * @param remoteId {String} remote id of target location (e.g. "0bae96bd419e141ff3200ccbf2822e4f")
+     * @param [acceptHeader] {String} Optional accept header value
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentService.prototype.loadLocationByRemoteId = function (remoteId, callback) {
+    ContentService.prototype.loadLocationByRemoteId = function (remoteId, acceptHeader, callback) {
         var that = this;
+
+        if (!callback) {
+            callback = acceptHeader;
+            acceptHeader = null;
+        }
+
         this._discoveryService.getInfoObject(
             "locationByRemoteId",
             function (error, locationByRemoteId) {
@@ -968,7 +1044,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
                     "GET",
                     parseUriTemplate(locationByRemoteId._href, {remoteId: remoteId}),
                     "",
-                    {"Accept": "application/vnd.ez.api.Location+json"},
+                    {"Accept": acceptHeader || "application/vnd.ez.api.Location+json"},
                     callback
                 );
             }
@@ -1001,6 +1077,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
      * @param locationId {String} target location identifier (e.g. "/api/ezp/v2/content/locations/1/2/102")
      * @param [limit=-1] {Number} the number of results returned
      * @param [offset=0] {Number} the offset of the result set
+     * @param [acceptHeader] {String} Optional accept header value
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      * @example
@@ -1011,23 +1088,25 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
      *          callback
      *      );
      */
-    ContentService.prototype.loadLocationChildren = function (locationId, limit, offset, callback) {
-
+    ContentService.prototype.loadLocationChildren = function (locationId, limit, offset, acceptHeader, callback) {
         var that = this,
             defaultLimit = -1,
             defaultOffset = 0;
 
         // default values for omitted parameters (if any)
-        if (arguments.length < 4) {
+        if (arguments.length < 5) {
             if (typeof limit == "function") {
                 // no optional params are passed
                 callback = limit;
                 limit = defaultLimit;
                 offset = defaultOffset;
-            } else {
+            } else if (typeof offset == "function") {
                 // only limit is passed
                 callback = offset;
                 offset = defaultOffset;
+            } else {
+                callback = acceptHeader;
+                acceptHeader = null;
             }
         }
 
@@ -1045,7 +1124,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
                     "GET",
                     location.Children._href + '?offset=' + offset + '&limit=' + limit,
                     "",
-                    {"Accept": location.Children["_media-type"]},
+                    {"Accept": acceptHeader || location.Children["_media-type"]},
                     callback
                 );
             }
@@ -1188,28 +1267,32 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
      * @param versionedContentId {String} target version identifier (e.g. "/api/ezp/v2/content/objects/108/versions/2")
      * @param [limit=-1] {Number} the number of results returned
      * @param [offset=0] {Number} the offset of the result set
+     * @param [acceptHeader] {String} Optional accept header value
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      * @example
      *      //See loadLocationChildren for example of "offset" and "limit" arguments usage
      */
-    ContentService.prototype.loadRelations = function (versionedContentId, limit, offset, callback) {
+    ContentService.prototype.loadRelations = function (versionedContentId, limit, offset, acceptHeader, callback) {
 
         var that = this,
             defaultLimit = -1,
             defaultOffset = 0;
 
         // default values for omitted parameters (if any)
-        if (arguments.length < 4) {
+        if (arguments.length < 5) {
             if (typeof limit == "function") {
                 // no optional params are passed
                 callback = limit;
                 limit = defaultLimit;
                 offset = defaultOffset;
-            } else {
+            } else if(typeof offset == "function") {
                 // only limit is passed
                 callback = offset;
                 offset = defaultOffset;
+            } else {
+                callback = acceptHeader;
+                acceptHeader = null;
             }
         }
 
@@ -1228,7 +1311,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
                     "GET",
                     version.Relations._href + '?offset=' + offset + '&limit=' + limit,
                     "",
-                    {"Accept": version.Relations["_media-type"]},
+                    {"Accept": acceptHeader || version.Relations["_media-type"]},
                     callback
                 );
             }
@@ -1242,28 +1325,32 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
      * @param contentId {String} target content identifier (e.g. "/api/ezp/v2/content/objects/102")
      * @param [limit=-1] {Number} the number of results returned
      * @param [offset=0] {Number} the offset of the result set
+     * @param [acceptHeader] {String} Optional accept header value
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      * @example
      *      //See loadLocationChildren for example of "offset" and "limit" arguments usage
      */
-    ContentService.prototype.loadCurrentRelations = function (contentId, limit, offset, callback) {
+    ContentService.prototype.loadCurrentRelations = function (contentId, limit, offset, acceptHeader, callback) {
 
         var that = this,
             defaultLimit = -1,
             defaultOffset = 0;
 
         // default values for omitted parameters (if any)
-        if (arguments.length < 4) {
+        if (arguments.length < 5) {
             if (typeof limit == "function") {
                 // no optional params are passed
                 callback = limit;
                 limit = defaultLimit;
                 offset = defaultOffset;
-            } else {
+            } else if (typeof offset == "function") {
                 // only limit is passed
                 callback = offset;
                 offset = defaultOffset;
+            } else {
+                callback = acceptHeader;
+                acceptHeader = null;
             }
         }
 
@@ -1281,7 +1368,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
                     "GET",
                     currentVersion.Relations._href + '?offset=' + offset + '&limit=' + limit,
                     "",
-                    {"Accept": currentVersion.Relations["_media-type"]},
+                    {"Accept": acceptHeader || currentVersion.Relations["_media-type"]},
                     callback
                 );
             }
@@ -1293,15 +1380,21 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
      *
      * @method loadRelation
      * @param relationId {String} target relation identifier (e.g. "/api/ezp/v2/content/objects/102/versions/5/relations/1")
+     * @param [acceptHeader] {String} Optional accept header value
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentService.prototype.loadRelation = function (relationId, callback) {
+    ContentService.prototype.loadRelation = function (relationId, acceptHeader, callback) {
+        if (!callback) {
+            callback = acceptHeader;
+            acceptHeader = null;
+        }
+
         this._connectionManager.request(
             "GET",
             relationId,
             "",
-            {"Accept": "application/vnd.ez.api.Relation+json"},
+            {"Accept": acceptHeader || "application/vnd.ez.api.Relation+json"},
             callback
         );
     };
@@ -1375,28 +1468,32 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
      * @method loadTrashItems
      * @param [limit=-1] {Number} the number of results returned
      * @param [offset=0] {Number} the offset of the result set
+     * @param [acceptHeader] {String} Optional accept header value
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      * @example
      *      //See loadLocationChildren for example of "offset" and "limit" arguments usage
      */
-    ContentService.prototype.loadTrashItems = function (limit, offset, callback) {
+    ContentService.prototype.loadTrashItems = function (limit, offset, acceptHeader, callback) {
 
         var that = this,
             defaultLimit = -1,
             defaultOffset = 0;
 
         // default values for omitted parameters (if any)
-        if (arguments.length < 3) {
+        if (arguments.length < 4) {
             if (typeof limit == "function") {
                 // no optional params are passed
                 callback = limit;
                 limit = defaultLimit;
                 offset = defaultOffset;
-            } else {
+            } else if (typeof offset == "function") {
                 // only limit is passed
                 callback = offset;
                 offset = defaultOffset;
+            } else {
+                callback = acceptHeader;
+                acceptHeader = null;
             }
         }
 
@@ -1412,7 +1509,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
                     "GET",
                     trash._href + '?offset=' + offset + '&limit=' + limit,
                     "",
-                    {"Accept": trash["_media-type"]},
+                    {"Accept": acceptHeader || trash["_media-type"]},
                     callback
                 );
             }
@@ -1424,15 +1521,21 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
      *
      * @method loadTrashItem
      * @param trashItemId {String} target trash item identifier (e.g. "/api/ezp/v2/content/trash/1")
+     * @param [acceptHeader] {String} Optional accept header value
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentService.prototype.loadTrashItem = function (trashItemId, callback) {
+    ContentService.prototype.loadTrashItem = function (trashItemId, acceptHeader, callback) {
+        if (!callback) {
+            callback = acceptHeader;
+            acceptHeader = null;
+        }
+
         this._connectionManager.request(
             "GET",
             trashItemId,
             "",
-            {"Accept": "application/vnd.ez.api.TrashItem+json"},
+            {"Accept": acceptHeader || "application/vnd.ez.api.TrashItem+json"},
             callback
         );
     };
@@ -1538,15 +1641,21 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
      *
      * @method loadObjectStateGroups
      * @param objectStateGroups {String} path to root objectStateGroups (will be replaced by auto-discovered soon)
+     * @param [acceptHeader] {String} Optional accept header value
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentService.prototype.loadObjectStateGroups = function (objectStateGroups, callback) {
+    ContentService.prototype.loadObjectStateGroups = function (objectStateGroups, acceptHeader, callback) {
+        if (!callback) {
+            callback = acceptHeader;
+            acceptHeader = null;
+        }
+
         this._connectionManager.request(
             "GET",
             objectStateGroups,
             "",
-            {"Accept": "application/vnd.ez.api.ObjectStateGroupList+json"},
+            {"Accept": acceptHeader || "application/vnd.ez.api.ObjectStateGroupList+json"},
             callback
         );
     };
@@ -1556,15 +1665,21 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
      *
      * @method loadObjectStateGroup
      * @param objectStateGroupId {String} target object state group identifier (e.g. "/api/ezp/v2/content/objectstategroups/2")
+     * @param [acceptHeader] {String} Optional accept header value
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentService.prototype.loadObjectStateGroup = function (objectStateGroupId, callback) {
+    ContentService.prototype.loadObjectStateGroup = function (objectStateGroupId, acceptHeader, callback) {
+        if (!callback) {
+            callback = acceptHeader;
+            acceptHeader = null;
+        }
+
         this._connectionManager.request(
             "GET",
             objectStateGroupId,
             "",
-            {"Accept": "application/vnd.ez.api.ObjectStateGroup+json"},
+            {"Accept": acceptHeader || "application/vnd.ez.api.ObjectStateGroup+json"},
             callback
         );
     };
@@ -1649,15 +1764,21 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
      *
      * @method loadObjectState
      * @param objectStateId {String} target object state identifier (e.g. "/api/ezp/v2/content/objectstategroups/7/objectstates/5")
+     * @param [acceptHeader] {String} Optional accept header value
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentService.prototype.loadObjectState = function (objectStateId, callback) {
+    ContentService.prototype.loadObjectState = function (objectStateId, acceptHeader, callback) {
+        if (!callback) {
+            callback = acceptHeader;
+            acceptHeader = null;
+        }
+
         this._connectionManager.request(
             "GET",
             objectStateId,
             "",
-            {"Accept": "application/vnd.ez.api.ObjectState+json"},
+            {"Accept": acceptHeader || "application/vnd.ez.api.ObjectState+json"},
             callback
         );
     };
@@ -1704,15 +1825,21 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
      *
      * @method getContentState
      * @param contentStatesId {String} link to target content's object states (should be auto-discovered from contentId)
+     * @param [acceptHeader] {String} Optional accept header value
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentService.prototype.getContentState = function (contentStatesId, callback) {
+    ContentService.prototype.getContentState = function (contentStatesId, acceptHeader, callback) {
+        if (!callback) {
+            callback = acceptHeader;
+            acceptHeader = null;
+        }
+
         this._connectionManager.request(
             "GET",
             contentStatesId,
             "",
-            {"Accept": "application/vnd.ez.api.ContentObjectStates+json"},
+            {"Accept": acceptHeader || "application/vnd.ez.api.ContentObjectStates+json"},
             callback
         );
     };
@@ -1786,15 +1913,21 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
      *
      * @method loadUrlAliases
      * @param urlAliases {String} link to root UrlAliases resource (should be auto-discovered)
+     * @param [acceptHeader] {String} Optional accept header value
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentService.prototype.listGlobalAliases = function (urlAliases, callback) {
+    ContentService.prototype.listGlobalAliases = function (urlAliases, acceptHeader, callback) {
+        if (!callback) {
+            callback = acceptHeader;
+            acceptHeader = null;
+        }
+
         this._connectionManager.request(
             "GET",
             urlAliases,
             "",
-            {"Accept": "application/vnd.ez.api.UrlAliasRefList+json"},
+            {"Accept": acceptHeader || "application/vnd.ez.api.UrlAliasRefList+json"},
             callback
         );
     };
@@ -1805,17 +1938,23 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
      * @method listLocationAliases
      * @param locationUrlAliases {String} link to target location's UrlAliases (should be auto-discovered from locationId)
      * @param [custom=true] {Boolean} this flag indicates weather autogenerated (false) or manual url aliases (true) should be returned
+     * @param [acceptHeader] {String} Optional accept header value
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentService.prototype.listLocationAliases = function (locationUrlAliases, custom, callback) {
+    ContentService.prototype.listLocationAliases = function (locationUrlAliases, custom, acceptHeader, callback) {
 
         var parameters;
 
         // default values for omitted parameters (if any)
-        if (arguments.length < 3) {
-            callback = custom;
-            custom = true;
+        if (arguments.length < 4) {
+            if (typeof custom == "function") {
+                callback = custom;
+                custom = true;
+            } else {
+                callback = acceptHeader;
+                acceptHeader = null;
+            }
         }
 
         parameters = (custom === true) ? "" : "?custom=false";
@@ -1824,7 +1963,7 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
             "GET",
             locationUrlAliases + '/urlaliases' + parameters,
             "",
-            {"Accept": "application/vnd.ez.api.UrlAliasRefList+json"},
+            {"Accept": acceptHeader || "application/vnd.ez.api.UrlAliasRefList+json"},
             callback
         );
     };
@@ -1834,15 +1973,21 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
      *
      * @method loadUrlAlias
      * @param urlAliasId {String} target url alias identifier (e.g. "/api/ezp/v2/content/urlaliases/0-a903c03b86eb2987889afa5fe17004eb")
+     * @param [acceptHeader] {String} Optional accept header value
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentService.prototype.loadUrlAlias = function (urlAliasId, callback) {
+    ContentService.prototype.loadUrlAlias = function (urlAliasId, acceptHeader, callback) {
+        if (!callback) {
+            callback = acceptHeader;
+            acceptHeader = null;
+        }
+
         this._connectionManager.request(
             "GET",
             urlAliasId,
             "",
-            {"Accept": "application/vnd.ez.api.UrlAlias+json"},
+            {"Accept": acceptHeader || "application/vnd.ez.api.UrlAlias+json"},
             callback
         );
     };
@@ -1893,15 +2038,21 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
      *
      * @method loadUrlWildcards
      * @param urlWildcards {String} link to root UrlWildcards resource (should be auto-discovered)
+     * @param [acceptHeader] {String} Optional accept header value
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentService.prototype.loadUrlWildcards = function (urlWildcards, callback) {
+    ContentService.prototype.loadUrlWildcards = function (urlWildcards, acceptHeader, callback) {
+        if (!callback) {
+            callback = acceptHeader;
+            acceptHeader = null;
+        }
+
         this._connectionManager.request(
             "GET",
             urlWildcards,
             "",
-            {"Accept": "application/vnd.ez.api.UrlWildcardList+json"},
+            {"Accept": acceptHeader || "application/vnd.ez.api.UrlWildcardList+json"},
             callback
         );
     };
@@ -1911,15 +2062,21 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
      *
      * @method loadUrlWildcard
      * @param urlWildcardId {String} target url wildcard identifier (e.g. "/api/ezp/v2/content/urlwildcards/1")
+     * @param [acceptHeader] {String} Optional accept header value
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentService.prototype.loadUrlWildcard = function (urlWildcardId, callback) {
+    ContentService.prototype.loadUrlWildcard = function (urlWildcardId, acceptHeader, callback) {
+        if (!callback) {
+            callback = acceptHeader;
+            acceptHeader = null;
+        }
+
         this._connectionManager.request(
             "GET",
             urlWildcardId,
             "",
-            {"Accept": "application/vnd.ez.api.UrlWildcard+json"},
+            {"Accept": acceptHeader || "application/vnd.ez.api.UrlWildcard+json"},
             callback
         );
     };
@@ -1947,15 +2104,21 @@ define(["structures/ContentCreateStruct", "structures/ContentUpdateStruct", "str
      *
      * @method loadImageVariation
      * @param variation {String} The variation REST id
+     * @param [acceptHeader] {String} Optional accept header value
      * @param callback {Function} Callback executed after performing the request (see
      *  {{#crossLink "ContentService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentService.prototype.loadImageVariation = function (variation, callback) {
+    ContentService.prototype.loadImageVariation = function (variation, acceptHeader, callback) {
+        if (!callback) {
+            callback = acceptHeader;
+            acceptHeader = null;
+        }
+
         this._connectionManager.request(
             "GET",
             variation,
             "",
-            {"Accept": "application\/vnd.ez.api.ContentImageVariation+json"},
+            {"Accept": acceptHeader || "application\/vnd.ez.api.ContentImageVariation+json"},
             callback
         );
     };

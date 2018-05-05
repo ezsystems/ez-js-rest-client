@@ -152,11 +152,17 @@ define(["structures/ContentTypeGroupInputStruct", "structures/ContentTypeCreateS
      * Load all content type groups
      *
      * @method loadContentTypeGroups
+     * @param [acceptHeader] {String} Optional accept header value
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentTypeService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentTypeService.prototype.loadContentTypeGroups = function (callback) {
+    ContentTypeService.prototype.loadContentTypeGroups = function (acceptHeader, callback) {
         var that = this;
+
+        if (!callback) {
+            callback = acceptHeader;
+            acceptHeader = null;
+        }
 
         this._discoveryService.getInfoObject('contentTypeGroups', function (error, xhr) {
             if (error) {
@@ -168,7 +174,7 @@ define(["structures/ContentTypeGroupInputStruct", "structures/ContentTypeCreateS
                 "GET",
                 xhr._href,
                 "",
-                {"Accept": "application/vnd.ez.api.ContentTypeGroupList+json"},
+                {"Accept": acceptHeader || "application/vnd.ez.api.ContentTypeGroupList+json"},
                 callback
             );
         });
@@ -179,15 +185,21 @@ define(["structures/ContentTypeGroupInputStruct", "structures/ContentTypeCreateS
      *
      * @method loadContentTypeGroup
      * @param contentTypeGroupId {String} target content type group identifier (e.g. "/api/ezp/v2/content/types/100")
+     * @param [acceptHeader] {String} Optional accept header value
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentTypeService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentTypeService.prototype.loadContentTypeGroup = function (contentTypeGroupId, callback) {
+    ContentTypeService.prototype.loadContentTypeGroup = function (contentTypeGroupId, acceptHeader, callback) {
+        if (!callback) {
+            callback = acceptHeader;
+            acceptHeader = null;
+        }
+
         this._connectionManager.request(
             "GET",
             contentTypeGroupId,
             "",
-            {"Accept": "application/vnd.ez.api.ContentTypeGroup+json"},
+            {"Accept": acceptHeader || "application/vnd.ez.api.ContentTypeGroup+json"},
             callback
         );
     };
@@ -234,11 +246,17 @@ define(["structures/ContentTypeGroupInputStruct", "structures/ContentTypeCreateS
      *
      * @method loadContentTypes
      * @param contentTypeGroupId {String} target content type group identifier (e.g. "/api/ezp/v2/content/typegroups/1")
+     * @param [acceptHeader] {String} Optional accept header value
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentTypeService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentTypeService.prototype.loadContentTypes = function (contentTypeGroupId, callback) {
+    ContentTypeService.prototype.loadContentTypes = function (contentTypeGroupId, acceptHeader, callback) {
         var that = this;
+
+        if (!callback) {
+            callback = acceptHeader;
+            acceptHeader = null;
+        }
 
         this.loadContentTypeGroup(
             contentTypeGroupId,
@@ -254,7 +272,7 @@ define(["structures/ContentTypeGroupInputStruct", "structures/ContentTypeCreateS
                     "GET",
                      contentTypeGroup.ContentTypes._href,
                     "",
-                    {"Accept": contentTypeGroup.ContentTypes["_media-type"]},
+                    {"Accept": acceptHeader || contentTypeGroup.ContentTypes["_media-type"]},
                     callback
                 );
             }
@@ -265,15 +283,21 @@ define(["structures/ContentTypeGroupInputStruct", "structures/ContentTypeCreateS
      * @method loadContentTypeGroupByIdentifier
      * @param contentTypeGroups {String} link to root ContentTypeGroups resource (should be auto-discovered)
      * @param identifier {String} target content type group identifier (e.g. "content")
+     * @param [acceptHeader] {String} Optional accept header value
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentTypeService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentTypeService.prototype.loadContentTypeGroupByIdentifier = function (contentTypeGroups, identifier, callback) {
+    ContentTypeService.prototype.loadContentTypeGroupByIdentifier = function (contentTypeGroups, identifier, acceptHeader, callback) {
+        if (!callback) {
+            callback = acceptHeader;
+            acceptHeader = null;
+        }
+        
         this._connectionManager.request(
             "GET",
             contentTypeGroups + "?identifier=" + identifier,
             "",
-            {"Accept": "application/vnd.ez.api.ContentTypeGroup+json"},
+            {"Accept": acceptHeader || "application/vnd.ez.api.ContentTypeGroup+json"},
             callback
         );
     };
@@ -366,15 +390,21 @@ define(["structures/ContentTypeGroupInputStruct", "structures/ContentTypeCreateS
      *
      * @method loadContentType
      * @param contentTypeId {String} target content type identifier (e.g. "/api/ezp/v2/content/types/18")
+     * @param [acceptHeader] {String} Optional accept header value
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentTypeService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentTypeService.prototype.loadContentType = function (contentTypeId, callback) {
+    ContentTypeService.prototype.loadContentType = function (contentTypeId, acceptHeader, callback) {
+        if (!callback) {
+            callback = acceptHeader;
+            acceptHeader = null;
+        }
+
         this._connectionManager.request(
             "GET",
             contentTypeId,
             "",
-            {"Accept": "application/vnd.ez.api.ContentType+json"},
+            {"Accept": acceptHeader || "application/vnd.ez.api.ContentType+json"},
             callback
         );
     };
@@ -384,11 +414,17 @@ define(["structures/ContentTypeGroupInputStruct", "structures/ContentTypeCreateS
      *
      * @method loadContentTypeByIdentifier
      * @param identifier {String} target content type string identifier (e.g. "blog")
+     * @param [acceptHeader] {String} Optional accept header value
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentTypeService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentTypeService.prototype.loadContentTypeByIdentifier = function (identifier, callback) {
+    ContentTypeService.prototype.loadContentTypeByIdentifier = function (identifier, acceptHeader, callback) {
         var that = this;
+
+        if (!callback) {
+            callback = acceptHeader;
+            acceptHeader = null;
+        }
 
         this._discoveryService.getInfoObject(
             "contentTypeByIdentifier",
@@ -401,7 +437,7 @@ define(["structures/ContentTypeGroupInputStruct", "structures/ContentTypeCreateS
                     "GET",
                     parseUriTemplate(contentTypeByIdentifier._href, {identifier: identifier}),
                     "",
-                    {"Accept": "application/vnd.ez.api.ContentTypeInfoList+json"},
+                    {"Accept": acceptHeader || "application/vnd.ez.api.ContentTypeInfoList+json"},
                     callback
                 );
             }
@@ -431,15 +467,21 @@ define(["structures/ContentTypeGroupInputStruct", "structures/ContentTypeCreateS
      *
      * @method loadGroupsOfContentType
      * @param contentTypeId {String} target content type identifier (e.g. "/api/ezp/v2/content/types/18")
+     * @param [acceptHeader] {String} Optional accept header value
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentTypeService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentTypeService.prototype.loadGroupsOfContentType = function (contentTypeId, callback) {
+    ContentTypeService.prototype.loadGroupsOfContentType = function (contentTypeId, acceptHeader, callback) {
+        if (!callback) {
+            callback = acceptHeader;
+            acceptHeader = null;
+        }
+
         this._connectionManager.request(
             "GET",
             contentTypeId + '/groups',
             "",
-            {"Accept": "application/vnd.ez.api.ContentTypeGroupRefList+json"},
+            {"Accept": acceptHeader || "application/vnd.ez.api.ContentTypeGroupRefList+json"},
             callback
         );
     };
@@ -523,15 +565,21 @@ define(["structures/ContentTypeGroupInputStruct", "structures/ContentTypeCreateS
      *
      * @method loadContentTypeDraft
      * @param contentTypeId {String} target content type identifier (e.g. "/api/ezp/v2/content/types/18")
+     * @param [acceptHeader] {String} Optional accept header value
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentTypeService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentTypeService.prototype.loadContentTypeDraft = function (contentTypeId, callback) {
+    ContentTypeService.prototype.loadContentTypeDraft = function (contentTypeId, acceptHeader, callback) {
+        if (!callback) {
+            callback = acceptHeader;
+            acceptHeader = null;
+        }
+
         this._connectionManager.request(
             "GET",
             contentTypeId + "/draft",
             "",
-            {"Accept": "application/vnd.ez.api.ContentType+json"},
+            {"Accept": acceptHeader || "application/vnd.ez.api.ContentType+json"},
             callback
         );
     };
@@ -633,15 +681,21 @@ define(["structures/ContentTypeGroupInputStruct", "structures/ContentTypeCreateS
      *
      * @method loadFieldDefinition
      * @param fieldDefinitionId {String} target field definition identifier (e.g. "/api/ezp/v2/content/types/42/fieldDefinitions/311")
+     * @param [acceptHeader] {String} Optional accept header value
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "ContentTypeService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    ContentTypeService.prototype.loadFieldDefinition = function (fieldDefinitionId, callback) {
+    ContentTypeService.prototype.loadFieldDefinition = function (fieldDefinitionId, acceptHeader, callback) {
+        if (!callback) {
+            callback = acceptHeader;
+            acceptHeader = null;
+        }
+
         this._connectionManager.request(
             "GET",
             fieldDefinitionId,
             "",
-            {"Accept": "application/vnd.ez.api.FieldDefinition+json"},
+            {"Accept": acceptHeader || "application/vnd.ez.api.FieldDefinition+json"},
             callback
         );
     };

@@ -207,11 +207,17 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
      * Load the root user group
      *
      * @method loadRootUserGroup
+     * @param [acceptHeader] {String} Optional accept header value
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "UserService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    UserService.prototype.loadRootUserGroup = function (callback) {
+    UserService.prototype.loadRootUserGroup = function (acceptHeader, callback) {
         var that = this;
+
+        if (!callback) {
+            callback = acceptHeader;
+            acceptHeader = null;
+        }
 
         this._discoveryService.getInfoObject(
             "rootUserGroup",
@@ -225,7 +231,7 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
                     "GET",
                     rootUserGroup._href,
                     "",
-                    {"Accept": rootUserGroup["_media-type"]},
+                    {"Accept": acceptHeader || rootUserGroup["_media-type"]},
                     callback
                 );
             });
@@ -236,15 +242,21 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
      *
      * @method loadUserGroup
      * @param userGroupId {String} target user group identifier (e.g. "/api/ezp/v2/user/groups/1/5")
+     * @param [acceptHeader] {String} Optional accept header value
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "UserService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    UserService.prototype.loadUserGroup = function (userGroupId, callback) {
+    UserService.prototype.loadUserGroup = function (userGroupId, acceptHeader, callback) {
+        if (!callback) {
+            callback = acceptHeader;
+            acceptHeader = null;
+        }
+
         this._connectionManager.request(
             "GET",
             userGroupId,
             "",
-            {"Accept": "application/vnd.ez.api.UserGroup+json"},
+            {"Accept": acceptHeader || "application/vnd.ez.api.UserGroup+json"},
             callback
         );
     };
@@ -255,15 +267,21 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
      * @method loadUserGroupByRemoteId
      * @param userGroups {String} link to root UserGroups resource (should be auto-discovered)
      * @param remoteId {String} target user group remote identifier (e.g. "f5c88a2209584891056f987fd965b0ba")
+     * @param [acceptHeader] {String} Optional accept header value
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "UserService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    UserService.prototype.loadUserGroupByRemoteId = function (userGroups, remoteId, callback) {
+    UserService.prototype.loadUserGroupByRemoteId = function (userGroups, remoteId, acceptHeader, callback) {
+        if (!callback) {
+            callback = acceptHeader;
+            acceptHeader = null;
+        }
+
         this._connectionManager.request(
             "GET",
             userGroups + '?remoteId=' + remoteId,
             "",
-            {"Accept": "application/vnd.ez.api.UserGroupList+json"},
+            {"Accept": acceptHeader || "application/vnd.ez.api.UserGroupList+json"},
             callback
         );
     };
@@ -362,11 +380,17 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
      *
      * @method loadSubUserGroups
      * @param userGroupId {String} target user group identifier (e.g. "/api/ezp/v2/user/groups/1/5")
+     * @param [acceptHeader] {String} Optional accept header value
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "UserService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    UserService.prototype.loadSubUserGroups = function (userGroupId, callback) {
+    UserService.prototype.loadSubUserGroups = function (userGroupId, acceptHeader, callback) {
         var that = this;
+
+        if (!callback) {
+            callback = acceptHeader;
+            acceptHeader = null;
+        }
 
         this.loadUserGroup(
             userGroupId,
@@ -382,7 +406,7 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
                     "GET",
                     subGroups._href,
                     "",
-                    {"Accept": subGroups["_media-type"]},
+                    {"Accept": acceptHeader || subGroups["_media-type"]},
                     callback
                 );
             }
@@ -394,11 +418,17 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
      *
      * @method loadUsersOfUserGroup
      * @param userGroupId {String} target user group identifier (e.g. "/api/ezp/v2/user/groups/1/5")
+     * @param [acceptHeader] {String} Optional accept header value
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "UserService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    UserService.prototype.loadUsersOfUserGroup = function (userGroupId, callback) {
+    UserService.prototype.loadUsersOfUserGroup = function (userGroupId, acceptHeader, callback) {
         var that = this;
+
+        if (!callback) {
+            callback = acceptHeader;
+            acceptHeader = null;
+        }
 
         this.loadUserGroup(
             userGroupId,
@@ -414,7 +444,7 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
                     "GET",
                     users._href,
                     "",
-                    {"Accept": users["_media-type"]},
+                    {"Accept": acceptHeader || users["_media-type"]},
                     callback
                 );
             }
@@ -426,15 +456,21 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
      *
      * @method loadUserGroupsOfUser
      * @param userId {String} target user identifier (e.g. "/api/ezp/v2/user/users/14")
+     * @param [acceptHeader] {String} Optional accept header value
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "UserService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    UserService.prototype.loadUserGroupsOfUser = function (userId, callback) {
+    UserService.prototype.loadUserGroupsOfUser = function (userId, acceptHeader, callback) {
+        if (!callback) {
+            callback = acceptHeader;
+            acceptHeader = null;
+        }
+
         this._connectionManager.request(
             "GET",
             userId + '/groups',
             "",
-            {"Accept": "application/vnd.ez.api.UserGroupRefList+json"},
+            {"Accept": acceptHeader || "application/vnd.ez.api.UserGroupRefList+json"},
             callback
         );
     };
@@ -481,11 +517,18 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
      *
      * @method getRoleAssignments
      * @param roleId {String} target role identifier (e.g. "/api/ezp/v2/user/roles/5")
+     * @param [acceptHeader] {String} Optional accept header value
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "UserService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    UserService.prototype.getRoleAssignments = function (roleId, callback) {
+    UserService.prototype.getRoleAssignments = function (roleId, acceptHeader, callback) {
         var that = this;
+
+        if (!callback) {
+            callback = acceptHeader;
+            acceptHeader = null;
+        }
+
         this._discoveryService.getInfoObject(
             "users",
             function (error, users) {
@@ -497,7 +540,7 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
                     "GET",
                     users._href + '?roleId=' + roleId,
                     "",
-                    {"Accept": "application/vnd.ez.api.UserList+json"},
+                    {"Accept": acceptHeader || "application/vnd.ez.api.UserList+json"},
                     callback
                 );
             }
@@ -509,15 +552,21 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
      *
      * @method loadUser
      * @param userId {String} target user identifier (e.g. "/api/ezp/v2/user/users/144")
+     * @param [acceptHeader] {String} Optional accept header value
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "UserService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    UserService.prototype.loadUser = function (userId, callback) {
+    UserService.prototype.loadUser = function (userId, acceptHeader, callback) {
+        if (!callback) {
+            callback = acceptHeader;
+            acceptHeader = null;
+        }
+
         this._connectionManager.request(
             "GET",
             userId,
             "",
-            {"Accept": "application/vnd.ez.api.User+json"},
+            {"Accept": acceptHeader || "application/vnd.ez.api.User+json"},
             callback
         );
     };
@@ -693,15 +742,21 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
      *
      * @method loadRole
      * @param roleId {String} target role identifier (e.g. "/api/ezp/v2/user/roles/5")
+     * @param [acceptHeader] {String} Optional accept header value
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "UserService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    UserService.prototype.loadRole = function (roleId, callback) {
+    UserService.prototype.loadRole = function (roleId, acceptHeader, callback) {
+        if (!callback) {
+            callback = acceptHeader;
+            acceptHeader = null;
+        }
+
         this._connectionManager.request(
             "GET",
             roleId,
             "",
-            {"Accept": "application/vnd.ez.api.Role+json"},
+            {"Accept": acceptHeader || "application/vnd.ez.api.Role+json"},
             callback
         );
     };
@@ -713,13 +768,13 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
      * @param [identifier] {String} string identifier of the roles to search (e.g. "admin")
      * @param [limit=-1] {Number} the limit of the result set
      * @param [offset=0] {Number} the offset of the result set
+     * @param [acceptHeader] {String} Optional accept header value
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "UserService"}}Note on the callbacks usage{{/crossLink}} for more info)
      * @example
      *     userService.loadRoles("admin", 5, 5, callback);
      */
-    UserService.prototype.loadRoles = function (identifier, limit, offset, callback) {
-
+    UserService.prototype.loadRoles = function (identifier, limit, offset, acceptHeader, callback) {
         var that = this,
             identifierQuery,
             defaultIdentifier = "",
@@ -727,7 +782,7 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
             defaultOffset = 0;
 
         // default values for omitted parameters (if any)
-        if (arguments.length < 4) {
+        if (arguments.length < 5) {
             if (typeof identifier == "function") {
                 // no optional params are passed
                 callback = identifier;
@@ -739,6 +794,9 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
                 callback = limit;
                 limit = defaultLimit;
                 offset = defaultOffset;
+            } else if (typeof acceptHeader == "function") {
+                callback = acceptHeader;
+                acceptHeader = null;
             } else {
                 // identifier and limit are passed
                 callback = offset;
@@ -760,7 +818,7 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
                     "GET",
                     roles._href + '?offset=' + offset + '&limit=' + limit + identifierQuery,
                     "",
-                    {"Accept": roles["_media-type"]},
+                    {"Accept": acceptHeader || roles["_media-type"]},
                     callback
                 );
             }
@@ -809,11 +867,17 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
      *
      * @method getRoleAssignmentsForUser
      * @param userId {String} target user identifier (e.g. "/api/ezp/v2/user/users/8")
+     * @param [acceptHeader] {String} Optional accept header value
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "UserService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    UserService.prototype.getRoleAssignmentsForUser = function (userId, callback) {
+    UserService.prototype.getRoleAssignmentsForUser = function (userId, acceptHeader, callback) {
         var that = this;
+
+        if (!callback) {
+            callback = acceptHeader;
+            acceptHeader = null;
+        }
 
         this.loadUser(
             userId,
@@ -829,7 +893,7 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
                     "GET",
                     userRoles._href,
                     "",
-                    {"Accept": userRoles["_media-type"]},
+                    {"Accept": acceptHeader || userRoles["_media-type"]},
                     callback
                 );
             }
@@ -841,11 +905,17 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
      *
      * @method getRoleAssignmentsForUserGroup
      * @param userGroupId {String} target user group identifier (e.g. "/api/ezp/v2/user/groups/2")
+     * @param [acceptHeader] {String} Optional accept header value
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "UserService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    UserService.prototype.getRoleAssignmentsForUserGroup = function (userGroupId, callback) {
+    UserService.prototype.getRoleAssignmentsForUserGroup = function (userGroupId, acceptHeader, callback) {
         var that = this;
+
+        if (!callback) {
+            callback = acceptHeader;
+            acceptHeader = null;
+        }
 
         this.loadUserGroup(
             userGroupId,
@@ -861,7 +931,7 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
                     "GET",
                     userGroupRoles._href,
                     "",
-                    {"Accept": userGroupRoles["_media-type"]},
+                    {"Accept": acceptHeader || userGroupRoles["_media-type"]},
                     callback
                 );
             }
@@ -873,15 +943,21 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
      *
      * @method getUserAssignmentObject
      * @param userAssignmentId {String} target role assignment identifier (e.g. "/api/ezp/v2/user/13/roles/7")
+     * @param [acceptHeader] {String} Optional accept header value
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "UserService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    UserService.prototype.getUserAssignmentObject = function (userAssignmentId, callback) {
+    UserService.prototype.getUserAssignmentObject = function (userAssignmentId, acceptHeader, callback) {
+        if (!callback) {
+            callback = acceptHeader;
+            acceptHeader = null;
+        }
+
         this._connectionManager.request(
             "GET",
             userAssignmentId,
             "",
-            {"Accept": "application/vnd.ez.api.RoleAssignment+json"},
+            {"Accept": acceptHeader || "application/vnd.ez.api.RoleAssignment+json"},
             callback
         );
     };
@@ -891,15 +967,21 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
      *
      * @method getUserGroupAssignmentObject
      * @param userGroupAssignmentId {String} target role assignment identifier (e.g. "/api/ezp/v2/user/groups/1/5/110/roles/7")
+     * @param [acceptHeader] {String} Optional accept header value
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "UserService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    UserService.prototype.getUserGroupAssignmentObject = function (userGroupAssignmentId, callback) {
+    UserService.prototype.getUserGroupAssignmentObject = function (userGroupAssignmentId, acceptHeader, callback) {
+        if (!callback) {
+            callback = acceptHeader;
+            acceptHeader = null;
+        }
+
         this._connectionManager.request(
             "GET",
             userGroupAssignmentId,
             "",
-            {"Accept": "application/vnd.ez.api.RoleAssignment+json"},
+            {"Accept": acceptHeader || "application/vnd.ez.api.RoleAssignment+json"},
             callback
         );
     };
@@ -1065,11 +1147,17 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
      *
      * @method loadPolicies
      * @param roleId {String} target role identifier (e.g. "/api/ezp/v2/user/roles/7")
+     * @param [acceptHeader] {String} Optional accept header value
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "UserService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    UserService.prototype.loadPolicies = function (roleId, callback) {
+    UserService.prototype.loadPolicies = function (roleId, acceptHeader, callback) {
         var that = this;
+
+        if (!callback) {
+            callback = acceptHeader;
+            acceptHeader = null;
+        }
 
         this.loadRole(
             roleId,
@@ -1085,7 +1173,7 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
                     "GET",
                     rolePolicies._href,
                     "",
-                    {"Accept": rolePolicies["_media-type"]},
+                    {"Accept": acceptHeader || rolePolicies["_media-type"]},
                     callback
                 );
             }
@@ -1097,15 +1185,21 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
      *
      * @method loadPolicy
      * @param policyId {String} target policy identifier (e.g. "/api/ezp/v2/user/roles/7/policies/1")
+     * @param [acceptHeader] {String} Optional accept header value
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "UserService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    UserService.prototype.loadPolicy = function (policyId, callback) {
+    UserService.prototype.loadPolicy = function (policyId, acceptHeader, callback) {
+        if (!callback) {
+            callback = acceptHeader;
+            acceptHeader = null;
+        }
+
         this._connectionManager.request(
             "GET",
             policyId,
             "",
-            {"Accept": "application/vnd.ez.api.Policy+json"},
+            {"Accept": acceptHeader || "application/vnd.ez.api.Policy+json"},
             callback
         );
     };
@@ -1153,15 +1247,21 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
      * @method loadPoliciesByUserId
      * @param userPolicies {String} link to root UserPolicies resource (should be auto-discovered)
      * @param userId {String} target user numerical identifier (e.g. 110)
+     * @param [acceptHeader] {String} Optional accept header value
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "UserService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    UserService.prototype.loadPoliciesByUserId = function (userPolicies, userId, callback) {
+    UserService.prototype.loadPoliciesByUserId = function (userPolicies, userId, acceptHeader, callback) {
+        if (!callback) {
+            callback = acceptHeader;
+            acceptHeader = null;
+        }
+
         this._connectionManager.request(
             "GET",
             userPolicies + "?userId=" + userId,
             "",
-            {"Accept": "application/vnd.ez.api.PolicyList+json"},
+            {"Accept": acceptHeader || "application/vnd.ez.api.PolicyList+json"},
             callback
         );
     };
@@ -1178,17 +1278,23 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
      *
      * @method createSession
      * @param sessionCreateStruct {SessionCreateStruct} object describing new session to be created (see "newSessionCreateStruct")
+     * @param [acceptHeader] {String} Optional accept header value
      * @param callback {Function} callback executed after performing the request (see
      *  {{#crossLink "UserService"}}Note on the callbacks usage{{/crossLink}} for more info)
      */
-    UserService.prototype.createSession = function (sessionCreateStruct, callback) {
+    UserService.prototype.createSession = function (sessionCreateStruct, acceptHeader, callback) {
         var that = this;
+
+        if (!callback) {
+            callback = acceptHeader;
+            acceptHeader = null;
+        }
 
         this._connectionManager.notAuthorizedRequest(
             "GET",
             this._rootPath,
             "",
-            {"Accept": "application/vnd.ez.api.Root+json"},
+            {"Accept": acceptHeader || "application/vnd.ez.api.Root+json"},
             function (error, rootResource) {
                 if (error) {
                     callback(error, rootResource);
