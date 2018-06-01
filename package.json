@@ -16,7 +16,8 @@
     "grunt-contrib-jasmine": "~0.5.2",
     "grunt-istanbul": "~0.2.3",
     "grunt-contrib-watch": "~0.5.3",
-    "uritemplate": "~0.3.4"
+    "uritemplate": "~0.3.4",
+    "urijs": "~1.18.10"
   },
   "scripts": {
     "test": "grunt test --verbose"

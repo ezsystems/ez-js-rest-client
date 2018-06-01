@@ -2,17 +2,20 @@ module.exports = function(grunt) {
 
     var dependenciesPaths = {
             "q": "../node_modules/q/q",
-            "uritemplate": "../node_modules/uritemplate/bin/uritemplate"
+            "uritemplate": "../node_modules/uritemplate/bin/uritemplate",
+            "urijs": "../node_modules/urijs/src"
         },
         testPaths = {
             "q": "../node_modules/q/q",
             "jasmineCAPIMatchers": "../test/jasmine/CAPIMatchers",
-            "uritemplate": "../node_modules/uritemplate/bin/uritemplate"
+            "uritemplate": "../node_modules/uritemplate/bin/uritemplate",
+            "urijs": "../node_modules/urijs/src"
         },
         coveragePaths = {
             "q": "../../../node_modules/q/q",
             "jasmineCAPIMatchers": "../../../test/jasmine/CAPIMatchers",
-            "uritemplate": "../../../node_modules/uritemplate/bin/uritemplate"
+            "uritemplate": "../../../node_modules/uritemplate/bin/uritemplate",
+            "urijs": "../../../node_modules/urijs/src"
         };
 
     grunt.initConfig({

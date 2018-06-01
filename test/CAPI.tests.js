@@ -10,7 +10,11 @@ define(function (require) {
 
     describe("CAPI", function () {
 
-        var endPointUrl = 'http://ez.git.local',
+        var testUrls = [
+                {endPointUrl: 'http://ez.git.local', expectedOrigin: 'http://ez.git.local', expectedPath: ''},
+                {endPointUrl: 'http://ez.git.local/test', expectedOrigin: 'http://ez.git.local', expectedPath: '/test'},
+                {endPointUrl: '/test', expectedOrigin: '', expectedPath: '/test'}
+            ],
             capi,
             MockAuthenticationAgent,
             mockAuthenticationAgent,
@@ -39,140 +43,184 @@ define(function (require) {
             this.setCredentials = function (credentials) { };
         };
 
-        beforeEach(function () {
-            testOptions = new TestOptions();
-            mockAuthenticationAgent = new MockAuthenticationAgent();
+        testUrls.forEach(function(testUrl) {
+            describe("for every url", function() {
+                beforeEach(function () {
+                    testOptions = new TestOptions();
+                    mockAuthenticationAgent = new MockAuthenticationAgent();
 
-            capi = new CAPI(
-                endPointUrl,
-                mockAuthenticationAgent,
-                testOptions
-            );
-        });
+                    capi = new CAPI(
+                        testUrl.endPointUrl,
+                        mockAuthenticationAgent,
+                        testOptions
+                    );
+                });
 
-        describe("Construction", function () {
-            it("should be constructable", function () {
-                expect(capi).toBeDefined();
-                expect(capi instanceof CAPI).toBeTruthy();
-            });
+                describe("Construction", function () {
+                    it("should be constructable", function () {
+                        expect(capi).toBeDefined();
+                        expect(capi instanceof CAPI).toBeTruthy();
+                    });
 
-            it("should update authenticationAgent with a reference to CAPI", function () {
-                expect(mockAuthenticationAgent._CAPI).toBe(capi);
-            });
-        });
-        describe("Service API", function () {
-            it("should provide ContentService", function () {
-                var contentService = capi.getContentService();
+                    it("should update authenticationAgent with a reference to CAPI", function () {
+                        expect(mockAuthenticationAgent._CAPI).toBe(capi);
+                    });
+                });
+                describe("Service API", function () {
+                    describe('getContentervice', function() {
+                        var contentService;
 
-                expect(contentService).toBeDefined();
-                expect(contentService instanceof ContentService).toBeTruthy();
-            });
+                        beforeEach(function() {
+                            contentService = capi.getContentService();
+                        });
 
-            it("should provide ContentTypeService", function () {
-                var contentTypeService = capi.getContentTypeService();
+                        it("should provide ContentService", function () {
+                            expect(contentService).toBeDefined();
+                            expect(contentService instanceof ContentService).toBeTruthy();
+                        });
 
-                expect(contentTypeService).toBeDefined();
-                expect(contentTypeService instanceof ContentTypeService).toBeTruthy();
-            });
+                        it("should provide ContentService with rootPath prefixed by path part of the url", function () {
+                            expect(contentService._rootPath).toEqual(testUrl.expectedPath + testOptions.rootPath);
+                        });
+                    });
 
-            it("should provide UserService", function () {
-                var userService = capi.getUserService();
+                    it("should provide ContentTypeService", function () {
+                        var contentTypeService = capi.getContentTypeService();
 
-                expect(userService).toBeDefined();
-                expect(userService instanceof UserService).toBeTruthy();
-            });
+                        expect(contentTypeService).toBeDefined();
+                        expect(contentTypeService instanceof ContentTypeService).toBeTruthy();
+                    });
 
-            it("should provide DiscoveryService", function () {
-                var discoveryService = capi.getDiscoveryService();
+                    describe('getUserService', function() {
+                        var userService;
 
-                expect(discoveryService).toBeDefined();
-                expect(discoveryService instanceof DiscoveryService).toBeTruthy();
-            });
-        });
+                        beforeEach(function() {
+                            userService = capi.getUserService();
+                        });
 
-        describe("Singleton Behaviour", function () {
-            it("should only create one ContentService", function () {
-                var contentService,
-                    anotherContentService;
+                        it("should provide UserService", function () {
+                            expect(userService).toBeDefined();
+                            expect(userService instanceof UserService).toBeTruthy();
+                        });
 
-                contentService = capi.getContentService();
-                anotherContentService = capi.getContentService();
+                        it("should provide UserService with rootPath prefixed by path part of the url", function () {
+                            expect(userService._rootPath).toEqual(testUrl.expectedPath + testOptions.rootPath);
+                        });
+                    });
 
-                expect(anotherContentService).toBe(contentService);
-            });
+                    describe('getDiscoveryService', function() {
+                        var discoveryService;
 
-            it("should only create one ContentTypeService", function () {
-                var contentTypeService,
-                    anotherContentTypeService;
+                        beforeEach(function() {
+                            discoveryService = capi.getDiscoveryService();
+                        });
 
-                contentTypeService = capi.getContentTypeService();
-                anotherContentTypeService = capi.getContentTypeService();
+                        it("should provide DiscoveryService", function () {
+                            expect(discoveryService).toBeDefined();
+                            expect(discoveryService instanceof DiscoveryService).toBeTruthy();
+                        });
 
-                expect(anotherContentTypeService).toBe(contentTypeService);
-            });
+                        it("should provide DiscoveryService with rootPath prefixed by path part of the url", function () {
+                            expect(discoveryService._rootPath).toEqual(testUrl.expectedPath + testOptions.rootPath);
+                        });
+                    });
+                });
 
-            it("should only create one UserService", function () {
-                var anotherUserService,
-                    userService;
+                describe("Singleton Behaviour", function () {
+                    it("should only create one ContentService", function () {
+                        var contentService,
+                            anotherContentService;
 
-                userService = capi.getUserService();
-                anotherUserService = capi.getUserService();
+                        contentService = capi.getContentService();
+                        anotherContentService = capi.getContentService();
 
-                expect(anotherUserService).toBe(userService);
-            });
-        });
+                        expect(anotherContentService).toBe(contentService);
+                    });
 
-        describe("isLoggedIn", function () {
-            it("should call the authentification agent isLoggedIn method", function () {
-                var mockCallback = function () {};
+                    it("should only create one ContentTypeService", function () {
+                        var contentTypeService,
+                            anotherContentTypeService;
 
-                spyOn(mockAuthenticationAgent, 'isLoggedIn');
-                capi.isLoggedIn(mockCallback);
+                        contentTypeService = capi.getContentTypeService();
+                        anotherContentTypeService = capi.getContentTypeService();
 
-                expect(mockAuthenticationAgent.isLoggedIn).toHaveBeenCalledWith(mockCallback);
-            });
-        });
+                        expect(anotherContentTypeService).toBe(contentTypeService);
+                    });
 
-        describe("logOut", function () {
-            it("should call the authentification agent logOut method", function () {
-                var mockCallback = function () {};
+                    it("should only create one UserService", function () {
+                        var anotherUserService,
+                            userService;
 
-                spyOn(mockAuthenticationAgent, 'logOut');
-                capi.logOut(mockCallback);
+                        userService = capi.getUserService();
+                        anotherUserService = capi.getUserService();
 
-                expect(mockAuthenticationAgent.logOut).toHaveBeenCalledWith(mockCallback);
-            });
-        });
+                        expect(anotherUserService).toBe(userService);
+                    });
+                });
 
-        describe('logIn', function () {
-            it("should call the authentication agent logIn method", function () {
-                var mockCallback = function () {};
+                describe("isLoggedIn", function () {
+                    it("should call the authentification agent isLoggedIn method", function () {
+                        var mockCallback = function () {};
 
-                spyOn(mockAuthenticationAgent, 'logIn');
-                capi.logIn(mockCallback);
+                        spyOn(mockAuthenticationAgent, 'isLoggedIn');
+                        capi.isLoggedIn(mockCallback);
 
-                expect(mockAuthenticationAgent.logIn).toHaveBeenCalledWith(mockCallback);
-            });
+                        expect(mockAuthenticationAgent.isLoggedIn).toHaveBeenCalledWith(mockCallback);
+                    });
+                });
 
-            it("should set the credentials and call the authentication agent logIn method", function () {
-                var mockCallback = function () {},
-                    credentials = {};
+                describe("logOut", function () {
+                    it("should call the authentification agent logOut method", function () {
+                        var mockCallback = function () {};
 
-                spyOn(mockAuthenticationAgent, 'logIn');
-                spyOn(mockAuthenticationAgent, 'setCredentials');
-                capi.logIn(credentials, mockCallback);
+                        spyOn(mockAuthenticationAgent, 'logOut');
+                        capi.logOut(mockCallback);
 
-                expect(mockAuthenticationAgent.setCredentials).toHaveBeenCalledWith(credentials);
-                expect(mockAuthenticationAgent.logIn).toHaveBeenCalledWith(mockCallback);
-            });
-        });
+                        expect(mockAuthenticationAgent.logOut).toHaveBeenCalledWith(mockCallback);
+                    });
+                });
 
-        describe("getConnectionManager", function () {
-            it("should provide ConnectionManager", function () {
-                var connectionManager = capi.getConnectionManager();
+                describe('logIn', function () {
+                    it("should call the authentication agent logIn method", function () {
+                        var mockCallback = function () {};
 
-                expect(connectionManager).toBeDefined();
-                expect(connectionManager instanceof ConnectionManager).toBeTruthy();
+                        spyOn(mockAuthenticationAgent, 'logIn');
+                        capi.logIn(mockCallback);
+
+                        expect(mockAuthenticationAgent.logIn).toHaveBeenCalledWith(mockCallback);
+                    });
+
+                    it("should set the credentials and call the authentication agent logIn method", function () {
+                        var mockCallback = function () {},
+                        credentials = {};
+
+                        spyOn(mockAuthenticationAgent, 'logIn');
+                        spyOn(mockAuthenticationAgent, 'setCredentials');
+                        capi.logIn(credentials, mockCallback);
+
+                        expect(mockAuthenticationAgent.setCredentials).toHaveBeenCalledWith(credentials);
+                        expect(mockAuthenticationAgent.logIn).toHaveBeenCalledWith(mockCallback);
+                    });
+                });
+
+                describe("getConnectionManager", function () {
+                    var connectionManager;
+
+                    beforeEach(function () {
+                        connectionManager = capi.getConnectionManager();
+                    });
+
+                    it("should provide ConnectionManager", function () {
+                        expect(connectionManager).toBeDefined();
+                        expect(connectionManager instanceof ConnectionManager).toBeTruthy();
+                    });
+
+                    it('should provide ConnectionManager with endPointUrl set to origin part of the url', function() {
+                        var connectionManager = capi.getConnectionManager();
+
+                        expect(connectionManager._endPointUrl).toEqual(testUrl.expectedOrigin);
+                    });
+                });
             });
         });
     });
