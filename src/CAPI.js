@@ -2,11 +2,11 @@
 define(['authAgents/SessionAuthAgent', 'authAgents/HttpBasicAuthAgent', 'ConnectionManager',
         'ConnectionFeatureFactory', 'connections/XmlHttpRequestConnection', 'connections/MicrosoftXmlHttpRequestConnection',
         'services/DiscoveryService', 'services/ContentService', 'services/ContentTypeService',
-        'services/UserService', 'utils/extend', 'utils/urijs'],
+        'services/UserService', 'utils/extend'],
     function (SessionAuthAgent, HttpBasicAuthAgent, ConnectionManager,
               ConnectionFeatureFactory, XmlHttpRequestConnection, MicrosoftXmlHttpRequestConnection,
               DiscoveryService, ContentService, ContentTypeService,
-              UserService, extend, urijs) {
+              UserService, extend) {
     "use strict";
 
     /**
@@ -44,8 +44,7 @@ define(['authAgents/SessionAuthAgent', 'authAgents/HttpBasicAuthAgent', 'Connect
             discoveryService,
             contentService,
             contentTypeService,
-            userService,
-            uri;
+            userService;
 
         // Options used if not overwritten from the outside
         defaultOptions =  {
@@ -63,18 +62,8 @@ define(['authAgents/SessionAuthAgent', 'authAgents/HttpBasicAuthAgent', 'Connect
         // Merging provided options (if any) with defaults
         mergedOptions = extend({}, defaultOptions, options);
 
-        // Used to split the endPointUrl into origin and path
-        uri = urijs(endPointUrl);
-        // Path part of the endPointUrl is used to prefix the rootPath
-        mergedOptions.rootPath = uri.pathname().replace(/\/+$/, '') + mergedOptions.rootPath;
-
         connectionFactory = new ConnectionFeatureFactory(mergedOptions.connectionStack);
-        connectionManager = new ConnectionManager(
-            uri.origin(),
-            authenticationAgent,
-            connectionFactory,
-            mergedOptions.siteAccess
-        );
+        connectionManager = new ConnectionManager(endPointUrl, authenticationAgent, connectionFactory, mergedOptions.siteAccess);
         connectionManager.logRequests = mergedOptions.logRequests;
         discoveryService = new DiscoveryService(mergedOptions.rootPath, connectionManager);
 
