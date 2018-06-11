@@ -1403,7 +1403,9 @@ define(function (require) {
                     parseUriTemplate(testRefreshSession, {sessionId: sessionId}),
                     "",
                     {"Accept": refreshSessionInfo["_media-type"]},
-                    mockCallback
+                    {"ontimeout": jasmine.any(Function)},
+                    jasmine.any(Function),
+                    30000
                 );
             });
 

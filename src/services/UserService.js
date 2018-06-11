@@ -1319,9 +1319,44 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
      * @method refreshSession
      * @param {String} sessionId the session identifier (e.g. "o7i8r1sapfc9r84ae53bgq8gp4")
      * @param {Function} callback
+     * @param {Number} timeout Optional timeout in milliseconds, default is 180000 (180sec, as in 3 minutes)
+     * @param {Function} reTryCallback Optional callback to get notified if code is retrying session refresh
+     *                   NOTE: gets called every time, except on the first try!
      */
-    UserService.prototype.refreshSession = function (sessionId, callback) {
-        var that = this;
+    UserService.prototype.refreshSession = function (sessionId, callback, timeout, reTryCallback) {
+        var that = this, firstTry = true, date = new Date(), refreshSessionInfo, sessionRefresh = function(e, result) {
+            // We re-try session refresh for 180 seconds on timeouts/server errors as it is often the requests holding
+            // others back(see ConnectionManager), and is thus the one request we typically need to re-try a few
+            // times if backend has temporary downtime or is undergoing brief maintenance.
+            if ((new Date()) - date >= (timeout || 180000)) {
+                callback(e ? e : true, result);
+                return;
+            }
+
+            if (firstTry) {
+                firstTry = false;
+            } else if (reTryCallback) {
+                reTryCallback();
+            }
+
+            that._connectionManager.request(
+                "POST",
+                parseUriTemplate(refreshSessionInfo._href, {sessionId: sessionId}),
+                "",
+                {"Accept": refreshSessionInfo["_media-type"]},
+                {"ontimeout": sessionRefresh},
+                function (error, result) {
+                    // Re-try refresh on unexpected 5xx errors
+                    if (error && result.status >= 500) {
+                        sessionRefresh(error, result);
+                        return;
+                    }
+
+                    callback(error, result);
+                },
+                30000// 30sec timeout, to avoid having to wait for default timeout of 600s, better to re-try if no reply
+            );
+        };
 
         this._discoveryService.getInfoObject(
             "refreshSession",
@@ -1330,13 +1365,9 @@ define(['structures/SessionCreateStruct', 'structures/UserCreateStruct', 'struct
                     callback(error, refreshSession);
                     return;
                 }
-                that._connectionManager.request(
-                    "POST",
-                    parseUriTemplate(refreshSession._href, {sessionId: sessionId}),
-                    "",
-                    {"Accept": refreshSession["_media-type"]},
-                    callback
-                );
+
+                refreshSessionInfo = refreshSession;
+                sessionRefresh();
             }
         );
     };
