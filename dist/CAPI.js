@@ -1137,6 +1137,7 @@ define('ConnectionManager',["structures/Response", "structures/Request", "struct
      * @param [headers={}] {object} object literal describing request headers
      * @param [requestEventHandlers] {Object} a set of callbacks to apply on a specific XHR event like onload, onerror, onprogress, etc.
      * @param callback {Function} function, which will be executed on request success
+     * @param timeout {Number} Optionally the number of milliseconds to set as timeout, by default none set.
      * @example
      *      var connectionManager = jsCAPI.getConnectionManager();
      *
@@ -1166,7 +1167,7 @@ define('ConnectionManager',["structures/Response", "structures/Request", "struct
      *          callback
      *      );
      */
-    ConnectionManager.prototype.request = function (method, url, body, headers, requestEventHandlers, callback) {
+    ConnectionManager.prototype.request = function (method, url, body, headers, requestEventHandlers, callback, timeout) {
         var that = this,
             request,
             nextRequest,
@@ -1224,7 +1225,8 @@ define('ConnectionManager',["structures/Response", "structures/Request", "struct
             method : method,
             url : this._endPointUrl + url,
             body : body,
-            headers : headers
+            headers : headers,
+            timeout : timeout
         });
 
         // Requests suspending workflow
@@ -1457,6 +1459,7 @@ define('connections/XmlHttpRequestConnection',["structures/Response", "structure
                 );
                 return;
             }
+
             callback(false, response);
         };
 
@@ -1490,6 +1493,10 @@ define('connections/XmlHttpRequestConnection',["structures/Response", "structure
             XHR.open(method, request.url, true, request.login, request.password);
         } else {
             XHR.open(method, request.url, true);
+        }
+
+        if (request.timeout) {
+            XHR.timeout = request.timeout;// time in milliseconds, e.g. 62000 == 62 seconds
         }
 
         if (method !== request.method) {
@@ -7950,9 +7957,44 @@ define('services/UserService',['structures/SessionCreateStruct', 'structures/Use
      * @method refreshSession
      * @param {String} sessionId the session identifier (e.g. "o7i8r1sapfc9r84ae53bgq8gp4")
      * @param {Function} callback
+     * @param {Number} timeout Optional timeout in milliseconds, default is 180000 (180sec, as in 3 minutes)
+     * @param {Function} reTryCallback Optional callback to get notified if code is retrying session refresh
+     *                   NOTE: gets called every time, except on the first try!
      */
-    UserService.prototype.refreshSession = function (sessionId, callback) {
-        var that = this;
+    UserService.prototype.refreshSession = function (sessionId, callback, timeout, reTryCallback) {
+        var that = this, firstTry = true, date = new Date(), refreshSessionInfo, sessionRefresh = function(e, result) {
+            // We re-try session refresh for 180 seconds on timeouts/server errors as it is often the requests holding
+            // others back(see ConnectionManager), and is thus the one request we typically need to re-try a few
+            // times if backend has temporary downtime or is undergoing brief maintenance.
+            if ((new Date()) - date >= (timeout || 180000)) {
+                callback(e ? e : true, result);
+                return;
+            }
+
+            if (firstTry) {
+                firstTry = false;
+            } else if (reTryCallback) {
+                reTryCallback();
+            }
+
+            that._connectionManager.request(
+                "POST",
+                parseUriTemplate(refreshSessionInfo._href, {sessionId: sessionId}),
+                "",
+                {"Accept": refreshSessionInfo["_media-type"]},
+                {"ontimeout": sessionRefresh},
+                function (error, result) {
+                    // Re-try refresh on unexpected 5xx errors
+                    if (error && result.status >= 500) {
+                        sessionRefresh(error, result);
+                        return;
+                    }
+
+                    callback(error, result);
+                },
+                30000// 30sec timeout, to avoid having to wait for default timeout of 600s, better to re-try if no reply
+            );
+        };
 
         this._discoveryService.getInfoObject(
             "refreshSession",
@@ -7961,13 +8003,9 @@ define('services/UserService',['structures/SessionCreateStruct', 'structures/Use
                     callback(error, refreshSession);
                     return;
                 }
-                that._connectionManager.request(
-                    "POST",
-                    parseUriTemplate(refreshSession._href, {sessionId: sessionId}),
-                    "",
-                    {"Accept": refreshSession["_media-type"]},
-                    callback
-                );
+
+                refreshSessionInfo = refreshSession;
+                sessionRefresh();
             }
         );
     };

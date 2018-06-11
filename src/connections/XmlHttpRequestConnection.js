@@ -60,6 +60,7 @@ define(["structures/Response", "structures/CAPIError"], function (Response, CAPI
                 );
                 return;
             }
+
             callback(false, response);
         };
 
@@ -93,6 +94,10 @@ define(["structures/Response", "structures/CAPIError"], function (Response, CAPI
             XHR.open(method, request.url, true, request.login, request.password);
         } else {
             XHR.open(method, request.url, true);
+        }
+
+        if (request.timeout) {
+            XHR.timeout = request.timeout;// time in milliseconds, e.g. 62000 == 62 seconds
         }
 
         if (method !== request.method) {

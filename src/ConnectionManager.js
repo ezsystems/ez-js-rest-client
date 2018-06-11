@@ -36,6 +36,7 @@ define(["structures/Response", "structures/Request", "structures/CAPIError"],
      * @param [headers={}] {object} object literal describing request headers
      * @param [requestEventHandlers] {Object} a set of callbacks to apply on a specific XHR event like onload, onerror, onprogress, etc.
      * @param callback {Function} function, which will be executed on request success
+     * @param timeout {Number} Optionally the number of milliseconds to set as timeout, by default none set.
      * @example
      *      var connectionManager = jsCAPI.getConnectionManager();
      *
@@ -65,7 +66,7 @@ define(["structures/Response", "structures/Request", "structures/CAPIError"],
      *          callback
      *      );
      */
-    ConnectionManager.prototype.request = function (method, url, body, headers, requestEventHandlers, callback) {
+    ConnectionManager.prototype.request = function (method, url, body, headers, requestEventHandlers, callback, timeout) {
         var that = this,
             request,
             nextRequest,
@@ -123,7 +124,8 @@ define(["structures/Response", "structures/Request", "structures/CAPIError"],
             method : method,
             url : this._endPointUrl + url,
             body : body,
-            headers : headers
+            headers : headers,
+            timeout : timeout
         });
 
         // Requests suspending workflow
