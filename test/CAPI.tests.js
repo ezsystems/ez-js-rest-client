@@ -26,6 +26,9 @@ define(function (require) {
 
         MockAuthenticationAgent = function () {
             this._CAPI = null;
+            this._storage = (function () {
+                this.getItem = function (key) { return 'key'; };
+            })();
             this.setCAPI = function (capi) {
                 this._CAPI = capi;
             };
@@ -164,6 +167,19 @@ define(function (require) {
 
                 expect(mockAuthenticationAgent.setCredentials).toHaveBeenCalledWith(credentials);
                 expect(mockAuthenticationAgent.logIn).toHaveBeenCalledWith(mockCallback);
+            });
+        });
+
+        describe('refreshSession', function () {
+            it('It should invoke the refreshSession method from the UserService', function () {
+                var mockCallback = function () {},
+                    userService = capi.getUserService();
+
+                spyOn(userService, 'refreshSession');
+
+                capi.logIn(mockCallback);
+
+                expect(userService).toHaveBeenCalledWith(mockCallback);
             });
         });
 

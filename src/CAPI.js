@@ -106,6 +106,35 @@ define(['authAgents/SessionAuthAgent', 'authAgents/HttpBasicAuthAgent', 'Connect
         };
 
         /**
+         * Stores session info.
+         *
+         * @method storeSessionInfo
+         * @param {Object} session
+         */
+        this.storeSessionInfo = function (session) {
+            authenticationAgent._storeSessionInfo({
+                name: session.name,
+                href: session._href,
+                identifier: session.identifier,
+                csrfToken: session.csrfToken,
+            });
+        };
+
+        /**
+         * Refreshes the user session
+         *
+         * @method refreshSession
+         * @param {Function} callback
+         */
+        this.refreshSession = function (callback) {
+            if (!userService) {
+                return;
+            }
+
+            userService.refreshSession(authenticationAgent._storage.getItem('ezpRestClient.sessionId'), callback);
+        };
+
+        /**
          * Get instance of Content Service. Use ContentService to retrieve information and execute operations related to Content.
          *
          * @method getContentService
