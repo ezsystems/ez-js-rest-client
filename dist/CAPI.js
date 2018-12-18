@@ -8205,6 +8205,20 @@ define('CAPI',['authAgents/SessionAuthAgent', 'authAgents/HttpBasicAuthAgent', '
         };
 
         /**
+         * Refreshes the user session
+         *
+         * @method refreshSession
+         * @param {Function} callback
+         */
+        this.refreshSession = function (callback) {
+            if (!userService) {
+                return;
+            }
+
+            userService.refreshSession(authenticationAgent._storage.getItem('ezpRestClient.sessionId'), callback);
+        };
+
+        /**
          * Get instance of Content Service. Use ContentService to retrieve information and execute operations related to Content.
          *
          * @method getContentService
